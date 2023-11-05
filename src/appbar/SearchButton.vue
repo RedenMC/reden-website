@@ -1,8 +1,12 @@
-<script>
+<script lang="ts">
 import { mergeProps } from 'vue'
 import { toast } from 'vue-sonner'
 
-const items = [
+const items: {
+  title: string
+  preview?: string
+  action?: () => void
+}[] = [
   { title: 'R-Debugger' },
   { title: 'Undo & Redo' },
   { title: 'Super Right' },

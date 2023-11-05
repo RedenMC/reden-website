@@ -1,9 +1,9 @@
-<script setup>
+<script setup lang="ts">
 import SearchButton from './SearchButton.vue'
 import TranslateButton from "./TranslateButton.vue";
 </script>
 
-<script>
+<script lang="ts">
 export default {
   name: 'RedenAppBar',
   data() {

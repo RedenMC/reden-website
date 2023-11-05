@@ -3,12 +3,15 @@ import {VSonner} from 'vuetify-sonner'
 import {ref} from 'vue'
 import type {Position as PositionType} from 'vue-sonner/lib/types'
 import {useI18n} from 'vue-i18n'
-import RedenAppBar from '../appbar/RedenAppBar.vue'
 
 const {t} = useI18n()
 
 const position = ref<PositionType>('bottom-center')
 const expand = ref(false)
+addEventListener('scroll', () => {
+  expand.value = window.scrollY > 0;
+})
+document.title = t('reden.title.home', [' | Reden'])
 </script>
 
 <template>
@@ -61,6 +64,22 @@ body {
   padding: 300px max(var(--side-padding), env(safe-area-inset-right)) 300px max(var(--side-padding), env(safe-area-inset-left));
 }
 
+@keyframes s {
+  0% {
+    background-color: #5fff;
+  }
+  50% {
+    background-color: #ff5f;
+  }
+  100% {
+    background-color: #5fff;
+  }
+}
+
+.changed-bg {
+  animation: s 5s infinite;
+}
+
 * {
   touch-action: manipulation;
 }
@@ -74,5 +93,10 @@ body {
 
 .main-button {
   margin: 6px;
+}
+
+.my-scroll {
+  height: 1000px;
+  background-color: #5fff;
 }
 </style>

@@ -5,6 +5,9 @@ const messages = {
     en: 'English',
     zh: '中文',
     reden: {
+      title: {
+        home: 'Home{0}',
+      },
       download: 'Download',
       description: 'Provide a one-stop working environment for redstone machine developers and become the best redstone debugging and teaching tool.',
     },
@@ -16,6 +19,9 @@ const messages = {
     en: 'English',
     zh: '中文',
     reden: {
+      title: {
+        home: '首页{0}',
+      },
       download: '下载',
       description: '为红石机器开发者提供一站式工作环境，成为最好的红石调试和教学工具。',
     },
