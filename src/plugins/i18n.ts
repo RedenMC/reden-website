@@ -9,7 +9,7 @@ const messages = {
         home: 'Home{0}',
       },
       download: 'Download',
-      description: 'Provide a one-stop working environment for redstone machine developers and become the best redstone debugging and teaching tool.',
+      description: 'Provide a one-stop working environment for redstone developers and become the best redstone debugging and teaching tool.',
     },
     search: {
       hover: 'Search Reden Features',

@@ -31,7 +31,8 @@ document.title = t('reden.title.home', [' | Reden'])
       </v-col>
     </v-row>
     <v-row>
-      <v-btn class="main-button" prepend-icon="mdi-download" size="x-large" rounded="rounded" color="primary">
+      <v-btn class="main-button" prepend-icon="mdi-download" size="x-large" rounded="rounded" color="primary"
+             href="#download">
         {{ t('reden.download') }}
       </v-btn>
       <v-btn
@@ -48,6 +49,54 @@ document.title = t('reden.title.home', [' | Reden'])
   </div>
   <v-parallax src="https://cdn.vuetifyjs.com/images/parallax/material.jpg">
     <div class="content">
+      <h2>Undo</h2>
+      <p>
+        Reden can quickly undo your actions by just pressing Ctrl+Z. All chain reactions will be undone.
+      </p>
+      <p>
+        Reden can undo:
+      </p>
+      <p>
+        Block changes
+        <video/>
+      </p>
+      <p>
+        Block changes with tile entities:
+        <video/>
+      </p>
+      <p>
+        TNTs
+        <video/>
+      </p>
+      <p>
+        Pistons
+        <video/>
+      </p>
+      <p>
+        And even entity changes!
+        <video />
+      </p>
+
+
+      <h2>Reden Debugger</h2>
+      <p>
+        Pause the game, during a tick
+      </p>
+      <p>
+        See update order visually
+      </p>
+      <p>
+        Breakpoints
+      </p>
+      <p>
+        Step into & step over
+      </p>
+      <p>
+        Tile ticks, block events...
+      </p>
+      <p>
+        Tick phase tree, view all detailed information just by a click
+      </p>
     </div>
   </v-parallax>
 </template>
@@ -76,10 +125,6 @@ body {
   }
 }
 
-.changed-bg {
-  animation: s 5s infinite;
-}
-
 * {
   touch-action: manipulation;
 }
@@ -95,8 +140,4 @@ body {
   margin: 6px;
 }
 
-.my-scroll {
-  height: 1000px;
-  background-color: #5fff;
-}
 </style>

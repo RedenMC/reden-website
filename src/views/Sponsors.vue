@@ -19,14 +19,19 @@ export default {
 </script>
 
 <template>
+  <h2>
+    {{ $t('sponsors') }}
+  </h2>
+  <p>
+    {{ $t('sponsors.description') }}
+  </p>
   <v-list
     subheader
     three-line
     v-for="sponsor in sponsors"
+    :key="sponsor.name"
   >
-    <v-list-item
-      :key="sponsor.name"
-    >
+    <v-list-item>
       <v-list-item-title class="text-h6">{{ sponsor.name }}</v-list-item-title>
       <v-list-item-subtitle>{{ sponsor.description }}</v-list-item-subtitle>
       <v-list-item-action>
