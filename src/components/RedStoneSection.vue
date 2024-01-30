@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import {onMounted, type Ref, ref} from "vue";
+import {en} from "vuetify/locale";
 
 const { size } = defineProps({
   size: Number,
 });
-if (size === undefined || size <= 1) {
+if (size === undefined || size < 1) {
   throw new Error('size must be greater than 0')
 }
 const sizz = Math.floor(size);
@@ -18,6 +19,7 @@ onMounted(() => {
       } else {
         entry.target.classList.remove('animate');
       }
+      console.log(entry.target.getBoundingClientRect().top)
     })
   })
   observer.observe(lightLine.value as Element);
@@ -35,12 +37,49 @@ onMounted(() => {
       <div class="photo r15" v-for="n in sizz" :key="n"></div>
     </div>
 
-    <slot></slot>
+    <div>
+      <div class="photo pistonHead"></div>
+      <div class="photo pistonSide"></div>
+      <div class="photo pistonBase"></div>
+    </div>
 
+    <v-card class="card">
+      <template #title>
+        Undo
+      </template>
+      <template #subtitle>
+        Undo is
+      </template>
+      <template #text>
+        <p>
+          This is Undo
+        </p>
+        <p>
+          Hello, Reden!
+        </p>
+      </template>
+    </v-card>
   </div>
 </template>
 
 <style scoped>
+.pistonBase {
+  background: url("@/assets/piston_base.png") no-repeat;
+  background-size: 100px 100px;
+}
+
+.pistonHead {
+  position: absolute;
+  background: url("@/assets/piston_head.png") no-repeat;
+  background-size: 100px 100px;
+}
+
+.pistonSide {
+  position: absolute;
+  background: url("@/assets/piston_side.png") no-repeat;
+  background-size: 100px 100px;
+}
+
 .photo {
   height: 100px;
   image-rendering: pixelated;
@@ -98,4 +137,10 @@ onMounted(() => {
   }
 }
 
+
+.card {
+  position: absolute;
+  top: 2rem;
+  left: 10%;
+}
 </style>

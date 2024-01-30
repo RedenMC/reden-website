@@ -3,6 +3,10 @@ import {VSonner} from 'vuetify-sonner'
 import {ref} from 'vue'
 import type {Position as PositionType} from 'vue-sonner/lib/types'
 import {useI18n} from 'vue-i18n'
+import RedStoneSection from "@/components/RedStoneSection.vue";
+import PistonBase from "@/assets/piston_base.png";
+import PistonSide from "@/assets/piston_side.png";
+import PistonHead from "@/assets/piston_head.png";
 
 const {t} = useI18n()
 
@@ -47,6 +51,13 @@ document.title = t('reden.title.home', [' | Reden'])
       </v-btn>
     </v-row>
   </div>
+  <v-img :src="PistonBase" style="height: 16px"/>
+  <v-img :src="PistonHead" style="height: 16px"/>
+  <v-img :src="PistonSide" style="height: 16px"/>
+  <RedStoneSection
+    :size=3
+  >
+  </RedStoneSection>
   <v-parallax src="https://cdn.vuetifyjs.com/images/parallax/material.jpg">
     <div class="content">
       <h2>Undo</h2>
