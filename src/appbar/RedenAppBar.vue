@@ -25,7 +25,7 @@ export default {
       <p class="text-h5">REDEN</p>
     <template #append>
       <v-btn icon="mdi-github" title="Github" href="https://github.com/zly2006/reden-is-what-we-made" />
-      <v-btn icon="custom:discordIcon" title="Discord" href="https://discord.gg/fCxmEyFgAd" />
+      <v-btn icon="custom:DiscordIcon" title="Discord" href="https://discord.gg/fCxmEyFgAd" />
       <TranslateButton />
       <SearchButton />
     </template>

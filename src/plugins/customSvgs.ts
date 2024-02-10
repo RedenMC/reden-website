@@ -1,10 +1,10 @@
 
 import { h } from "vue";
 import type { IconSet, IconProps } from "vuetify";
-import discordIcon from "./discordIcon.vue";
+import DiscordIcon from "@/plugins/DiscordIcon.vue";
 
 const customSvgNameToComponent: any = {
-  discordIcon,
+  DiscordIcon,
 };
 
 const customSVGs: IconSet = {

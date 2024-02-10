@@ -18,6 +18,16 @@ const routes = [
         path: '/code',
         name: 'Code Editor',
         component: () => import('@/views/EditorPage.vue')
+      },
+      {
+        path: '/login',
+        name: 'Login',
+        component: () => import('@/views/Login.vue')
+      },
+      {
+        path: '/home',
+        name: 'Home',
+        component: () => import('@/views/UserHome.vue')
       }
     ],
   },
