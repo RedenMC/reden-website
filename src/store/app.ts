@@ -2,6 +2,12 @@
 import { defineStore } from 'pinia'
 
 export const useAppStore = defineStore('app', {
+  hydrate(storeState, initialState) {
+    return {
+      ...storeState,
+      ...initialState,
+    }
+  },
   state: () => ({
     logined: false,
     username: null as string | null,

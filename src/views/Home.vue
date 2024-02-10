@@ -143,19 +143,7 @@ body {
   max-width: 800px;
   margin: auto;
   height: auto;
-  padding: 260px 0 260px 0;
-}
-
-@keyframes s {
-  0% {
-    background-color: #5fff;
-  }
-  50% {
-    background-color: #ff5f;
-  }
-  100% {
-    background-color: #5fff;
-  }
+  padding: 230px 0 260px 0;
 }
 
 * {

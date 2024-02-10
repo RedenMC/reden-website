@@ -4,8 +4,15 @@
 <script lang="ts">
 import {apiBaseUrl} from "@/constants";
 import {useAppStore} from "@/store/app";
+import {ref} from "vue";
 
-let user = fetch(apiBaseUrl + 'account/profile', {
+type response = {
+  username: string
+  email: string
+  id: number
+}
+let user = ref<response>()
+fetch(apiBaseUrl + 'account/profile', {
   method: 'GET',
   headers: {
     'Content-Type': 'application/json',
@@ -15,19 +22,10 @@ let user = fetch(apiBaseUrl + 'account/profile', {
   mode: 'cors'
 }).then(async response => {
   if (response.ok) {
-    let data: {
-      username: string
-      email: string
-      id: number
-    } = await response.json()
-    return data
+    user.value = await response.json()
   } else {
     console.log(response)
-    return {
-      username: 'Error',
-      email: 'Error',
-      id: -1
-    }
+    await Promise.reject(response.json())
   }
 })
 export default {
@@ -41,7 +39,7 @@ export default {
 
 <template>
 <pre>
-  {{JSON.stringify(user)}}
+  {{JSON.stringify(user, null, 2)}}
 </pre>
 </template>
 

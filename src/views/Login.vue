@@ -28,6 +28,7 @@ export default {
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify(req),
       }).then(async response => {
         if (response.ok) {
@@ -124,7 +125,7 @@ export default {
         <v-col>
           <v-btn
             color="blue"
-            href="/auth/github"
+            href="/oauth/github"
             :block="true"
           >
             <v-icon left>mdi-github</v-icon>
@@ -134,7 +135,7 @@ export default {
         <v-col>
           <v-btn
             color="red"
-            href="/auth/microsoft"
+            href="/oauth/microsoft"
             :block="true"
           >
             <v-icon left>mdi-microsoft</v-icon>
