@@ -2,8 +2,7 @@
 
 </script>
 <script lang="ts">
-import {apiBaseUrl} from "@/constants";
-import {useAppStore} from "@/store/app";
+import {doFetchGet} from "@/constants";
 import {ref} from "vue";
 
 type response = {
@@ -12,15 +11,7 @@ type response = {
   id: number
 }
 let user = ref<response>()
-fetch(apiBaseUrl + 'account/profile', {
-  method: 'GET',
-  headers: {
-    'Content-Type': 'application/json',
-    'X-CSRF-Token': useAppStore().csrfToken || ''
-  },
-  credentials: 'include',
-  mode: 'cors'
-}).then(async response => {
+doFetchGet('/api/account/profile').then(async response => {
   if (response.ok) {
     user.value = await response.json()
   } else {

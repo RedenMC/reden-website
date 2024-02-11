@@ -7,6 +7,7 @@ import RedStoneSection from "@/components/RedStoneSection.vue";
 import PistonBase from "@/assets/piston_base.png";
 import PistonSide from "@/assets/piston_side.png";
 import PistonHead from "@/assets/piston_head.png";
+import {useAppStore} from "@/store/app";
 
 const {t} = useI18n()
 
@@ -53,13 +54,13 @@ document.title = t('reden.title.home', [' | Reden'])
     <v-row>
       <v-btn
         class="main-button"
-        href="/login"
+        :href="useAppStore().logined ? '/home' : '/login'"
         prepend-icon="mdi-login"
         size="x-large"
         rounded="rounded"
         variant="outlined"
       >
-        {{ t('reden.login') }}
+        {{ t('reden.my_account') }}
       </v-btn>
       <v-btn
         class="main-button"

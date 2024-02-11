@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import {VSonner} from "vuetify-sonner";
+import CloudFlareCaptcha from "@/components/CloudFlareCaptcha.vue";
 </script>
 <script lang="ts">
-import {apiBaseUrl} from "@/constants";
+import doFetchPost from "@/constants";
 import {useAppStore} from "@/store/app";
 import {toast} from "vuetify-sonner";
+import {getCFToken} from "@/components/CloudFlareCaptcha.vue";
+import {useCaptchaStore} from "@/store/captcha";
 
 export default {
   name: 'Login',
@@ -12,8 +15,19 @@ export default {
     return {
       username: '',
       password: '',
-      loading: false
+      loading: false,
+      captchaOk: false
     }
+  },
+  mounted() {
+    setInterval(() => {
+      const token = getCFToken()
+      console.log(token)
+      if (token !== '') {
+        useCaptchaStore().set("cloudflare", token)
+        this.captchaOk = true
+      }
+    }, 1000)
   },
   methods: {
     login() {
@@ -22,15 +36,9 @@ export default {
         username: this.username,
         password: this.password,
         timestamp: new Date().getTime(),
+        captcha: useCaptchaStore().$state
       }
-      fetch(apiBaseUrl + 'account/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify(req),
-      }).then(async response => {
+      doFetchPost('/api/account/login', req).then(async response => {
         if (response.ok) {
           let data: {
             redirect?: string
@@ -72,12 +80,11 @@ export default {
           )
           console.error('Login Failed', data)
         }
+      }).finally(() => {
+        this.loading = false
       })
-        .finally(() => {
-          this.loading = false
-        })
     }
-  }
+  },
 }
 </script>
 
@@ -110,9 +117,15 @@ export default {
       </v-text-field>
       <v-btn
         :loading="loading"
+        :disabled="!captchaOk"
         color="primary"
         @click="login"
-      >Login
+      >
+        {{
+          captchaOk ?
+              'Login' :
+              'Please complete the captcha'
+        }}
       </v-btn>
 
       <span class="text-center" style="padding: 4px">
@@ -144,6 +157,7 @@ export default {
         </v-col>
       </v-row>
     </div>
+    <CloudFlareCaptcha v-show="!captchaOk"/>
   </div>
 </template>
 

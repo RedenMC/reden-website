@@ -70,7 +70,7 @@ export default {
             v-model="searchText"
             placeholder="Search"
             clear-icon="mdi-close-circle-outline"
-            clearable
+            :clearable="true"
             @click:clear="searchText = ''"
             @keydown="checkEnter(this)"
           />
