@@ -6,9 +6,11 @@ const messages = {
     zh: '中文',
     reden: {
       title: {
-        home: 'Home{0}',
+        home: 'Home',
       },
       download: 'Download',
+      my_account: 'My Account',
+      wiki: 'Wiki',
       description: 'Provide a one-stop working environment for redstone developers and become the best redstone debugging and teaching tool.',
     },
     search: {
@@ -20,9 +22,11 @@ const messages = {
     zh: '中文',
     reden: {
       title: {
-        home: '首页{0}',
+        home: '首页',
       },
       download: '下载',
+      my_account: '我的账户',
+      wiki: 'Wiki',
       description: '为红石机器开发者提供一站式工作环境，成为最好的红石调试和教学工具。',
     },
     search: {

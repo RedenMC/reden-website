@@ -9,6 +9,8 @@ import {toast} from "vuetify-sonner";
 import {getCFToken} from "@/components/CloudFlareCaptcha.vue";
 import {useCaptchaStore} from "@/store/captcha";
 
+let task: number
+
 export default {
   name: 'Login',
   data() {
@@ -20,7 +22,7 @@ export default {
     }
   },
   mounted() {
-    setInterval(() => {
+    task = setInterval(() => {
       const token = getCFToken()
       console.log(token)
       if (token !== '') {
@@ -28,6 +30,10 @@ export default {
         this.captchaOk = true
       }
     }, 1000)
+  },
+  unmounted() {
+    clearInterval(task)
+    turnstile.remove()
   },
   methods: {
     login() {

@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import {onMounted, type Ref, ref} from "vue";
-import {en} from "vuetify/locale";
 
-const { size } = defineProps({
+const {size} = defineProps({
   size: Number,
 });
 if (size === undefined || size < 1) {
@@ -11,16 +10,30 @@ if (size === undefined || size < 1) {
 const sizz = Math.floor(size);
 
 let lightLine: Ref<Element | null> = ref(null);
+let card: Ref<Element | null> = ref(null);
 onMounted(() => {
   let observer = new IntersectionObserver((it) => {
+    console.log(card.value?.classList)
     it.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('animate');
-      } else {
-        entry.target.classList.remove('animate');
+      if (entry.target.getBoundingClientRect().top > 0) {
+        // only operate when the element is at the bottom of the screen
+        if (entry.intersectionRatio == 1) {
+          entry.target.classList.add('light-line-animate');
+          entry.target.classList.remove('invisible');
+          card.value?.classList?.add('card-animate');
+          card.value?.classList?.remove('invisible');
+        } else {
+          entry.target.classList.remove('light-line-animate');
+          card.value?.classList?.remove('card-animate');
+        }
+        if (entry.intersectionRatio == 0) {
+          entry.target.classList.add('invisible');
+          card.value?.classList?.add('invisible');
+        }
       }
-      console.log(entry.target.getBoundingClientRect().top)
     })
+  }, {
+    threshold: [0, 1]
   })
   observer.observe(lightLine.value as Element);
 })
@@ -30,35 +43,33 @@ onMounted(() => {
   <div class="line">
 
     <div class="darkLine lineLayout">
-      <div class="photo r0" v-for="n in sizz" :key="n"><slot :name="n"></slot></div>
+      <div class="photo r0" v-for="n in sizz" :key="n">
+        <slot :name="n"></slot>
+      </div>
     </div>
 
-    <div class="lightLine lineLayout" ref="lightLine">
+    <div class="lightLine lineLayout invisible" ref="lightLine">
       <div class="photo r15" v-for="n in sizz" :key="n"></div>
     </div>
 
-    <div>
-      <div class="photo pistonHead"></div>
-      <div class="photo pistonSide"></div>
-      <div class="photo pistonBase"></div>
+    <div ref="card">
+      <v-card class="card">
+        <template #title>
+          Undo
+        </template>
+        <template #subtitle>
+          Undo is
+        </template>
+        <template #text>
+          <p>
+            This is Undo
+          </p>
+          <p>
+            Hello, Reden!
+          </p>
+        </template>
+      </v-card>
     </div>
-
-    <v-card class="card">
-      <template #title>
-        Undo
-      </template>
-      <template #subtitle>
-        Undo is
-      </template>
-      <template #text>
-        <p>
-          This is Undo
-        </p>
-        <p>
-          Hello, Reden!
-        </p>
-      </template>
-    </v-card>
   </div>
 </template>
 
@@ -84,10 +95,12 @@ onMounted(() => {
   height: 100px;
   image-rendering: pixelated;
 }
+
 .r0 {
   background: url("@/assets/redstone_dust_0.png") no-repeat;
   background-size: 100px 100px;
 }
+
 .r15 {
   background: url("@/assets/redstone_dust_15.png") no-repeat;
   background-size: 100px 100px;
@@ -107,12 +120,16 @@ onMounted(() => {
   position: absolute;
   width: 100%;
   height: 100%;
-  mask: linear-gradient(var(--c0) 0%, var(--c1) 10%);
+  mask: linear-gradient(var(--c0) -100%, var(--c1) 20%);
 
 }
 
-.animate {
+.light-line-animate {
   animation: mask 1s ease-out alternate;
+}
+
+.invisible {
+  opacity: 0;
 }
 
 @property --c0 {
@@ -120,6 +137,7 @@ onMounted(() => {
   inherits: false;
   initial-value: #fff;
 }
+
 @property --c1 {
   syntax: '<color>';
   inherits: false;
@@ -137,10 +155,33 @@ onMounted(() => {
   }
 }
 
+@keyframes light-line-bg {
+}
 
 .card {
   position: absolute;
   top: 2rem;
-  left: 10%;
+  margin-left: 70px;
+  margin-right: 70px;
+  width: calc(100% - 140px);
+}
+
+@keyframes card-appear {
+  0% {
+    position: relative;
+    top: 2rem;
+    transform: translateX(-100px);
+    opacity: 100%;
+  }
+  100% {
+    position: static;
+    top: 2rem;
+    transform: translateX(0);
+    opacity: 100%;
+  }
+}
+
+.card-animate {
+  animation: card-appear 1s ease-out;
 }
 </style>

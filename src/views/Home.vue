@@ -74,13 +74,6 @@ document.title = t('reden.title.home', [' | Reden'])
       </v-btn>
     </v-row>
   </div>
-  <v-img :src="PistonBase" style="height: 16px"/>
-  <v-img :src="PistonHead" style="height: 16px"/>
-  <v-img :src="PistonSide" style="height: 16px"/>
-  <RedStoneSection
-    :size=3
-  >
-  </RedStoneSection>
   <v-parallax src="https://cdn.vuetifyjs.com/images/parallax/material.jpg">
     <div class="content">
       <h2>Undo</h2>
