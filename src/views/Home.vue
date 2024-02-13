@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import {VSonner, toast} from 'vuetify-sonner'
+import {VSonner} from 'vuetify-sonner'
 import {ref} from 'vue'
 import type {Position as PositionType} from 'vue-sonner/lib/types'
 import {useI18n} from 'vue-i18n'
-import RedStoneSection from "@/components/RedStoneSection.vue";
 import {useAppStore} from "@/store/app";
 
 const {t} = useI18n()
@@ -19,57 +18,59 @@ document.title = t('reden.title.home')
 <template>
   <VSonner :position="position" :expand="expand"/>
   <div class="main-page">
-    <v-row align-content="center">
-      <v-col>
-        <h1 class="text-h2 font-weight-bold">
-          Reden Mod
-        </h1>
-        <p style="font-size: larger">
-          {{ t('reden.description') }}
-        </p>
-      </v-col>
-      <v-col cols="3" class="icon-main">
-        <v-img src="/reden_256.png" width="148"/>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-btn class="main-button" prepend-icon="mdi-download" size="x-large" rounded="rounded" color="primary"
-             href="#download">
-        {{ t('reden.download') }}
-      </v-btn>
-      <v-btn
-        class="main-button"
-        href="https://github.com/zly2006/reden-is-what-we-made"
-        prepend-icon="mdi-github"
-        size="x-large"
-        rounded="rounded"
-        variant="outlined"
-      >
-        Github
-      </v-btn>
-    </v-row>
-    <v-row>
-      <v-btn
-        class="main-button"
-        :href="useAppStore().logined ? '/home' : '/login'"
-        prepend-icon="mdi-login"
-        size="x-large"
-        rounded="rounded"
-        variant="outlined"
-      >
-        {{ t('reden.my_account') }}
-      </v-btn>
-      <v-btn
-        class="main-button"
-        href="//wiki.redenmc.com"
-        prepend-icon="mdi-book-open"
-        size="x-large"
-        rounded="rounded"
-        variant="outlined"
-      >
-        {{ t('reden.wiki') }}
-      </v-btn>
-    </v-row>
+    <div>
+      <v-row align-content="center">
+        <v-col>
+          <h1 class="text-h2 font-weight-bold">
+            Reden Mod
+          </h1>
+          <p style="font-size: larger">
+            {{ t('reden.description') }}
+          </p>
+        </v-col>
+        <v-col cols="3" class="icon-main">
+          <v-img src="/reden_256.png" width="148"/>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-btn class="main-button" prepend-icon="mdi-download" size="x-large" rounded="rounded" color="primary"
+               href="#download">
+          {{ t('reden.download') }}
+        </v-btn>
+        <v-btn
+          class="main-button"
+          href="https://github.com/zly2006/reden-is-what-we-made"
+          prepend-icon="mdi-github"
+          size="x-large"
+          rounded="rounded"
+          variant="outlined"
+        >
+          Github
+        </v-btn>
+      </v-row>
+      <v-row>
+        <v-btn
+          class="main-button"
+          :href="useAppStore().logined ? '/home' : '/login'"
+          prepend-icon="mdi-login"
+          size="x-large"
+          rounded="rounded"
+          variant="outlined"
+        >
+          {{ t('reden.my_account') }}
+        </v-btn>
+        <v-btn
+          class="main-button"
+          href="//wiki.redenmc.com"
+          prepend-icon="mdi-book-open"
+          size="x-large"
+          rounded="rounded"
+          variant="outlined"
+        >
+          {{ t('reden.wiki') }}
+        </v-btn>
+      </v-row>
+    </div>
   </div>
   <v-parallax src="https://cdn.vuetifyjs.com/images/parallax/material.jpg">
     <div class="content">
@@ -98,7 +99,7 @@ document.title = t('reden.title.home')
       </p>
       <p>
         And even entity changes!
-        <video />
+        <video/>
       </p>
 
 
@@ -133,11 +134,12 @@ body {
 .main-page {
   max-width: 800px;
   margin: auto;
-  height: 100vh;
-  padding-top: 230px;
+  height: calc(100vh - 64px);
   padding-left: 30px;
   padding-right: 30px;
-  /*padding-bottom: 300px;*/
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 * {
