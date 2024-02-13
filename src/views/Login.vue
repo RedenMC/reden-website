@@ -75,17 +75,20 @@ export default {
             error: string
             error_description: string
           } = await response.json()
-          toast('Login Failed',
-            {
-              description: data.error + '\n' + (data.error_description || ''),
-              duration: 10000,
-              cardProps: {
-                color: 'red'
-              }
-            }
-          )
           console.error('Login Failed', data)
+          await Promise.reject(data.error + '\n' + (data.error_description || ''))
         }
+      }).catch(e => {
+        toast('Login Failed',
+          {
+            description: e.toString(),
+            duration: 10000,
+            cardProps: {
+              color: 'red'
+            }
+          }
+        )
+        console.log(e)
       }).finally(() => {
         this.loading = false
       })
@@ -129,8 +132,8 @@ export default {
       >
         {{
           captchaOk ?
-              'Login' :
-              'Please complete the captcha'
+            'Login' :
+            'Please complete the captcha'
         }}
       </v-btn>
 
