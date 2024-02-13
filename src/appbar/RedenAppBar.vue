@@ -1,14 +1,8 @@
 <script setup lang="ts">
 import SearchButton from './SearchButton.vue'
 import TranslateButton from "./TranslateButton.vue";
-</script>
-
-<script lang="ts">
-export default {
-  name: 'RedenAppBar',
-  data: () => {
-  },
-}
+import '@/main.css'
+import AccountButton from "@/appbar/AccountButton.vue";
 </script>
 
 <template>
@@ -38,28 +32,17 @@ export default {
 
       <v-btn class="mobile-hide" icon="mdi-home" title="Home" href="/"/>
     </template>
-    <p class="text-h5 mobile-hide">REDEN</p>
+    <p class="text-h5">REDEN</p>
     <template #append>
       <v-btn class="mobile-hide" icon="mdi-github" title="Github"
              href="https://github.com/zly2006/reden-is-what-we-made"/>
       <v-btn class="mobile-hide" icon="custom:DiscordIcon" title="Discord" href="https://discord.gg/fCxmEyFgAd"/>
       <TranslateButton/>
       <SearchButton/>
+      <AccountButton/>
     </template>
   </v-app-bar>
 </template>
 
 <style scoped>
-@media (max-width: 500px) {
-  .mobile-hide {
-    display: none;
-  }
-}
-
-@media (min-width: 500px) {
-  .mobile-show {
-    display: none;
-  }
-}
-
 </style>

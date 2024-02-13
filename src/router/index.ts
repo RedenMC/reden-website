@@ -33,6 +33,11 @@ const routes = [
         path: '/oauth/microsoft',
         name: 'Microsoft OAuth',
         component: () => import('@/views/OAuthMicrosoft.vue')
+      },
+      {
+        path: '/download',
+        name: 'Download',
+        component: () => import('@/views/Download.vue')
       }
     ],
   },

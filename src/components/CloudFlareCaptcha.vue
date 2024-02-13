@@ -19,11 +19,15 @@ export default {
 </script>
 
 <template>
-  <form name="captcha">
+  <form name="captcha" class="captcha">
     <div class="cf-turnstile" :data-sitekey="cloudflareCAPTCHAKey"></div>
   </form>
 </template>
 
 <style scoped>
-
+.captcha {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
 </style>
