@@ -1,5 +1,6 @@
 <script lang="ts">
 import { useI18n } from 'vue-i18n'
+import {Locale} from "@intlify/core-base";
 
 export default {
   name: 'TranslateButton',
@@ -11,7 +12,7 @@ export default {
     }
   },
   methods: {
-    changeLanguage(locale) {
+    changeLanguage(locale: Locale) {
       localStorage.setItem('locale', locale)
       this.$i18n.locale = locale
     },
@@ -21,7 +22,9 @@ export default {
 
 <template>
   <div class="text-center">
-    <v-menu open-on-hover>
+    <v-menu
+      :close-on-content-click="true"
+    >
       <template #activator="{ props }">
         <v-btn icon="mdi-translate" v-bind="props" />
       </template>

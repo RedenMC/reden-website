@@ -4,9 +4,6 @@ import {ref} from 'vue'
 import type {Position as PositionType} from 'vue-sonner/lib/types'
 import {useI18n} from 'vue-i18n'
 import RedStoneSection from "@/components/RedStoneSection.vue";
-import PistonBase from "@/assets/piston_base.png";
-import PistonSide from "@/assets/piston_side.png";
-import PistonHead from "@/assets/piston_head.png";
 import {useAppStore} from "@/store/app";
 
 const {t} = useI18n()
@@ -16,14 +13,14 @@ const expand = ref(false)
 addEventListener('scroll', () => {
   expand.value = window.scrollY > 0;
 })
-document.title = t('reden.title.home', [' | Reden'])
+document.title = t('reden.title.home')
 </script>
 
 <template>
   <VSonner :position="position" :expand="expand"/>
   <div class="main-page">
     <v-row align-content="center">
-      <v-col cols="9">
+      <v-col>
         <h1 class="text-h2 font-weight-bold">
           Reden Mod
         </h1>
@@ -31,7 +28,7 @@ document.title = t('reden.title.home', [' | Reden'])
           {{ t('reden.description') }}
         </p>
       </v-col>
-      <v-col cols="3">
+      <v-col cols="3" class="icon-main">
         <v-img src="/reden_256.png" width="148"/>
       </v-col>
     </v-row>
@@ -136,8 +133,11 @@ body {
 .main-page {
   max-width: 800px;
   margin: auto;
-  height: auto;
-  padding: 230px 0 260px 0;
+  height: 100vh;
+  padding-top: 230px;
+  padding-left: 30px;
+  padding-right: 30px;
+  /*padding-bottom: 300px;*/
 }
 
 * {
@@ -153,6 +153,12 @@ body {
 
 .main-button {
   margin: 6px;
+}
+
+@media screen and (max-width: 750px) {
+  .icon-main {
+    display: none;
+  }
 }
 
 </style>
