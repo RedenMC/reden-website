@@ -3,6 +3,7 @@ import SearchButton from './SearchButton.vue'
 import TranslateButton from "./TranslateButton.vue";
 import '@/main.css'
 import AccountButton from "@/appbar/AccountButton.vue";
+import {discordInvite} from "@/constants";
 </script>
 
 <template>
@@ -36,7 +37,7 @@ import AccountButton from "@/appbar/AccountButton.vue";
     <template #append>
       <v-btn class="mobile-hide" icon="mdi-github" title="Github"
              href="https://github.com/zly2006/reden-is-what-we-made"/>
-      <v-btn class="mobile-hide" icon="custom:DiscordIcon" title="Discord" href="https://discord.gg/fCxmEyFgAd"/>
+      <v-btn class="mobile-hide" icon="custom:DiscordIcon" title="Discord" :href="discordInvite"/>
       <TranslateButton/>
       <SearchButton/>
       <AccountButton/>

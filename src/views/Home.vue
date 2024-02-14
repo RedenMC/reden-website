@@ -7,6 +7,7 @@ import RedStoneSection from "@/components/RedStoneSection.vue";
 import NetherPortalVideo from '@/assets/nether_protal.mp4'
 import RedstoneSectionTitle from "@/components/RedstoneSectionTitle.vue";
 import Feature from "@/views/Feature.vue";
+import {discordInvite} from "@/constants";
 
 const {t} = useI18n()
 
@@ -101,7 +102,7 @@ document.title = t('reden.title.home')
       </template>
       <template #action>
         <v-btn
-          href="//rvc.redenmc.com"
+          href="//hub.redenmc.com"
           color="primary"
           variant="outlined"
           rounded="rounded"
@@ -167,7 +168,7 @@ document.title = t('reden.title.home')
       </template>
       <template #action>
         <v-btn
-          href="//discord.gg/3zvz5Z8"
+          :href="discordInvite"
           color="primary"
           variant="outlined"
           rounded="rounded"

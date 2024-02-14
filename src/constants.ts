@@ -2,6 +2,7 @@ import {useAppStore} from "@/store/app";
 
 export const reCAPTCHAKey = "6Lczc24pAAAAAAxzBZbRy8CZc_ba06Qn_3OJ_Vg-"
 export const cloudflareCAPTCHAKey = "0x4AAAAAAARtCTyyGc1nbVUm"
+export const discordInvite = "https://discord.gg/fCxmEyFgAd"
 
 export default function doFetchPost(url: string, data: any) {
   return fetch(url, {
