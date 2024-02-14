@@ -112,8 +112,18 @@ const messages = {
       home: {
         feature_intro: {
           title: '功能介绍',
-          undo: '不小心出了错？Reden 可以通过按下 Ctrl+Z 快速撤销您的操作。所有连锁反应都将被撤销。'
+          undo: '不小心出了错？Reden 可以通过按下 Ctrl+Z 快速撤销您的操作。所有连锁反应都将被撤销。',
+          rvc: 'RVC (Reden 版本控制) 是专为红石设计的版本控制系统。它可以让您轻松管理所有版本的红石项目。',
+          debugger: '搞不清楚为什么您的红石装置不工作？Reden 调试器可以帮助您查看游戏如何处理您的红石装置。',
         },
+        community_intro: {
+          title: '社区',
+          open_source: 'Reden 是一个开源项目，对所有人免费。我们欢迎所有人为 Reden 做出贡献，包括代码、文档、Wiki 等。',
+          rvchub: 'RVC Hub 是供红石开发者分享他们 RVC 项目的官方平台。在这里开始与社区分享您的知识和经验！',
+          wiki: 'Reden Wiki 包含了您需要了解的关于红石和 Reden 的几乎所有内容。这也是与社区分享您的知识的好地方。',
+          discord: '加入我们的 Discord 服务器，与其他红石开发者聊天并从社区获得帮助。',
+          sponsor: 'Reden 得到了社区的赞助。我们感谢每一位支持我们的赞助者。',
+        }
       },
       download: '下载',
       download_page: {

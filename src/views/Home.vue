@@ -6,6 +6,7 @@ import {useI18n} from 'vue-i18n'
 import RedStoneSection from "@/components/RedStoneSection.vue";
 import NetherPortalVideo from '@/assets/nether_protal.mp4'
 import RedstoneSectionTitle from "@/components/RedstoneSectionTitle.vue";
+import Feature from "@/views/Feature.vue";
 
 const {t} = useI18n()
 
@@ -62,76 +63,8 @@ document.title = t('reden.title.home')
       </div>
     </div>
   </div>
-  <div class="features-intro intro-common">
-    <RedstoneSectionTitle :title="$t('reden.home.feature_intro.title')"/>
-    <RedStoneSection
-      :video="NetherPortalVideo"
-      :size="3">
-      <template #title>
-        Undo
-      </template>
-      <template #text>
-        <p>
-          {{ $t('reden.home.feature_intro.undo')}}
-        </p>
-      </template>
-      <template #action>
-        <v-btn
-          href="/feature/undo"
-          color="primary"
-          rounded="rounded"
-          variant="outlined"
-          class="main-button"
-        >
-          {{ t('reden.learn_more') }}
-        </v-btn>
-      </template>
-    </RedStoneSection>
-    <RedStoneSection
-      :size="3">
-      <template #title>
-        RVC
-      </template>
-      <template #text>
-        <p>
-          {{ $t('reden.home.feature_intro.rvc')}}
-        </p>
-      </template>
-      <template #action>
-        <v-btn
-          href="/feature/rvc"
-          color="primary"
-          variant="outlined"
-          rounded="rounded"
-          class="main-button"
-        >
-          {{ t('reden.learn_more') }}
-        </v-btn>
-      </template>
-    </RedStoneSection>
-    <RedStoneSection
-      :size="3">
-      <template #title>
-        Reden Debugger
-      </template>
-      <template #text>
-        <p>
-          {{ $t('reden.home.feature_intro.debugger')}}
-        </p>
-      </template>
-      <template #action>
-        <v-btn
-          href="/feature/debugger"
-          color="primary"
-          variant="outlined"
-          rounded="rounded"
-          class="main-button"
-        >
-          {{ t('reden.learn_more') }}
-        </v-btn>
-      </template>
-    </RedStoneSection>
-  </div>
+
+  <Feature />
   <div class="community-intro intro-common" >
     <RedstoneSectionTitle :title="$t('reden.home.community_intro.title')"/>
     <RedStoneSection
