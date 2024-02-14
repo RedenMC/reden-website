@@ -74,6 +74,14 @@ const messages = {
       title: 'Sponsors',
       description: 'Reden is supported by you, and we are sincerely grateful to every sponsor.',
     },
+    login: {
+      title: 'Login to Reden',
+      oauth: 'Or login with',
+      button: {
+        login: 'Login',
+        captcha: 'Please complete the captcha first',
+      },
+    },
     search: {
       hover: 'Search Reden Features',
     },
@@ -150,6 +158,14 @@ const messages = {
     sponsors: {
       title: '赞助者',
       description: 'Reden 得到了你们的支持，我们在此由衷地感谢每一位赞助者。',
+    },
+    login: {
+      title: '登录 Reden',
+      oauth: '使用以下方式登录',
+      button: {
+        login: '登录',
+        captcha: '请先完成验证码',
+      },
     },
     search: {
       hover: '搜索 Reden 功能',

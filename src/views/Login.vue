@@ -9,8 +9,6 @@ import {toast} from "vuetify-sonner";
 import {getCFToken} from "@/components/CloudFlareCaptcha.vue";
 import {useCaptchaStore} from "@/store/captcha";
 
-let task: number
-
 export default {
   name: 'Login',
   data() {
@@ -18,11 +16,12 @@ export default {
       username: '',
       password: '',
       loading: false,
-      captchaOk: false
+      captchaOk: false,
+      task: 0
     }
   },
   mounted() {
-    task = setInterval(() => {
+    this.task = setInterval(() => {
       const token = getCFToken()
       console.log(token)
       if (token !== '') {
@@ -32,7 +31,7 @@ export default {
     }, 1000)
   },
   unmounted() {
-    clearInterval(task)
+    clearInterval(this.task)
     turnstile.remove()
   },
   methods: {
@@ -70,12 +69,21 @@ export default {
             }
           }, 500)
         } else {
-          console.log(response)
           let data: ErrorResponse = await response.json()
           console.error('Login Failed', data)
           await Promise.reject(data.error + '\n' + (data.error_description || ''))
         }
       }).catch(e => {
+        clearInterval(this.task)
+        this.task = setInterval(() => {
+          const token = getCFToken()
+          console.log(token)
+          if (token !== '') {
+            useCaptchaStore().set("cloudflare", token)
+            this.captchaOk = true
+          }
+        }, 1000)
+        turnstile.reset()
         toast('Login Failed',
           {
             description: e.toString(),
@@ -85,6 +93,7 @@ export default {
             }
           }
         )
+        this.captchaOk = false
         console.log(e)
       }).finally(() => {
         this.loading = false
@@ -100,7 +109,7 @@ export default {
   <div class="main-page">
     <div class="login-form">
       <h1>
-        Login to Reden
+        {{ $t('login.title') }}
       </h1>
       <v-text-field
         v-model="username"
@@ -129,8 +138,8 @@ export default {
       >
         {{
           captchaOk ?
-            'Login' :
-            'Please complete the captcha'
+            $t('login.button.login') :
+            $t('login.button.captcha')
         }}
       </v-btn>
 
@@ -138,7 +147,11 @@ export default {
         <a href="/forgot-password">Forgot Password?</a> or <a href="/register">Register</a>
       </span>
 
-      <h1>Or sign in with</h1>
+      <h1>
+        {{
+          $t('login.oauth')
+        }}
+      </h1>
 
       <v-row>
         <v-col>
