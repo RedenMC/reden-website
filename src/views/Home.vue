@@ -60,7 +60,7 @@ document.title = t('reden.title.home')
       </div>
     </div>
   </div>
-  <div class="features-intro">
+  <div class="features-intro" v-for="i in 5" :key="i">
     <RedStoneSection :size="3">
       <template #title>
         Undo
@@ -75,14 +75,10 @@ document.title = t('reden.title.home')
         <p>
           Hello, Reden!
         </p>
-        <br />
-        <br />
-        <br />
-        <br />
       </template>
       <template #image>
         <video src="@/assets/nether_protal.mp4"
-               style="object-fit: scale-down; height:260px"
+               style="object-fit: scale-down; height:260px; right: 0"
                autoplay
                loop
                muted
@@ -189,7 +185,8 @@ body {
 }
 
 .features-intro {
-  width: 1000px;
+  min-width: 320px;
+  max-width: 800px;
   margin-left: auto;
   margin-right: auto;
 }

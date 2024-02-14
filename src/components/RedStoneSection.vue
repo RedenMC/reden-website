@@ -53,7 +53,10 @@ defineSlots<{
   <div class="line">
     <div ref="card">
 
-      <v-card class="card">
+      <v-card
+        class="card"
+        :min-height="sizz * 100 - 80"
+      >
         <template #title>
           Undo
         </template>
@@ -112,11 +115,13 @@ defineSlots<{
 .r0 {
   background: url("@/assets/redstone_dust_0.png") no-repeat;
   background-size: 100px 100px;
+  background-position-x: -30px;
 }
 
 .r15 {
   background: url("@/assets/redstone_dust_15.png") no-repeat;
   background-size: 100px 100px;
+  background-position-x: -30px;
 }
 
 .lineLayout {
@@ -170,10 +175,9 @@ defineSlots<{
 .card {
   position: absolute;
   top: 2rem;
-  margin-left: 70px;
-  margin-right: 70px;
+  margin-left: 40px;
   translate: 0;
-  width: calc(100% - 140px);
+  min-width: calc(100% - 80px);
   transform: none;
 }
 
@@ -192,7 +196,6 @@ defineSlots<{
 .card-invisible {
   position: absolute;
   opacity: 0;
-  transition: 1s ease-in;
   transform: translateX(-10%);
 }
 </style>
