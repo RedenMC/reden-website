@@ -54,7 +54,7 @@ window
       location="bottom"
       :text="badge.hover_translate != null ?  $t(badge.hover_translate) : $t(badge.translate)"
     >
-      <template v-slot:activator="{ props }">
+      <template #activator="{ props }">
         <v-chip
           v-bind="props"
           :color="badge.color"

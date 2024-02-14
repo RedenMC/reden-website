@@ -4,6 +4,7 @@ import {ref} from 'vue'
 import type {Position as PositionType} from 'vue-sonner/lib/types'
 import {useI18n} from 'vue-i18n'
 import RedStoneSection from "@/components/RedStoneSection.vue";
+import NetherPortalVideo from '@/assets/nether_protal.mp4'
 
 const {t} = useI18n()
 
@@ -61,29 +62,26 @@ document.title = t('reden.title.home')
     </div>
   </div>
   <div class="features-intro" v-for="i in 5" :key="i">
-    <RedStoneSection :size="3">
+    <RedStoneSection
+      :video="NetherPortalVideo"
+      :size="3">
       <template #title>
         Undo
       </template>
-      <template #subtitle>
-        Undo is
-      </template>
       <template #text>
         <p>
-          This is Undo
-        </p>
-        <p>
-          Hello, Reden!
+          {{ $t('reden.home.feature_intro.undo')}}
         </p>
       </template>
-      <template #image>
-        <video src="@/assets/nether_protal.mp4"
-               style="object-fit: scale-down; height:260px; right: 0"
-               autoplay
-               loop
-               muted
-               playsinline
-        />
+      <template #action>
+        <v-btn
+          href="/feature/undo"
+          color="primary"
+          rounded="rounded"
+          class="main-button"
+        >
+          {{ t('reden.learn_more') }}
+        </v-btn>
       </template>
     </RedStoneSection>
   </div>

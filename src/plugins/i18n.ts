@@ -5,6 +5,7 @@ const messages = {
     en: 'English',
     zh: '中文',
     reden: {
+      learn_more: 'Learn More',
       footer: {
         reden_mod: {
           title: 'Reden Mod',
@@ -35,6 +36,11 @@ const messages = {
       title: {
         home: 'Home',
       },
+      home: {
+        feature_intro: {
+          undo: 'Made a mistake? Reden can quickly undo your actions by just pressing Ctrl+Z. All chain reactions will be undone.'
+        },
+      },
       download: 'Download',
       download_page: {
         sorry_constructing: 'Sorry, our download page is under construction, we suggest you to download at',
@@ -61,6 +67,7 @@ const messages = {
     en: 'English',
     zh: '中文',
     reden: {
+      learn_more: '了解更多',
       footer: {
         reden_mod: {
           title: 'Reden Mod',
@@ -90,6 +97,11 @@ const messages = {
       },
       title: {
         home: '首页',
+      },
+      home: {
+        feature_intro: {
+          undo: '不小心出了错？Reden 可以通过按下 Ctrl+Z 快速撤销您的操作。所有连锁反应都将被撤销。'
+        },
       },
       download: '下载',
       download_page: {

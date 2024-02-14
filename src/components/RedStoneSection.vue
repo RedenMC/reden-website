@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import {onMounted, type Ref, ref, VueElement} from "vue";
-import {en} from "vuetify/locale";
 
-const {size, imageTransparentPercentage} = defineProps({
+const {size, imageTransparentPercentage, video} = defineProps({
   size: Number,
-  imageTransparentPercentage: Number
+  imageTransparentPercentage: Number,
+  video: String
 });
 if (size === undefined || size < 1) {
   throw new Error('size must be greater than 0')
@@ -46,7 +46,9 @@ defineSlots<{
   subtitle: VueElement
   text: VueElement
   image: VueElement
+  action: VueElement[]
 }>()
+const autoPlay = ref(true)
 </script>
 
 <template>
@@ -58,25 +60,44 @@ defineSlots<{
         :min-height="sizz * 100 - 80"
       >
         <template #title>
-          Undo
+          <slot name="title"/>
         </template>
         <template #subtitle>
-          Undo is
+          <slot name="subtitle"/>
         </template>
         <template #text>
-          <p>
-            This is Undo
-          </p>
-          <p>
-            Hello, Reden!
-          </p>
+          <div class="my-text-wrap">
+            <slot name="text"/>
+          </div>
         </template>
         <template #image>
-          <slot name="image" />
+          <div class="bg-img-wrap">
+            <slot v-if="video == undefined" name="image"/>
+            <video :src="video" v-if="video != undefined"
+                   style="object-fit: scale-down; height:260px; right: 0"
+                   :autoplay="autoPlay"
+                   loop
+                   muted
+                   playsinline
+            />
+          </div>
+        </template>
+        <template #actions>
+          <!--
+          <v-tooltip text="Auto play">
+            <template #activator="{ props }">
+              <v-btn
+                :icon="autoPlay ? 'mdi-pause' : 'mdi-play'"
+                @click="autoPlay = !autoPlay"
+                v-bind="props">
+              </v-btn>
+            </template>
+          </v-tooltip>
+          -->
+          <slot name="action"/>
         </template>
       </v-card>
     </div>
-
     <div class="darkLine lineLayout">
       <div class="photo r0" v-for="n in sizz" :key="n">
       </div>
@@ -136,7 +157,7 @@ defineSlots<{
 .lightLine {
   top: 0;
   position: absolute;
-  width: 100%;
+  width: 50px;
   height: 100%;
   mask: linear-gradient(var(--c0) -100%, var(--c1) 20%);
 
@@ -197,5 +218,17 @@ defineSlots<{
   position: absolute;
   opacity: 0;
   transform: translateX(-10%);
+}
+
+.bg-img-wrap {
+  display: flex;
+  width: 100%;
+  justify-content: end;
+}
+
+.my-text-wrap {
+  min-width: 200px;
+  text-shadow: black 1px 1px 1px;
+  font-size: 16px;
 }
 </style>
