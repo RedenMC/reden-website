@@ -29,6 +29,8 @@ onMounted(() => {
   })
   observer.observe(all.value!);
 })
+const lampOnStyle = 'url(' + LampOn + ')'
+const lampOffStyle = 'url(' + LampOff + ')'
 </script>
 
 <template>
@@ -44,9 +46,8 @@ onMounted(() => {
            class="lever-base"
            alt=""
       />
-      <img :src="leverOn ? LampOn : LampOff" width="50" class="lamp" alt=""/>
     </div>
-    <div style="width: 50px; height: 75px;">
+    <div :class="{ 'lamp-on': leverOn, 'lamp-off': !leverOn, 'lamp-common': true }">
 
     </div>
     <div class="title">{{ title }}</div>
@@ -87,10 +88,22 @@ onMounted(() => {
   height: 75px;
 }
 
-.lamp {
-  position: absolute;
-  top: 25px;
+.lamp-on {
+  background-image: v-bind(lampOnStyle);
+  transition: background-image 0.5s;
+  transition-delay: 0.5s;
+}
+
+.lamp-off {
+  background-image: v-bind(lampOffStyle);
+}
+
+.lamp-common {
+  background-position: 0 25px;
+  background-size: 50px 50px;
   image-rendering: pixelated;
+  width: 50px;
+  height: 75px;
 }
 
 .redstone-section-title {
