@@ -73,6 +73,8 @@ const messages = {
     sponsors: {
       title: 'Sponsors',
       description: 'Reden is supported by you, and we are sincerely grateful to every sponsor.',
+      alipay: 'Support us with Alipay',
+      notice: 'Reden is an open-source project and always free for everyone. We receive no funding from any company or organization. We rely on your support to keep the project running. When you support us, you will be listed here as a sponsor so please make sure you provide your name and email address when you donate. Thank you for your support!',
     },
     login: {
       title: 'Login to Reden',
@@ -158,6 +160,8 @@ const messages = {
     sponsors: {
       title: '赞助者',
       description: 'Reden 得到了你们的支持，我们在此由衷地感谢每一位赞助者。',
+      alipay: '使用支付宝赞助',
+      notice: 'Reden 是一个开源项目，永远对所有人免费。我们没有从任何公司或组织获得资金。我们依靠您的支持来维持项目运行。当您支持我们时，您会在此页面被列出，因此请确保您在捐款时提供您的姓名和电子邮件地址。感谢您的支持！',
     },
     login: {
       title: '登录 Reden',

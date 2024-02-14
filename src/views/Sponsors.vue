@@ -65,6 +65,15 @@ doFetchGet('/api/sponsors').then((res) => {
       </v-list-item>
     </v-list>
   </div>
+  <div class="text-center content-common notice">
+    <p>
+      {{ $t('sponsors.notice') }}
+    </p>
+    <p class="text-md-h5">
+      {{ $t('sponsors.alipay') }}
+    </p>
+    <img src="@/assets/reden-alipay.png" alt="" width="200">
+  </div>
 </template>
 
 <style scoped>
@@ -78,4 +87,7 @@ a:hover {
   text-decoration: underline;
 }
 
+.notice {
+  padding: 40px;
+}
 </style>
