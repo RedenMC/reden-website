@@ -5,8 +5,7 @@ import {Locale} from "@intlify/core-base";
 export default {
   name: 'TranslateButton',
   data() {
-    const { t } = useI18n()
-    t('s')
+    const t = useI18n()
     return {
       t,
     }

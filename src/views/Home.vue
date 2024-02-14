@@ -22,7 +22,7 @@ document.title = t('reden.title.home')
       <v-row>
         <v-col>
           <h1 class="text-h2 font-weight-bold">
-            Reden Mod
+            Reden
           </h1>
           <p style="font-size: larger">
             {{ t('reden.description') }}
@@ -60,7 +60,38 @@ document.title = t('reden.title.home')
       </div>
     </div>
   </div>
-  <RedStoneSection :size="3" />
+  <div class="features-intro">
+    <RedStoneSection :size="3">
+      <template #title>
+        Undo
+      </template>
+      <template #subtitle>
+        Undo is
+      </template>
+      <template #text>
+        <p>
+          This is Undo
+        </p>
+        <p>
+          Hello, Reden!
+        </p>
+        <br />
+        <br />
+        <br />
+        <br />
+      </template>
+      <template #image>
+        <video src="@/assets/nether_protal.mp4"
+               style="object-fit: scale-down; height:260px"
+               autoplay
+               loop
+               muted
+               playsinline
+        />
+      </template>
+    </RedStoneSection>
+  </div>
+  <div style="height: 400px"/>
   <v-parallax src="https://cdn.vuetifyjs.com/images/parallax/material.jpg">
     <div class="content">
       <h2>Undo</h2>
@@ -155,6 +186,12 @@ body {
 
 .main-button {
   margin: 6px;
+}
+
+.features-intro {
+  width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 </style>

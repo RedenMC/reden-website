@@ -9,36 +9,6 @@ import RedenAppBar from "@/appbar/RedenAppBar.vue";
 
     <default-view/>
 
-    <!--
-      reden.footer: {
-        reden_mod: {
-          title: 'Reden Mod',
-          undo_redo: 'Undo & Redo',
-          rvc: 'Reden Version Control',
-          debugger: 'Reden Debugger',
-          github: 'Github',
-        },
-        reden_ecosystem: {
-          title: 'Reden Ecosystem',
-          wiki: 'Reden Wiki',
-          rvc_hub: 'RVC Hub',
-          sponsors: 'Sponsors',
-          github_organization: 'Github Organization',
-        },
-        reden_community: {
-          title: 'Reden Community',
-          discord: 'Discord',
-          community_guidelines: 'Community Guidelines',
-          community_events: 'Community Events',
-        },
-        follow_us: {
-          title: 'Follow Us',
-          blog: 'Blog',
-          youtube: 'Youtube',
-          bilibili: 'Bilibili',
-        },
-      },
-    -->
     <v-footer class="flex-column">
       <div class="text-center w-100">
         <v-row>
@@ -64,7 +34,7 @@ import RedenAppBar from "@/appbar/RedenAppBar.vue";
               </a>
             </div>
             <div class="footer-list-item">
-              <a href="/feature/rvc">
+              <a href="/feature/debugger">
                 {{ $t('reden.footer.reden_mod.debugger') }}
               </a>
             </div>
@@ -142,7 +112,7 @@ import RedenAppBar from "@/appbar/RedenAppBar.vue";
               </a>
             </div>
             <div class="footer-list-item">
-              <a href="https://space.bilibili.com/1545239761">
+              <a class="link" href="https://space.bilibili.com/1545239761">
                 {{ $t('reden.footer.follow_us.bilibili') }}
               </a>
             </div>

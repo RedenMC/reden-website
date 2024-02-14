@@ -3,7 +3,7 @@ import {VSonner} from "vuetify-sonner";
 import CloudFlareCaptcha from "@/components/CloudFlareCaptcha.vue";
 </script>
 <script lang="ts">
-import doFetchPost from "@/constants";
+import doFetchPost, {ErrorResponse} from "@/constants";
 import {useAppStore} from "@/store/app";
 import {toast} from "vuetify-sonner";
 import {getCFToken} from "@/components/CloudFlareCaptcha.vue";
@@ -71,10 +71,7 @@ export default {
           }, 500)
         } else {
           console.log(response)
-          let data: {
-            error: string
-            error_description: string
-          } = await response.json()
+          let data: ErrorResponse = await response.json()
           console.error('Login Failed', data)
           await Promise.reject(data.error + '\n' + (data.error_description || ''))
         }

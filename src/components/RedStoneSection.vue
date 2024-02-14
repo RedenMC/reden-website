@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import {onMounted, type Ref, ref} from "vue";
+import {onMounted, type Ref, ref, VueElement} from "vue";
+import {en} from "vuetify/locale";
 
-const {size} = defineProps({
+const {size, imageTransparentPercentage} = defineProps({
   size: Number,
+  imageTransparentPercentage: Number
 });
 if (size === undefined || size < 1) {
   throw new Error('size must be greater than 0')
@@ -13,22 +15,23 @@ let lightLine: Ref<Element | null> = ref(null);
 let card: Ref<Element | null> = ref(null);
 onMounted(() => {
   let observer = new IntersectionObserver((it) => {
-    console.log(card.value?.classList)
     it.forEach((entry) => {
       if (entry.target.getBoundingClientRect().top > 0) {
         // only operate when the element is at the bottom of the screen
         if (entry.intersectionRatio == 1) {
-          entry.target.classList.add('light-line-animate');
-          entry.target.classList.remove('invisible');
-          card.value?.classList?.add('card-animate');
-          card.value?.classList?.remove('invisible');
+          if (entry.target.classList.contains('invisible')) {
+            entry.target.classList.add('light-line-animate');
+            entry.target.classList.remove('invisible');
+          }
+          card.value?.classList?.add('card-active');
+          card.value?.classList?.remove('card-invisible');
         } else {
           entry.target.classList.remove('light-line-animate');
-          card.value?.classList?.remove('card-animate');
+          card.value?.classList?.remove('card-active');
         }
         if (entry.intersectionRatio == 0) {
           entry.target.classList.add('invisible');
-          card.value?.classList?.add('invisible');
+          card.value?.classList?.add('card-invisible');
         }
       }
     })
@@ -37,22 +40,19 @@ onMounted(() => {
   })
   observer.observe(lightLine.value as Element);
 })
+
+defineSlots<{
+  title: VueElement
+  subtitle: VueElement
+  text: VueElement
+  image: VueElement
+}>()
 </script>
 
 <template>
   <div class="line">
-
-    <div class="darkLine lineLayout">
-      <div class="photo r0" v-for="n in sizz" :key="n">
-        <slot :name="n"></slot>
-      </div>
-    </div>
-
-    <div class="lightLine lineLayout invisible" ref="lightLine">
-      <div class="photo r15" v-for="n in sizz" :key="n"></div>
-    </div>
-
     <div ref="card">
+
       <v-card class="card">
         <template #title>
           Undo
@@ -68,8 +68,21 @@ onMounted(() => {
             Hello, Reden!
           </p>
         </template>
+        <template #image>
+          <slot name="image" />
+        </template>
       </v-card>
     </div>
+
+    <div class="darkLine lineLayout">
+      <div class="photo r0" v-for="n in sizz" :key="n">
+      </div>
+    </div>
+
+    <div class="lightLine lineLayout invisible" ref="lightLine">
+      <div class="photo r15" v-for="n in sizz" :key="n"></div>
+    </div>
+
   </div>
 </template>
 
@@ -124,10 +137,6 @@ onMounted(() => {
 
 }
 
-.light-line-animate {
-  animation: mask 1s ease-out alternate;
-}
-
 .invisible {
   opacity: 0;
 }
@@ -163,25 +172,27 @@ onMounted(() => {
   top: 2rem;
   margin-left: 70px;
   margin-right: 70px;
+  translate: 0;
   width: calc(100% - 140px);
+  transform: none;
 }
 
-@keyframes card-appear {
-  0% {
-    position: relative;
-    top: 2rem;
-    transform: translateX(-100px);
-    opacity: 100%;
-  }
-  100% {
-    position: static;
-    top: 2rem;
-    transform: translateX(0);
-    opacity: 100%;
-  }
+.card-active {
+  transition: all 1s ease-out;
+  transform: none;
+  animation: 1s ease-in;
 }
 
-.card-animate {
-  animation: card-appear 1s ease-out;
+/*noinspection CssUnusedSymbol*/
+.light-line-animate {
+  animation: mask 1s ease-out alternate;
+}
+
+/*noinspection CssUnusedSymbol*/
+.card-invisible {
+  position: absolute;
+  opacity: 0;
+  transition: 1s ease-in;
+  transform: translateX(-10%);
 }
 </style>

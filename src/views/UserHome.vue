@@ -1,19 +1,39 @@
 <script setup lang="ts">
 
 import {doFetchGet} from "@/constants";
-import {ref} from "vue";
+import {Ref, ref} from "vue";
 import {toast} from "vuetify-sonner";
+import UserBadges from "@/components/UserBadges.vue";
+import {ro} from "vuetify/locale";
 
 type Profile = {
   username: string
   email: string
   id: number
   avatarUrl: string
+  isDeveloper: boolean
+  isContributor: boolean
+  isStaff: boolean
 }
+let roles: string[] = []
 let user = ref<Profile>()
+
 doFetchGet('/api/account/profile').then(async response => {
   if (response.ok) {
-    user.value = await response.json()
+    const data: Profile = await response.json()
+    roles = []
+    if (data.isDeveloper) {
+      roles?.push('developer')
+    }
+    if (data.isContributor) {
+      roles?.push('contributor')
+    }
+    if (data.isStaff) {
+      roles?.push('staff')
+    }
+    console.log('roles', roles)
+
+    user.value = data
   } else {
     console.log(response)
     await Promise.reject(response.json())
@@ -34,27 +54,30 @@ doFetchGet('/api/account/profile').then(async response => {
   <v-card
     class="profile-card user-card"
     :elevation="10"
-    >
-    <v-img
-      :src="user?.avatarUrl"
-      height="200"
-      width="200"
+  >
+    <div class="profile-card-content">
+      <v-img
+        :src="user?.avatarUrl"
+        height="200"
+        width="200"
       />
-    <h1 class="user-name">
-      {{user?.username}}
-    </h1>
-    <span class="user-id" v-if="user?.id != null">
+      <h1 class="user-name">
+        {{ user?.username }}
+      </h1>
+      <UserBadges :roles="roles" />
+      <span class="user-id" v-if="user?.id != null">
       <v-icon>mdi-account</v-icon>
-      uid: {{user?.id}}
+      uid: {{ user?.id }}
     </span>
-    <p class="user-email" v-if="user?.email != null">
-      <v-icon>mdi-email</v-icon>
-      {{user?.email}}
-      <v-icon>mdi-warning</v-icon>
-    </p>
+      <p class="user-email" v-if="user?.email != null">
+        <v-icon>mdi-email</v-icon>
+        <a :href="'mailto:' + user?.email">{{ user?.email }}</a>
+        <v-icon>mdi-warning</v-icon>
+      </p>
+    </div>
   </v-card>
-<pre>
-  {{JSON.stringify(user, null, 2)}}
+  <pre>
+  {{ JSON.stringify(user, null, 2) }}
 </pre>
 </template>
 
@@ -74,5 +97,26 @@ doFetchGet('/api/account/profile').then(async response => {
   padding: 0;
   font-weight: bold;
   text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
+}
+
+.user-email {
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+}
+
+.badges {
+  display: flex;
+  gap: 10px;
+  text-align: center;
+}
+
+.profile-card-content {
+  padding: 16px;
 }
 </style>

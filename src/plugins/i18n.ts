@@ -43,6 +43,16 @@ const messages = {
       wiki: 'Wiki',
       description: 'Provide a one-stop working environment for redstone developers and become the best redstone debugging and teaching tool.',
     },
+    user: {
+      developer: 'Developer',
+      developer_hover: 'This user is an active developer of this project',
+      contributor: 'Contributor',
+      contributor_hover: 'This user has contributed to this project',
+      sponsor: 'Sponsor',
+      sponsor_hover: 'This user has sponsored this project',
+      staff: 'Staff',
+      staff_hover: 'This user is a staff member of this project',
+    },
     search: {
       hover: 'Search Reden Features',
     },
@@ -88,6 +98,16 @@ const messages = {
       my_account: '我的账户',
       wiki: 'Wiki',
       description: '为红石机器开发者提供一站式工作环境，成为最好的红石调试和教学工具。',
+    },
+    user: {
+      developer: '开发者',
+      developer_hover: '此用户是本项目的活跃开发者',
+      contributor: '贡献者',
+      contributor_hover: '此用户参与过本项目的开发',
+      sponsor: '赞助者',
+      sponsor_hover: '此用户赞助过本项目',
+      staff: '管理员',
+      staff_hover: '此用户是本项目的管理员',
     },
     search: {
       hover: '搜索 Reden 功能',

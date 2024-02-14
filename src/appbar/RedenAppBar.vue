@@ -32,7 +32,7 @@ import AccountButton from "@/appbar/AccountButton.vue";
 
       <v-btn class="mobile-hide" icon="mdi-home" title="Home" href="/"/>
     </template>
-    <p class="text-h5">REDEN</p>
+    <p class="text-h5"></p>
     <template #append>
       <v-btn class="mobile-hide" icon="mdi-github" title="Github"
              href="https://github.com/zly2006/reden-is-what-we-made"/>
