@@ -7,7 +7,7 @@ import RedstoneSectionTitle from "@/components/RedstoneSectionTitle.vue";
 </script>
 
 <template>
-  <div class="features-intro intro-common">
+  <div class="features-intro content-common">
     <RedstoneSectionTitle :title="$t('reden.home.feature_intro.title')"/>
     <RedStoneSection
       :video="NetherPortalVideo"
@@ -80,10 +80,4 @@ import RedstoneSectionTitle from "@/components/RedstoneSectionTitle.vue";
 </template>
 
 <style scoped>
-.intro-common {
-  min-width: 320px;
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
-}
 </style>

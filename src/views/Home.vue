@@ -66,7 +66,7 @@ document.title = t('reden.title.home')
   </div>
 
   <Feature />
-  <div class="community-intro intro-common" >
+  <div class="community-intro content-common" >
     <RedstoneSectionTitle :title="$t('reden.home.community_intro.title')"/>
     <RedStoneSection
       :size="3">
@@ -221,13 +221,6 @@ body {
 
 .main-button {
   margin: 6px;
-}
-
-.intro-common {
-  min-width: 320px;
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 </style>

@@ -1,46 +1,71 @@
 <script setup lang="ts">
+import {doFetchGet} from "@/constants";
+import {ref, Ref} from "vue";
+import {toast, VSonner} from "vuetify-sonner";
 
-</script>
-
-<script lang="ts">
-import axios from 'axios'
-
-export default {
-  name: "Sponsors",
-  data() {
-    axios.get('/api/sponsors').then((res) => {
-      this.sponsors = res.data
-    })
-    return {
-      sponsors: []
-    }
-  }
+type Sponsor = {
+  name: string
+  detail: string
+  avatar: string
+  amount: number
+  message: string
 }
+
+const sponsors: Ref<Sponsor[]> = ref([])
+doFetchGet('/api/sponsors').then((res) => {
+  if (res.ok) {
+    return res.json()
+  } else {
+    Promise.reject('Failed to fetch sponsors')
+  }
+}).then(data => {
+  sponsors.value = data.sort((a: Sponsor, b: Sponsor) => {
+    return b.amount - a.amount
+  })
+}).catch((e) => {
+  console.error(e)
+  toast('Failed to fetch sponsors', {
+    description: 'Please try again later',
+    duration: 5000,
+    cardProps: {
+      color: 'error'
+    }
+  })
+})
 </script>
 
 <template>
-  <h2>
-    {{ $t('sponsors') }}
-  </h2>
-  <p>
+  <VSonner position="top-center"/>
+
+  <h1 class="text-center">
+    {{ $t('sponsors.title') }}
+  </h1>
+  <p class="text-center">
     {{ $t('sponsors.description') }}
   </p>
-  <v-list
-    subheader
-    three-line
-    v-for="sponsor in sponsors"
-    :key="sponsor.name"
-  >
-    <v-list-item>
-      <v-list-item-title class="text-h6">{{ sponsor.name }}</v-list-item-title>
-      <v-list-item-subtitle>{{ sponsor.description }}</v-list-item-subtitle>
-      <v-list-item-action>
-        <v-img :src="sponsor.avatar"/>
-      </v-list-item-action>
-    </v-list-item>
-  </v-list>
-</template>
+  <div class="content-common">
+    <v-list
+      subheader
+      three-line
+      link
+      v-for="sponsor in sponsors"
+      :key="sponsor.name"
+    >
+      <v-list-item
+        :key="sponsor.name"
+        :v-ripple="true"
+        >
+        <v-list-item-title class="text-h6">{{ sponsor.name }}</v-list-item-title>
+        <v-list-item-subtitle>{{ sponsor.detail || '¥' + sponsor.amount }}</v-list-item-subtitle>
+        <v-list-item-action>
+          <v-img :src="sponsor.avatar"/>
+        </v-list-item-action>
 
+        <div v-html="sponsor.message" />
+      </v-list-item>
+    </v-list>
+  </div>
+</template>
 
 <style scoped>
 

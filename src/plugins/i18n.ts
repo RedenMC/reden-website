@@ -70,6 +70,10 @@ const messages = {
       staff: 'Staff',
       staff_hover: 'This user is a staff member of this project',
     },
+    sponsors: {
+      title: 'Sponsors',
+      description: 'Reden is supported by you, and we are sincerely grateful to every sponsor.',
+    },
     search: {
       hover: 'Search Reden Features',
     },
@@ -142,6 +146,10 @@ const messages = {
       sponsor_hover: '此用户赞助过本项目',
       staff: '管理员',
       staff_hover: '此用户是本项目的管理员',
+    },
+    sponsors: {
+      title: '赞助者',
+      description: 'Reden 得到了你们的支持，我们在此由衷地感谢每一位赞助者。',
     },
     search: {
       hover: '搜索 Reden 功能',
