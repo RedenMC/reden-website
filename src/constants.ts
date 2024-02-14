@@ -4,6 +4,16 @@ export const reCAPTCHAKey = "6Lczc24pAAAAAAxzBZbRy8CZc_ba06Qn_3OJ_Vg-"
 export const cloudflareCAPTCHAKey = "0x4AAAAAAARtCTyyGc1nbVUm"
 export const discordInvite = "https://discord.gg/fCxmEyFgAd"
 
+export type Profile = {
+  username: string
+  email: string
+  id: number
+  avatarUrl: string
+  isDeveloper: boolean
+  isContributor: boolean
+  isStaff: boolean
+}
+
 export default function doFetchPost(url: string, data: any) {
   return fetch(url, {
     method: 'POST',

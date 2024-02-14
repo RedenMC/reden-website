@@ -1,20 +1,11 @@
 <script setup lang="ts">
 
-import {doFetchGet} from "@/constants";
-import {Ref, ref} from "vue";
+import {doFetchGet, Profile} from "@/constants";
+import {ref} from "vue";
 import {toast} from "vuetify-sonner";
 import UserBadges from "@/components/UserBadges.vue";
-import {ro} from "vuetify/locale";
+import {useAppStore} from "@/store/app";
 
-type Profile = {
-  username: string
-  email: string
-  id: number
-  avatarUrl: string
-  isDeveloper: boolean
-  isContributor: boolean
-  isStaff: boolean
-}
 let roles: string[] = []
 let user = ref<Profile>()
 
@@ -32,8 +23,8 @@ doFetchGet('/api/account/profile').then(async response => {
       roles?.push('staff')
     }
     console.log('roles', roles)
-
     user.value = data
+    useAppStore().updateCache(data)
   } else {
     console.log(response)
     await Promise.reject(response.json())
@@ -52,7 +43,7 @@ doFetchGet('/api/account/profile').then(async response => {
 
 <template>
   <v-card
-    class="profile-card user-card"
+    class="profile-card"
     :elevation="10"
   >
     <div class="profile-card-content">
@@ -84,9 +75,6 @@ doFetchGet('/api/account/profile').then(async response => {
 <style scoped>
 .profile-card {
   margin: 20px;
-}
-
-.user-card {
   width: 300px;
 }
 
@@ -108,12 +96,6 @@ doFetchGet('/api/account/profile').then(async response => {
   a:hover {
     text-decoration: underline;
   }
-}
-
-.badges {
-  display: flex;
-  gap: 10px;
-  text-align: center;
 }
 
 .profile-card-content {

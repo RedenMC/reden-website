@@ -53,7 +53,7 @@ doFetchGet('/api/sponsors').then((res) => {
     >
       <v-list-item
         :key="sponsor.name"
-        :v-ripple="true"
+        v-ripple
         >
         <v-list-item-title class="text-h6">{{ sponsor.name }}</v-list-item-title>
         <v-list-item-subtitle>{{ sponsor.detail || '¥' + sponsor.amount }}</v-list-item-subtitle>
@@ -68,5 +68,14 @@ doFetchGet('/api/sponsors').then((res) => {
 </template>
 
 <style scoped>
+a {
+  color: #cccccc;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
 
 </style>

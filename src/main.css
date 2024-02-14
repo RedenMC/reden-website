@@ -17,13 +17,3 @@
     margin-left: auto;
     margin-right: auto;
 }
-
-a {
-    color: #cccccc;
-    text-decoration: none;
-}
-
-a:hover {
-    color: #ffffff;
-    text-decoration: underline;
-}

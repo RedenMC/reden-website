@@ -140,12 +140,15 @@ import RedenAppBar from "@/appbar/RedenAppBar.vue";
 
 .footer-list-item {
   margin-bottom: 8px;
-  a {
-    color: #cccccc;
-    text-decoration: none;
-  }
-  a:hover {
-    text-decoration: underline;
-  }
+}
+
+a {
+  color: #cccccc;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #ffffff;
+  text-decoration: underline;
 }
 </style>

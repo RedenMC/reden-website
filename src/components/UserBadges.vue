@@ -69,5 +69,9 @@ window
 </template>
 
 <style scoped>
-
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
 </style>

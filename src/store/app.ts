@@ -1,11 +1,13 @@
 // Utilities
 import { defineStore } from 'pinia'
+import {Profile} from "@/constants";
 
 type AppState = {
   logined: boolean
-  username: string | null
+  username?: string
   uid: number
-  csrfToken: string | null
+  csrfToken?: string
+  userCache?: Profile
 }
 
 function getState(): AppState {
@@ -15,9 +17,10 @@ function getState(): AppState {
   }
   return {
     logined: false,
-    username: null,
+    username: undefined,
     uid: -1,
-    csrfToken: null,
+    csrfToken: undefined,
+    userCache: undefined,
   }
 }
 
@@ -39,15 +42,21 @@ export const useAppStore = defineStore('app', {
       this.uid = uid
       this.save()
     },
+    updateCache(profile: Profile) {
+      this.userCache = profile
+      this.username = profile.username
+      this.save()
+    },
     setCsrfToken(token: string) {
       this.csrfToken = token
       this.save()
     },
     logout() {
       this.logined = false
-      this.username = null
+      this.username = undefined
       this.uid = -1
-      this.csrfToken = null
+      this.csrfToken = undefined
+      this.userCache = undefined
       this.save()
     }
   },
