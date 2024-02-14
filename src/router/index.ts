@@ -1,5 +1,5 @@
 // Composables
-import { createRouter, createWebHistory } from 'vue-router'
+import {createRouter, createWebHistory} from 'vue-router'
 
 const routes = [
   {
@@ -38,7 +38,27 @@ const routes = [
         path: '/download',
         name: 'Download',
         component: () => import('@/views/Download.vue')
-      }
+      },
+      {
+        path: '/feature',
+        name: 'Feature',
+        component: () => import('@/views/Feature.vue'),
+      },
+      {
+        path: '/feature/undo',
+        name: 'Undo',
+        component: () => import('@/views/feature/Undo.vue')
+      },
+      {
+        path: '/feature/rvc',
+        name: 'RVC',
+        component: () => import('@/views/feature/RVC.vue')
+      },
+      {
+        path: '/feature/debugger',
+        name: 'Debugger',
+        component: () => import('@/views/feature/Debugger.vue')
+      },
     ],
   },
 ]

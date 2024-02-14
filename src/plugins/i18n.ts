@@ -38,8 +38,19 @@ const messages = {
       },
       home: {
         feature_intro: {
-          undo: 'Made a mistake? Reden can quickly undo your actions by just pressing Ctrl+Z. All chain reactions will be undone.'
+          title: 'Features',
+          undo: 'Made a mistake? Reden can quickly undo your actions by just pressing Ctrl+Z. All chain reactions will be undone.',
+          rvc: 'RVC (Reden Version Control) is a version control system designed for redstone. It allows you to manage your redstone projects in all versions with ease.',
+          debugger: 'Can\'t figure out why your redstone contraption isn\'t working? Reden Debugger can help you see how the game exactly processes your redstone contraption.',
         },
+        community_intro: {
+          title: 'Community',
+          open_source: 'Reden is an open-source project and free for everyone. We welcome everyone to contribute to Reden including code, documentation, wiki, and more.',
+          rvchub: 'RVC Hub is an official platform for redstone developers to share their RVC projects. Start sharing your knowledge and experience with the community here!',
+          wiki: 'Reden Wiki contains almost everything you need to know about redstone ans Reden. It is also a great place to share your knowledge with the community.',
+          discord: 'Join our Discord server to chat with other redstone developers and get help from the community.',
+          sponsor: 'Reden is sponsored by the community. We appreciate every sponsor who supports us.',
+        }
       },
       download: 'Download',
       download_page: {
@@ -100,6 +111,7 @@ const messages = {
       },
       home: {
         feature_intro: {
+          title: '功能介绍',
           undo: '不小心出了错？Reden 可以通过按下 Ctrl+Z 快速撤销您的操作。所有连锁反应都将被撤销。'
         },
       },

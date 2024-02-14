@@ -5,6 +5,7 @@ import type {Position as PositionType} from 'vue-sonner/lib/types'
 import {useI18n} from 'vue-i18n'
 import RedStoneSection from "@/components/RedStoneSection.vue";
 import NetherPortalVideo from '@/assets/nether_protal.mp4'
+import RedstoneSectionTitle from "@/components/RedstoneSectionTitle.vue";
 
 const {t} = useI18n()
 
@@ -61,7 +62,8 @@ document.title = t('reden.title.home')
       </div>
     </div>
   </div>
-  <div class="features-intro" v-for="i in 5" :key="i">
+  <div class="features-intro intro-common">
+    <RedstoneSectionTitle :title="$t('reden.home.feature_intro.title')"/>
     <RedStoneSection
       :video="NetherPortalVideo"
       :size="3">
@@ -78,6 +80,51 @@ document.title = t('reden.title.home')
           href="/feature/undo"
           color="primary"
           rounded="rounded"
+          variant="outlined"
+          class="main-button"
+        >
+          {{ t('reden.learn_more') }}
+        </v-btn>
+      </template>
+    </RedStoneSection>
+    <RedStoneSection
+      :size="3">
+      <template #title>
+        RVC
+      </template>
+      <template #text>
+        <p>
+          {{ $t('reden.home.feature_intro.rvc')}}
+        </p>
+      </template>
+      <template #action>
+        <v-btn
+          href="/feature/rvc"
+          color="primary"
+          variant="outlined"
+          rounded="rounded"
+          class="main-button"
+        >
+          {{ t('reden.learn_more') }}
+        </v-btn>
+      </template>
+    </RedStoneSection>
+    <RedStoneSection
+      :size="3">
+      <template #title>
+        Reden Debugger
+      </template>
+      <template #text>
+        <p>
+          {{ $t('reden.home.feature_intro.debugger')}}
+        </p>
+      </template>
+      <template #action>
+        <v-btn
+          href="/feature/debugger"
+          color="primary"
+          variant="outlined"
+          rounded="rounded"
           class="main-button"
         >
           {{ t('reden.learn_more') }}
@@ -85,59 +132,119 @@ document.title = t('reden.title.home')
       </template>
     </RedStoneSection>
   </div>
-  <div style="height: 400px"/>
-  <v-parallax src="https://cdn.vuetifyjs.com/images/parallax/material.jpg">
-    <div class="content">
-      <h2>Undo</h2>
-      <p>
-        Reden can quickly undo your actions by just pressing Ctrl+Z. All chain reactions will be undone.
-      </p>
-      <p>
-        Reden can undo:
-      </p>
-      <p>
-        Block changes
-        <video/>
-      </p>
-      <p>
-        Block changes with tile entities:
-        <video/>
-      </p>
-      <p>
-        TNTs
-        <video/>
-      </p>
-      <p>
-        Pistons
-        <video/>
-      </p>
-      <p>
-        And even entity changes!
-        <video/>
-      </p>
-
-
-      <h2>Reden Debugger</h2>
-      <p>
-        Pause the game, during a tick
-      </p>
-      <p>
-        See update order visually
-      </p>
-      <p>
-        Breakpoints
-      </p>
-      <p>
-        Step into & step over
-      </p>
-      <p>
-        Tile ticks, block events...
-      </p>
-      <p>
-        Tick phase tree, view all detailed information just by a click
-      </p>
-    </div>
-  </v-parallax>
+  <div class="community-intro intro-common" >
+    <RedstoneSectionTitle :title="$t('reden.home.community_intro.title')"/>
+    <RedStoneSection
+      :size="3">
+      <template #title>
+        Open Source
+      </template>
+      <template #text>
+        <p>
+          {{ $t('reden.home.community_intro.open_source')}}
+        </p>
+      </template>
+      <template #action>
+        <v-btn
+          href="//github.com/zly2006/reden-is-what-we-made"
+          color="primary"
+          variant="outlined"
+          rounded="rounded"
+          class="main-button"
+        >
+          Github
+        </v-btn>
+      </template>
+    </RedStoneSection>
+    <RedStoneSection
+      :size="3">
+      <template #title>
+        RVC Hub
+      </template>
+      <template #text>
+        <p>
+          {{ $t('reden.home.community_intro.rvchub')}}
+        </p>
+      </template>
+      <template #action>
+        <v-btn
+          href="//rvc.redenmc.com"
+          color="primary"
+          variant="outlined"
+          rounded="rounded"
+          class="main-button"
+        >
+          RVC Hub
+        </v-btn>
+      </template>
+    </RedStoneSection>
+    <RedStoneSection
+      :size="3">
+      <template #title>
+        Sponsors
+      </template>
+      <template #text>
+        <p>
+          {{ $t('reden.home.community_intro.sponsor')}}
+        </p>
+      </template>
+      <template #action>
+        <v-btn
+          href="/sponsors"
+          color="primary"
+          variant="outlined"
+          rounded="rounded"
+          class="main-button"
+        >
+          Sponsors
+        </v-btn>
+      </template>
+    </RedStoneSection>
+    <RedStoneSection
+      :size="3">
+      <template #title>
+        Wiki
+      </template>
+      <template #text>
+        <p>
+          {{ $t('reden.home.community_intro.wiki')}}
+        </p>
+      </template>
+      <template #action>
+        <v-btn
+          href="//wiki.redenmc.com"
+          color="primary"
+          variant="outlined"
+          rounded="rounded"
+          class="main-button"
+        >
+          Wiki
+        </v-btn>
+      </template>
+    </RedStoneSection>
+    <RedStoneSection
+      :size="3">
+      <template #title>
+        Discord
+      </template>
+      <template #text>
+        <p>
+          {{ $t('reden.home.community_intro.discord')}}
+        </p>
+      </template>
+      <template #action>
+        <v-btn
+          href="//discord.gg/3zvz5Z8"
+          color="primary"
+          variant="outlined"
+          rounded="rounded"
+          class="main-button"
+        >
+          Discord
+        </v-btn>
+      </template>
+    </RedStoneSection>
+  </div>
 </template>
 
 <style scoped>
@@ -182,7 +289,7 @@ body {
   margin: 6px;
 }
 
-.features-intro {
+.intro-common {
   min-width: 320px;
   max-width: 800px;
   margin-left: auto;
