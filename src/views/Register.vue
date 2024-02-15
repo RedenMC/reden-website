@@ -12,7 +12,7 @@ const confirmPassword = ref('')
 const invitationCode = ref('')
 const loading = ref(false)
 const captchaOk = ref(false)
-const registerOk = ref(true)
+const registerOk = ref(false)
 let task = 0
 
 onMounted(() => {
@@ -62,7 +62,7 @@ function register() {
       })
     }
   }).catch(e => {
-    console.error(e)
+    console.error('error',e)
     toast('Failed to register: ' + (e?.code || 'Unknown error'), {
       description: e?.data?.error || 'Please try again later',
       duration: 5000,
