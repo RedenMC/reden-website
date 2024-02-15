@@ -4,7 +4,6 @@ import {ref} from 'vue'
 import type {Position as PositionType} from 'vue-sonner/lib/types'
 import {useI18n} from 'vue-i18n'
 import RedStoneSection from "@/components/RedStoneSection.vue";
-import NetherPortalVideo from '@/assets/nether_protal.mp4'
 import RedstoneSectionTitle from "@/components/RedstoneSectionTitle.vue";
 import Feature from "@/views/Feature.vue";
 import {discordInvite} from "@/constants";
@@ -13,9 +12,7 @@ const {t} = useI18n()
 
 const position = ref<PositionType>('bottom-center')
 const expand = ref(false)
-addEventListener('scroll', () => {
-  expand.value = window.scrollY > 0;
-})
+const introContent = ref<HTMLElement | null>(null)
 document.title = t('reden.title.home')
 </script>
 
@@ -65,119 +62,121 @@ document.title = t('reden.title.home')
     </div>
   </div>
 
-  <Feature />
-  <div class="community-intro content-common" >
-    <RedstoneSectionTitle :title="$t('reden.home.community_intro.title')"/>
-    <RedStoneSection
-      :size="3">
-      <template #title>
-        Open Source
-      </template>
-      <template #text>
-        <p>
-          {{ $t('reden.home.community_intro.open_source')}}
-        </p>
-      </template>
-      <template #action>
-        <v-btn
-          href="//github.com/zly2006/reden-is-what-we-made"
-          color="primary"
-          variant="outlined"
-          rounded="rounded"
-          class="main-button"
-        >
-          Github
-        </v-btn>
-      </template>
-    </RedStoneSection>
-    <RedStoneSection
-      :size="3">
-      <template #title>
-        RVC Hub
-      </template>
-      <template #text>
-        <p>
-          {{ $t('reden.home.community_intro.rvchub')}}
-        </p>
-      </template>
-      <template #action>
-        <v-btn
-          href="//hub.redenmc.com"
-          color="primary"
-          variant="outlined"
-          rounded="rounded"
-          class="main-button"
-        >
+  <div class="intro-content" ref="introContent">
+    <Feature/>
+    <div class="community-intro content-common">
+      <RedstoneSectionTitle :title="$t('reden.home.community_intro.title')"/>
+      <RedStoneSection
+        :size="3">
+        <template #title>
+          Open Source
+        </template>
+        <template #text>
+          <p>
+            {{ $t('reden.home.community_intro.open_source') }}
+          </p>
+        </template>
+        <template #action>
+          <v-btn
+            href="//github.com/zly2006/reden-is-what-we-made"
+            color="primary"
+            variant="outlined"
+            rounded="rounded"
+            class="main-button"
+          >
+            Github
+          </v-btn>
+        </template>
+      </RedStoneSection>
+      <RedStoneSection
+        :size="3">
+        <template #title>
           RVC Hub
-        </v-btn>
-      </template>
-    </RedStoneSection>
-    <RedStoneSection
-      :size="3">
-      <template #title>
-        Sponsors
-      </template>
-      <template #text>
-        <p>
-          {{ $t('reden.home.community_intro.sponsor')}}
-        </p>
-      </template>
-      <template #action>
-        <v-btn
-          href="/sponsors"
-          color="primary"
-          variant="outlined"
-          rounded="rounded"
-          class="main-button"
-        >
+        </template>
+        <template #text>
+          <p>
+            {{ $t('reden.home.community_intro.rvchub') }}
+          </p>
+        </template>
+        <template #action>
+          <v-btn
+            href="//hub.redenmc.com"
+            color="primary"
+            variant="outlined"
+            rounded="rounded"
+            class="main-button"
+          >
+            RVC Hub
+          </v-btn>
+        </template>
+      </RedStoneSection>
+      <RedStoneSection
+        :size="3">
+        <template #title>
           Sponsors
-        </v-btn>
-      </template>
-    </RedStoneSection>
-    <RedStoneSection
-      :size="3">
-      <template #title>
-        Wiki
-      </template>
-      <template #text>
-        <p>
-          {{ $t('reden.home.community_intro.wiki')}}
-        </p>
-      </template>
-      <template #action>
-        <v-btn
-          href="//wiki.redenmc.com"
-          color="primary"
-          variant="outlined"
-          rounded="rounded"
-          class="main-button"
-        >
+        </template>
+        <template #text>
+          <p>
+            {{ $t('reden.home.community_intro.sponsor') }}
+          </p>
+        </template>
+        <template #action>
+          <v-btn
+            href="/sponsors"
+            color="primary"
+            variant="outlined"
+            rounded="rounded"
+            class="main-button"
+          >
+            Sponsors
+          </v-btn>
+        </template>
+      </RedStoneSection>
+      <RedStoneSection
+        :size="3">
+        <template #title>
           Wiki
-        </v-btn>
-      </template>
-    </RedStoneSection>
-    <RedStoneSection
-      :size="3">
-      <template #title>
-        Discord
-      </template>
-      <template #text>
-        <p>
-          {{ $t('reden.home.community_intro.discord')}}
-        </p>
-      </template>
-      <template #action>
-        <v-btn
-          :href="discordInvite"
-          color="primary"
-          variant="outlined"
-          rounded="rounded"
-          class="main-button"
-        >
+        </template>
+        <template #text>
+          <p>
+            {{ $t('reden.home.community_intro.wiki') }}
+          </p>
+        </template>
+        <template #action>
+          <v-btn
+            href="//wiki.redenmc.com"
+            color="primary"
+            variant="outlined"
+            rounded="rounded"
+            class="main-button"
+          >
+            Wiki
+          </v-btn>
+        </template>
+      </RedStoneSection>
+      <RedStoneSection
+        :size="3">
+        <template #title>
           Discord
-        </v-btn>
-      </template>
-    </RedStoneSection>
+        </template>
+        <template #text>
+          <p>
+            {{ $t('reden.home.community_intro.discord') }}
+          </p>
+        </template>
+        <template #action>
+          <v-btn
+            :href="discordInvite"
+            color="primary"
+            variant="outlined"
+            rounded="rounded"
+            class="main-button"
+          >
+            Discord
+          </v-btn>
+        </template>
+      </RedStoneSection>
+    </div>
   </div>
 </template>
 
@@ -210,13 +209,6 @@ body {
 
 * {
   touch-action: manipulation;
-}
-
-.content {
-  display: flex;
-  flex-direction: column;
-  gap: 48px;
-  margin-top: 96px;
 }
 
 .main-button {
