@@ -1,30 +1,15 @@
 <script setup lang="ts">
+import {ref} from "vue";
 
-</script>
-<script lang="ts">
-import {doFetchGet} from "@/constants";
+const loading = ref(true)
 
-export default {
-  name: 'OAuthMicrosoft',
-  mounted() {
-    doFetchGet('/api/oauth/microsoft/action/login').then(response => {
-      if (response.ok) {
-        response.json().then(data => {
-          console.log(data)
-          window.location.href = data['redirect']
-        })
-      } else {
-        Promise.reject(response)
-      }
-    }).catch(reason => {
-      console.log(reason)
-    })
-  },
-}
 </script>
 
 <template>
-
+<v-progress-linear
+  :indeterminate="true"
+  v-show="loading"
+  ></v-progress-linear>
 </template>
 
 <style scoped>

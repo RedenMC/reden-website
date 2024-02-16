@@ -26,22 +26,25 @@ const defs: { [keys: string]: Def } = {
     translate: 'user.staff',
     hover_translate: 'user.staff_hover',
     icon: 'mdi-account-tie'
+  },
+  sponsor: {
+    color: 'purple',
+    translate: 'user.sponsor',
+    hover_translate: 'user.sponsor_hover',
+    icon: 'mdi-account-heart'
   }
 }
 
 type Props = {
-  roles: string[]
+  roles: string[] | undefined
 }
 
 const props = defineProps<Props>()
 
 const badges = ref(props.roles?.map((role: string) => defs[role]))
 
-console.log('received', props.roles)
-
 watch(() => props.roles, (newVal) => {
-  console.log('new roles', newVal)
-  badges.value = newVal.map((role: string) => defs[role])
+  badges.value = newVal?.map((role: string) => defs[role])
 })
 window
 </script>

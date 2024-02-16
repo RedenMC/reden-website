@@ -43,6 +43,8 @@ export const useAppStore = defineStore('app', {
       this.save()
     },
     updateCache(profile: Profile) {
+      this.logined = true
+      this.uid = profile.id
       this.userCache = profile
       this.username = profile.username
       this.save()

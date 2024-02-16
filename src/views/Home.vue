@@ -13,7 +13,7 @@ const {t} = useI18n()
 const position = ref<PositionType>('bottom-center')
 const expand = ref(false)
 const introContent = ref<HTMLElement | null>(null)
-document.title = t('reden.title.home')
+document.title = t('reden.title.home') + ' - Reden'
 </script>
 
 <template>

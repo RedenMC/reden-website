@@ -3,7 +3,7 @@ import {VSonner} from "vuetify-sonner";
 import CloudFlareCaptcha from "@/components/CloudFlareCaptcha.vue";
 </script>
 <script lang="ts">
-import doFetchPost, {ErrorResponse} from "@/constants";
+import doFetchPost, {ErrorResponse, LoginResponse} from "@/constants";
 import {useAppStore} from "@/store/app";
 import {toast} from "vuetify-sonner";
 import {getCFToken} from "@/components/CloudFlareCaptcha.vue";
@@ -45,10 +45,7 @@ export default {
       }
       doFetchPost('/api/account/login', req).then(async response => {
         if (response.ok) {
-          let data: {
-            redirect?: string
-            csrf_token: string
-          } = await response.json()
+          let data: LoginResponse = await response.json()
           console.log(data)
           useAppStore().login(this.username, 1)
           useAppStore().setCsrfToken(data.csrf_token)
@@ -167,7 +164,7 @@ export default {
         <v-col>
           <v-btn
             color="red"
-            href="/oauth/microsoft"
+            :href="'/api/oauth/microsoft?redirect_url=' + encodeURI('/home')"
             :block="true"
           >
             <v-icon left>mdi-microsoft</v-icon>

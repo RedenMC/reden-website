@@ -9,9 +9,19 @@ export type Profile = {
   email: string
   id: number
   avatarUrl: string
-  isDeveloper: boolean
-  isContributor: boolean
+  roles: string[]
+  mcUUID: string
   isStaff: boolean
+}
+
+export type GeneralResponse = {
+  redirect?: string
+  error?: string
+  error_description?: string
+}
+
+export type LoginResponse = GeneralResponse & {
+  csrf_token: string
 }
 
 export default function doFetchPost(url: string, data: any) {

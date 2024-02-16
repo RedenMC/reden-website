@@ -2,32 +2,38 @@
 
 import {doFetchGet, Profile} from "@/constants";
 import {ref} from "vue";
-import {toast} from "vuetify-sonner";
+import {toast, VSonner} from "vuetify-sonner";
 import UserBadges from "@/components/UserBadges.vue";
 import {useAppStore} from "@/store/app";
 
-let roles: string[] = []
 let user = ref<Profile>()
+
+// oauth login csrf token is not passed by json, but by query string
+const queries = window.location.search.substring(1).split('&');
+const csrf = queries.find(str => str.startsWith('csrf_token='))?.substring(11)
+if (csrf) {
+  useAppStore().setCsrfToken(csrf)
+  history.pushState({}, document.title, window.location.pathname + window.location.hash)
+  console.log('csrf', csrf)
+}
 
 doFetchGet('/api/account/profile').then(async response => {
   if (response.ok) {
     const data: Profile = await response.json()
-    roles = []
-    if (data.isDeveloper) {
-      roles?.push('developer')
-    }
-    if (data.isContributor) {
-      roles?.push('contributor')
-    }
-    if (data.isStaff) {
-      roles?.push('staff')
-    }
-    console.log('roles', roles)
     user.value = data
     useAppStore().updateCache(data)
   } else {
-    console.log(response)
-    await Promise.reject(response.json())
+    if (response.status === 401) {
+      toast('Error', {
+        description: 'You are not logged in',
+        duration: 1000,
+        cardProps: {
+          color: 'error'
+        }
+      })
+      window.location.href = '/login'
+    }
+    await Promise.reject(await response.json())
   }
 }).catch((e) => {
   toast('Error', {
@@ -39,9 +45,34 @@ doFetchGet('/api/account/profile').then(async response => {
   })
   console.log(e)
 })
+
+function logout() {
+  doFetchGet('/api/account/logout').then(response => {
+    if (response.ok) {
+      window.location.href = '/'
+      useAppStore().logout()
+      toast('Logout Successful', {
+        description: 'You have been logged out',
+        duration: 1000,
+        cardProps: {
+          color: 'green'
+        }
+      })
+    } else {
+      toast('Error', {
+        description: 'Failed to logout',
+        duration: 1000,
+        cardProps: {
+          color: 'error'
+        }
+      })
+    }
+  });
+}
 </script>
 
 <template>
+  <VSonner />
   <v-card
     class="profile-card"
     :elevation="10"
@@ -55,7 +86,7 @@ doFetchGet('/api/account/profile').then(async response => {
       <h1 class="user-name">
         {{ user?.username }}
       </h1>
-      <UserBadges :roles="roles" />
+      <UserBadges :roles="user?.roles" />
       <span class="user-id" v-if="user?.id != null">
       <v-icon>mdi-account</v-icon>
       uid: {{ user?.id }}
@@ -67,9 +98,12 @@ doFetchGet('/api/account/profile').then(async response => {
       </p>
     </div>
   </v-card>
-  <pre>
-  {{ JSON.stringify(user, null, 2) }}
-</pre>
+  <v-btn
+    color="primary"
+    @click="logout"
+  >
+    Logout
+  </v-btn>
 </template>
 
 <style scoped>
