@@ -91,7 +91,7 @@ const lampOffStyle = 'url(' + LampOff + ')'
 .lamp-on {
   background-image: v-bind(lampOnStyle);
   transition: background-image 0.5s;
-  transition-delay: 0.5s;
+  transition-delay: 0.2s;
 }
 
 .lamp-off {

@@ -16,7 +16,7 @@ function verifyMinecraft() {
   // check ms
   doFetchGet("/api/account/microsoft").then(response => {
     if (response.ok) {
-      status.value = 'Checking Minecraft account...'
+      status.value = 'Microsoft account checked, verifying Minecraft ownership...'
       doFetchGet("/api/account/minecraft/verify").then(response => {
         if (response.ok) {
           toast('Success', {
@@ -28,6 +28,9 @@ function verifyMinecraft() {
           })
           status.value = 'Minecraft account verified, please refresh the page'
           window.location.reload()
+          verifyingMinecraft.value = false
+        } else if (response.status == 409) {
+          status.value = 'Sorry, your Minecraft account already verified, please refresh the page'
           verifyingMinecraft.value = false
         } else {
           toast('Error', {
