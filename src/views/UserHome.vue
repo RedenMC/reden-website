@@ -1,10 +1,11 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 
 import {doFetchGet, Profile} from "@/constants";
 import {ref} from "vue";
 import {toast, VSonner} from "vuetify-sonner";
 import UserBadges from "@/components/UserBadges.vue";
 import {useAppStore} from "@/store/app";
+import VerifyMinecraft from "@/components/VerifyMinecraft.vue";
 
 let user = ref<Profile>()
 
@@ -16,35 +17,37 @@ if (csrf) {
   history.pushState({}, document.title, window.location.pathname + window.location.hash)
   console.log('csrf', csrf)
 }
-
-doFetchGet('/api/account/profile').then(async response => {
-  if (response.ok) {
-    const data: Profile = await response.json()
-    user.value = data
-    useAppStore().updateCache(data)
-  } else {
-    if (response.status === 401) {
-      toast('Error', {
-        description: 'You are not logged in',
-        duration: 1000,
-        cardProps: {
-          color: 'error'
-        }
-      })
-      window.location.href = '/login'
+function fetchUser() {
+  doFetchGet('/api/account/profile').then(async response => {
+    if (response.ok) {
+      const data: Profile = await response.json()
+      user.value = data
+      useAppStore().updateCache(data)
+    } else {
+      if (response.status === 401) {
+        toast('Error', {
+          description: 'You are not logged in',
+          duration: 1000,
+          cardProps: {
+            color: 'error'
+          }
+        })
+        window.location.href = '/login'
+      }
+      await Promise.reject(await response.json())
     }
-    await Promise.reject(await response.json())
-  }
-}).catch((e) => {
-  toast('Error', {
-    description: 'Failed to get user profile',
-    duration: 1000,
-    cardProps: {
-      color: 'error'
-    }
+  }).catch((e) => {
+    toast('Error', {
+      description: 'Failed to get user profile',
+      duration: 1000,
+      cardProps: {
+        color: 'error'
+      }
+    })
+    console.log(e)
   })
-  console.log(e)
-})
+}
+fetchUser()
 
 function logout() {
   doFetchGet('/api/account/logout').then(response => {
@@ -72,10 +75,10 @@ function logout() {
 </script>
 
 <template>
-  <VSonner />
+  <VSonner/>
   <v-card
-    class="profile-card"
     :elevation="10"
+    class="profile-card"
   >
     <div class="profile-card-content">
       <v-img
@@ -86,16 +89,17 @@ function logout() {
       <h1 class="user-name">
         {{ user?.username }}
       </h1>
-      <UserBadges :roles="user?.roles" />
-      <span class="user-id" v-if="user?.id != null">
-      <v-icon>mdi-account</v-icon>
-      uid: {{ user?.id }}
-    </span>
-      <p class="user-email" v-if="user?.email != null">
+      <UserBadges :roles="user?.roles"/>
+      <span v-if="user?.id != null" class="user-id">
+        <v-icon>mdi-account</v-icon>
+        uid: {{ user?.id }}
+      </span>
+      <p v-if="user?.email != null" class="user-email">
         <v-icon>mdi-email</v-icon>
         <a :href="'mailto:' + user?.email">{{ user?.email }}</a>
         <v-icon>mdi-warning</v-icon>
       </p>
+      <VerifyMinecraft :user="user" />
     </div>
   </v-card>
   <v-btn

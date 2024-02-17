@@ -1,69 +1,17 @@
-# essentials
+# Reden Website
 
-## Project setup
+This is the source code for the [Reden website](https://RedenMC.com)(RedenMC.com).
 
-```
-# yarn
-yarn
+## Contributing
 
-# npm
-npm install
+Feel free to open a PR.
 
-# pnpm
-pnpm install
+## License
 
-# bun 
-bun install
-```
+MIT
 
-### Compiles and hot-reloads for development
+## Security
 
-```
-# yarn
-yarn dev
+If you find a security vulnerability, please contact us at <info@redenmc.com>.
 
-# npm
-npm run dev
-
-# pnpm
-pnpm dev
-
-# bun 
-bun run dev
-```
-
-### Compiles and minifies for production
-
-```
-# yarn
-yarn build
-
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# bun 
-bun run build
-```
-
-### Lints and fixes files
-
-```
-# yarn
-yarn lint
-
-# npm
-npm run lint
-
-# pnpm
-pnpm lint
-
-# bun 
-bun run lint
-```
-
-### Customize configuration
-
-See [Configuration Reference](https://vitejs.dev/config/).
+You can use the GPG public key located in the `SECURITY.asc` file to encrypt your message.

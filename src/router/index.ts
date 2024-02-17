@@ -40,11 +40,6 @@ const routes = [
         component: () => import('@/views/UserHome.vue')
       },
       {
-        path: '/oauth/microsoft',
-        name: 'Microsoft OAuth',
-        component: () => import('@/views/OAuthMicrosoft.vue')
-      },
-      {
         path: '/download',
         name: 'Download',
         component: () => import('@/views/Download.vue')
