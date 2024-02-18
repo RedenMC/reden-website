@@ -34,7 +34,13 @@ export const useAppStore = defineStore('app', {
   state: getState,
   actions: {
     save() {
-      localStorage.setItem('appState', JSON.stringify(this.$state))
+      localStorage.setItem('appState', JSON.stringify({
+        logined: this.logined,
+        username: this.username,
+        uid: this.uid,
+        csrfToken: this.csrfToken,
+        userCache: this.userCache
+      }))
     },
     login(username: string, uid: number) {
       this.logined = true
