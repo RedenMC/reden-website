@@ -12,6 +12,7 @@ export type Profile = {
   roles: string[]
   mcUUID: string
   isStaff: boolean
+  githubId: string
 }
 
 export type GeneralResponse = {

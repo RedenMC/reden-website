@@ -154,7 +154,7 @@ export default {
         <v-col>
           <v-btn
             color="blue"
-            href="/oauth/github"
+            :href="'/api/oauth/github?redirect_url=' + encodeURI('/home')"
             :block="true"
           >
             <v-icon left>mdi-github</v-icon>
@@ -169,6 +169,18 @@ export default {
           >
             <v-icon left>mdi-microsoft</v-icon>
             Microsoft
+          </v-btn>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <v-btn
+            color="green"
+            :href="'/api/oauth/gitee?redirect_url=' + encodeURI('/home')"
+            :block="true"
+          >
+            <v-icon left>mdi-gitee</v-icon>
+            Gitee
           </v-btn>
         </v-col>
       </v-row>
