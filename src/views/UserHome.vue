@@ -111,7 +111,7 @@ function logout() {
         <span v-else>
           Account not linked
           <a
-            href="/api/oauth/gi thub?redirect_url=/home"
+            href="/api/oauth/github?redirect_url=/home"
           >
             Link Now
           </a>
