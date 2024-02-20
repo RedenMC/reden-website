@@ -7,6 +7,7 @@ type Def = {
   translate: string
   hover_translate?: string
   icon: string
+  url?: string
 }
 const defs: { [keys: string]: Def } = {
   developer: {
@@ -31,7 +32,8 @@ const defs: { [keys: string]: Def } = {
     color: 'purple',
     translate: 'user.sponsor',
     hover_translate: 'user.sponsor_hover',
-    icon: 'mdi-account-heart'
+    icon: 'mdi-account-heart',
+    url: '/sponsors'
   }
 }
 
@@ -46,7 +48,7 @@ const badges = ref(props.roles?.map((role: string) => defs[role]))
 watch(() => props.roles, (newVal) => {
   badges.value = newVal?.map((role: string) => defs[role])
 })
-window
+
 </script>
 
 <template>
@@ -61,6 +63,7 @@ window
         <v-chip
           v-bind="props"
           :color="badge.color"
+          :href="badge?.url"
           text-color="white"
         >
           <v-icon>{{ badge.icon }}</v-icon>

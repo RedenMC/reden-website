@@ -62,21 +62,21 @@ const lampOffStyle = 'url(' + LampOff + ')'
 
 .lever-on {
   position: absolute;
-  transform: translateY(-35px) rotate(45deg) translateX(25px);
+  transform: translateY(-36px) rotate(45deg) translateX(25px);
   transition: transform 0.5s;
   image-rendering: pixelated;
 }
 
 .lever-off {
   position: absolute;
-  transform: translateY(-35px) rotate(-45deg) translateX(-25px);
+  transform: translateY(-36px) rotate(-45deg) translateX(-25px);
   transition: transform 0.5s;
   image-rendering: pixelated;
 }
 
 .lever-base {
   position: absolute;
-  width: 25px;
+  height: 10px;
   left: 12px;
   top: 15px;
   image-rendering: pixelated;

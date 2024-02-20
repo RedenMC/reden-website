@@ -186,7 +186,6 @@ export default {
         </v-col>
       </v-row>
     </div>
-
   </div>
 </template>
 
