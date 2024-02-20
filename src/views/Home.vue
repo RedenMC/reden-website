@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import {VSonner} from 'vuetify-sonner'
 import {ref} from 'vue'
 import type {Position as PositionType} from 'vue-sonner/lib/types'
 import {useI18n} from 'vue-i18n'
@@ -17,7 +16,6 @@ document.title = t('reden.title.home') + ' - Reden'
 </script>
 
 <template>
-  <VSonner :position="position" :expand="expand"/>
   <div class="main-page">
     <div>
       <v-row>

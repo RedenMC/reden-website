@@ -1,12 +1,14 @@
 <script lang="ts" setup>
 import DefaultView from './View.vue'
 import RedenAppBar from "@/appbar/RedenAppBar.vue";
+import {VSonner} from "vuetify-sonner";
 </script>
 
 <template>
   <v-app theme="dark">
     <RedenAppBar/>
 
+    <VSonner :position="'top-right'" :expand="true"/>
     <default-view/>
 
     <v-footer class="flex-column">

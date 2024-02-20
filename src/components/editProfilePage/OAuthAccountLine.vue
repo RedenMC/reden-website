@@ -1,14 +1,38 @@
 <script lang="ts" setup>
-import {OAuthAccount} from "@/constants";
+import {doFetchDelete, getOauth, OAuthAccount} from "@/constants";
+import {ref} from "vue";
+import {toast} from "vuetify-sonner";
 
-const {type, account, icon} = defineProps<{
+const account = ref<OAuthAccount>()
+const loading = ref(true)
+
+const {type, icon} = defineProps<{
   type: string,
-  account?: OAuthAccount,
   icon?: string
 }>()
 
+getOauth(type, `/api/account/${type}`, account).then(() => {
+  loading.value = false
+})
 function unlinkAccount(type: string) {
-
+  doFetchDelete(`/api/account/${type}`).then(response => {
+    if (response.ok) {
+      account.value = undefined
+      toast('Account unlinked', {
+        cardProps: {
+          color: 'success'
+        },
+        duration: 5000,
+      })
+    } else {
+      toast(response.statusText, {
+        cardProps: {
+          color: 'error'
+        },
+        duration: 5000,
+      })
+    }
+  })
 }
 </script>
 
@@ -33,6 +57,7 @@ function unlinkAccount(type: string) {
         :href="`/api/oauth/${type}?redirect_url=/home`"
         class="text-capitalize setting-button"
         color="primary"
+        :loading="loading"
       >
         Link Account
       </v-btn>
@@ -41,6 +66,7 @@ function unlinkAccount(type: string) {
         class="text-capitalize setting-button"
         color="error"
         @click="unlinkAccount(type)"
+        :loading="loading"
       >
         Unlink Account
       </v-btn>

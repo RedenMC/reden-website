@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import {VSonner} from "vuetify-sonner";
 import CloudFlareCaptcha from "@/components/CloudFlareCaptcha.vue";
 </script>
 <script lang="ts">
@@ -101,8 +100,6 @@ export default {
 </script>
 
 <template>
-  <VSonner position="top-center" :expand="true"/>
-
   <div class="main-page">
     <div class="login-form">
       <h1>

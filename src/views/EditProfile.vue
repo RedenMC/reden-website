@@ -5,10 +5,6 @@ import OAuthAccountLine from "@/components/editProfilePage/OAuthAccountLine.vue"
 
 const user = ref<Profile>()
 fetchUser(user)
-const microsoft = ref<OAuthAccount>()
-const github = ref<OAuthAccount>()
-getOauth('microsoft', "/api/account/microsoft", microsoft)
-getOauth('github', "/api/account/github", github)
 
 const oldPassword = ref('')
 const newPassword = ref('')
@@ -21,9 +17,11 @@ function changePassword() {
 const savingInfo = ref(false)
 const savingPreferences = ref(false)
 function saveInfo() {
+  savingInfo.value = true
   // backend: todo
 }
 function savePreferences() {
+  savingPreferences.value = true
   // backend: todo
 }
 </script>
@@ -117,6 +115,7 @@ function savePreferences() {
       <v-btn
         class="text-capitalize setting-button"
         color="primary"
+        :loading="savingInfo"
         @click="saveInfo"
       >
         Save
@@ -217,8 +216,8 @@ function savePreferences() {
       label="New Password"
       placeholder="Enter your new password"
       :rules="[
-        v => isStrongPassword(v) || 'Password must contain at least 8 characters, and include uppercase, lowercase, and numbers',
-        v => v !== oldPassword || 'New password must be different from old password'
+        (v: string) => isStrongPassword(v) || 'Password must contain at least 8 characters, and include uppercase, lowercase, and numbers',
+        (v: string) => v !== oldPassword || 'New password must be different from old password'
       ]"
     />
     <v-text-field
@@ -229,7 +228,7 @@ function savePreferences() {
       label="Confirm New Password"
       placeholder="Enter your new password again"
       :rules="[
-        v => v === newPassword || 'Passwords do not match'
+        (v: string) => v === newPassword || 'Passwords do not match'
       ]"
     />
     <v-row>
@@ -250,8 +249,8 @@ function savePreferences() {
     <h3 class="setting-section-title">
       Third Party Accounts
     </h3>
-    <OAuthAccountLine icon="mdi-microsoft" type="microsoft" :account="microsoft"/>
-    <OAuthAccountLine icon="mdi-github" type="github" :account="github"/>
+    <OAuthAccountLine icon="mdi-microsoft" type="microsoft" />
+    <OAuthAccountLine icon="mdi-github" type="github" />
   </v-card>
 </template>
 

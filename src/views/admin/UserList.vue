@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {Ref, ref} from "vue";
 import {doFetchGet, ErrorResponse, Profile} from "@/constants";
-import {toast, VSonner} from "vuetify-sonner";
+import {toast} from "vuetify-sonner";
 
 const pageSize = ref(20)
 const totalItems = ref(0)
@@ -42,8 +42,6 @@ const headers = [
 </script>
 
 <template>
-  <VSonner position="top-center" :expand="true"/>
-
   <v-data-table-server
     v-model:items-per-page="pageSize"
     :headers="headers"

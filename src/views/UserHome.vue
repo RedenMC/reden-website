@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 
 import {doFetchGet} from "@/constants";
-import {toast, VSonner} from "vuetify-sonner";
+import {toast} from "vuetify-sonner";
 import {useAppStore} from "@/store/app";
 import UserProfileCard from "@/components/UserProfileCard.vue";
 
@@ -40,7 +40,6 @@ function logout() {
 </script>
 
 <template>
-  <VSonner/>
   <UserProfileCard>
     <template #actions>
       <v-row>

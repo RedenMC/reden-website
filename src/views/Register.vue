@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {toast, VSonner} from "vuetify-sonner";
+import {toast} from "vuetify-sonner";
 import CloudFlareCaptcha, {getCFToken} from "@/components/CloudFlareCaptcha.vue";
 import {onMounted, onUnmounted, ref} from "vue";
 import {useCaptchaStore} from "@/store/captcha";
@@ -81,8 +81,6 @@ function register() {
 </script>
 
 <template>
-  <VSonner :expand="true" position="top-center"/>
-
   <div class="main-page">
     <div v-if="!registerOk" class="register-form">
       <h1>

@@ -52,6 +52,17 @@ export function doFetchGet(url: string) {
   })
 }
 
+export function doFetchDelete(url: string) {
+  return fetch(url, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-Token': useAppStore().csrfToken || '<no csrf token>'
+    },
+    credentials: 'include',
+  })
+}
+
 export type ErrorResponse = {
   error: string
   error_description: string
@@ -95,26 +106,24 @@ export type OAuthAccount = {
   name?: string
 }
 
-export function getOauth(type: string, url: string, account: Ref<OAuthAccount | undefined>) {
-  doFetchGet(url).then(res => {
-    if (res.ok) {
-      res.json().then((data: OAuthAccount) => {
-        account.value = data
-      })
-    } else if (res.status == 404) {
-      account.value = undefined
-    } else {
-      console.error(res)
-      toast('Error', {
-        description: `Failed to get ${type} account`,
-        duration: 10000,
-        cardProps: {
-          color: 'error'
-        }
-      })
-    }
-  })
-}
+export const getOauth = (type: string, url: string, account: Ref<OAuthAccount | undefined>) => doFetchGet(url).then(res => {
+  if (res.ok) {
+    res.json().then((data: OAuthAccount) => {
+      account.value = data
+    })
+  } else if (res.status == 404) {
+    account.value = undefined
+  } else {
+    console.error(res)
+    toast('Error', {
+      description: `Failed to get ${type} account`,
+      duration: 10000,
+      cardProps: {
+        color: 'error'
+      }
+    })
+  }
+});
 
 export function isStrongPassword(password: string) {
   return !!(password.length >= 8
