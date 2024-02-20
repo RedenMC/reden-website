@@ -40,6 +40,11 @@ const routes = [
         component: () => import('@/views/UserHome.vue')
       },
       {
+        path: '/home/edit',
+        name: 'EditProfile',
+        component: () => import('@/views/EditProfile.vue')
+      },
+      {
         path: '/download',
         name: 'Download',
         component: () => import('@/views/Download.vue')
