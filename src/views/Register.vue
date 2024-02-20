@@ -3,7 +3,7 @@ import {toast, VSonner} from "vuetify-sonner";
 import CloudFlareCaptcha, {getCFToken} from "@/components/CloudFlareCaptcha.vue";
 import {onMounted, onUnmounted, ref} from "vue";
 import {useCaptchaStore} from "@/store/captcha";
-import doFetchPost from "@/constants";
+import {isStrongPassword} from "@/constants";
 
 const email = ref('')
 const username = ref('')
@@ -32,7 +32,7 @@ onUnmounted(() => {
 })
 
 function register() {
-  if (!isStrongPassword()) return
+  if (!isStrongPassword(password.value)) return
   if (confirmPassword.value != password.value) return
   if (email.value.indexOf('@') == -1) return
   if (!/^[\w\-\u4e00-\u9fa5]{3,20}$/.test(username.value)) return
@@ -78,12 +78,6 @@ function register() {
   })
 }
 
-function isStrongPassword() {
-  return !!(password.value.length >= 8
-    && password.value.match(/[a-z]/)
-    && password.value.match(/[A-Z]/)
-    && password.value.match(/[0-9]/));
-}
 </script>
 
 <template>
@@ -116,7 +110,7 @@ function isStrongPassword() {
       </v-text-field>
       <v-text-field
         v-model="password"
-        :rules="[() => isStrongPassword() || 'Password is not strong enough, must contain at least 8 characters, including uppercase, lowercase, and numbers']"
+        :rules="[() => isStrongPassword(password) || 'Password is not strong enough, must contain at least 8 characters, including uppercase, lowercase, and numbers']"
         label="Password"
         placeholder="Password"
         required
