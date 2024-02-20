@@ -1,3 +1,4 @@
+import { register } from 'blockly/core/extensions'
 import type { I18n } from 'vue-i18n'
 import { createI18n } from 'vue-i18n'
 const messages = {
@@ -84,6 +85,13 @@ const messages = {
         captcha: 'Please complete the captcha first',
       },
     },
+    register: {
+      title: 'Register to Reden',
+      button: {
+        register: 'Register',
+        captcha: 'Please complete the captcha first',
+      },
+    },
     search: {
       hover: 'Search Reden Features',
     },
@@ -165,6 +173,14 @@ const messages = {
     },
     login: {
       title: '登录 Reden',
+      oauth: '使用以下方式登录',
+      button: {
+        login: '登录',
+        captcha: '请先完成验证码',
+      },
+    },
+    register: {
+      title: '注册 Reden',
       oauth: '使用以下方式登录',
       button: {
         login: '登录',

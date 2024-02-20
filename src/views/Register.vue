@@ -13,7 +13,7 @@ const invitationCode = ref('')
 const loading = ref(false)
 const captchaOk = ref(false)
 const registerOk = ref(false)
-let task = 0
+let task : NodeJS.Timeout
 
 onMounted(() => {
   task = setInterval(() => {
@@ -91,7 +91,7 @@ function isStrongPassword() {
   <div class="main-page">
     <div class="register-form" v-if="!registerOk">
       <h1>
-        Register RedenMC Account
+        {{ $t('register.title') }}
       </h1>
       <v-text-field
         v-model="email"
@@ -229,4 +229,6 @@ function isStrongPassword() {
   margin-bottom: 100px;
   margin-top: 100px;
 }
+
+
 </style>
