@@ -69,14 +69,15 @@ function verifyMinecraft() {
   <p class="minecraft">
     <v-icon>mdi-minecraft</v-icon>
     <span v-if="user?.mcUUID != null">
-      Verified minecraft account
-
       <v-tooltip
-        location="top"
         :text="`Verified as Minecraft UUID ${user.mcUUID}`"
+        location="top"
       >
         <template #activator="{ props }">
-          <v-icon v-bind="props" style="color: green">mdi-check-decagram</v-icon>
+          <span v-bind="props">
+            <v-icon style="color: green">mdi-check-decagram</v-icon>
+            Verified minecraft account
+          </span>
         </template>
       </v-tooltip>
     </span>

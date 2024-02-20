@@ -106,7 +106,7 @@ function logout() {
       <p class="user-github">
         <v-icon>mdi-github</v-icon>
         <span v-if="user?.githubId != null">
-          <a :href="'//github.com/' + user.githubId"> {{ user!.githubId }} </a>
+          <a :href="'//github.com/' + user.githubId">     {{ user!.githubId }} </a>
         </span>
         <span v-else>
           Account not linked
@@ -142,15 +142,13 @@ function logout() {
   text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
 }
 
-.user-email {
-  a {
-    color: inherit;
-    text-decoration: none;
-  }
+a {
+  color: inherit;
+  text-decoration: none;
+}
 
-  a:hover {
-    text-decoration: underline;
-  }
+a:hover {
+  text-decoration: underline;
 }
 
 .profile-card-content {
