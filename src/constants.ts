@@ -1,6 +1,7 @@
 import {useAppStore} from "@/store/app";
 import {Ref} from "vue";
 import {toast} from "vuetify-sonner";
+import {da} from "vuetify/locale";
 
 export const reCAPTCHAKey = "6Lczc24pAAAAAAxzBZbRy8CZc_ba06Qn_3OJ_Vg-"
 export const cloudflareCAPTCHAKey = "0x4AAAAAAARtCTyyGc1nbVUm"
@@ -15,6 +16,7 @@ export type Profile = {
   mcUUID: string
   isStaff: boolean
   githubId: string
+  canChangePassword: boolean
 }
 
 export type GeneralResponse = {
@@ -84,5 +86,40 @@ export function fetchUser(userRef: Ref<Profile | undefined>) {
     })
     console.log(e)
   })
+}
+
+export type OAuthAccount = {
+  type: string
+  id: string
+  email: string
+  name?: string
+}
+
+export function getOauth(type: string, url: string, account: Ref<OAuthAccount | undefined>) {
+  doFetchGet(url).then(res => {
+    if (res.ok) {
+      res.json().then((data: OAuthAccount) => {
+        account.value = data
+      })
+    } else if (res.status == 404) {
+      account.value = undefined
+    } else {
+      console.error(res)
+      toast('Error', {
+        description: `Failed to get ${type} account`,
+        duration: 10000,
+        cardProps: {
+          color: 'error'
+        }
+      })
+    }
+  })
+}
+
+export function isStrongPassword(password: string) {
+  return !!(password.length >= 8
+    && password.match(/[a-z]/)
+    && password.match(/[A-Z]/)
+    && password.match(/[0-9]/));
 }
 
