@@ -87,16 +87,6 @@ function isStrongPassword() {
     && password.value.match(/[0-9]/)
 }
 
-function tmp(){
-  toast(t("register.toast.succ.title"),
-        {
-          description: t("register.toast.succ.msg"),
-          duration: 1000,
-          cardProps: {
-            color: 'green'
-          }
-        })
-}
 </script>
 
 <template>
