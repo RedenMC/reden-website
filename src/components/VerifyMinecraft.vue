@@ -66,59 +66,56 @@ function verifyMinecraft() {
 </script>
 
 <template>
-  <p class="minecraft">
-    <v-icon>mdi-minecraft</v-icon>
-    <span v-if="user?.mcUUID != null">
-      <v-tooltip
-        :text="`Verified as Minecraft UUID ${user.mcUUID}`"
-        location="top"
-      >
-        <template #activator="{ props }">
-          <span v-bind="props">
-            <v-icon style="color: green">mdi-check-decagram</v-icon>
-            Verified minecraft account
-          </span>
-        </template>
-      </v-tooltip>
-    </span>
-    <span v-else>
-      No verified minecraft account linked
-      <v-dialog width="500">
-        <template v-slot:activator="{ props }">
-          <v-btn
-            color="primary"
-            size="sm"
-            v-bind="props"
-            variant="plain"
-            @click="verifyMinecraft"
-          >
-            Verify Now
-          </v-btn>
-        </template>
+  <span v-if="user?.mcUUID != null">
+    <v-tooltip
+      :text="`Verified as Minecraft UUID ${user.mcUUID}`"
+      location="top"
+    >
+      <template #activator="{ props }">
+        <span v-bind="props">
+          <v-icon style="color: green">mdi-check-decagram</v-icon>
+          Verified minecraft account
+        </span>
+      </template>
+    </v-tooltip>
+  </span>
+  <span v-else>
+    No verified minecraft account linked
+    <v-dialog width="500">
+      <template v-slot:activator="{ props }">
+        <v-btn
+          color="primary"
+          size="sm"
+          v-bind="props"
+          variant="plain"
+          @click="verifyMinecraft"
+        >
+          Verify Now
+        </v-btn>
+      </template>
 
-        <template v-slot:default="">
-          <v-card
-            :loading="verifyingMinecraft"
-            title="Verify Minecraft"
-          >
-            <v-card-text v-html="status">
-            </v-card-text>
+      <template v-slot:default="">
+        <v-card
+          :loading="verifyingMinecraft"
+          title="Verify Minecraft"
+        >
+          <v-card-text v-html="status">
+          </v-card-text>
 
-            <v-card-actions>
-              <v-spacer/>
-              <v-btn
-                v-if="mustLinkMicrosoft"
-                color="primary"
-                href="/api/oauth/microsoft"
-              >
-                Link Now
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </template>
-      </v-dialog>
-    </span>
-  </p>
+          <v-card-actions>
+            <v-spacer/>
+            <v-btn
+              v-if="mustLinkMicrosoft"
+              color="primary"
+              href="/api/oauth/microsoft"
+            >
+              Link Now
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </template>
+    </v-dialog>
+  </span>
 </template>
 
 <style scoped>

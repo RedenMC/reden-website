@@ -58,17 +58,20 @@ fetchUser()
       </h1>
       <UserBadges :roles="user?.roles"/>
       <p v-if="user?.id != null" class="user-id">
-        <v-icon>mdi-account</v-icon>
-        uid: {{ user?.id }}
+        <v-icon class="profile-item-icon">mdi-account</v-icon>
+        <span>uid: {{ user?.id }}</span>
       </p>
       <p v-if="user?.email != null" class="user-email">
-        <v-icon>mdi-email</v-icon>
+        <v-icon class="profile-item-icon">mdi-email</v-icon>
         <a class="link" :href="'mailto:' + user?.email"> {{ user?.email }} </a>
         <v-icon>mdi-warning</v-icon>
       </p>
-      <VerifyMinecraft :user="user"/>
+      <p class="minecraft">
+        <v-icon class="profile-item-icon">mdi-minecraft</v-icon>
+        <VerifyMinecraft :user="user"/>
+      </p>
       <p class="user-github">
-        <v-icon>mdi-github</v-icon>
+        <v-icon class="profile-item-icon">mdi-github</v-icon>
         <span v-if="user?.githubId != null">
           <a class="link" :href="'//github.com/' + user.githubId"> {{ user!.githubId }} </a>
         </span>
@@ -135,5 +138,9 @@ a:hover.link {
   display: flex;
   flex-direction: row;
   justify-content: center;
+}
+
+.profile-item-icon {
+  margin-right: 6px;
 }
 </style>
