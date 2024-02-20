@@ -85,6 +85,13 @@ const messages = {
         captcha: 'Please complete the captcha first',
       },
     },
+    register: {
+      oauth: 'Or register with',
+      button: {
+        register: 'Register',
+        captcha: 'Please complete the captcha first',
+      },
+    },
     search: {
       hover: 'Search Reden Features',
     },
@@ -169,6 +176,13 @@ const messages = {
       oauth: '使用以下方式登录',
       button: {
         login: '登录',
+        captcha: '请先完成验证码',
+      },
+    },
+    register: {
+      oauth: '使用以下方式注册',
+      button: {
+        register: '注册',
         captcha: '请先完成验证码',
       },
     },
