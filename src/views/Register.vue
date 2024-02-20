@@ -152,7 +152,7 @@ function isStrongPassword() {
         :label="t('register.placeholder.invitation')"
         :placeholder="t('register.placeholder.invitation')"
         />
-      <span style="margin-top: -20px;margin-bottom: 15px;">
+      <span >
         {{ $t("register.existing") }} <a href="/login">{{ $t("register.login") }}</a>
       </span>
       <CloudFlareCaptcha v-show="!captchaOk"/>
@@ -161,7 +161,6 @@ function isStrongPassword() {
         :disabled="!captchaOk"
         color="primary"
         @click="register"
-        style="margin-top: 15px;"
       >
         {{
           captchaOk ?
