@@ -99,8 +99,7 @@ function verifyMinecraft() {
           :loading="verifyingMinecraft"
           title="Verify Minecraft"
         >
-          <v-card-text v-html="status">
-          </v-card-text>
+          <v-card-text>{{ status }}</v-card-text>
 
           <v-card-actions>
             <v-spacer/>
