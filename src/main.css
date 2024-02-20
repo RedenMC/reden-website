@@ -14,6 +14,7 @@
 .content-common {
     min-width: 320px;
     max-width: 800px;
+    padding: 20px;
     margin-left: auto;
     margin-right: auto;
 }

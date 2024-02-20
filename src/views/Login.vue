@@ -127,6 +127,9 @@ export default {
           <v-icon>mdi-lock</v-icon>
         </template>
       </v-text-field>
+
+      <CloudFlareCaptcha v-show="!captchaOk"/>
+
       <v-btn
         :loading="loading"
         :disabled="!captchaOk"
@@ -185,7 +188,6 @@ export default {
         </v-col>
       </v-row>
     </div>
-    <CloudFlareCaptcha v-show="!captchaOk"/>
   </div>
 </template>
 

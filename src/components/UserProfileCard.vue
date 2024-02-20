@@ -87,10 +87,11 @@ fetchUser()
       <v-row>
         <v-col>
           <v-btn
-              color="primary"
-              href="/home/edit"
-              rounded="lg"
-              variant="outlined"
+            color="secondary"
+            href="/home/edit"
+            rounded="lg"
+            class="text-none"
+            variant="outlined"
           >
             Edit Profile
           </v-btn>
