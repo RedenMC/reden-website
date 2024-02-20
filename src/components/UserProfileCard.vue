@@ -7,7 +7,7 @@ import VerifyMinecraft from "@/components/VerifyMinecraft.vue";
 let user = ref<Profile>()
 fetchUser(user)
 
-const { actions } = defineSlots<{
+defineSlots<{
   actions: VueElement[] | undefined
 }>()
 
