@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import {toast, VSonner} from "vuetify-sonner";
 import CloudFlareCaptcha, {getCFToken} from "@/components/CloudFlareCaptcha.vue";
 import {onMounted, onUnmounted, ref} from "vue";
@@ -38,6 +38,7 @@ function register() {
   if (!isStrongPassword()) return
   if (confirmPassword.value != password.value) return
   if (email.value.indexOf('@') == -1) return
+  if (!/^[\w\-\u4e00-\u9fa5]{3,20}$/.test(username.value)) return
   loading.value = true
   const req = {
     email: email.value,
@@ -65,7 +66,7 @@ function register() {
       })
     }
   }).catch(e => {
-    console.error('error',e)
+    console.error('error', e)
     toast('Failed to register: ' + (e?.code || 'Unknown error'), {
       description: e?.data?.error || t("register.toast.try"),
       duration: 5000,
@@ -81,19 +82,19 @@ function register() {
 }
 
 function isStrongPassword() {
-  return password.value.length >= 8
+  return !!(password.value.length >= 8
     && password.value.match(/[a-z]/)
     && password.value.match(/[A-Z]/)
-    && password.value.match(/[0-9]/)
+    && password.value.match(/[0-9]/));
 }
 
 </script>
 
 <template>
-  <VSonner position="top-center" :expand="true"/>
+  <VSonner :expand="true" position="top-center"/>
 
   <div class="main-page">
-    <div class="register-form" v-if="!registerOk">
+    <div v-if="!registerOk" class="register-form">
       <h1>
         {{ $t('register.title') }}
       </h1>
@@ -101,19 +102,17 @@ function isStrongPassword() {
         v-model="email"
         :label="t('register.placeholder.email')"
         :placeholder="t('register.placeholder.email')"
+        :rules="[() => /.+@.+\..+/i.test(email) || $t('register.inval.email')]"
         required>
         <template #prepend>
           <v-icon>mdi-email</v-icon>
         </template>
       </v-text-field>
-      <span v-if="email.indexOf('@') == -1" style="margin-top: -20px;margin-bottom: 5px;">
-        <v-icon color="red" size="small">mdi-alert-circle</v-icon>
-        {{ $t("register.inval.email") }}
-      </span>
       <v-text-field
         v-model="username"
         :label="t('register.placeholder.username')"
         :placeholder="t('register.placeholder.username')"
+        :rules="[() => /^[\w\-\u4e00-\u9fa5]{3,20}$/.test(username) || $t('register.inval.username')]"
         required>
         <template #prepend>
           <v-icon>mdi-account</v-icon>
@@ -123,8 +122,9 @@ function isStrongPassword() {
         v-model="password"
         :label="t('register.placeholder.password')"
         :placeholder="t('register.placeholder.password')"
-        type="password"
-        required>
+        :rules="[() => isStrongPassword() || $t('register.inval.password.strenght')]"
+        required
+        type="password">
         <template #prepend>
           <v-icon>mdi-lock</v-icon>
         </template>
@@ -133,20 +133,13 @@ function isStrongPassword() {
         v-model="confirmPassword"
         :label="t('register.placeholder.confirm')"
         :placeholder="t('register.placeholder.confirm')"
-        type="password"
-        required>
+        :rules="[() => confirmPassword == password || $t('register.inval.password.mismatching')]"
+        required
+        type="password">
         <template #prepend>
           <v-icon>mdi-lock</v-icon>
         </template>
       </v-text-field>
-      <span v-if="confirmPassword != password" style="margin-top: -20px;">
-        <v-icon color="red" size="small">mdi-alert-circle</v-icon>
-        {{ $t("register.inval.password.mismatching") }}
-      </span>
-      <span v-if="!isStrongPassword()" style="margin-bottom: 5px;">
-        <v-icon color="red" size="small">mdi-alert-circle</v-icon>
-        {{ $t("register.inval.password.strenght") }}
-      </span>
       <v-text-field
         v-model="invitationCode"
         :label="t('register.placeholder.invitation')"
@@ -157,8 +150,8 @@ function isStrongPassword() {
       </span>
       <CloudFlareCaptcha v-show="!captchaOk"/>
       <v-btn
-        :loading="loading"
         :disabled="!captchaOk"
+        :loading="loading"
         color="primary"
         @click="register"
       >
@@ -168,14 +161,29 @@ function isStrongPassword() {
             $t('register.button.captcha')
         }}
       </v-btn>
+
+      <h1>
+        {{
+          $t('register.oauth')
+        }}
+      </h1>
+      <v-btn
+        color="blue"
+        href="/api/oauth/microsoft"
+        prepend-icon="mdi-microsoft"
+        :block="true"
+      >
+        Microsoft
+      </v-btn>
     </div>
+
     <div v-if="registerOk">
       <v-sheet
+        class="ok-screen pa-4 text-center mx-auto"
         elevation="12"
         max-width="600"
         rounded="lg"
         width="100%"
-        class="ok-screen pa-4 text-center mx-auto"
       >
         <v-icon
           class="mb-5"
@@ -196,8 +204,8 @@ function isStrongPassword() {
           <v-btn
             class="text-none"
             color="success"
-            rounded
             href="/"
+            rounded
             variant="flat"
             width="90"
           >

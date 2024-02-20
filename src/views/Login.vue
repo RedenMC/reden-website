@@ -3,7 +3,7 @@ import {VSonner} from "vuetify-sonner";
 import CloudFlareCaptcha from "@/components/CloudFlareCaptcha.vue";
 </script>
 <script lang="ts">
-import doFetchPost, {ErrorResponse, LoginResponse} from "@/constants";
+import {doFetchPost, ErrorResponse, LoginResponse} from "@/constants";
 import {useAppStore} from "@/store/app";
 import {toast} from "vuetify-sonner";
 import {getCFToken} from "@/components/CloudFlareCaptcha.vue";

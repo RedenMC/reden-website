@@ -41,7 +41,23 @@ function logout() {
 
 <template>
   <VSonner/>
-  <UserProfileCard/>
+  <UserProfileCard>
+    <template #actions>
+      <v-row>
+        <v-col>
+          <v-btn
+            color="secondary"
+            href="/home/edit"
+            rounded="lg"
+            class="text-none"
+            variant="outlined"
+          >
+            Edit Profile
+          </v-btn>
+        </v-col>
+      </v-row>
+    </template>
+  </UserProfileCard>
   <v-btn
     color="primary"
     @click="logout"
