@@ -197,8 +197,6 @@ body {
   flex-direction: column;
   justify-content: center;
 
-  .buttons {
-  }
 
   @media (max-width: 750px) {
     .icon {

@@ -4,6 +4,7 @@ import CloudFlareCaptcha, {getCFToken} from "@/components/CloudFlareCaptcha.vue"
 import {onMounted, onUnmounted, ref} from "vue";
 import {useCaptchaStore} from "@/store/captcha";
 import doFetchPost from "@/constants";
+import { useI18n } from 'vue-i18n'
 
 const email = ref('')
 const username = ref('')
@@ -14,6 +15,7 @@ const loading = ref(false)
 const captchaOk = ref(false)
 const registerOk = ref(false)
 let task : NodeJS.Timeout
+const {t} = useI18n()
 
 onMounted(() => {
   task = setInterval(() => {
@@ -31,6 +33,7 @@ onUnmounted(() => {
   turnstile.remove()
 })
 
+
 function register() {
   if (!isStrongPassword()) return
   if (confirmPassword.value != password.value) return
@@ -46,9 +49,9 @@ function register() {
   }
   doFetchPost("/api/account/register/start", req).then(async res => {
     if (res.ok) {
-      toast('Register Successful',
+      toast(t("register.toast.succ.title"),
         {
-          description: 'Please check your email to complete the registration',
+          description: t("register.toast.succ.msg"),
           duration: 1000,
           cardProps: {
             color: 'green'
@@ -64,7 +67,7 @@ function register() {
   }).catch(e => {
     console.error('error',e)
     toast('Failed to register: ' + (e?.code || 'Unknown error'), {
-      description: e?.data?.error || 'Please try again later',
+      description: e?.data?.error || t("register.toast.try"),
       duration: 5000,
       cardProps: {
         color: 'error'
@@ -83,6 +86,17 @@ function isStrongPassword() {
     && password.value.match(/[A-Z]/)
     && password.value.match(/[0-9]/)
 }
+
+function tmp(){
+  toast(t("register.toast.succ.title"),
+        {
+          description: t("register.toast.succ.msg"),
+          duration: 1000,
+          cardProps: {
+            color: 'green'
+          }
+        })
+}
 </script>
 
 <template>
@@ -96,20 +110,20 @@ function isStrongPassword() {
       <v-text-field
         v-model="email"
         label="Email"
-        placeholder="Email"
+        placeholder="{{ t('register.placeholder.email') }}"
         required>
         <template #prepend>
           <v-icon>mdi-email</v-icon>
         </template>
       </v-text-field>
-      <span v-if="email.indexOf('@') == -1" >
+      <span v-if="email.indexOf('@') == -1" style="margin-top: -20px;margin-bottom: 5px;">
         <v-icon color="red" size="small">mdi-alert-circle</v-icon>
-        Invalid email address
+        {{ $t("register.inval.email") }}
       </span>
       <v-text-field
         v-model="username"
         label="Username"
-        placeholder="Username"
+        placeholder="{{ t('register.placeholder.username') }}"
         required>
         <template #prepend>
           <v-icon>mdi-account</v-icon>
@@ -118,7 +132,7 @@ function isStrongPassword() {
       <v-text-field
         v-model="password"
         label="Password"
-        placeholder="Password"
+        placeholder="{{ t('register.placeholder.password') }}"
         type="password"
         required>
         <template #prepend>
@@ -128,30 +142,30 @@ function isStrongPassword() {
       <v-text-field
         v-model="confirmPassword"
         label="Confirm Password"
-        placeholder="Confirm Password"
+        placeholder="{{ t('register.placeholder.cpassword') }}"
         type="password"
         required>
         <template #prepend>
           <v-icon>mdi-lock</v-icon>
         </template>
       </v-text-field>
-      <span v-if="confirmPassword != password" >
+      <span v-if="confirmPassword != password" style="margin-top: -20px;">
         <v-icon color="red" size="small">mdi-alert-circle</v-icon>
-        Passwords do not match
+        {{ $t("register.inval.password.mismatching") }}
       </span>
-      <span v-if="!isStrongPassword()" >
+      <span v-if="!isStrongPassword()" style="margin-bottom: 5px;">
         <v-icon color="red" size="small">mdi-alert-circle</v-icon>
-        Password is not strong enough, please use at least 8 characters, including uppercase, lowercase and numbers.
+        {{ $t("register.inval.password.strenght") }}
       </span>
-      <CloudFlareCaptcha v-show="!captchaOk"/>
       <v-text-field
         v-model="invitationCode"
         label="Invitation Code"
-        placeholder="Invitation Code, optional"
+        placeholder="{{ t('register.placeholder.invitation') }}"
         />
-      <span>
-        Already have an account? <a href="/login">Login</a>
+      <span style="margin-top: -20px;margin-bottom: 15px;">
+        {{ $t("register.existing") }} <a href="/login">{{ $t("register.login") }}</a>
       </span>
+      <CloudFlareCaptcha v-show="!captchaOk"/>
       <v-btn
         :loading="loading"
         :disabled="!captchaOk"
@@ -180,12 +194,10 @@ function isStrongPassword() {
           size="112"
         ></v-icon>
 
-        <h2 class="text-h5 mb-6">One more step</h2>
+        <h2 class="text-h5 mb-6">{{ $t("register.sent.title") }}</h2>
 
         <p class="mb-4 text-medium-emphasis">
-          We have sent an email to <strong>{{ email.substring(email.indexOf('@') + 1) }}</strong> with a link to complete your registration.
-          <br />
-          If you don't see the email, please check other places it might be, like your junk, spam, social, or other folders.
+          {{ $t("register.sent.msg",{email:email.substring(email.indexOf('@') + 1)}) }}
         </p>
 
         <v-divider class="mb-4"></v-divider>
@@ -199,7 +211,7 @@ function isStrongPassword() {
             variant="flat"
             width="90"
           >
-            Done
+            {{ $t("register.button.done") }}
           </v-btn>
         </div>
       </v-sheet>
@@ -228,6 +240,10 @@ function isStrongPassword() {
 .ok-screen {
   margin-bottom: 100px;
   margin-top: 100px;
+}
+
+.captcha{
+  margin: auto;
 }
 
 
