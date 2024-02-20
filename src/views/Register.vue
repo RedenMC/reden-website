@@ -109,8 +109,8 @@ function tmp(){
       </h1>
       <v-text-field
         v-model="email"
-        label="Email"
-        placeholder="{{ t('register.placeholder.email') }}"
+        :label="t('register.placeholder.email')"
+        :placeholder="t('register.placeholder.email')"
         required>
         <template #prepend>
           <v-icon>mdi-email</v-icon>
@@ -122,8 +122,8 @@ function tmp(){
       </span>
       <v-text-field
         v-model="username"
-        label="Username"
-        placeholder="{{ t('register.placeholder.username') }}"
+        :label="t('register.placeholder.username')"
+        :placeholder="t('register.placeholder.username')"
         required>
         <template #prepend>
           <v-icon>mdi-account</v-icon>
@@ -131,8 +131,8 @@ function tmp(){
       </v-text-field>
       <v-text-field
         v-model="password"
-        label="Password"
-        placeholder="{{ t('register.placeholder.password') }}"
+        :label="t('register.placeholder.password')"
+        :placeholder="t('register.placeholder.password')"
         type="password"
         required>
         <template #prepend>
@@ -141,8 +141,8 @@ function tmp(){
       </v-text-field>
       <v-text-field
         v-model="confirmPassword"
-        label="Confirm Password"
-        placeholder="{{ t('register.placeholder.cpassword') }}"
+        :label="t('register.placeholder.confirm')"
+        :placeholder="t('register.placeholder.confirm')"
         type="password"
         required>
         <template #prepend>
@@ -159,8 +159,8 @@ function tmp(){
       </span>
       <v-text-field
         v-model="invitationCode"
-        label="Invitation Code"
-        placeholder="{{ t('register.placeholder.invitation') }}"
+        :label="t('register.placeholder.invitation')"
+        :placeholder="t('register.placeholder.invitation')"
         />
       <span style="margin-top: -20px;margin-bottom: 15px;">
         {{ $t("register.existing") }} <a href="/login">{{ $t("register.login") }}</a>
@@ -171,6 +171,7 @@ function tmp(){
         :disabled="!captchaOk"
         color="primary"
         @click="register"
+        style="margin-top: 15px;"
       >
         {{
           captchaOk ?

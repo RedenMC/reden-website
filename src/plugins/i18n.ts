@@ -234,7 +234,7 @@ const messages = {
         username:"用户名",
         password:"密码",
         confirm:"重复密码",
-        invitation:"Invitation Code,optional"
+        invitation:"邀请码(可选)"
 
       },
       button: {
