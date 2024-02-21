@@ -1,9 +1,8 @@
 <script lang="ts" setup>
-import {toast, VSonner} from "vuetify-sonner";
+import {toast} from "vuetify-sonner";
 import CloudFlareCaptcha, {getCFToken} from "@/components/CloudFlareCaptcha.vue";
 import {onMounted, onUnmounted, ref} from "vue";
 import {useCaptchaStore} from "@/store/captcha";
-import doFetchPost from "@/constants";
 import { useI18n } from 'vue-i18n'
 import {isStrongPassword} from "@/constants";
 
@@ -29,12 +28,11 @@ onMounted(() => {
   }, 1000)
 })
 
+
 onUnmounted(() => {
   clearInterval(task)
   turnstile.remove()
 })
-
-
 function register() {
   if (!isStrongPassword(password.value)) return
   if (confirmPassword.value != password.value) return
@@ -68,7 +66,7 @@ function register() {
     }
   }).catch(e => {
     console.error('error', e)
-    toast('Failed to register: ' + (e?.code || 'Unknown error'), {
+    toast(t("register.toast.failed") + (e?.code || t("register.error.unknown")), {
       description: e?.data?.error || t("register.toast.try"),
       duration: 5000,
       cardProps: {
@@ -85,8 +83,6 @@ function register() {
 </script>
 
 <template>
-  <VSonner :expand="true" position="top-center"/>
-
   <div class="main-page">
     <div v-if="!registerOk" class="register-form">
       <h1>
@@ -116,7 +112,7 @@ function register() {
         v-model="password"
         :label="t('register.placeholder.password')"
         :placeholder="t('register.placeholder.password')"
-        :rules="[() => isStrongPassword() || $t('register.invalid.password.strength')]"
+        :rules="[() => isStrongPassword(password) || $t('register.invalid.password.strength')]"
         required
         type="password">
         <template #prepend>
@@ -190,7 +186,11 @@ function register() {
         <h2 class="text-h5 mb-6">{{ $t("register.sent.title") }}</h2>
 
         <p class="mb-4 text-medium-emphasis">
-          {{ $t("register.sent.msg",{email:email.substring(email.indexOf('@') + 1)}) }}
+          {{ $t("register.sent.msg1") }}
+          <strong>{{ email.substring(email.indexOf('@') + 1) }}</strong>
+          {{ $t("register.sent.msg2") }}
+          <br />
+          {{ $t("register.sent.msg3") }}
         </p>
 
         <v-divider class="mb-4"></v-divider>
