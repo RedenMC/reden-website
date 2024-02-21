@@ -1,10 +1,11 @@
 <script lang="ts" setup>
 import {ref} from "vue";
-import {doFetchGet, Profile} from "@/constants";
+import {doFetchGet, Profile, toastError} from "@/constants";
 import {toast} from "vuetify-sonner";
 
-const {user} = defineProps<{
+const {user, showActions} = defineProps<{
   user: Profile | undefined
+  showActions: boolean
 }>()
 const status = ref('')
 const verifyingMinecraft = ref(false)
@@ -33,35 +34,21 @@ function verifyMinecraft() {
           status.value = 'Sorry, your Minecraft account already verified, please refresh the page'
           verifyingMinecraft.value = false
         } else {
-          toast('Error', {
-            description: 'Failed to verify minecraft account',
-            duration: 1000,
-            cardProps: {
-              color: 'error'
-            }
-          })
-          verifyingMinecraft.value = false
+          return Promise.reject(response)
         }
-      })
+      }).catch(e => toastError(e, 'Failed to verify minecraft account'))
+        .finally(() => verifyingMinecraft.value = false)
+    } else if (response.status == 404) {
+      mustLinkMicrosoft.value = true
+      status.value = 'You must link your microsoft account to verify minecraft account. ' +
+        'We must be given permission to check your microsoft and minecraft account, if you do not trust this, ' +
+        'please check out <a href="/minecraft/verify/in-game"> In-Game Verification</a> for more information'
+      verifyingMinecraft.value = false
     } else {
-      if (response.status == 404) {
-        mustLinkMicrosoft.value = true
-        status.value = 'You must link your microsoft account to verify minecraft account. ' +
-          'We must be given permission to check your microsoft and minecraft account, if you do not trust this, ' +
-          'please check out <a href="/minecraft/verify/in-game"> In-Game Verification</a> for more information'
-        verifyingMinecraft.value = false
-      } else {
-        toast('Error', {
-          description: 'Failed to check microsoft account',
-          duration: 1000,
-          cardProps: {
-            color: 'error'
-          }
-        })
-        verifyingMinecraft.value = false
-      }
+      return Promise.reject(response)
     }
-  })
+  }).catch(e => toastError(e, 'Failed to verify microsoft account'))
+    .finally(() => verifyingMinecraft.value = false)
 }
 </script>
 
@@ -82,10 +69,12 @@ function verifyMinecraft() {
   <span v-else>
     No verified minecraft account linked
     <v-dialog width="500">
-      <template v-slot:activator="{ props }">
+      <template #activator="{ props }">
         <v-btn
+          v-if="showActions"
           color="primary"
           size="sm"
+          class="text-capitalize"
           v-bind="props"
           variant="plain"
           @click="verifyMinecraft"
@@ -94,7 +83,7 @@ function verifyMinecraft() {
         </v-btn>
       </template>
 
-      <template v-slot:default="">
+      <template #default>
         <v-card
           :loading="verifyingMinecraft"
           title="Verify Minecraft"

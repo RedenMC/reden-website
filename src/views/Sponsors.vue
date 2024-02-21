@@ -16,7 +16,7 @@ doFetchGet('/api/sponsors').then((res) => {
   if (res.ok) {
     return res.json()
   } else {
-    Promise.reject('Failed to fetch sponsors')
+    return Promise.reject('Failed to fetch sponsors')
   }
 }).then(data => {
   sponsors.value = data.sort((a: Sponsor, b: Sponsor) => {

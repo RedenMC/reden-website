@@ -3,7 +3,7 @@ import {toast} from "vuetify-sonner";
 import CloudFlareCaptcha, {getCFToken} from "@/components/CloudFlareCaptcha.vue";
 import {onMounted, onUnmounted, ref} from "vue";
 import {useCaptchaStore} from "@/store/captcha";
-import {isStrongPassword} from "@/constants";
+import {isStrongPassword, toastError} from "@/constants";
 
 const email = ref('')
 const username = ref('')
@@ -57,20 +57,13 @@ function register() {
         })
       registerOk.value = true
     } else {
-      await Promise.reject({
+      return Promise.reject({
         code: res.status,
         data: await res.json()
       })
     }
-  }).catch(e => {
-    console.error('error', e)
-    toast('Failed to register: ' + (e?.code || 'Unknown error'), {
-      description: e?.data?.error || 'Please try again later',
-      duration: 5000,
-      cardProps: {
-        color: 'error'
-      }
-    })
+  }).catch((e: any) => {
+    toastError(e, 'Failed to register')
     captchaOk.value = false
     turnstile.reset()
   }).finally(() => {
