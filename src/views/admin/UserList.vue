@@ -67,7 +67,7 @@ function isBanned(user: Profile) {
       <user-badges :roles="value"/>
     </template>
     <template #item.ban="{ item }">
-      <v-chip v-if="isBanned(item)" color="error" text="Banned until {{ new Date(item.bannedUntil).toLocaleString() }}, {{ item.bannedReason }}"/>
+      <v-chip v-if="isBanned(item)" color="error" :text="`Banned until ${ new Date(item.bannedUntil).toLocaleString() }, ${ item.bannedReason }`"/>
       <v-chip v-else color="success" text="Not Banned"/>
     </template>
   </v-data-table-server>
