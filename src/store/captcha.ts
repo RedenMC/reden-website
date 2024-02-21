@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia'
+import { defineStore } from 'pinia';
 
 export const useCaptchaStore = defineStore('captcha', {
   state: () => ({
@@ -6,13 +6,13 @@ export const useCaptchaStore = defineStore('captcha', {
     token: null as string | null,
   }),
   actions: {
-    set(provider: "cloudflare" | "reCAPTCHA" | "none", token: string) {
-      this.provider = provider
-      this.token = token
+    set(provider: 'cloudflare' | 'reCAPTCHA' | 'none', token: string) {
+      this.provider = provider;
+      this.token = token;
     },
     clear() {
-      this.provider = 'none'
-      this.token = null
-    }
+      this.provider = 'none';
+      this.token = null;
+    },
   },
-})
+});

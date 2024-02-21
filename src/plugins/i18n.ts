@@ -1,5 +1,5 @@
-import type { I18n } from 'vue-i18n'
-import { createI18n } from 'vue-i18n'
+import type { I18n } from 'vue-i18n';
+import { createI18n } from 'vue-i18n';
 const messages = {
   en: {
     en: 'English',
@@ -17,7 +17,7 @@ const messages = {
         itemsPerPageText: 'Items per page:',
         itemsPerPageAll: 'All',
         pageText: '{0}-{1} items of {2}',
-      }
+      },
     },
     reden: {
       learn_more: 'Learn More',
@@ -56,24 +56,31 @@ const messages = {
           title: 'Features',
           undo: 'Made a mistake? Reden can quickly undo your actions by just pressing Ctrl+Z. All chain reactions will be undone.',
           rvc: 'RVC (Reden Version Control) is a version control system designed for redstone. It allows you to manage your redstone projects in all versions with ease.',
-          debugger: 'Can\'t figure out why your redstone contraption isn\'t working? Reden Debugger can help you see how the game exactly processes your redstone contraption.',
+          debugger:
+            "Can't figure out why your redstone contraption isn't working? Reden Debugger can help you see how the game exactly processes your redstone contraption.",
         },
         community_intro: {
           title: 'Community',
-          open_source: 'Reden is an open-source project and free for everyone. We welcome everyone to contribute to Reden including code, documentation, wiki, and more.',
-          rvchub: 'RVC Hub is an official platform for redstone developers to share their RVC projects. Start sharing your knowledge and experience with the community here!',
+          open_source:
+            'Reden is an open-source project and free for everyone. We welcome everyone to contribute to Reden including code, documentation, wiki, and more.',
+          rvchub:
+            'RVC Hub is an official platform for redstone developers to share their RVC projects. Start sharing your knowledge and experience with the community here!',
           wiki: 'Reden Wiki contains almost everything you need to know about redstone ans Reden. It is also a great place to share your knowledge with the community.',
-          discord: 'Join our Discord server to chat with other redstone developers and get help from the community.',
-          sponsor: 'Reden is sponsored by the community. We appreciate every sponsor who supports us.',
-        }
+          discord:
+            'Join our Discord server to chat with other redstone developers and get help from the community.',
+          sponsor:
+            'Reden is sponsored by the community. We appreciate every sponsor who supports us.',
+        },
       },
       download: 'Download',
       download_page: {
-        sorry_constructing: 'Sorry, our download page is under construction, we suggest you to download at',
+        sorry_constructing:
+          'Sorry, our download page is under construction, we suggest you to download at',
       },
       my_account: 'My Account',
       wiki: 'Wiki',
-      description: 'Provide a one-stop working environment for redstone developers and become the best redstone debugging and teaching tool.',
+      description:
+        'Provide a one-stop working environment for redstone developers and become the best redstone debugging and teaching tool.',
     },
     user: {
       developer: 'Developer',
@@ -87,10 +94,13 @@ const messages = {
     },
     sponsors: {
       title: 'Sponsors',
-      description: 'Reden is supported by you, and we are sincerely grateful to every sponsor.',
+      description:
+        'Reden is supported by you, and we are sincerely grateful to every sponsor.',
       alipay: 'Support us with Alipay',
-      notice: 'Reden is an open-source project and always free for everyone. We receive no funding from any company or organization. We rely on your support to keep the project running. When you support us, you will be listed here as a sponsor so please make sure you provide your name and email address when you donate. Thank you for your support!',
-      badge: 'You can get this Sponsor badge by supporting us, and it will be displayed on your profile.',
+      notice:
+        'Reden is an open-source project and always free for everyone. We receive no funding from any company or organization. We rely on your support to keep the project running. When you support us, you will be listed here as a sponsor so please make sure you provide your name and email address when you donate. Thank you for your support!',
+      badge:
+        'You can get this Sponsor badge by supporting us, and it will be displayed on your profile.',
     },
     login: {
       title: 'Login to Reden',
@@ -188,24 +198,30 @@ const messages = {
           title: '功能介绍',
           undo: '不小心出了错？Reden 可以通过按下 Ctrl+Z 快速撤销您的操作。所有连锁反应都将被撤销。',
           rvc: 'RVC (Reden 版本控制) 是专为红石设计的版本控制系统。它可以让您轻松管理所有版本的红石项目。',
-          debugger: '搞不清楚为什么您的红石装置不工作？Reden 调试器可以帮助您查看游戏如何处理您的红石装置。',
+          debugger:
+            '搞不清楚为什么您的红石装置不工作？Reden 调试器可以帮助您查看游戏如何处理您的红石装置。',
         },
         community_intro: {
           title: '社区',
-          open_source: 'Reden 是一个开源项目，对所有人免费。我们欢迎所有人为 Reden 做出贡献，包括代码、文档、Wiki 等。',
-          rvchub: 'RVC Hub 是供红石开发者分享他们 RVC 项目的官方平台。在这里开始与社区分享您的知识和经验！',
+          open_source:
+            'Reden 是一个开源项目，对所有人免费。我们欢迎所有人为 Reden 做出贡献，包括代码、文档、Wiki 等。',
+          rvchub:
+            'RVC Hub 是供红石开发者分享他们 RVC 项目的官方平台。在这里开始与社区分享您的知识和经验！',
           wiki: 'Reden Wiki 包含了您需要了解的关于红石和 Reden 的几乎所有内容。这也是与社区分享您的知识的好地方。',
-          discord: '加入我们的 Discord 服务器，与其他红石开发者聊天并从社区获得帮助。',
+          discord:
+            '加入我们的 Discord 服务器，与其他红石开发者聊天并从社区获得帮助。',
           sponsor: 'Reden 得到了社区的赞助。我们感谢每一位支持我们的赞助者。',
-        }
+        },
       },
       download: '下载',
       download_page: {
-        sorry_constructing: '抱歉，我们的下载页面正在建设中，我们建议您前往此处下载：',
+        sorry_constructing:
+          '抱歉，我们的下载页面正在建设中，我们建议您前往此处下载：',
       },
       my_account: '我的账户',
       wiki: 'Wiki',
-      description: '为红石机器开发者提供一站式工作环境，成为最好的红石调试和教学工具。',
+      description:
+        '为红石机器开发者提供一站式工作环境，成为最好的红石调试和教学工具。',
     },
     user: {
       developer: '开发者',
@@ -221,7 +237,8 @@ const messages = {
       title: '赞助者',
       description: 'Reden 得到了你们的支持，我们在此由衷地感谢每一位赞助者。',
       alipay: '使用支付宝赞助',
-      notice: 'Reden 是一个开源项目，永远对所有人免费。我们没有从任何公司或组织获得资金。我们依靠您的支持来维持项目运行。当您支持我们时，您会在此页面被列出，因此请确保您在捐款时提供您的姓名和电子邮件地址。感谢您的支持！',
+      notice:
+        'Reden 是一个开源项目，永远对所有人免费。我们没有从任何公司或组织获得资金。我们依靠您的支持来维持项目运行。当您支持我们时，您会在此页面被列出，因此请确保您在捐款时提供您的姓名和电子邮件地址。感谢您的支持！',
     },
     login: {
       title: '登录 Reden',
@@ -275,12 +292,11 @@ const messages = {
       hover: '搜索 Reden 功能',
     },
   },
-}
-
+};
 
 export const i18n: I18n = createI18n({
   legacy: false, // Vuetify does not support the legacy mode of vue-i18n
   locale: localStorage.getItem('locale') || 'en',
   fallbackLocale: 'en',
   messages,
-})
+});

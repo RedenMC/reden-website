@@ -1,41 +1,34 @@
 <script setup lang="ts">
-import {VueElement} from "vue";
-import {Profile} from "@/constants";
-import UserBadges from "@/components/UserBadges.vue";
-import VerifyMinecraft from "@/components/VerifyMinecraft.vue";
+import { VueElement } from 'vue';
+import { Profile } from '@/constants';
+import UserBadges from '@/components/UserBadges.vue';
+import VerifyMinecraft from '@/components/VerifyMinecraft.vue';
 
 const { user, showActions } = defineProps({
   user: {
     type: Object as () => Profile | undefined,
-    required: true
+    required: true,
   },
   showActions: {
     type: Boolean,
-    default: true
-  }
-})
+    default: true,
+  },
+});
 
 defineSlots<{
-  actions: VueElement[] | undefined
-}>()
-
+  actions: VueElement[] | undefined;
+}>();
 </script>
 <template>
-  <v-card
-      :elevation="10"
-      class="profile-card"
-  >
+  <v-card :elevation="10" class="profile-card">
     <div class="profile-card-content">
       <div class="user-avatar-border">
-        <v-avatar
-            :image="user?.avatarUrl"
-            :size="200"
-        />
+        <v-avatar :image="user?.avatarUrl" :size="200" />
       </div>
       <h1 class="user-name">
         {{ user?.username }}
       </h1>
-      <UserBadges :roles="user?.roles"/>
+      <UserBadges :roles="user?.roles" />
       <p v-if="user?.id != null" class="user-id">
         <v-icon class="profile-item-icon">mdi-account</v-icon>
         <span>uid: {{ user?.id }}</span>
@@ -47,18 +40,18 @@ defineSlots<{
       </p>
       <p class="minecraft">
         <v-icon class="profile-item-icon">mdi-minecraft</v-icon>
-        <VerifyMinecraft :user="user" :showActions="showActions"/>
+        <VerifyMinecraft :user="user" :showActions="showActions" />
       </p>
       <p class="user-github">
         <v-icon class="profile-item-icon">mdi-github</v-icon>
         <span v-if="user?.githubId != null">
-          <a class="link" :href="'//github.com/' + user.githubId"> {{ user!.githubId }} </a>
+          <a class="link" :href="'//github.com/' + user.githubId">
+            {{ user!.githubId }}
+          </a>
         </span>
         <span v-else>
           Account not linked
-          <a v-if="showActions"
-              href="/api/oauth/github?redirect_url=/home"
-          >
+          <a v-if="showActions" href="/api/oauth/github?redirect_url=/home">
             Link Now
           </a>
         </span>

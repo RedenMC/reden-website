@@ -1,26 +1,28 @@
 <script setup lang="ts">
-import SearchButton from './SearchButton.vue'
-import TranslateButton from "./TranslateButton.vue";
-import '@/main.css'
-import AccountButton from "@/appbar/AccountButton.vue";
-import {discordInvite} from "@/constants";
+import SearchButton from './SearchButton.vue';
+import TranslateButton from './TranslateButton.vue';
+import '@/main.css';
+import AccountButton from '@/appbar/AccountButton.vue';
+import { discordInvite } from '@/constants';
 </script>
 
 <template>
   <v-app-bar :elevation="2">
     <template #prepend>
-      <v-menu
-        class="mobile-show"
-        :close-on-content-click="true"
-      >
+      <v-menu class="mobile-show" :close-on-content-click="true">
         <template #activator="{ props }">
-          <v-btn class="mobile-show" icon="mdi-menu" title="Menu" v-bind="props"/>
+          <v-btn
+            class="mobile-show"
+            icon="mdi-menu"
+            title="Menu"
+            v-bind="props"
+          />
         </template>
 
         <v-list>
           <v-list-item
             :link="true"
-            v-for="(k) in [1, 2, 3]"
+            v-for="k in [1, 2, 3]"
             :key="`locale-${k}`"
             :min-width="200"
           >
@@ -31,19 +33,27 @@ import {discordInvite} from "@/constants";
         </v-list>
       </v-menu>
 
-      <v-btn class="mobile-hide" icon="mdi-home" title="Home" href="/"/>
+      <v-btn class="mobile-hide" icon="mdi-home" title="Home" href="/" />
     </template>
     <p class="text-h5"></p>
     <template #append>
-      <v-btn class="mobile-hide" icon="mdi-github" title="Github"
-             href="https://github.com/zly2006/reden-is-what-we-made"/>
-      <v-btn class="mobile-hide" icon="custom:DiscordIcon" title="Discord" :href="discordInvite"/>
-      <TranslateButton/>
-      <SearchButton/>
-      <AccountButton/>
+      <v-btn
+        class="mobile-hide"
+        icon="mdi-github"
+        title="Github"
+        href="https://github.com/zly2006/reden-is-what-we-made"
+      />
+      <v-btn
+        class="mobile-hide"
+        icon="custom:DiscordIcon"
+        title="Discord"
+        :href="discordInvite"
+      />
+      <TranslateButton />
+      <SearchButton />
+      <AccountButton />
     </template>
   </v-app-bar>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

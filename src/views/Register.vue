@@ -1,11 +1,12 @@
 <script lang="ts" setup>
-import {toast} from "vuetify-sonner";
-import CloudFlareCaptcha, {getCFToken} from "@/components/CloudFlareCaptcha.vue";
-import {onMounted, onUnmounted, ref} from "vue";
-import {useCaptchaStore} from "@/store/captcha";
+import { toast } from 'vuetify-sonner';
+import CloudFlareCaptcha, {
+  getCFToken,
+} from '@/components/CloudFlareCaptcha.vue'
 import { useI18n } from 'vue-i18n'
-import {isStrongPassword, toastError} from "@/constants";
-
+import { onMounted, onUnmounted, ref } from 'vue';
+import { useCaptchaStore } from '@/store/captcha';
+import { isStrongPassword, toastError } from '@/constants';
 const email = ref('')
 const username = ref('')
 const password = ref('')
@@ -19,60 +20,62 @@ const {t} = useI18n()
 
 onMounted(() => {
   task = setInterval(() => {
-    const token = getCFToken()
-    console.log(token)
+    const token = getCFToken();
+    console.log(token);
     if (token !== '') {
-      useCaptchaStore().set("cloudflare", token)
-      captchaOk.value = true
+      useCaptchaStore().set('cloudflare', token);
+      captchaOk.value = true;
     }
-  }, 1000)
-})
+  }, 1000);
+});
 
 
 onUnmounted(() => {
-  clearInterval(task)
-  turnstile.remove()
-})
+  clearInterval(task);
+  turnstile.remove();
+});
+
 function register() {
-  if (!isStrongPassword(password.value)) return
-  if (confirmPassword.value != password.value) return
-  if (email.value.indexOf('@') == -1) return
-  if (!/^[\w\-\u4e00-\u9fa5]{3,20}$/.test(username.value)) return
-  loading.value = true
+  if (!isStrongPassword(password.value)) return;
+  if (confirmPassword.value != password.value) return;
+  if (email.value.indexOf('@') == -1) return;
+  if (!/^[\w\-\u4e00-\u9fa5]{3,20}$/.test(username.value)) return;
+  loading.value = true;
   const req = {
     email: email.value,
     username: username.value,
     password: password.value,
     invitationCode: invitationCode.value,
     timestamp: new Date().getTime(),
-    captcha: useCaptchaStore().$state
-  }
-  doFetchPost("/api/account/register/start", req).then(async res => {
-    if (res.ok) {
-      toast(t("register.toast.suc.title"),
-        {
-          description: t("register.toast.suc.msg"),
+    captcha: useCaptchaStore().$state,
+  };
+  doFetchPost('/api/account/register/start', req)
+    .then(async (res) => {
+      if (res.ok) {
+        toast('Register Successful', {
+          description: 'Please check your email to complete the registration',
           duration: 1000,
           cardProps: {
-            color: 'green'
-          }
-        })
-      registerOk.value = true
-    } else {
-      return Promise.reject({
-        code: res.status,
-        data: await res.json()
-      })
-    }
-  }).catch((e: any) => {
-    toastError(e, t("register.toast.failed") )
-    captchaOk.value = false
-    turnstile.reset()
-  }).finally(() => {
-    loading.value = false
-  })
+            color: 'green',
+          },
+        });
+        registerOk.value = true;
+      } else {
+        return Promise.reject({
+          code: res.status,
+          data: await res.json(),
+        });
+      }
+    })
+    .catch((e: any) => {
+      toastError(e, 'Failed to register');
+      captchaOk.value = false;
+      turnstile.reset();
+    })
+    .finally(() => {
+      loading.value = false;
+    });
 }
-
 </script>
 
 <template>
@@ -107,7 +110,8 @@ function register() {
         :placeholder="t('register.placeholder.password')"
         :rules="[() => isStrongPassword(password) || $t('register.invalid.password.strength')]"
         required
-        type="password">
+        type="password"
+      >
         <template #prepend>
           <v-icon>mdi-lock</v-icon>
         </template>
@@ -118,11 +122,13 @@ function register() {
         :placeholder="t('register.placeholder.confirm')"
         :rules="[() => confirmPassword == password || $t('register.invalid.password.mismatching')]"
         required
-        type="password">
+        type="password"
+      >
         <template #prepend>
           <v-icon>mdi-lock</v-icon>
         </template>
       </v-text-field>
+      <CloudFlareCaptcha v-show="!captchaOk"/>
       <v-text-field
         v-model="invitationCode"
         :label="t('register.placeholder.invitation')"
@@ -131,7 +137,6 @@ function register() {
       <span >
         {{ $t("register.existing") }} <a href="/login">{{ $t("register.login") }}</a>
       </span>
-      <CloudFlareCaptcha v-show="!captchaOk"/>
       <v-btn
         :disabled="!captchaOk"
         :loading="loading"
@@ -139,16 +144,14 @@ function register() {
         @click="register"
       >
         {{
-          captchaOk ?
-            $t('register.button.register') :
-            $t('register.button.captcha')
+          captchaOk
+            ? $t('register.button.register')
+            : $t('register.button.captcha')
         }}
       </v-btn>
 
       <h1>
-        {{
-          $t('register.oauth')
-        }}
+        {{ $t('register.oauth') }}
       </h1>
       <v-btn
         color="blue"
@@ -180,7 +183,7 @@ function register() {
 
         <p class="mb-4 text-medium-emphasis">
           {{ $t("register.sent.msg1") }}
-          <strong>{{ email.substring(email.indexOf('@') + 1) }}</strong>
+          <strong>{{ email }}</strong>
           {{ $t("register.sent.msg2") }}
           <br />
           {{ $t("register.sent.msg3") }}
