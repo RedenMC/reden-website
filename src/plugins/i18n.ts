@@ -87,10 +87,10 @@ const messages = {
     },
     register: {
       title: 'Register to Reden',
-      inval:{
+      invalid:{
         email:"Invalid email address.",
         password:{
-          strenght:"Password is not strong enough, please use at least 8 characters, including uppercase, lowercase and numbers.",
+          strength:"Password is not strong enough, please use at least 8 characters, including uppercase, lowercase and numbers.",
           mismatching:"Passwords do not match"
         }
       },
@@ -101,7 +101,7 @@ const messages = {
         title:"One more step"
       },
       toast:{
-        succ:{
+        suc:{
           title:"Register Successful",
           msg:'Please check your email to complete the registration'
         },
@@ -210,12 +210,13 @@ const messages = {
     },
     register: {
       title: '注册 Reden',
-      inval:{
+      invalid:{
         email:"无效的邮箱地址",
         password:{
-          strenght:"密码需使用至少8个字符（大写、小写和数字）",
+          strength:"密码需使用至少8个字符（大写、小写和数字）",
           mismatching:"密码不符"
-        }
+        },
+        username:"无效用户名"
       },
       existing:"已经有账号了？",
       login:"登录",
@@ -224,7 +225,7 @@ const messages = {
         title:"最后一步"
       },
       toast:{
-        succ:{
+        suc:{
           title:"注册成功！",
           msg:'请检查你的邮箱来完成注册'
         },
