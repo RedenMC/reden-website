@@ -1,11 +1,8 @@
 <script lang="ts" setup>
 import { toast } from 'vuetify-sonner';
-import CloudFlareCaptcha, {
-  getCFToken,
-} from '@/components/CloudFlareCaptcha.vue';
-import { onMounted, onUnmounted, ref } from 'vue';
-import { useCaptchaStore } from '@/store/captcha';
-import { isStrongPassword, toastError } from '@/constants';
+import {ref, watch} from 'vue';
+import VueTurnstile from "vue-turnstile";
+import {cloudflareCAPTCHAKey, doFetchPost, isStrongPassword, toastError} from '@/constants';
 
 const email = ref('');
 const username = ref('');
@@ -13,25 +10,8 @@ const password = ref('');
 const confirmPassword = ref('');
 const invitationCode = ref('');
 const loading = ref(false);
-const captchaOk = ref(false);
 const registerOk = ref(false);
-let task = 0;
-
-onMounted(() => {
-  task = setInterval(() => {
-    const token = getCFToken();
-    console.log(token);
-    if (token !== '') {
-      useCaptchaStore().set('cloudflare', token);
-      captchaOk.value = true;
-    }
-  }, 1000);
-});
-
-onUnmounted(() => {
-  clearInterval(task);
-  turnstile.remove();
-});
+const token = ref('');
 
 function register() {
   if (!isStrongPassword(password.value)) return;
@@ -45,10 +25,13 @@ function register() {
     password: password.value,
     invitationCode: invitationCode.value,
     timestamp: new Date().getTime(),
-    captcha: useCaptchaStore().$state,
+    captcha: {
+      token: token.value,
+      provider: 'cloudflare',
+    },
   };
   doFetchPost('/api/account/register/start', req)
-    .then(async (res) => {
+    .then(res => {
       if (res.ok) {
         toast('Register Successful', {
           description: 'Please check your email to complete the registration',
@@ -59,17 +42,10 @@ function register() {
         });
         registerOk.value = true;
       } else {
-        return Promise.reject({
-          code: res.status,
-          data: await res.json(),
-        });
+        return Promise.reject(res);
       }
     })
-    .catch((e: any) => {
-      toastError(e, 'Failed to register');
-      captchaOk.value = false;
-      turnstile.reset();
-    })
+    .catch(e => toastError(e, 'Failed to register'))
     .finally(() => {
       loading.value = false;
     });
@@ -133,7 +109,7 @@ function register() {
           <v-icon>mdi-lock</v-icon>
         </template>
       </v-text-field>
-      <CloudFlareCaptcha v-show="!captchaOk" />
+      <vue-turnstile :site-key="cloudflareCAPTCHAKey" v-model="token" v-show="!token" />
       <v-text-field
         v-model="invitationCode"
         label="Invitation Code (Optional)"
@@ -141,13 +117,13 @@ function register() {
       />
       <span> Already have an account? <a href="/login">Login</a> </span>
       <v-btn
-        :disabled="!captchaOk"
+        :disabled="!token"
         :loading="loading"
         color="primary"
         @click="register"
       >
         {{
-          captchaOk
+          token
             ? $t('register.button.register')
             : $t('register.button.captcha')
         }}

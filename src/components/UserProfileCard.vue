@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { Ref, ref, VueElement, watch } from 'vue';
-import { doFetchDelete, fetchUser, Profile, toastError } from '@/constants';
+import { doFetchDelete, Profile, toastError } from '@/constants';
 import UserBadges from '@/components/UserBadges.vue';
 import VerifyMinecraft from '@/components/VerifyMinecraft.vue';
 import { toast } from 'vuetify-sonner';

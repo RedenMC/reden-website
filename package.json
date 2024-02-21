@@ -20,6 +20,7 @@
     "vue-i18n": "^9.6.5",
     "vue-router": "^4.0.0",
     "vue-sonner": "^1.0.1",
+    "vue-turnstile": "^1.0.8",
     "vuetify": "^3.0.0",
     "vuetify-sonner": "^0.3.2"
   },

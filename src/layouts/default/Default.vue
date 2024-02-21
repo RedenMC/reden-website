@@ -8,7 +8,7 @@ import { VSonner } from 'vuetify-sonner';
   <v-app theme="dark">
     <RedenAppBar />
 
-    <VSonner :position="'top-right'" :expand="true" />
+    <VSonner :expand="true" :position="'top-right'" />
     <default-view />
 
     <v-footer class="flex-column">
