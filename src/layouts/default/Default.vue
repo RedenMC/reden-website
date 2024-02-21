@@ -40,9 +40,6 @@ import { VSonner } from 'vuetify-sonner';
                 {{ $t('reden.footer.reden_mod.debugger') }}
               </a>
             </div>
-            <div class="footer-list-item">
-              <a href="//github.com/zly2006/reden-is-what-we-made"> Github </a>
-            </div>
           </v-col>
           <v-col>
             <div class="footer-list-title">
@@ -51,13 +48,13 @@ import { VSonner } from 'vuetify-sonner';
               </b>
             </div>
             <div class="footer-list-item">
-              <a href="//wiki.redenmc.com">
-                {{ $t('reden.footer.reden_ecosystem.wiki') }}
+              <a href="https://github.com/zly2006/reden-is-what-we-made">
+                Reden on Github
               </a>
             </div>
             <div class="footer-list-item">
-              <a href="//hub.redenmc.com">
-                {{ $t('reden.footer.reden_ecosystem.rvc_hub') }}
+              <a href="//wiki.redenmc.com">
+                {{ $t('reden.footer.reden_ecosystem.wiki') }}
               </a>
             </div>
             <div class="footer-list-item">

@@ -85,25 +85,6 @@ document.title = t('reden.title.home') + ' - Reden';
         </template>
       </RedStoneSection>
       <RedStoneSection :size="3">
-        <template #title> RVC Hub </template>
-        <template #text>
-          <p>
-            {{ $t('reden.home.community_intro.rvchub') }}
-          </p>
-        </template>
-        <template #action>
-          <v-btn
-            href="//hub.redenmc.com"
-            color="primary"
-            variant="outlined"
-            rounded="rounded"
-            class="main-button"
-          >
-            RVC Hub
-          </v-btn>
-        </template>
-      </RedStoneSection>
-      <RedStoneSection :size="3">
         <template #title> Sponsors </template>
         <template #text>
           <p>

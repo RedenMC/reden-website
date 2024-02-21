@@ -92,19 +92,20 @@ function savePreferences() {
   <v-card v-if="user" class="setting-section-card" rounded="lg">
     <h3 class="setting-section-title">Basic Information</h3>
     <v-row>
-      <v-col cols="6">
+      <v-col>
         <p class="setting-label">Email</p>
         <p class="setting-description">
           This is the email you use to register and reset your password.
         </p>
       </v-col>
-      <v-spacer />
-      <span>
-        {{ user.email }}
+      <div>
+        <span class="setting-button">
+          {{ user.email }}
+        </span>
         <v-btn class="text-capitalize setting-button" color="primary">
           Change Email
         </v-btn>
-      </span>
+      </div>
     </v-row>
     <v-row>
       <v-col>

@@ -31,7 +31,6 @@ const messages = {
         reden_ecosystem: {
           title: 'Reden Ecosystem',
           wiki: 'Reden Wiki',
-          rvc_hub: 'RVC Hub',
           sponsors: 'Sponsors',
           github_organization: 'Github Organization',
         },
@@ -63,8 +62,6 @@ const messages = {
           title: 'Community',
           open_source:
             'Reden is an open-source project and free for everyone. We welcome everyone to contribute to Reden including code, documentation, wiki, and more.',
-          rvchub:
-            'RVC Hub is an official platform for redstone developers to share their RVC projects. Start sharing your knowledge and experience with the community here!',
           wiki: 'Reden Wiki contains almost everything you need to know about redstone ans Reden. It is also a great place to share your knowledge with the community.',
           discord:
             'Join our Discord server to chat with other redstone developers and get help from the community.',
@@ -136,7 +133,6 @@ const messages = {
         reden_ecosystem: {
           title: 'Reden 生态系统',
           wiki: 'Reden Wiki',
-          rvc_hub: 'RVC Hub',
           sponsors: '赞助者',
           github_organization: 'Github 组织',
         },
@@ -168,8 +164,6 @@ const messages = {
           title: '社区',
           open_source:
             'Reden 是一个开源项目，对所有人免费。我们欢迎所有人为 Reden 做出贡献，包括代码、文档、Wiki 等。',
-          rvchub:
-            'RVC Hub 是供红石开发者分享他们 RVC 项目的官方平台。在这里开始与社区分享您的知识和经验！',
           wiki: 'Reden Wiki 包含了您需要了解的关于红石和 Reden 的几乎所有内容。这也是与社区分享您的知识的好地方。',
           discord:
             '加入我们的 Discord 服务器，与其他红石开发者聊天并从社区获得帮助。',

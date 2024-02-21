@@ -1,11 +1,5 @@
 <script lang="ts" setup>
-import {
-  doFetchGet,
-  fetchUser,
-  Profile,
-  toastError,
-  toastStatusCode,
-} from '@/constants';
+import { doFetchGet, fetchUser, Profile, toastError } from '@/constants';
 import { toast } from 'vuetify-sonner';
 import { useAppStore } from '@/store/app';
 import UserProfileCard from '@/components/UserProfileCard.vue';
