@@ -5,6 +5,7 @@ import {onMounted, onUnmounted, ref} from "vue";
 import {useCaptchaStore} from "@/store/captcha";
 import doFetchPost from "@/constants";
 import { useI18n } from 'vue-i18n'
+import {isStrongPassword} from "@/constants";
 
 const email = ref('')
 const username = ref('')
@@ -35,7 +36,7 @@ onUnmounted(() => {
 
 
 function register() {
-  if (!isStrongPassword()) return
+  if (!isStrongPassword(password.value)) return
   if (confirmPassword.value != password.value) return
   if (email.value.indexOf('@') == -1) return
   if (!/^[\w\-\u4e00-\u9fa5]{3,20}$/.test(username.value)) return
@@ -79,13 +80,6 @@ function register() {
   }).finally(() => {
     loading.value = false
   })
-}
-
-function isStrongPassword() {
-  return !!(password.value.length >= 8
-    && password.value.match(/[a-z]/)
-    && password.value.match(/[A-Z]/)
-    && password.value.match(/[0-9]/));
 }
 
 </script>
@@ -176,6 +170,7 @@ function isStrongPassword() {
         Microsoft
       </v-btn>
     </div>
+
 
     <div v-if="registerOk">
       <v-sheet

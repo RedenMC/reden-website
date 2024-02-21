@@ -1,45 +1,16 @@
 <script setup lang="ts">
-import {ref} from "vue";
-import {doFetchGet, Profile} from "@/constants";
-import {useAppStore} from "@/store/app";
-import {toast} from "vuetify-sonner";
+import {ref, VueElement} from "vue";
+import {fetchUser, Profile} from "@/constants";
 import UserBadges from "@/components/UserBadges.vue";
 import VerifyMinecraft from "@/components/VerifyMinecraft.vue";
 
 let user = ref<Profile>()
+fetchUser(user)
 
-function fetchUser() {
-  doFetchGet('/api/account/profile').then(async response => {
-    if (response.ok) {
-      const data: Profile = await response.json()
-      user.value = data
-      useAppStore().updateCache(data)
-    } else {
-      if (response.status === 401) {
-        toast('Error', {
-          description: 'You are not logged in',
-          duration: 1000,
-          cardProps: {
-            color: 'error'
-          }
-        })
-        window.location.href = '/login'
-      }
-      await Promise.reject(await response.json())
-    }
-  }).catch((e) => {
-    toast('Error', {
-      description: 'Failed to get user profile',
-      duration: 1000,
-      cardProps: {
-        color: 'error'
-      }
-    })
-    console.log(e)
-  })
-}
+const { actions } = defineSlots<{
+  actions: VueElement[] | undefined
+}>()
 
-fetchUser()
 </script>
 <template>
   <v-card
@@ -84,19 +55,7 @@ fetchUser()
           </a>
         </span>
       </p>
-      <v-row>
-        <v-col>
-          <v-btn
-            color="secondary"
-            href="/home/edit"
-            rounded="lg"
-            class="text-none"
-            variant="outlined"
-          >
-            Edit Profile
-          </v-btn>
-        </v-col>
-      </v-row>
+      <slot name="actions" />
     </div>
   </v-card>
 </template>

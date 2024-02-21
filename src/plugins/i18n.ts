@@ -92,7 +92,8 @@ const messages = {
         password:{
           strength:"Password is not strong enough, please use at least 8 characters, including uppercase, lowercase and numbers.",
           mismatching:"Passwords do not match"
-        }
+        },
+        username:"无效用户名"
       },
       existing:"Already have an account?",
       login:"Login",
