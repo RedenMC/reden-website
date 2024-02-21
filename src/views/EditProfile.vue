@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {fetchUser, getOauth, isStrongPassword, OAuthAccount, Profile} from "@/constants";
+import {fetchUser, isStrongPassword, Profile} from "@/constants";
 import {ref} from "vue";
 import OAuthAccountLine from "@/components/editProfilePage/OAuthAccountLine.vue";
 

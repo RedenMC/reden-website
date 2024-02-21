@@ -3,7 +3,6 @@ import {Ref, ref} from "vue";
 import {doFetchGet, ErrorResponse, Profile} from "@/constants";
 import {toast} from "vuetify-sonner";
 import UserBadges from "@/components/UserBadges.vue";
-import {debuggerStatement} from "@babel/types";
 
 const pageSize = ref(20)
 const totalItems = ref(0)
