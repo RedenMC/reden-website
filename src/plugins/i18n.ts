@@ -87,39 +87,39 @@ const messages = {
     },
     register: {
       title: 'Register to Reden',
-      invalid:{
-        email:"Invalid email address.",
-        password:{
-          strength:"Password is not strong enough, please use at least 8 characters, including uppercase, lowercase and numbers.",
-          mismatching:"Passwords do not match"
+      invalid: {
+        email: "Invalid email address.",
+        password: {
+          strength: "Password is not strong enough, please use at least 8 characters, including uppercase, lowercase and numbers.",
+          mismatching: "Passwords do not match"
         },
-        username:"无效用户名"
+        username: "无效用户名"
       },
-      existing:"Already have an account?",
-      login:"Login",
-      sent:{
-        msg:"We have sent an email to <strong>{email}</strong> with a link to complete your registration.<br />If you don't see the email, please check other places it might be, like your junk, spam, social, or other folders.",
-        title:"One more step"
+      existing: "Already have an account?",
+      login: "Login",
+      sent: {
+        msg: "We have sent an email to <strong>{email}</strong> with a link to complete your registration.<br />If you don't see the email, please check other places it might be, like your junk, spam, social, or other folders.",
+        title: "One more step"
       },
-      toast:{
-        suc:{
-          title:"Register Successful",
+      toast: {
+        suc: {
+          title: "Register Successful",
           msg:'Please check your email to complete the registration'
         },
         try:'Please try again later'
       },
-      placeholder:{
-        email:"Email",
-        username:"Username",
-        password:"Password",
-        confirm:"Confirm Password",
-        invitation:"Invitation Code,optional"
+      placeholder: {
+        email: "Email",
+        username: "Username",
+        password: "Password",
+        confirm: "Confirm Password",
+        invitation: "Invitation Code,optional"
 
       },
       button: {
         register: 'Register',
         captcha: 'Please complete the captcha first',
-        done:"Done"
+        done: "Done"
       },
     },
     search: {
@@ -211,39 +211,39 @@ const messages = {
     },
     register: {
       title: '注册 Reden',
-      invalid:{
-        email:"无效的邮箱地址",
-        password:{
-          strength:"密码需使用至少8个字符（大写、小写和数字）",
-          mismatching:"密码不符"
+      invalid: {
+        email: "无效的邮箱地址",
+        password: {
+          strength: "密码需使用至少8个字符（大写、小写和数字）",
+          mismatching: "密码不符"
         },
-        username:"无效用户名"
+        username: "无效用户名"
       },
-      existing:"已经有账号了？",
-      login:"登录",
-      sent:{
-        msg:"我们向 <strong>{email}</strong> 发送了一封确认邮件来完成注册。<br />如果您没有看到该邮件，请检查可能存在的其他地方，如垃圾站或其他文件夹。",
-        title:"最后一步"
+      existing: "已经有账号了？",
+      login: "登录",
+      sent: {
+        msg: "我们向 <strong>{email}</strong> 发送了一封确认邮件来完成注册。<br />如果您没有看到该邮件，请检查可能存在的其他地方，如垃圾站或其他文件夹。",
+        title: "最后一步"
       },
-      toast:{
-        suc:{
-          title:"注册成功！",
+      toast: {
+        suc: {
+          title: "注册成功！",
           msg:'请检查你的邮箱来完成注册'
         },
         try:'请稍后再试'
       },
-      placeholder:{
-        email:"电子邮箱",
-        username:"用户名",
-        password:"密码",
-        confirm:"重复密码",
-        invitation:"邀请码(可选)"
+      placeholder: {
+        email: "电子邮箱",
+        username: "用户名",
+        password: "密码",
+        confirm: "重复密码",
+        invitation: "邀请码(可选)"
 
       },
       button: {
         register: '注册',
         captcha: '请先完成验证码',
-        done:"完成"
+        done: "完成"
       },
     },
     search: {
