@@ -1,14 +1,14 @@
 <script lang="ts" setup>
-import {fetchUser, getOauth, isStrongPassword, OAuthAccount, Profile} from "@/constants";
+import {doFetchPost, fetchUser, isStrongPassword, Profile, toastError} from "@/constants";
 import {ref} from "vue";
 import OAuthAccountLine from "@/components/editProfilePage/OAuthAccountLine.vue";
+import {toast} from "vuetify-sonner";
 
+const userCopy = ref<Profile>()
 const user = ref<Profile>()
-fetchUser(user)
-const microsoft = ref<OAuthAccount>()
-const github = ref<OAuthAccount>()
-getOauth('microsoft', "/api/account/microsoft", microsoft)
-getOauth('github', "/api/account/github", github)
+fetchUser(user).then(() => {
+  userCopy.value = JSON.parse(JSON.stringify(user.value))
+})
 
 const oldPassword = ref('')
 const newPassword = ref('')
@@ -21,10 +21,59 @@ function changePassword() {
 const savingInfo = ref(false)
 const savingPreferences = ref(false)
 function saveInfo() {
+  savingInfo.value = true
+  doFetchPost('/api/account/update', user.value).then(response => {
+    if (response.ok) {
+      toast('Success', {
+        description: 'Information saved',
+        duration: 1000,
+        cardProps: {
+          color: 'green'
+        }
+      })
+      fetchUser(user).then(() => {
+        userCopy.value = JSON.parse(JSON.stringify(user.value))
+      })
+    } else {
+      return Promise.reject(response)
+    }
+  }).catch(e => toastError(e, 'Failed to save information'))
+    .finally(() => {
+    savingInfo.value = false
+  })
   // backend: todo
 }
+function changed(a: Record<string, unknown>, b: Record<string, unknown>) {
+  console.log('comparing', a, 'and', b)
+  return Object.keys(a).some((key: string) => a[key] !== b[key])
+}
 function savePreferences() {
-  // backend: todo
+  savingPreferences.value = true
+  if (!(user.value?.preference)) return
+  doFetchPost('/api/account/update/preference', user.value?.preference).then(response => {
+    if (response.ok) {
+      toast('Success', {
+        description: 'Preferences saved',
+        duration: 1000,
+        cardProps: {
+          color: 'green'
+        }
+      })
+      userCopy.value!.preference = user.value?.preference!
+    } else {
+      return Promise.reject(response)
+    }
+  }).catch(e => {
+    toast('Error', {
+      description: e.toString(),
+      duration: 3e3,
+      cardProps: {
+        color: 'error'
+      }
+    })
+  }).finally(() => {
+    savingPreferences.value = false
+  })
 }
 </script>
 
@@ -38,7 +87,7 @@ function savePreferences() {
       Basic Information
     </h3>
     <v-row>
-      <v-col cols="9">
+      <v-col cols="6">
         <p class="setting-label">
           Email
         </p>
@@ -47,12 +96,15 @@ function savePreferences() {
         </p>
       </v-col>
       <v-spacer />
-      <v-btn
-        class="text-capitalize setting-button"
-        color="primary"
-      >
-        Change Email
-      </v-btn>
+      <span>
+        {{ user.email }}
+        <v-btn
+          class="text-capitalize setting-button"
+          color="primary"
+        >
+          Change Email
+        </v-btn>
+      </span>
     </v-row>
     <v-row>
       <v-col>
@@ -68,28 +120,14 @@ function savePreferences() {
           v-model="user.username"
           class="setting-input"
           color="primary"
+          :disabled="(user.canChangeNameUntil || 0) > Date.now()"
         >
           <template #prepend>
             <v-icon>mdi-account</v-icon>
           </template>
-        </v-text-field>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-        <p class="setting-label">
-          Display Name
-        </p>
-        <p class="setting-description">
-          This is the name that will be displayed on the website.
-        </p>
-      </v-col>
-      <v-col>
-        <!-- backend: todo -->
-        <v-text-field
-          class="setting-input"
-          color="primary"
-        >
+          <template #details v-if="(user.canChangeNameUntil || 0) > Date.now()">
+            You can change your username again in {{ Math.round((user.canChangeNameUntil! - Date.now()) / 1000 / 60 / 60 ) }} hours
+          </template>
         </v-text-field>
       </v-col>
     </v-row>
@@ -103,8 +141,8 @@ function savePreferences() {
         </p>
       </v-col>
       <v-col>
-        <!-- backend: todo -->
         <v-textarea
+          v-model="user.bio"
           class="setting-input"
           color="primary"
         >
@@ -117,7 +155,9 @@ function savePreferences() {
       <v-btn
         class="text-capitalize setting-button"
         color="primary"
+        :loading="savingInfo"
         @click="saveInfo"
+        :disabled="userCopy?.username == user.username && (userCopy?.bio || '') == user.bio"
       >
         Save
       </v-btn>
@@ -127,6 +167,7 @@ function savePreferences() {
   <v-card
     class="setting-section-card"
     rounded="lg"
+    v-if="user"
   >
     <h3 class="setting-section-title">
       Preferences
@@ -144,6 +185,8 @@ function savePreferences() {
       <v-switch
         class="setting-button"
         color="primary"
+        v-model="user.preference.showEmail"
+        :hide-details="true"
       />
     </v-row>
     <v-row>
@@ -159,7 +202,8 @@ function savePreferences() {
       <v-switch
         class="setting-button"
         color="primary"
-        hide-details
+        v-model="user.preference.showMC"
+        :hide-details="true"
       />
     </v-row>
     <v-row>
@@ -175,8 +219,60 @@ function savePreferences() {
       <v-switch
         class="setting-button"
         color="primary"
+        v-model="user.preference.showGithub"
         hide-details
       />
+    </v-row>
+    <v-row>
+      <v-col cols="9">
+        <p class="setting-label">
+          Show Timezone
+        </p>
+        <p class="setting-description">
+          Whether to show your timezone to other users.
+        </p>
+      </v-col>
+      <v-spacer />
+      <v-switch
+        class="setting-button"
+        color="primary"
+        v-model="user.preference.showTimezone"
+        hide-details
+      />
+    </v-row>
+    <v-row>
+      <v-col cols="9">
+        <p class="setting-label">
+          Show QQ
+        </p>
+        <p class="setting-description">
+          Whether to show your QQ to other users.
+        </p>
+      </v-col>
+      <v-spacer />
+      <v-switch
+        class="setting-button"
+        color="primary"
+        v-model="user.preference.showQQ"
+        hide-details
+      />
+    </v-row>
+    <v-row>
+      <v-col>
+        <p class="setting-label">
+          Pronouns
+        </p>
+        <p class="setting-description">
+          Your pronouns.
+        </p>
+      </v-col>
+      <v-col>
+        <v-text-field
+          v-model="user.preference.pronouns"
+          class="setting-input"
+          color="primary"
+        />
+      </v-col>
     </v-row>
     <v-row>
       <v-spacer />
@@ -185,6 +281,7 @@ function savePreferences() {
         class="text-capitalize setting-button"
         color="primary"
         @click="savePreferences"
+        :disabled="userCopy && !changed(user.preference, userCopy!.preference)"
       >
         Save Preferences
       </v-btn>
@@ -192,6 +289,7 @@ function savePreferences() {
   </v-card>
 
   <v-card
+    v-if="user"
     class="setting-section-card"
     rounded="lg"
   >
@@ -202,6 +300,7 @@ function savePreferences() {
       You can change your password here.
     </p>
     <v-text-field
+      v-if="!user.passwordNotSet"
       v-model="oldPassword"
       class="setting-input"
       color="primary"
@@ -209,6 +308,9 @@ function savePreferences() {
       label="Old Password"
       placeholder="Enter your old password"
     />
+    <p v-if="user.passwordNotSet">
+      This is the first time you login, please change your password as soon as possible.
+    </p>
     <v-text-field
       v-model="newPassword"
       class="setting-input"
@@ -217,8 +319,8 @@ function savePreferences() {
       label="New Password"
       placeholder="Enter your new password"
       :rules="[
-        v => isStrongPassword(v) || 'Password must contain at least 8 characters, and include uppercase, lowercase, and numbers',
-        v => v !== oldPassword || 'New password must be different from old password'
+        (v: string) => isStrongPassword(v) || 'Password must contain at least 8 characters, and include uppercase, lowercase, and numbers',
+        (v: string) => v !== oldPassword || 'New password must be different from old password'
       ]"
     />
     <v-text-field
@@ -229,7 +331,7 @@ function savePreferences() {
       label="Confirm New Password"
       placeholder="Enter your new password again"
       :rules="[
-        v => v === newPassword || 'Passwords do not match'
+        (v: string) => v === newPassword || 'Passwords do not match'
       ]"
     />
     <v-row>
@@ -250,8 +352,8 @@ function savePreferences() {
     <h3 class="setting-section-title">
       Third Party Accounts
     </h3>
-    <OAuthAccountLine icon="mdi-microsoft" type="microsoft" :account="microsoft"/>
-    <OAuthAccountLine icon="mdi-github" type="github" :account="github"/>
+    <OAuthAccountLine icon="mdi-microsoft" type="microsoft" />
+    <OAuthAccountLine icon="mdi-github" type="github" />
   </v-card>
 </template>
 

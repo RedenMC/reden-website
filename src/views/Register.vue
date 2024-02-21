@@ -4,7 +4,7 @@ import CloudFlareCaptcha, {getCFToken} from "@/components/CloudFlareCaptcha.vue"
 import {onMounted, onUnmounted, ref} from "vue";
 import {useCaptchaStore} from "@/store/captcha";
 import { useI18n } from 'vue-i18n'
-import {isStrongPassword} from "@/constants";
+import {isStrongPassword, toastError} from "@/constants";
 
 const email = ref('')
 const username = ref('')
@@ -59,20 +59,13 @@ function register() {
         })
       registerOk.value = true
     } else {
-      await Promise.reject({
+      return Promise.reject({
         code: res.status,
         data: await res.json()
       })
     }
-  }).catch(e => {
-    console.error('error', e)
-    toast(t("register.toast.failed") + (e?.code || t("register.error.unknown")), {
-      description: e?.data?.error || t("register.toast.try"),
-      duration: 5000,
-      cardProps: {
-        color: 'error'
-      }
-    })
+  }).catch((e: any) => {
+    toastError(e, t("register.toast.failed") )
     captchaOk.value = false
     turnstile.reset()
   }).finally(() => {

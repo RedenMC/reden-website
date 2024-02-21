@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import {onMounted, type Ref, ref, VueElement} from "vue";
 
+// todo: 不透明度渐变
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const {size, imageTransparentPercentage, video} = defineProps({
   size: Number,
   imageTransparentPercentage: Number,

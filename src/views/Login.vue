@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import {VSonner} from "vuetify-sonner";
 import CloudFlareCaptcha from "@/components/CloudFlareCaptcha.vue";
 </script>
 <script lang="ts">
-import {doFetchPost, ErrorResponse, LoginResponse} from "@/constants";
+import {doFetchPost, ErrorResponse, LoginResponse, toastError} from "@/constants";
 import {useAppStore} from "@/store/app";
 import {toast} from "vuetify-sonner";
 import {getCFToken} from "@/components/CloudFlareCaptcha.vue";
@@ -44,32 +43,29 @@ export default {
         captcha: useCaptchaStore().$state
       }
       doFetchPost('/api/account/login', req).then(async response => {
-        if (response.ok) {
-          let data: LoginResponse = await response.json()
-          console.log(data)
-          useAppStore().login(this.username, 1)
-          useAppStore().setCsrfToken(data.csrf_token)
-          toast('Login Successful',
-            {
-              description: 'You have been logged in',
-              duration: 1000,
-              cardProps: {
-                color: 'green'
-              }
-            }
-          )
-          setTimeout(() => {
-            if (data.redirect !== undefined) {
-              this.$router.push(data.redirect)
-            } else {
-              this.$router.push('/')
-            }
-          }, 500)
-        } else {
-          let data: ErrorResponse = await response.json()
-          console.error('Login Failed', data)
-          await Promise.reject(data.error + '\n' + (data.error_description || ''))
+        if (!response.ok) {
+          return Promise.reject(response)
         }
+        let data: LoginResponse = await response.json()
+        console.log(data)
+        useAppStore().login(this.username, 1)
+        useAppStore().setCsrfToken(data.csrf_token)
+        toast('Login Successful',
+          {
+            description: 'You have been logged in',
+            duration: 1000,
+            cardProps: {
+              color: 'green'
+            }
+          }
+        )
+        setTimeout(() => {
+          if (data.redirect !== undefined) {
+            this.$router.push(data.redirect)
+          } else {
+            this.$router.push('/')
+          }
+        }, 500)
       }).catch(e => {
         clearInterval(this.task)
         this.task = setInterval(() => {
@@ -81,17 +77,8 @@ export default {
           }
         }, 1000)
         turnstile.reset()
-        toast('Login Failed',
-          {
-            description: e.toString(),
-            duration: 10000,
-            cardProps: {
-              color: 'red'
-            }
-          }
-        )
+        toastError(e, 'Login Failed')
         this.captchaOk = false
-        console.log(e)
       }).finally(() => {
         this.loading = false
       })
@@ -101,8 +88,6 @@ export default {
 </script>
 
 <template>
-  <VSonner position="top-center" :expand="true"/>
-
   <div class="main-page">
     <div class="login-form">
       <h1>

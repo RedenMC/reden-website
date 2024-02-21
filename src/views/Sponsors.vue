@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {doFetchGet} from "@/constants";
 import {ref, Ref} from "vue";
-import {toast, VSonner} from "vuetify-sonner";
+import {toast} from "vuetify-sonner";
 
 type Sponsor = {
   name: string
@@ -16,7 +16,7 @@ doFetchGet('/api/sponsors').then((res) => {
   if (res.ok) {
     return res.json()
   } else {
-    Promise.reject('Failed to fetch sponsors')
+    return Promise.reject('Failed to fetch sponsors')
   }
 }).then(data => {
   sponsors.value = data.sort((a: Sponsor, b: Sponsor) => {
@@ -35,8 +35,6 @@ doFetchGet('/api/sponsors').then((res) => {
 </script>
 
 <template>
-  <VSonner position="top-center"/>
-
   <h1 class="text-center">
     {{ $t('sponsors.title') }}
   </h1>

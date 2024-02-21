@@ -1,13 +1,21 @@
 <script setup lang="ts">
-import {ref, VueElement} from "vue";
-import {fetchUser, Profile} from "@/constants";
+import {VueElement} from "vue";
+import {Profile} from "@/constants";
 import UserBadges from "@/components/UserBadges.vue";
 import VerifyMinecraft from "@/components/VerifyMinecraft.vue";
 
-let user = ref<Profile>()
-fetchUser(user)
+const { user, showActions } = defineProps({
+  user: {
+    type: Object as () => Profile | undefined,
+    required: true
+  },
+  showActions: {
+    type: Boolean,
+    default: true
+  }
+})
 
-const { actions } = defineSlots<{
+defineSlots<{
   actions: VueElement[] | undefined
 }>()
 
@@ -39,7 +47,7 @@ const { actions } = defineSlots<{
       </p>
       <p class="minecraft">
         <v-icon class="profile-item-icon">mdi-minecraft</v-icon>
-        <VerifyMinecraft :user="user"/>
+        <VerifyMinecraft :user="user" :showActions="showActions"/>
       </p>
       <p class="user-github">
         <v-icon class="profile-item-icon">mdi-github</v-icon>
@@ -48,7 +56,7 @@ const { actions } = defineSlots<{
         </span>
         <span v-else>
           Account not linked
-          <a
+          <a v-if="showActions"
               href="/api/oauth/github?redirect_url=/home"
           >
             Link Now

@@ -1,9 +1,10 @@
 <script lang="ts" setup>
 
-import {doFetchGet} from "@/constants";
-import {toast, VSonner} from "vuetify-sonner";
+import {doFetchGet, fetchUser, Profile, toastError, toastStatusCode} from "@/constants";
+import {toast} from "vuetify-sonner";
 import {useAppStore} from "@/store/app";
 import UserProfileCard from "@/components/UserProfileCard.vue";
+import {ref} from "vue";
 
 // oauth login csrf token is not passed by json, but by query string
 const queries = window.location.search.substring(1).split('&');
@@ -13,6 +14,9 @@ if (csrf) {
   history.pushState({}, document.title, window.location.pathname + window.location.hash)
   console.log('csrf', csrf)
 }
+
+let user = ref<Profile>()
+fetchUser(user)
 
 function logout() {
   doFetchGet('/api/account/logout').then(response => {
@@ -27,21 +31,16 @@ function logout() {
         }
       })
     } else {
-      toast('Error', {
-        description: 'Failed to logout',
-        duration: 1000,
-        cardProps: {
-          color: 'error'
-        }
-      })
+      return Promise.reject(response)
     }
-  });
+  }).catch(e => toastError(e, 'Failed to logout'))
 }
 </script>
 
 <template>
-  <VSonner/>
-  <UserProfileCard>
+  <UserProfileCard
+    :user="user"
+  >
     <template #actions>
       <v-row>
         <v-col>

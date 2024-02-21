@@ -4,6 +4,21 @@ const messages = {
   en: {
     en: 'English',
     zh: '中文',
+    $vuetify: {
+      dataIterator: {
+        rowsPerPageText: 'Items per page:',
+        rowsPerPageAll: 'All',
+        pageText: '{0}-{1} of {2}',
+        noResultsText: 'No matching records found',
+        nextPage: 'Next page',
+        prevPage: 'Previous page',
+      },
+      dataFooter: {
+        itemsPerPageText: 'Items per page:',
+        itemsPerPageAll: 'All',
+        pageText: '{0}-{1} items of {2}',
+      }
+    },
     reden: {
       learn_more: 'Learn More',
       footer: {

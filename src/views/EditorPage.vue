@@ -1,6 +1,5 @@
 <script lang="ts">
 import Blockly, {WorkspaceSvg} from 'blockly';
-import * as libraryBlocks from 'blockly/blocks';
 import {javascriptGenerator} from 'blockly/javascript';
 
 const toolbox = {
