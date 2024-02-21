@@ -1,90 +1,92 @@
 <script lang="ts" setup>
-import {toast} from "vuetify-sonner";
-import CloudFlareCaptcha, {getCFToken} from "@/components/CloudFlareCaptcha.vue";
-import {onMounted, onUnmounted, ref} from "vue";
-import {useCaptchaStore} from "@/store/captcha";
-import {isStrongPassword, toastError} from "@/constants";
+import { toast } from 'vuetify-sonner';
+import CloudFlareCaptcha, {
+  getCFToken,
+} from '@/components/CloudFlareCaptcha.vue';
+import { onMounted, onUnmounted, ref } from 'vue';
+import { useCaptchaStore } from '@/store/captcha';
+import { isStrongPassword, toastError } from '@/constants';
 
-const email = ref('')
-const username = ref('')
-const password = ref('')
-const confirmPassword = ref('')
-const invitationCode = ref('')
-const loading = ref(false)
-const captchaOk = ref(false)
-const registerOk = ref(false)
-let task = 0
+const email = ref('');
+const username = ref('');
+const password = ref('');
+const confirmPassword = ref('');
+const invitationCode = ref('');
+const loading = ref(false);
+const captchaOk = ref(false);
+const registerOk = ref(false);
+let task = 0;
 
 onMounted(() => {
   task = setInterval(() => {
-    const token = getCFToken()
-    console.log(token)
+    const token = getCFToken();
+    console.log(token);
     if (token !== '') {
-      useCaptchaStore().set("cloudflare", token)
-      captchaOk.value = true
+      useCaptchaStore().set('cloudflare', token);
+      captchaOk.value = true;
     }
-  }, 1000)
-})
+  }, 1000);
+});
 
 onUnmounted(() => {
-  clearInterval(task)
-  turnstile.remove()
-})
+  clearInterval(task);
+  turnstile.remove();
+});
 
 function register() {
-  if (!isStrongPassword(password.value)) return
-  if (confirmPassword.value != password.value) return
-  if (email.value.indexOf('@') == -1) return
-  if (!/^[\w\-\u4e00-\u9fa5]{3,20}$/.test(username.value)) return
-  loading.value = true
+  if (!isStrongPassword(password.value)) return;
+  if (confirmPassword.value != password.value) return;
+  if (email.value.indexOf('@') == -1) return;
+  if (!/^[\w\-\u4e00-\u9fa5]{3,20}$/.test(username.value)) return;
+  loading.value = true;
   const req = {
     email: email.value,
     username: username.value,
     password: password.value,
     invitationCode: invitationCode.value,
     timestamp: new Date().getTime(),
-    captcha: useCaptchaStore().$state
-  }
-  doFetchPost("/api/account/register/start", req).then(async res => {
-    if (res.ok) {
-      toast('Register Successful',
-        {
+    captcha: useCaptchaStore().$state,
+  };
+  doFetchPost('/api/account/register/start', req)
+    .then(async (res) => {
+      if (res.ok) {
+        toast('Register Successful', {
           description: 'Please check your email to complete the registration',
           duration: 1000,
           cardProps: {
-            color: 'green'
-          }
-        })
-      registerOk.value = true
-    } else {
-      return Promise.reject({
-        code: res.status,
-        data: await res.json()
-      })
-    }
-  }).catch((e: any) => {
-    toastError(e, 'Failed to register')
-    captchaOk.value = false
-    turnstile.reset()
-  }).finally(() => {
-    loading.value = false
-  })
+            color: 'green',
+          },
+        });
+        registerOk.value = true;
+      } else {
+        return Promise.reject({
+          code: res.status,
+          data: await res.json(),
+        });
+      }
+    })
+    .catch((e: any) => {
+      toastError(e, 'Failed to register');
+      captchaOk.value = false;
+      turnstile.reset();
+    })
+    .finally(() => {
+      loading.value = false;
+    });
 }
-
 </script>
 
 <template>
   <div class="main-page">
     <div v-if="!registerOk" class="register-form">
-      <h1>
-        Register RedenMC Account
-      </h1>
+      <h1>Register RedenMC Account</h1>
       <v-text-field
         v-model="email"
         label="Email"
         placeholder="Email"
         :rules="[() => /.+@.+\..+/i.test(email) || 'Invalid email address']"
-        required>
+        required
+      >
         <template #prepend>
           <v-icon>mdi-email</v-icon>
         </template>
@@ -93,19 +95,28 @@ function register() {
         v-model="username"
         label="Username"
         placeholder="Username"
-        :rules="[() => /^[\w\-\u4e00-\u9fa5]{3,20}$/.test(username) || 'Invalid username']"
-        required>
+        :rules="[
+          () =>
+            /^[\w\-\u4e00-\u9fa5]{3,20}$/.test(username) || 'Invalid username',
+        ]"
+        required
+      >
         <template #prepend>
           <v-icon>mdi-account</v-icon>
         </template>
       </v-text-field>
       <v-text-field
         v-model="password"
-        :rules="[() => isStrongPassword(password) || 'Password is not strong enough, must contain at least 8 characters, including uppercase, lowercase, and numbers']"
+        :rules="[
+          () =>
+            isStrongPassword(password) ||
+            'Password is not strong enough, must contain at least 8 characters, including uppercase, lowercase, and numbers',
+        ]"
         label="Password"
         placeholder="Password"
         required
-        type="password">
+        type="password"
+      >
         <template #prepend>
           <v-icon>mdi-lock</v-icon>
         </template>
@@ -116,20 +127,19 @@ function register() {
         label="Confirm Password"
         placeholder="Confirm Password"
         required
-        type="password">
+        type="password"
+      >
         <template #prepend>
           <v-icon>mdi-lock</v-icon>
         </template>
       </v-text-field>
-      <CloudFlareCaptcha v-show="!captchaOk"/>
+      <CloudFlareCaptcha v-show="!captchaOk" />
       <v-text-field
         v-model="invitationCode"
         label="Invitation Code (Optional)"
         placeholder="Invitation Code, optional"
       />
-      <span>
-        Already have an account? <a href="/login">Login</a>
-      </span>
+      <span> Already have an account? <a href="/login">Login</a> </span>
       <v-btn
         :disabled="!captchaOk"
         :loading="loading"
@@ -137,16 +147,14 @@ function register() {
         @click="register"
       >
         {{
-          captchaOk ?
-            $t('register.button.register') :
-            $t('register.button.captcha')
+          captchaOk
+            ? $t('register.button.register')
+            : $t('register.button.captcha')
         }}
       </v-btn>
 
       <h1>
-        {{
-          $t('register.oauth')
-        }}
+        {{ $t('register.oauth') }}
       </h1>
       <v-btn
         color="blue"
@@ -178,9 +186,9 @@ function register() {
         <p class="mb-4 text-medium-emphasis">
           We have sent an email to <strong>{{ email }}</strong> with a link to
           complete your registration.
-          <br/>
-          If you don't see the email, please check other places it might be, like your junk, spam, social, or other
-          folders.
+          <br />
+          If you don't see the email, please check other places it might be,
+          like your junk, spam, social, or other folders.
         </p>
 
         <v-divider class="mb-4"></v-divider>

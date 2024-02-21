@@ -1,38 +1,38 @@
 <script lang="ts" setup>
-import {doFetchDelete, getOauth, OAuthAccount} from "@/constants";
-import {ref} from "vue";
-import {toast} from "vuetify-sonner";
+import { doFetchDelete, getOauth, OAuthAccount } from '@/constants';
+import { ref } from 'vue';
+import { toast } from 'vuetify-sonner';
 
-const account = ref<OAuthAccount>()
-const loading = ref(true)
+const account = ref<OAuthAccount>();
+const loading = ref(true);
 
-const {type, icon} = defineProps<{
-  type: string,
-  icon?: string
-}>()
+const { type, icon } = defineProps<{
+  type: string;
+  icon?: string;
+}>();
 
 getOauth(type, `/api/account/${type}`, account).then(() => {
-  loading.value = false
-})
+  loading.value = false;
+});
 function unlinkAccount(type: string) {
-  doFetchDelete(`/api/account/${type}`).then(response => {
+  doFetchDelete(`/api/account/${type}`).then((response) => {
     if (response.ok) {
-      account.value = undefined
+      account.value = undefined;
       toast('Account unlinked', {
         cardProps: {
-          color: 'success'
+          color: 'success',
         },
         duration: 5000,
-      })
+      });
     } else {
       toast(response.statusText, {
         cardProps: {
-          color: 'error'
+          color: 'error',
         },
         duration: 5000,
-      })
+      });
     }
-  })
+  });
 }
 </script>
 
@@ -46,9 +46,7 @@ function unlinkAccount(type: string) {
     </v-col>
     <v-col>
       <p v-if="account">
-        {{
-          account.email
-        }}
+        {{ account.email }}
       </p>
     </v-col>
     <v-col>
@@ -77,6 +75,5 @@ function unlinkAccount(type: string) {
 <style scoped>
 .line {
   margin: 10px;
-
 }
 </style>

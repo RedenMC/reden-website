@@ -1,5 +1,5 @@
 // Composables
-import {createRouter, createWebHistory} from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router';
 
 const routes = [
   {
@@ -12,42 +12,43 @@ const routes = [
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
-        component: () => import(/* webpackChunkName: "home" */ '@/views/Home.vue'),
+        component: () =>
+          import(/* webpackChunkName: "home" */ '@/views/Home.vue'),
       },
       {
         path: '/code',
         name: 'Code Editor',
-        component: () => import('@/views/EditorPage.vue')
+        component: () => import('@/views/EditorPage.vue'),
       },
       {
         path: '/login',
         name: 'Login',
-        component: () => import('@/views/Login.vue')
+        component: () => import('@/views/Login.vue'),
       },
       {
         path: '/register',
         name: 'Register',
-        component: () => import('@/views/Register.vue')
+        component: () => import('@/views/Register.vue'),
       },
       {
         path: '/sponsors',
         name: 'Sponsors',
-        component: () => import('@/views/Sponsors.vue')
+        component: () => import('@/views/Sponsors.vue'),
       },
       {
         path: '/home',
         name: 'UserHome',
-        component: () => import('@/views/UserHome.vue')
+        component: () => import('@/views/UserHome.vue'),
       },
       {
         path: '/home/edit',
         name: 'EditProfile',
-        component: () => import('@/views/EditProfile.vue')
+        component: () => import('@/views/EditProfile.vue'),
       },
       {
         path: '/download',
         name: 'Download',
-        component: () => import('@/views/Download.vue')
+        component: () => import('@/views/Download.vue'),
       },
       {
         path: '/feature',
@@ -57,35 +58,35 @@ const routes = [
       {
         path: '/feature/undo',
         name: 'Undo',
-        component: () => import('@/views/feature/Undo.vue')
+        component: () => import('@/views/feature/Undo.vue'),
       },
       {
         path: '/feature/rvc',
         name: 'RVC',
-        component: () => import('@/views/feature/RVC.vue')
+        component: () => import('@/views/feature/RVC.vue'),
       },
       {
         path: '/feature/debugger',
         name: 'Debugger',
-        component: () => import('@/views/feature/Debugger.vue')
+        component: () => import('@/views/feature/Debugger.vue'),
       },
       {
         path: '/user/:uid(\\d+)',
         name: 'UserProfile',
-        component: () => import('@/views/profile/OtherUser.vue')
+        component: () => import('@/views/profile/OtherUser.vue'),
       },
       {
         path: '/admin/users',
         name: 'AdminUserList',
-        component: () => import('@/views/admin/UserList.vue')
-      }
+        component: () => import('@/views/admin/UserList.vue'),
+      },
     ],
   },
-]
+];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
-})
+});
 
-export default router
+export default router;

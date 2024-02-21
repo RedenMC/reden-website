@@ -1,15 +1,15 @@
 <script lang="ts" setup>
-import DefaultView from './View.vue'
-import RedenAppBar from "@/appbar/RedenAppBar.vue";
-import {VSonner} from "vuetify-sonner";
+import DefaultView from './View.vue';
+import RedenAppBar from '@/appbar/RedenAppBar.vue';
+import { VSonner } from 'vuetify-sonner';
 </script>
 
 <template>
   <v-app theme="dark">
-    <RedenAppBar/>
+    <RedenAppBar />
 
-    <VSonner :position="'top-right'" :expand="true"/>
-    <default-view/>
+    <VSonner :position="'top-right'" :expand="true" />
+    <default-view />
 
     <v-footer class="flex-column">
       <div class="text-center w-100">
@@ -41,9 +41,7 @@ import {VSonner} from "vuetify-sonner";
               </a>
             </div>
             <div class="footer-list-item">
-              <a href="//github.com/zly2006/reden-is-what-we-made">
-                Github
-              </a>
+              <a href="//github.com/zly2006/reden-is-what-we-made"> Github </a>
             </div>
           </v-col>
           <v-col>
@@ -103,13 +101,13 @@ import {VSonner} from "vuetify-sonner";
             </div>
             <div class="footer-list-item">
               <a href="/blog">
-                <v-icon icon="mdi-rss"/>
+                <v-icon icon="mdi-rss" />
                 {{ $t('reden.footer.follow_us.blog') }}
               </a>
             </div>
             <div class="footer-list-item">
               <a href="//youtube.com/@zly2006">
-                <v-icon icon="mdi-youtube"/>
+                <v-icon icon="mdi-youtube" />
                 {{ $t('reden.footer.follow_us.youtube') }}
               </a>
             </div>

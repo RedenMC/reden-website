@@ -1,55 +1,56 @@
 <script setup lang="ts">
-import {onMounted, Ref, ref} from "vue";
-import Lever from "@/assets/lever.png";
-import LeverBase from "@/assets/lever_base.png";
-import LampOff from "@/assets/redstone_lamp.png";
-import LampOn from "@/assets/redstone_lamp_on.png";
+import { onMounted, Ref, ref } from 'vue';
+import Lever from '@/assets/lever.png';
+import LeverBase from '@/assets/lever_base.png';
+import LampOff from '@/assets/redstone_lamp.png';
+import LampOn from '@/assets/redstone_lamp_on.png';
 
-const {title} = defineProps({
-  title: String
-})
+const { title } = defineProps({
+  title: String,
+});
 
-const all: Ref<Element | null> = ref(null)
-const leverOn = ref(false)
+const all: Ref<Element | null> = ref(null);
+const leverOn = ref(false);
 onMounted(() => {
-  let observer = new IntersectionObserver((it) => {
-    it.forEach((entry) => {
-      if (entry.target.getBoundingClientRect().top > 0) {
-        // only operate when the element is at the bottom of the screen
-        if (entry.intersectionRatio == 1) {
-          leverOn.value = true
+  let observer = new IntersectionObserver(
+    (it) => {
+      it.forEach((entry) => {
+        if (entry.target.getBoundingClientRect().top > 0) {
+          // only operate when the element is at the bottom of the screen
+          if (entry.intersectionRatio == 1) {
+            leverOn.value = true;
+          }
+          if (entry.intersectionRatio == 0) {
+            leverOn.value = false;
+          }
         }
-        if (entry.intersectionRatio == 0) {
-          leverOn.value = false
-        }
-      }
-    })
-  }, {
-    threshold: [0, 1]
-  })
+      });
+    },
+    {
+      threshold: [0, 1],
+    },
+  );
   observer.observe(all.value!);
-})
-const lampOnStyle = 'url(' + LampOn + ')'
-const lampOffStyle = 'url(' + LampOff + ')'
+});
+const lampOnStyle = 'url(' + LampOn + ')';
+const lampOffStyle = 'url(' + LampOff + ')';
 </script>
 
 <template>
   <div class="redstone-section-title">
     <div class="lever-all" ref="all" @click="leverOn = !leverOn">
-      <img :src="Lever"
-           :class="{ 'lever-on': leverOn, 'lever-off': !leverOn }"
-           height="50"
-           width="50"
-           alt=""
+      <img
+        :src="Lever"
+        :class="{ 'lever-on': leverOn, 'lever-off': !leverOn }"
+        height="50"
+        width="50"
+        alt=""
       />
-      <img :src="LeverBase"
-           class="lever-base"
-           alt=""
-      />
+      <img :src="LeverBase" class="lever-base" alt="" />
     </div>
-    <div :class="{ 'lamp-on': leverOn, 'lamp-off': !leverOn, 'lamp-common': true }">
-
-    </div>
+    <div
+      :class="{ 'lamp-on': leverOn, 'lamp-off': !leverOn, 'lamp-common': true }"
+    ></div>
     <div class="title">{{ title }}</div>
   </div>
 </template>
