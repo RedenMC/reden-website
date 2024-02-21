@@ -3,7 +3,6 @@ import {Ref, ref} from "vue";
 import {doFetchGet, ErrorResponse, Profile} from "@/constants";
 import {toast} from "vuetify-sonner";
 import UserBadges from "@/components/UserBadges.vue";
-import {debuggerStatement} from "@babel/types";
 
 const pageSize = ref(20)
 const totalItems = ref(0)
@@ -12,7 +11,6 @@ const loading = ref(false)
 const search = ref('')
 async function loadItems(options: { page: number, itemsPerPage: number, sortBy: string[], sortDesc: boolean }) {
   loading.value = true
-  console.log('loadItems', options)
   const response = await doFetchGet(`/api/admin/user/list?page=${options.page}&pageSize=${options.itemsPerPage}&sort=${options.sortBy[0]}&order=${options.sortDesc ? 'desc' : 'asc'}&search=${search.value}`)
   if (response.ok) {
     const data: {

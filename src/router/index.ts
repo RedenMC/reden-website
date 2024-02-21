@@ -70,6 +70,11 @@ const routes = [
         component: () => import('@/views/feature/Debugger.vue')
       },
       {
+        path: '/user/:uid(\\d+)',
+        name: 'UserProfile',
+        component: () => import('@/views/profile/OtherUser.vue')
+      },
+      {
         path: '/admin/users',
         name: 'AdminUserList',
         component: () => import('@/views/admin/UserList.vue')
