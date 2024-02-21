@@ -1,16 +1,15 @@
 <script setup lang="ts">
-import {ref} from 'vue'
-import type {Position as PositionType} from 'vue-sonner/lib/types'
-import {useI18n} from 'vue-i18n'
-import RedStoneSection from "@/components/RedStoneSection.vue";
-import RedstoneSectionTitle from "@/components/RedstoneSectionTitle.vue";
-import Feature from "@/views/Feature.vue";
-import {discordInvite} from "@/constants";
+import { ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import RedStoneSection from '@/components/RedStoneSection.vue';
+import RedstoneSectionTitle from '@/components/RedstoneSectionTitle.vue';
+import Feature from '@/views/Feature.vue';
+import { discordInvite } from '@/constants';
 
-const {t} = useI18n()
+const { t } = useI18n();
 
-const introContent = ref<HTMLElement | null>(null)
-document.title = t('reden.title.home') + ' - Reden'
+const introContent = ref<HTMLElement | null>(null);
+document.title = t('reden.title.home') + ' - Reden';
 </script>
 
 <template>
@@ -18,21 +17,25 @@ document.title = t('reden.title.home') + ' - Reden'
     <div>
       <v-row>
         <v-col>
-          <h1 class="text-h2 font-weight-bold">
-            Reden
-          </h1>
+          <h1 class="text-h2 font-weight-bold">Reden</h1>
           <p style="font-size: larger">
-            {{ t('reden.description') }}
+            {{ $t('reden.description') }}
           </p>
         </v-col>
         <v-col cols="3" class="icon">
-          <v-img src="/reden_256.png" width="148"/>
+          <v-img src="/reden_256.png" width="148" />
         </v-col>
       </v-row>
       <div class="buttons">
-        <v-btn class="main-button" prepend-icon="mdi-download" size="x-large" rounded="rounded" color="primary"
-               href="/download">
-          {{ t('reden.download') }}
+        <v-btn
+          class="main-button"
+          prepend-icon="mdi-download"
+          size="x-large"
+          rounded="rounded"
+          color="primary"
+          href="/download"
+        >
+          {{ $t('reden.download') }}
         </v-btn>
         <v-btn
           class="main-button"
@@ -52,21 +55,18 @@ document.title = t('reden.title.home') + ' - Reden'
           rounded="rounded"
           variant="outlined"
         >
-          {{ t('reden.wiki') }}
+          {{ $t('reden.wiki') }}
         </v-btn>
       </div>
     </div>
   </div>
 
   <div class="intro-content" ref="introContent">
-    <Feature/>
+    <Feature />
     <div class="community-intro content-common">
-      <RedstoneSectionTitle :title="$t('reden.home.community_intro.title')"/>
-      <RedStoneSection
-        :size="3">
-        <template #title>
-          Open Source
-        </template>
+      <RedstoneSectionTitle :title="$t('reden.home.community_intro.title')" />
+      <RedStoneSection :size="3">
+        <template #title> Open Source </template>
         <template #text>
           <p>
             {{ $t('reden.home.community_intro.open_source') }}
@@ -84,11 +84,8 @@ document.title = t('reden.title.home') + ' - Reden'
           </v-btn>
         </template>
       </RedStoneSection>
-      <RedStoneSection
-        :size="3">
-        <template #title>
-          RVC Hub
-        </template>
+      <RedStoneSection :size="3">
+        <template #title> RVC Hub </template>
         <template #text>
           <p>
             {{ $t('reden.home.community_intro.rvchub') }}
@@ -106,11 +103,8 @@ document.title = t('reden.title.home') + ' - Reden'
           </v-btn>
         </template>
       </RedStoneSection>
-      <RedStoneSection
-        :size="3">
-        <template #title>
-          Sponsors
-        </template>
+      <RedStoneSection :size="3">
+        <template #title> Sponsors </template>
         <template #text>
           <p>
             {{ $t('reden.home.community_intro.sponsor') }}
@@ -128,11 +122,8 @@ document.title = t('reden.title.home') + ' - Reden'
           </v-btn>
         </template>
       </RedStoneSection>
-      <RedStoneSection
-        :size="3">
-        <template #title>
-          Wiki
-        </template>
+      <RedStoneSection :size="3">
+        <template #title> Wiki </template>
         <template #text>
           <p>
             {{ $t('reden.home.community_intro.wiki') }}
@@ -150,11 +141,8 @@ document.title = t('reden.title.home') + ' - Reden'
           </v-btn>
         </template>
       </RedStoneSection>
-      <RedStoneSection
-        :size="3">
-        <template #title>
-          Discord
-        </template>
+      <RedStoneSection :size="3">
+        <template #title> Discord </template>
         <template #text>
           <p>
             {{ $t('reden.home.community_intro.discord') }}
@@ -210,5 +198,4 @@ body {
 .main-button {
   margin: 6px;
 }
-
 </style>

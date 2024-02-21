@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import ModrinthFull from "@/plugins/icons/ModrinthFull.vue";
+import ModrinthFull from '@/plugins/icons/ModrinthFull.vue';
 </script>
 
 <template>
   <h2>
     {{ $t('reden.download_page.sorry_constructing') }}
     <a href="https://modrinth.com/mod/reden">
-      <ModrinthFull style="height: 24px"/>
+      <ModrinthFull style="height: 24px" />
     </a>
   </h2>
 </template>

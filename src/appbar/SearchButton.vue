@@ -1,26 +1,26 @@
 <script lang="ts">
-import { mergeProps } from 'vue'
-import { toast } from 'vue-sonner'
+import { mergeProps } from 'vue';
+import { toast } from 'vue-sonner';
 
 const items: {
-  title: string
-  preview?: string
-  action?: () => void
+  title: string;
+  preview?: string;
+  action?: () => void;
 }[] = [
   { title: 'R-Debugger' },
   { title: 'Undo & Redo' },
   { title: 'Super Right' },
   { title: 'Other Server Side Features', preview: 'AAA' },
   { title: 'Other Client Side Features', preview: 'AAA' },
-]
+];
 
 for (const item of items) {
-  item.preview = item.preview || item.title
+  item.preview = item.preview || item.title;
   item.action = () => {
     toast(item.title, {
       description: item.preview,
-    })
-  }
+    });
+  };
 }
 
 export default {
@@ -28,38 +28,31 @@ export default {
     return {
       searchText: '',
       items,
-    }
+    };
   },
   watch: {
     searchText(val) {
       this.items = items.filter((item) => {
-        return item.title.toLowerCase().includes(val.toLowerCase())
-      })
+        return item.title.toLowerCase().includes(val.toLowerCase());
+      });
     },
   },
   methods: {
     mergeProps,
     checkEnter(e) {
-      if (e.key === 'Enter')
-        this.items[0].action()
+      if (e.key === 'Enter') this.items[0].action();
     },
   },
-}
+};
 </script>
 
 <template>
   <div class="text-center">
-    <v-menu
-      :close-on-content-click="false"
-      transition="scale-transition"
-    >
+    <v-menu :close-on-content-click="false" transition="scale-transition">
       <template #activator="{ props: menu }">
         <v-tooltip location="top" transition="scale-transition">
           <template #activator="{ props: tooltip }">
-            <v-btn
-              v-bind="mergeProps(menu, tooltip)"
-              icon="mdi-magnify"
-            />
+            <v-btn v-bind="mergeProps(menu, tooltip)" icon="mdi-magnify" />
           </template>
           <span> {{ $t('search.hover') }} </span>
         </v-tooltip>

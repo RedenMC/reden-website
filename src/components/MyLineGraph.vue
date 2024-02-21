@@ -1,11 +1,8 @@
 <script setup lang="ts">
-
 // VSparkline is a component
 </script>
 <template>
-  <div>
-
-  </div>
+  <div></div>
   <!--
   <v-sparkline
       :value="value"
@@ -31,7 +28,7 @@ const gradients = [
   ['purple', 'violet'],
   ['#00c6ff', '#F0F', '#FF0'],
   ['#f72047', '#ffd200', '#1feaea'],
-]
+];
 
 export default {
   data: () => ({
@@ -47,5 +44,5 @@ export default {
     type: 'trend',
     autoLineWidth: false,
   }),
-}
+};
 </script>

@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import {ref} from "vue";
-import {fetchOtherUser, Profile} from "@/constants";
-import UserProfileCard from "@/components/UserProfileCard.vue";
+import { ref } from 'vue';
+import { fetchOtherUser, Profile } from '@/constants';
+import UserProfileCard from '@/components/UserProfileCard.vue';
 // to number
-const uid = window.location.pathname.split('/').pop()
-const numUid = Number(uid)
-const user = ref<Profile>()
+const uid = window.location.pathname.split('/').pop();
+const numUid = Number(uid);
+const user = ref<Profile>();
 if (numUid) {
-  fetchOtherUser(numUid, user)
+  fetchOtherUser(numUid, user);
 }
 </script>
 
@@ -21,10 +21,8 @@ if (numUid) {
     </v-card-text>
   </v-card>
   <v-card v-else-if="user">
-    <UserProfileCard :user="user" :show-actions="false"/>
+    <UserProfileCard :user="user" :show-actions="false" />
   </v-card>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
