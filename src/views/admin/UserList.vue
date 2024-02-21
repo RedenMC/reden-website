@@ -60,13 +60,13 @@ function isBanned(user: Profile) {
     item-value="name"
     @update:options="loadItems"
   >
-    <template #item.lastLoginTime="{ value }">
+    <template #[`item.lastLoginTime`]="{ value }">
       {{ (value ? (new Date(value)) : 'Never logged in') }}
     </template>
-    <template #item.roles="{ value }">
+    <template #[`item.roles`]="{ value }">
       <user-badges :roles="value"/>
     </template>
-    <template #item.ban="{ item }">
+    <template #[`item.ban`]="{ item }">
       <v-chip v-if="isBanned(item)" color="error" :text="`Banned until ${ new Date(item.bannedUntil).toLocaleString() }, ${ item.bannedReason }`"/>
       <v-chip v-else color="success" text="Not Banned"/>
     </template>
