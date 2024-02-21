@@ -17,6 +17,8 @@ export type Profile = {
   isStaff: boolean
   githubId: string
   canChangePassword: boolean
+  bannedUntil?: number
+  bannedReason?: string
 }
 
 export type GeneralResponse = {

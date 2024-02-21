@@ -2,16 +2,18 @@
 import {Ref, ref} from "vue";
 import {doFetchGet, ErrorResponse, Profile} from "@/constants";
 import {toast} from "vuetify-sonner";
+import UserBadges from "@/components/UserBadges.vue";
+import {debuggerStatement} from "@babel/types";
 
 const pageSize = ref(20)
 const totalItems = ref(0)
 const serverItems: Ref<Profile[]> = ref([])
 const loading = ref(false)
 const search = ref('')
-async function loadItems(options: { page: number, itemsPerPage: number, sortBy: string[], sortDesc: boolean[] }) {
+async function loadItems(options: { page: number, itemsPerPage: number, sortBy: string[], sortDesc: boolean }) {
   loading.value = true
   console.log('loadItems', options)
-  const response = await doFetchGet(`/api/admin/user/list?page=${options.page}&pageSize=${options.itemsPerPage}&sort=${options.sortBy[0]}&order=${options.sortDesc[0] ? 'desc' : 'asc'}&search=${search.value}`)
+  const response = await doFetchGet(`/api/admin/user/list?page=${options.page}&pageSize=${options.itemsPerPage}&sort=${options.sortBy[0]}&order=${options.sortDesc ? 'desc' : 'asc'}&search=${search.value}`)
   if (response.ok) {
     const data: {
       users: Profile[],
@@ -32,13 +34,19 @@ async function loadItems(options: { page: number, itemsPerPage: number, sortBy: 
   loading.value = false
 }
 const headers = [
-  {title: 'Name', key: 'name'},
+  {title: 'UID', key: 'id'},
+  {title: 'Username', key: 'username'},
   {title: 'Email', key: 'email'},
-  {title: 'Role', key: 'role'},
-  {title: 'Created At', key: 'createdAt'},
-  {title: 'Updated At', key: 'updatedAt'},
+  {title: 'Role', key: 'roles'},
+  {title: 'Last Login IP', key: 'lastLoginIp'},
+  {title: 'Last Login Time', key: 'lastLoginTime'},
+  {title: 'Banned', key: 'ban'},
   {title: 'Actions', key: 'actions', sortable: false}
 ]
+
+function isBanned(user: Profile) {
+  return (user.bannedUntil || 0) > Date.now()
+}
 </script>
 
 <template>
@@ -51,7 +59,18 @@ const headers = [
     :search="search"
     item-value="name"
     @update:options="loadItems"
-  ></v-data-table-server>
+  >
+    <template #item.lastLoginTime="{ value }">
+      {{ (value ? (new Date(value)) : 'Never logged in') }}
+    </template>
+    <template #item.roles="{ value }">
+      <user-badges :roles="value"/>
+    </template>
+    <template #item.ban="{ item }">
+      <v-chip v-if="isBanned(item)" color="error" text="Banned until {{ new Date(item.bannedUntil).toLocaleString() }}, {{ item.bannedReason }}"/>
+      <v-chip v-else color="success" text="Not Banned"/>
+    </template>
+  </v-data-table-server>
 </template>
 
 <style scoped>

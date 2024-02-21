@@ -191,6 +191,7 @@ function savePreferences() {
   </v-card>
 
   <v-card
+    v-if="user"
     class="setting-section-card"
     rounded="lg"
   >
@@ -201,6 +202,7 @@ function savePreferences() {
       You can change your password here.
     </p>
     <v-text-field
+      v-if="!user.canChangePassword"
       v-model="oldPassword"
       class="setting-input"
       color="primary"
@@ -208,6 +210,9 @@ function savePreferences() {
       label="Old Password"
       placeholder="Enter your old password"
     />
+    <p v-if="user.canChangePassword">
+      This is the first time you login, please change your password as soon as possible.
+    </p>
     <v-text-field
       v-model="newPassword"
       class="setting-input"
