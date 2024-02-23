@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { toast } from 'vuetify-sonner';
-import {ref, watch} from 'vue';
+import {ref} from 'vue';
 import VueTurnstile from "vue-turnstile";
 import {cloudflareCAPTCHAKey, doFetchPost, isStrongPassword, toastError} from '@/constants';
 
@@ -109,7 +109,11 @@ function register() {
           <v-icon>mdi-lock</v-icon>
         </template>
       </v-text-field>
-      <vue-turnstile :site-key="cloudflareCAPTCHAKey" v-model="token" v-show="!token" />
+      <vue-turnstile
+        :site-key="cloudflareCAPTCHAKey"
+        v-model="token"
+        v-show="!token"
+      />
       <v-text-field
         v-model="invitationCode"
         label="Invitation Code (Optional)"
@@ -123,9 +127,7 @@ function register() {
         @click="register"
       >
         {{
-          token
-            ? $t('register.button.register')
-            : $t('register.button.captcha')
+          token ? $t('register.button.register') : $t('register.button.captcha')
         }}
       </v-btn>
 

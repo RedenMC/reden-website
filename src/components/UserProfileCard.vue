@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-import { Ref, ref, VueElement, watch } from 'vue';
-import { doFetchDelete, Profile, toastError } from '@/constants';
+import {Ref, ref, VueElement} from 'vue';
+import {doFetchDelete, Profile, toastError} from '@/constants';
 import UserBadges from '@/components/UserBadges.vue';
 import VerifyMinecraft from '@/components/VerifyMinecraft.vue';
-import { toast } from 'vuetify-sonner';
-import { useAppStore } from '@/store/app';
+import {toast} from 'vuetify-sonner';
+import {useAppStore} from '@/store/app';
 
-const { user, canEdit } = defineProps({
+const {user, canEdit, applyPreference} = defineProps({
   user: {
     type: Object as () => Ref<Profile | undefined>,
     required: true,
@@ -15,15 +15,9 @@ const { user, canEdit } = defineProps({
     type: Boolean,
     default: true,
   },
+  applyPreference: Boolean,
 });
-watch(
-  () => user?.value,
-  (newVal) => {
-    if (newVal) {
-      console.log('user updated', newVal);
-    }
-  },
-);
+
 defineSlots<{
   actions: VueElement[] | undefined;
 }>();
@@ -34,6 +28,7 @@ const selectedFile = ref<File | null | undefined>();
 function editAvatar() {
   uploader.value?.click();
 }
+
 function fileSelected() {
   const file = uploader.value?.files?.item(0);
   selectedFile.value = file;
@@ -72,6 +67,7 @@ function fileSelected() {
     })
     .catch((e) => toastError(e, 'Failed to update avatar'));
 }
+
 function deleteAvatar() {
   doFetchDelete('/api/account/avatar')
     .then((response) => {
@@ -98,17 +94,17 @@ function deleteAvatar() {
       <v-hover>
         <template #default="{ isHovering, props }">
           <div
-            class="edit-avatar"
-            v-bind="props"
             v-if="canEdit"
             v-show="isHovering"
+            class="edit-avatar"
+            v-bind="props"
           >
             <v-hover>
               <template #default="{ isHovering, props }">
                 <v-btn
-                  v-bind="props"
                   :color="isHovering ? 'primary' : undefined"
                   icon="mdi-pencil"
+                  v-bind="props"
                   @click="editAvatar"
                 />
               </template>
@@ -116,17 +112,17 @@ function deleteAvatar() {
             <v-hover v-if="user?.avatarUrl">
               <template #default="{ isHovering, props }">
                 <v-btn
-                  v-bind="props"
                   :color="isHovering ? 'red' : undefined"
                   icon="mdi-delete"
+                  v-bind="props"
                   @click="deleteAvatar"
                 />
               </template>
             </v-hover>
           </div>
           <input
-            accept="image/*"
             ref="uploader"
+            accept="image/*"
             class="d-none"
             type="file"
             @change="fileSelected"
@@ -140,33 +136,44 @@ function deleteAvatar() {
         {{ user?.username }}
       </h1>
       <UserBadges :roles="user?.roles" />
-      <p v-if="user?.id != null" class="user-id">
-        <v-icon class="profile-item-icon">mdi-account</v-icon>
-        <span>uid: {{ user?.id }}</span>
+      <p v-if="user?.bio" class="user-bio">
+        {{ user?.bio }}
       </p>
-      <p v-if="user?.email != null" class="user-email">
-        <v-icon class="profile-item-icon">mdi-email</v-icon>
-        <a :href="'mailto:' + user?.email" class="link"> {{ user?.email }} </a>
-        <v-icon>mdi-warning</v-icon>
-      </p>
-      <p class="minecraft">
-        <v-icon class="profile-item-icon">mdi-minecraft</v-icon>
-        <VerifyMinecraft :showActions="canEdit" :user="user" />
-      </p>
-      <p class="user-github">
-        <v-icon class="profile-item-icon">mdi-github</v-icon>
-        <span v-if="user?.githubId != null">
-          <a :href="'//github.com/' + user.githubId" class="link">
-            {{ user!.githubId }}
-          </a>
-        </span>
-        <span v-else>
+      <div v-if="user" class="user-details-list">
+        <p class="user-id">
+          <v-icon class="profile-item-icon">mdi-account</v-icon>
+          <span>uid: {{ user.id }}</span>
+        </p>
+        <p v-if="user.email && (!applyPreference || user.preference.showEmail)" class="user-email">
+          <v-icon class="profile-item-icon">mdi-email</v-icon>
+          <a :href="'mailto:' + user?.email" class="link"> {{ user?.email }} </a>
+        </p>
+        <p v-if="user?.preference?.pronouns" class="user-pronoun">
+          <span>{{ user?.preference?.pronouns }}</span>
+        </p>
+        <p v-if="user.mcUUID && (!applyPreference || user.preference.showMC)" class="minecraft">
+          <v-icon class="profile-item-icon">mdi-minecraft</v-icon>
+          <VerifyMinecraft :showActions="canEdit" :user="user" />
+        </p>
+        <p v-if="!applyPreference || user.preference.showGithub" class="user-github">
+          <v-icon class="profile-item-icon">mdi-github</v-icon>
+          <span v-if="user?.githubId != null">
+            <a :href="'//github.com/' + user.githubId" class="link">
+              {{ user!.githubId }}
+            </a>
+          </span>
+          <span v-else>
           Account not linked
           <a v-if="canEdit" href="/api/oauth/github?redirect_url=/home">
             Link Now
           </a>
         </span>
-      </p>
+        </p>
+        <p v-if="user?.timezone && (!applyPreference || user.preference.showTimezone)" class="user-timezone">
+          <v-icon class="profile-item-icon">mdi-clock</v-icon>
+          <span>{{ user?.timezone }}</span>
+        </p>
+      </div>
       <slot name="actions" />
     </div>
   </v-card>
@@ -224,5 +231,15 @@ a:hover.link {
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+
+.user-bio {
+  color: #eeeeee;
+  font-size: 1.2em;
+}
+
+.user-details-list {
+  margin-top: 12px;
+  margin-bottom: 12px;
 }
 </style>

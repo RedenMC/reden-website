@@ -17,6 +17,7 @@ export type Profile = {
   mcUUID?: string;
   isStaff?: boolean;
   githubId?: string;
+  timezone?: string;
   passwordNotSet: boolean;
   bannedUntil?: number;
   canChangeNameUntil?: number;

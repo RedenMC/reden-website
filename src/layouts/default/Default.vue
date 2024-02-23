@@ -116,9 +116,16 @@ import { VSonner } from 'vuetify-sonner';
           </v-col>
         </v-row>
       </div>
-      <div class="text-center w-100">
-        {{ new Date().getFullYear() }} — <strong>RedenMC</strong>
-      </div>
+      <v-row class="last-line">
+        <v-col class="text-center">
+          <a href="https://github.com/zly2006/reden-is-what-we-made">Reden</a>
+          and
+          <a href="https://github.com/RedenMC/reden-website">this website</a>
+          are both free software.
+          <br />
+          {{ new Date().getFullYear() }} — <strong>RedenMC</strong>
+        </v-col>
+      </v-row>
     </v-footer>
   </v-app>
 </template>
@@ -147,5 +154,9 @@ a {
 a:hover {
   color: #ffffff;
   text-decoration: underline;
+}
+
+.last-line {
+  margin-top: 16px;
 }
 </style>

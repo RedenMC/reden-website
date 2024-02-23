@@ -21,7 +21,7 @@ if (numUid) {
     </v-card-text>
   </v-card>
   <v-card v-else-if="user">
-    <UserProfileCard :user="user" :show-actions="false" />
+    <UserProfileCard :user="user" :can-edit="false" />
   </v-card>
 </template>
 

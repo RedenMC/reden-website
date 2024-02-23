@@ -1,10 +1,15 @@
 <script setup lang="ts">
 import VueTurnstile from 'vue-turnstile';
-import {cloudflareCAPTCHAKey, doFetchPost, LoginResponse, toastError} from "@/constants";
-import {useAppStore} from "@/store/app";
-import {toast} from "vuetify-sonner";
-import {ref} from "vue";
-import router from "@/router";
+import {
+  cloudflareCAPTCHAKey,
+  doFetchPost,
+  LoginResponse,
+  toastError,
+} from '@/constants';
+import { useAppStore } from '@/store/app';
+import { toast } from 'vuetify-sonner';
+import { ref } from 'vue';
+import router from '@/router';
 
 const username = ref('');
 const password = ref('');
@@ -82,7 +87,11 @@ function login() {
         </template>
       </v-text-field>
 
-      <vue-turnstile :site-key="cloudflareCAPTCHAKey" v-model="token" v-show="!token" />
+      <vue-turnstile
+        :site-key="cloudflareCAPTCHAKey"
+        v-model="token"
+        v-show="!token"
+      />
 
       <v-btn
         :loading="loading"

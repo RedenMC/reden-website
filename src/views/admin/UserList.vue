@@ -60,6 +60,7 @@ function isBanned(user: Profile) {
     :headers="headers"
     :items-length="totalItems"
     :items="serverItems"
+    :items-per-page-options="[10, 20, 50, 100]"
     :loading="loading"
     :search="search"
     item-value="name"

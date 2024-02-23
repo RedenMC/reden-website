@@ -5,6 +5,9 @@ const messages = {
     en: 'English',
     zh: '中文',
     $vuetify: {
+      close: 'Close',
+      open: 'Open',
+      noDataText: 'No data available',
       dataIterator: {
         rowsPerPageText: 'Items per page:',
         rowsPerPageAll: 'All',
@@ -12,11 +15,21 @@ const messages = {
         noResultsText: 'No matching records found',
         nextPage: 'Next page',
         prevPage: 'Previous page',
+        loadingText: 'Loading items...',
       },
       dataFooter: {
         itemsPerPageText: 'Items per page:',
         itemsPerPageAll: 'All',
+        prevPage: 'Previous page',
+        nextPage: 'Next page',
+        firstPage: 'First page',
+        lastPage: 'Last page',
         pageText: '{0}-{1} items of {2}',
+      },
+      pagination: {
+        ariaLabel: {
+          root: 'Pagination',
+        }
       },
     },
     reden: {
