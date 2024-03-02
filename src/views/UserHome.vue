@@ -1,11 +1,5 @@
 <script lang="ts" setup>
-import {
-  doFetchGet,
-  fetchUser,
-  Profile,
-  toastError,
-  toastStatusCode,
-} from '@/constants';
+import { doFetchGet, fetchUser, Profile, toastError } from '@/constants';
 import { toast } from 'vuetify-sonner';
 import { useAppStore } from '@/store/app';
 import UserProfileCard from '@/components/UserProfileCard.vue';
@@ -51,24 +45,68 @@ function logout() {
 </script>
 
 <template>
-  <UserProfileCard :user="user">
-    <template #actions>
-      <v-row>
-        <v-col>
-          <v-btn
-            color="secondary"
-            href="/home/edit"
-            rounded="lg"
-            class="text-none"
-            variant="outlined"
-          >
-            Edit Profile
-          </v-btn>
-        </v-col>
-      </v-row>
-    </template>
-  </UserProfileCard>
-  <v-btn color="primary" @click="logout"> Logout </v-btn>
+  <div class="d-flex flex-row">
+    <div>
+      <UserProfileCard :user="user">
+        <template #actions>
+          <v-row>
+            <v-col>
+              <v-btn
+                color="secondary"
+                href="/home/edit"
+                rounded="lg"
+                class="text-none"
+                variant="outlined"
+              >
+                Edit Profile
+              </v-btn>
+            </v-col>
+          </v-row>
+        </template>
+      </UserProfileCard>
+      <v-btn color="primary" @click="logout"> Logout </v-btn>
+    </div>
+    <v-timeline>
+      <v-timeline-item
+        v-for="event in [
+          {
+            id: 1,
+            title: 'Title',
+            subtitle: 'Subtitle',
+            subtitle2: 'Subtitle 2',
+            description: 'Description',
+            color: 'primary',
+            icon: 'mdi-account',
+          },
+          {
+            id: 2,
+            title: 'Title',
+            subtitle: 'Subtitle',
+            subtitle2: 'Subtitle 2',
+            description: 'Description',
+            color: 'primary',
+            icon: 'mdi-account',
+          },
+        ]"
+        :key="event.id"
+        :color="event.color"
+        :icon="event.icon"
+        :title="event.title"
+        :subtitle="event.subtitle"
+        :subtitle-2="event.subtitle2"
+      >
+        <template #opposite>
+          <v-card>
+            <v-card-title>{{ event.title }}</v-card-title>
+            <v-card-text>{{ event.description }}</v-card-text>
+            <template #actions>
+              <v-btn color="primary">Action</v-btn>
+            </template>
+          </v-card>
+        </template>
+      </v-timeline-item>
+    </v-timeline>
+  </div>
 </template>
 
 <style scoped></style>

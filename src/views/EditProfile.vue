@@ -68,7 +68,7 @@ function savePreferences() {
             color: 'green',
           },
         });
-        userCopy.value!.preference = user.value?.preference!;
+        userCopy.value!.preference = JSON.parse(JSON.stringify(user.value?.preference));
       } else {
         return Promise.reject(response);
       }
@@ -92,19 +92,20 @@ function savePreferences() {
   <v-card v-if="user" class="setting-section-card" rounded="lg">
     <h3 class="setting-section-title">Basic Information</h3>
     <v-row>
-      <v-col cols="6">
+      <v-col>
         <p class="setting-label">Email</p>
         <p class="setting-description">
           This is the email you use to register and reset your password.
         </p>
       </v-col>
-      <v-spacer />
-      <span>
-        {{ user.email }}
+      <div>
+        <span class="setting-button">
+          {{ user.email }}
+        </span>
         <v-btn class="text-capitalize setting-button" color="primary">
           Change Email
         </v-btn>
-      </span>
+      </div>
     </v-row>
     <v-row>
       <v-col>
@@ -183,9 +184,9 @@ function savePreferences() {
     </v-row>
     <v-row>
       <v-col cols="9">
-        <p class="setting-label">Show Minecraft Username</p>
+        <p class="setting-label">Show Minecraft Account</p>
         <p class="setting-description">
-          Whether to show your Minecraft username to other users.
+          Whether to show your Minecraft UUID to other users.
         </p>
       </v-col>
       <v-spacer />

@@ -17,6 +17,7 @@ export type Profile = {
   mcUUID?: string;
   isStaff?: boolean;
   githubId?: string;
+  timezone?: string;
   passwordNotSet: boolean;
   bannedUntil?: number;
   canChangeNameUntil?: number;
@@ -117,10 +118,19 @@ export async function toastError(e: any, message?: string) {
         },
       });
     }
-  } else {
+  } else if (e instanceof Object && e.error) {
     console.log('error', e);
     toast(message || 'Error', {
-      description: e.toString(),
+      description: e.error + (e.error_description || ''),
+      duration: 3e3,
+      cardProps: {
+        color: 'error',
+      },
+    });
+  } else {
+    console.log('error', e);
+    toast('Error', {
+      description: message,
       duration: 3e3,
       cardProps: {
         color: 'error',

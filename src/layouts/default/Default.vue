@@ -8,7 +8,7 @@ import { VSonner } from 'vuetify-sonner';
   <v-app theme="dark">
     <RedenAppBar />
 
-    <VSonner :position="'top-right'" :expand="true" />
+    <VSonner :expand="true" :position="'top-right'" />
     <default-view />
 
     <v-footer class="flex-column">
@@ -40,9 +40,6 @@ import { VSonner } from 'vuetify-sonner';
                 {{ $t('reden.footer.reden_mod.debugger') }}
               </a>
             </div>
-            <div class="footer-list-item">
-              <a href="//github.com/zly2006/reden-is-what-we-made"> Github </a>
-            </div>
           </v-col>
           <v-col>
             <div class="footer-list-title">
@@ -51,13 +48,13 @@ import { VSonner } from 'vuetify-sonner';
               </b>
             </div>
             <div class="footer-list-item">
-              <a href="//wiki.redenmc.com">
-                {{ $t('reden.footer.reden_ecosystem.wiki') }}
+              <a href="https://github.com/zly2006/reden-is-what-we-made">
+                Reden on Github
               </a>
             </div>
             <div class="footer-list-item">
-              <a href="//hub.redenmc.com">
-                {{ $t('reden.footer.reden_ecosystem.rvc_hub') }}
+              <a href="//wiki.redenmc.com">
+                {{ $t('reden.footer.reden_ecosystem.wiki') }}
               </a>
             </div>
             <div class="footer-list-item">
@@ -119,9 +116,16 @@ import { VSonner } from 'vuetify-sonner';
           </v-col>
         </v-row>
       </div>
-      <div class="text-center w-100">
-        {{ new Date().getFullYear() }} — <strong>RedenMC</strong>
-      </div>
+      <v-row class="last-line">
+        <v-col class="text-center">
+          <a href="https://github.com/zly2006/reden-is-what-we-made">Reden</a>
+          and
+          <a href="https://github.com/RedenMC/reden-website">this website</a>
+          are both free software.
+          <br />
+          {{ new Date().getFullYear() }} — <strong>RedenMC</strong>
+        </v-col>
+      </v-row>
     </v-footer>
   </v-app>
 </template>
@@ -150,5 +154,9 @@ a {
 a:hover {
   color: #ffffff;
   text-decoration: underline;
+}
+
+.last-line {
+  margin-top: 16px;
 }
 </style>
