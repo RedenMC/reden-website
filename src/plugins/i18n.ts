@@ -128,15 +128,13 @@ const messages = {
           strength: "Password is not strong enough, please use at least 8 characters, including uppercase, lowercase and numbers.",
           mismatching: "Passwords do not match"
         },
-        username: "无效用户名"
+        username: "Invalid Username."
       },
       existing: "Already have an account?",
       login: "Login",
       sent: {
         title:"One more step",
-        msg1: "We have sent an email to ",
-        msg2: "with a link to complete your registration.",
-        msg3: "If you don't see the email, please check other places it might be, like your junk, spam, social, or other folders."
+        msg: "We have sent an email to {email} with a link to complete your registration.If you don't see the email, please check other places it might be, like your junk, spam, social, or other folders."
       },
       toast: {
         suc: {
@@ -269,9 +267,7 @@ const messages = {
       login: "登录",
       sent: {
         title:"最后一步",
-        msg1: "我们向 ",
-        msg2: " 发送了一封包含链接的验证邮件",
-        msg3: "如果你没有看见该邮件，请注意垃圾站或其他文件夹"
+        msg1: "我们向 {email} 发送了一封包含链接的验证邮件。如果你没有看见该邮件，请注意垃圾站或其他文件夹。"
       },
       toast: {
         suc: {

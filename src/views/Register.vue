@@ -140,7 +140,7 @@ function register() {
     </div>
 
 
-    <div v-if="registerOk">
+    <div v-if="registerOk" >
       <v-sheet
         class="ok-screen pa-4 text-center mx-auto"
         elevation="12"
@@ -156,14 +156,7 @@ function register() {
         ></v-icon>
 
         <h2 class="text-h5 mb-6">{{ $t("register.sent.title") }}</h2>
-
-        <p class="mb-4 text-medium-emphasis">
-          {{ $t("register.sent.msg1") }}
-          <strong>{{ email }}</strong>
-          {{ $t("register.sent.msg2") }}
-          <br />
-          {{ $t("register.sent.msg3") }}
-        </p>
+        <span>{{ $t("register.sent.msg",{email:email}) }}</span>
 
         <v-divider class="mb-4"></v-divider>
 
