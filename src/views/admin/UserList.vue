@@ -73,7 +73,25 @@ function isBanned(user: Profile) {
       />
       <v-chip v-else color="success" text="Not Banned" />
     </template>
+    <template #[`item.username`]="{ item }">
+      <a class="username" :href="`/user/${item.id}`">
+        <v-avatar :image="item.avatarUrl" />
+        {{ item.username }}
+      </a>
+    </template>
   </v-data-table-server>
 </template>
 
-<style scoped></style>
+<style scoped>
+.username {
+  font-size: 1.3rem;
+  text-decoration: none;
+  color: #dddddd;
+}
+
+.username:hover {
+  transition: all 0.5s;
+  color: #66ccff;
+  text-decoration: underline;
+}
+</style>
