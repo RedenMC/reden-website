@@ -264,7 +264,11 @@ function savePreferences() {
         <p class="setting-description">Your timezone.</p>
       </v-col>
       <v-col>
-        <v-select v-model="user.preference.timezone" :items="timezones" />
+        <v-select
+          class="setting-input"
+          v-model="user.preference.timezone"
+          :items="timezones"
+        />
       </v-col>
     </v-row>
     <v-row>

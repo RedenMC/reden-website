@@ -4,12 +4,16 @@ import TranslateButton from './TranslateButton.vue';
 import '@/main.css';
 import AccountButton from '@/appbar/AccountButton.vue';
 import { discordInvite } from '@/constants';
+import { useAppStore } from '@/store/app';
+import { useDisplay } from 'vuetify';
+
+const { mobile } = useDisplay();
 </script>
 
 <template>
-  <v-app-bar :elevation="2">
+  <v-app-bar :elevation="2" color="transparent" class="reden-app-bar">
     <template #prepend>
-      <v-menu class="mobile-show" :close-on-content-click="true">
+      <v-menu v-show="mobile" :close-on-content-click="true">
         <template #activator="{ props }">
           <v-btn
             class="mobile-show"
@@ -19,17 +23,46 @@ import { discordInvite } from '@/constants';
           />
         </template>
 
-        <v-list>
-          <v-list-item
-            :link="true"
-            v-for="k in [1, 2, 3]"
-            :key="`locale-${k}`"
-            :min-width="200"
-          >
-            <v-list-item-title>
-              {{ k }}
-            </v-list-item-title>
+        <v-list class="w-100">
+          <v-list-item href="/">
+            <template #prepend>
+              <v-icon>mdi-home</v-icon>
+            </template>
+            <v-list-item-title> Home </v-list-item-title>
           </v-list-item>
+          <v-list-item href="/feature">
+            <template #prepend>
+              <v-icon>mdi-view-dashboard</v-icon>
+            </template>
+            <v-list-item-title> Features </v-list-item-title>
+          </v-list-item>
+          <v-divider />
+          <v-list-item v-if="useAppStore().logined" href="/home">
+            <template #prepend>
+              <v-avatar
+                v-if="useAppStore().userCache?.avatarUrl"
+                :size="40"
+                :image="useAppStore().userCache?.avatarUrl"
+              />
+              <v-icon v-else> mdi-account</v-icon>
+            </template>
+            <v-list-item-title> My Profile </v-list-item-title>
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-title> My Machines </v-list-item-title>
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-title> My Stars </v-list-item-title>
+          </v-list-item>
+          <template v-if="useAppStore().userCache?.isStaff">
+            <v-divider />
+            <v-list-item href="/admin/users">
+              <template #prepend>
+                <v-icon>mdi-cog</v-icon>
+              </template>
+              <v-list-item-title> Admin </v-list-item-title>
+            </v-list-item>
+          </template>
         </v-list>
       </v-menu>
 
@@ -56,4 +89,8 @@ import { discordInvite } from '@/constants';
   </v-app-bar>
 </template>
 
-<style scoped></style>
+<style scoped>
+.reden-app-bar {
+  backdrop-filter: blur(10px);
+}
+</style>

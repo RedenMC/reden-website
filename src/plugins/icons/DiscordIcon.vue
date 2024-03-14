@@ -1,8 +1,8 @@
 <template>
   <!-- Uploaded to: SVG Repo, www.svgrepo.com, Transformed by: SVG Repo Mixer Tools -->
   <svg
-    width="800px"
-    height="600px"
+    width="24"
+    height="24"
     viewBox="-25.6 -55.6 307.20 307.20"
     version="1.1"
     xmlns="http://www.w3.org/2000/svg"
@@ -11,7 +11,6 @@
     fill="#ffffff"
     stroke="#ffffff"
     stroke-width="0.00256"
-    transform="matrix(1, 0, 0, 1, 0, 0)"
   >
     <g id="SVGRepo_bgCarrier" stroke-width="0" />
     <g

@@ -760,6 +760,11 @@ core-js@^3.29.0:
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.36.0.tgz#e752fa0b0b462a0787d56e9d73f80b0f7c0dde68"
   integrity sha512-mt7+TUBbTFg5+GngsAxeKBTl5/VS0guFeJacYge9OmHb+m058UwwIm41SE9T4Den7ClatV57B6TYTuJ0CX1MAw==
 
+countries-and-timezones@^3.6.0:
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/countries-and-timezones/-/countries-and-timezones-3.6.0.tgz#80716f05ebef270842fd72010f9b33e2848e24c7"
+  integrity sha512-8/nHBCs1eKeQ1jnsZVGdqrLYxS8nPcfJn8PnmxdJXWRLZdXsGFR8gnVhRjatGDBjqmPm7H+FtYpBYTPWd0Eiqg==
+
 cross-spawn@^7.0.2:
   version "7.0.3"
   resolved "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-7.0.3.tgz#f73a85b9d5d41d045551c177e2882d4ac85728a6"

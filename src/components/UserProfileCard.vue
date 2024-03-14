@@ -5,6 +5,7 @@ import UserBadges from '@/components/UserBadges.vue';
 import VerifyMinecraft from '@/components/VerifyMinecraft.vue';
 import { toast } from 'vuetify-sonner';
 import { useAppStore } from '@/store/app';
+import { getTimezone } from 'countries-and-timezones';
 
 const { user, canEdit, applyPreference } = defineProps({
   user: {
@@ -173,20 +174,45 @@ function deleteAvatar() {
               {{ user!.githubId }}
             </a>
           </span>
-          <span v-else>
-            Account not linked
-            <a v-if="canEdit" href="/api/oauth/github?redirect_url=/home">
-              Link Now
-            </a>
-          </span>
+          <span v-else>Account not linked</span>
+          <a v-if="canEdit" href="/api/oauth/github?redirect_url=/home"
+            >Link Now</a
+          >
         </p>
         <p v-if="user.preference.timezone" class="user-timezone">
           <v-icon class="profile-item-icon">mdi-clock</v-icon>
           <span>{{
             new Date().toLocaleString('en-us', {
               timeZone: user.preference.timezone,
+              hour: '2-digit',
+              minute: '2-digit',
+              hour12: false,
             })
           }}</span>
+          <span
+            v-if="
+              -new Date().getTimezoneOffset() ==
+              getTimezone(user.preference.timezone)?.utcOffset
+            "
+          >
+            (Your timezone)
+          </span>
+        </p>
+      </div>
+
+      <!-- followers and following and following projects -->
+      <div>
+        <p class="user-followers">
+          <v-icon class="profile-item-icon">mdi-account-group</v-icon>
+          <span>{{ user?.followers || 0 }} followers </span>
+        </p>
+        <p class="user-following">
+          <v-icon class="profile-item-icon">mdi-account-group-outline</v-icon>
+          <span>{{ user?.following || 0 }} following </span>
+        </p>
+        <p class="user-following-projects">
+          <v-icon class="profile-item-icon">mdi-source-branch</v-icon>
+          <span>{{ user?.followingProjects || 0 }} following projects </span>
         </p>
       </div>
       <slot name="actions" />

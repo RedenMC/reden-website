@@ -22,6 +22,9 @@ export type Profile = {
   canChangeNameUntil?: number;
   bannedReason?: string;
   preference: Preference;
+  followers?: number;
+  following?: number;
+  followingProjects?: number;
 };
 
 export type Preference = {
@@ -167,7 +170,7 @@ export const fetchUser = (userRef: Ref<Profile | undefined>) =>
     })
     .catch((e) => toastError(e, 'Failed to get user profile'));
 
-export function fetchOtherUser(uid: number, ref: Ref<Profile | undefined>) {
+export const fetchOtherUser = (uid: number, ref: Ref<Profile | undefined>) =>
   doFetchGet(`/api/users/${uid}`)
     .then(async (response) => {
       if (response.ok) {
@@ -177,7 +180,6 @@ export function fetchOtherUser(uid: number, ref: Ref<Profile | undefined>) {
       }
     })
     .catch((e) => toastError(e, 'Failed to get user profile'));
-}
 
 export type OAuthAccount = {
   type: string;

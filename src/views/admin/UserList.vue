@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { Ref, ref } from 'vue';
-import { doFetchGet, ErrorResponse, Profile } from '@/constants';
-import { toast } from 'vuetify-sonner';
+import { doFetchGet, ErrorResponse, Profile, toastError } from '@/constants';
 import UserBadges from '@/components/UserBadges.vue';
 
 const pageSize = ref(20);
@@ -28,13 +27,7 @@ async function loadItems(options: {
     totalItems.value = data.total;
   } else {
     const error: ErrorResponse = await response.json();
-    toast('Error', {
-      description: error.error,
-      duration: 10000,
-      cardProps: {
-        color: 'error',
-      },
-    });
+    await toastError(error);
   }
   loading.value = false;
 }
