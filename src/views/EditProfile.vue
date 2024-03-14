@@ -16,6 +16,8 @@ fetchUser(user).then(() => {
   userCopy.value = JSON.parse(JSON.stringify(user.value));
 });
 
+const timezones = Intl.supportedValuesOf('timeZone');
+
 const oldPassword = ref('');
 const newPassword = ref('');
 const confirmNewPassword = ref('');
@@ -49,7 +51,6 @@ function saveInfo() {
     .finally(() => {
       savingInfo.value = false;
     });
-  // backend: todo
 }
 function changed(a: Record<string, unknown>, b: Record<string, unknown>) {
   console.log('comparing', a, 'and', b);
@@ -252,6 +253,18 @@ function savePreferences() {
           v-model="user.preference.pronouns"
           class="setting-input"
           color="primary"
+        />
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <p class="setting-label">Timezone</p>
+        <p class="setting-description">Your timezone. </p>
+      </v-col>
+      <v-col>
+        <v-select
+          v-model="user.preference.timezone"
+          :items="timezones"
         />
       </v-col>
     </v-row>

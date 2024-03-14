@@ -17,7 +17,6 @@ export type Profile = {
   mcUUID?: string;
   isStaff?: boolean;
   githubId?: string;
-  timezone?: string;
   passwordNotSet: boolean;
   bannedUntil?: number;
   canChangeNameUntil?: number;
@@ -30,6 +29,7 @@ export type Preference = {
   showQQ: boolean;
   showMC: boolean;
   showGithub: boolean;
+  timezone?: string;
   showTimezone: boolean;
   pronouns?: string;
 };
@@ -144,29 +144,27 @@ export type ErrorResponse = {
   error_description: string;
 };
 
-export function fetchUser(userRef: Ref<Profile | undefined>) {
-  return doFetchGet('/api/account/profile')
-    .then(async (response) => {
-      if (response.ok) {
-        const data: Profile = await response.json();
-        userRef.value = data;
-        useAppStore().updateCache(data);
-      } else {
-        if (response.status === 401) {
-          toast('Error', {
-            description: 'You are not logged in',
-            duration: 3e3,
-            cardProps: {
-              color: 'error',
-            },
-          });
-          window.location.href = '/login';
-        }
-        return Promise.reject(await response.json());
+export const fetchUser = (userRef: Ref<Profile | undefined>) => doFetchGet('/api/account/profile')
+  .then(async (response) => {
+    if (response.ok) {
+      const data: Profile = await response.json();
+      userRef.value = data;
+      useAppStore().updateCache(data);
+    } else {
+      if (response.status === 401) {
+        toast('Error', {
+          description: 'You are not logged in',
+          duration: 3e3,
+          cardProps: {
+            color: 'error',
+          },
+        });
+        window.location.href = '/login';
       }
-    })
-    .catch((e) => toastError(e, 'Failed to get user profile'));
-}
+      return Promise.reject(await response.json());
+    }
+  })
+  .catch((e) => toastError(e, 'Failed to get user profile'));
 
 export function fetchOtherUser(uid: number, ref: Ref<Profile | undefined>) {
   doFetchGet(`/api/users/${uid}`)

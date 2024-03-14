@@ -11,7 +11,7 @@ type AppState = {
 };
 
 function getState(): AppState {
-  const data = localStorage.getItem('appState');
+  const data = localStorage.getItem('redenCache');
   if (data) {
     return JSON.parse(data);
   }
@@ -24,7 +24,7 @@ function getState(): AppState {
   };
 }
 
-export const useAppStore = defineStore('app', {
+export const useAppStore = defineStore('reden', {
   hydrate(storeState, initialState) {
     return {
       ...storeState,
@@ -35,7 +35,7 @@ export const useAppStore = defineStore('app', {
   actions: {
     save() {
       localStorage.setItem(
-        'appState',
+        'redenCache',
         JSON.stringify({
           logined: this.logined,
           username: this.username,

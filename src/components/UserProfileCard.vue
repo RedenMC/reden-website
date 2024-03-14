@@ -169,9 +169,11 @@ function deleteAvatar() {
           </a>
         </span>
         </p>
-        <p v-if="user?.timezone && (!applyPreference || user.preference.showTimezone)" class="user-timezone">
+        <p v-if="user.preference.timezone" class="user-timezone">
           <v-icon class="profile-item-icon">mdi-clock</v-icon>
-          <span>{{ user?.timezone }}</span>
+          <span>{{
+            new Date().toLocaleString('en-us', { timeZone: user.preference.timezone})
+          }}</span>
         </p>
       </div>
       <slot name="actions" />
