@@ -144,27 +144,28 @@ export type ErrorResponse = {
   error_description: string;
 };
 
-export const fetchUser = (userRef: Ref<Profile | undefined>) => doFetchGet('/api/account/profile')
-  .then(async (response) => {
-    if (response.ok) {
-      const data: Profile = await response.json();
-      userRef.value = data;
-      useAppStore().updateCache(data);
-    } else {
-      if (response.status === 401) {
-        toast('Error', {
-          description: 'You are not logged in',
-          duration: 3e3,
-          cardProps: {
-            color: 'error',
-          },
-        });
-        window.location.href = '/login';
+export const fetchUser = (userRef: Ref<Profile | undefined>) =>
+  doFetchGet('/api/account/profile')
+    .then(async (response) => {
+      if (response.ok) {
+        const data: Profile = await response.json();
+        userRef.value = data;
+        useAppStore().updateCache(data);
+      } else {
+        if (response.status === 401) {
+          toast('Error', {
+            description: 'You are not logged in',
+            duration: 3e3,
+            cardProps: {
+              color: 'error',
+            },
+          });
+          window.location.href = '/login';
+        }
+        return Promise.reject(await response.json());
       }
-      return Promise.reject(await response.json());
-    }
-  })
-  .catch((e) => toastError(e, 'Failed to get user profile'));
+    })
+    .catch((e) => toastError(e, 'Failed to get user profile'));
 
 export function fetchOtherUser(uid: number, ref: Ref<Profile | undefined>) {
   doFetchGet(`/api/users/${uid}`)

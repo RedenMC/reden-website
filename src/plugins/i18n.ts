@@ -29,7 +29,7 @@ const messages = {
       pagination: {
         ariaLabel: {
           root: 'Pagination',
-        }
+        },
       },
     },
     reden: {

@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-import {Ref, ref, VueElement} from 'vue';
-import {doFetchDelete, Profile, toastError} from '@/constants';
+import { Ref, ref, VueElement } from 'vue';
+import { doFetchDelete, Profile, toastError } from '@/constants';
 import UserBadges from '@/components/UserBadges.vue';
 import VerifyMinecraft from '@/components/VerifyMinecraft.vue';
-import {toast} from 'vuetify-sonner';
-import {useAppStore} from '@/store/app';
+import { toast } from 'vuetify-sonner';
+import { useAppStore } from '@/store/app';
 
-const {user, canEdit, applyPreference} = defineProps({
+const { user, canEdit, applyPreference } = defineProps({
   user: {
     type: Object as () => Ref<Profile | undefined>,
     required: true,
@@ -144,18 +144,29 @@ function deleteAvatar() {
           <v-icon class="profile-item-icon">mdi-account</v-icon>
           <span>uid: {{ user.id }}</span>
         </p>
-        <p v-if="user.email && (!applyPreference || user.preference.showEmail)" class="user-email">
+        <p
+          v-if="user.email && (!applyPreference || user.preference.showEmail)"
+          class="user-email"
+        >
           <v-icon class="profile-item-icon">mdi-email</v-icon>
-          <a :href="'mailto:' + user?.email" class="link"> {{ user?.email }} </a>
+          <a :href="'mailto:' + user?.email" class="link">
+            {{ user?.email }}
+          </a>
         </p>
         <p v-if="user?.preference?.pronouns" class="user-pronoun">
           <span>{{ user?.preference?.pronouns }}</span>
         </p>
-        <p v-if="user.mcUUID && (!applyPreference || user.preference.showMC)" class="minecraft">
+        <p
+          v-if="user.mcUUID && (!applyPreference || user.preference.showMC)"
+          class="minecraft"
+        >
           <v-icon class="profile-item-icon">mdi-minecraft</v-icon>
           <VerifyMinecraft :showActions="canEdit" :user="user" />
         </p>
-        <p v-if="!applyPreference || user.preference.showGithub" class="user-github">
+        <p
+          v-if="!applyPreference || user.preference.showGithub"
+          class="user-github"
+        >
           <v-icon class="profile-item-icon">mdi-github</v-icon>
           <span v-if="user?.githubId != null">
             <a :href="'//github.com/' + user.githubId" class="link">
@@ -163,16 +174,18 @@ function deleteAvatar() {
             </a>
           </span>
           <span v-else>
-          Account not linked
-          <a v-if="canEdit" href="/api/oauth/github?redirect_url=/home">
-            Link Now
-          </a>
-        </span>
+            Account not linked
+            <a v-if="canEdit" href="/api/oauth/github?redirect_url=/home">
+              Link Now
+            </a>
+          </span>
         </p>
         <p v-if="user.preference.timezone" class="user-timezone">
           <v-icon class="profile-item-icon">mdi-clock</v-icon>
           <span>{{
-            new Date().toLocaleString('en-us', { timeZone: user.preference.timezone})
+            new Date().toLocaleString('en-us', {
+              timeZone: user.preference.timezone,
+            })
           }}</span>
         </p>
       </div>

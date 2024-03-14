@@ -69,7 +69,9 @@ function savePreferences() {
             color: 'green',
           },
         });
-        userCopy.value!.preference = JSON.parse(JSON.stringify(user.value?.preference));
+        userCopy.value!.preference = JSON.parse(
+          JSON.stringify(user.value?.preference),
+        );
       } else {
         return Promise.reject(response);
       }
@@ -259,13 +261,10 @@ function savePreferences() {
     <v-row>
       <v-col>
         <p class="setting-label">Timezone</p>
-        <p class="setting-description">Your timezone. </p>
+        <p class="setting-description">Your timezone.</p>
       </v-col>
       <v-col>
-        <v-select
-          v-model="user.preference.timezone"
-          :items="timezones"
-        />
+        <v-select v-model="user.preference.timezone" :items="timezones" />
       </v-col>
     </v-row>
     <v-row>

@@ -1,8 +1,13 @@
 <script lang="ts" setup>
 import { toast } from 'vuetify-sonner';
-import {ref} from 'vue';
-import VueTurnstile from "vue-turnstile";
-import {cloudflareCAPTCHAKey, doFetchPost, isStrongPassword, toastError} from '@/constants';
+import { ref } from 'vue';
+import VueTurnstile from 'vue-turnstile';
+import {
+  cloudflareCAPTCHAKey,
+  doFetchPost,
+  isStrongPassword,
+  toastError,
+} from '@/constants';
 
 const email = ref('');
 const username = ref('');
@@ -31,7 +36,7 @@ function register() {
     },
   };
   doFetchPost('/api/account/register/start', req)
-    .then(res => {
+    .then((res) => {
       if (res.ok) {
         toast('Register Successful', {
           description: 'Please check your email to complete the registration',
@@ -45,7 +50,7 @@ function register() {
         return Promise.reject(res);
       }
     })
-    .catch(e => toastError(e, 'Failed to register'))
+    .catch((e) => toastError(e, 'Failed to register'))
     .finally(() => {
       loading.value = false;
     });
