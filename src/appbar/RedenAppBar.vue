@@ -37,23 +37,39 @@ const { mobile } = useDisplay();
             <v-list-item-title> Features </v-list-item-title>
           </v-list-item>
           <v-divider />
-          <v-list-item v-if="useAppStore().logined" href="/home">
-            <template #prepend>
-              <v-avatar
-                v-if="useAppStore().userCache?.avatarUrl"
-                :size="40"
-                :image="useAppStore().userCache?.avatarUrl"
-              />
-              <v-icon v-else> mdi-account</v-icon>
-            </template>
-            <v-list-item-title> My Profile </v-list-item-title>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-title> My Machines </v-list-item-title>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-title> My Stars </v-list-item-title>
-          </v-list-item>
+          <template v-if="useAppStore().logined">
+            <v-list-item href="/home">
+              <template #prepend>
+                <v-avatar
+                  v-if="useAppStore().userCache?.avatarUrl"
+                  :size="40"
+                  :image="useAppStore().userCache?.avatarUrl"
+                />
+                <v-icon v-else> mdi-account</v-icon>
+              </template>
+              <v-list-item-title> My Profile </v-list-item-title>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-title> My Machines </v-list-item-title>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-title> My Stars </v-list-item-title>
+            </v-list-item>
+          </template>
+          <template v-else>
+            <v-list-item href="/login">
+              <template #prepend>
+                <v-icon>mdi-account</v-icon>
+              </template>
+              <v-list-item-title> Login </v-list-item-title>
+            </v-list-item>
+            <v-list-item href="/register">
+              <template #prepend>
+                <v-icon>mdi-account-plus</v-icon>
+              </template>
+              <v-list-item-title> Register </v-list-item-title>
+            </v-list-item>
+          </template>
           <template v-if="useAppStore().userCache?.isStaff">
             <v-divider />
             <v-list-item href="/admin/users">
