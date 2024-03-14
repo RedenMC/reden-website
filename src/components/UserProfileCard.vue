@@ -174,10 +174,11 @@ function deleteAvatar() {
               {{ user!.githubId }}
             </a>
           </span>
-          <span v-else>Account not linked</span>
-          <a v-if="canEdit" href="/api/oauth/github?redirect_url=/home"
-            >Link Now</a
-          >
+          <template v-else>
+            <span>Account not linked</span>
+            <!-- prettier-ignore -->
+            <a v-if="canEdit" href="/api/oauth/github?redirect_url=/home">Link Now</a>
+          </template>
         </p>
         <p v-if="user.preference.timezone" class="user-timezone">
           <v-icon class="profile-item-icon">mdi-clock</v-icon>
