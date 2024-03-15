@@ -8,10 +8,10 @@ type AppState = {
   uid: number;
   csrfToken?: string;
   userCache?: Profile;
-  theme: 'light' | 'dark'
+  theme: 'light' | 'dark';
 };
 
-function getState(): AppState {
+function state(): AppState {
   const data = localStorage.getItem('redenCache');
   if (data) {
     return JSON.parse(data);
@@ -22,18 +22,12 @@ function getState(): AppState {
     uid: -1,
     csrfToken: undefined,
     userCache: undefined,
-    theme: 'dark'
+    theme: 'dark',
   };
 }
 
 export const useAppStore = defineStore('reden', {
-  hydrate(storeState, initialState) {
-    return {
-      ...storeState,
-      ...initialState,
-    };
-  },
-  state: getState,
+  state,
   actions: {
     save() {
       localStorage.setItem(

@@ -31,9 +31,8 @@ function login() {
       if (!response.ok) {
         return Promise.reject(response);
       }
-      let data: LoginResponse = await response.json();
-      console.log(data);
-      useAppStore().login(username.value, 1);
+      const data: LoginResponse = await response.json();
+      useAppStore().login(username.value, -1);
       useAppStore().setCsrfToken(data.csrf_token);
       toast('Login Successful', {
         description: 'You have been logged in',

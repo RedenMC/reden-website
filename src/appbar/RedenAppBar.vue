@@ -3,14 +3,14 @@ import SearchButton from './SearchButton.vue';
 import TranslateButton from './TranslateButton.vue';
 import '@/main.css';
 import AccountButton from '@/appbar/AccountButton.vue';
-import {discordInvite, theme} from '@/constants';
+import { discordInvite, theme } from '@/constants';
 import { useAppStore } from '@/store/app';
 import { useDisplay } from 'vuetify';
 
 const { mobile } = useDisplay();
 function toggleTheme() {
-  theme.value = theme.value === 'light' ? 'dark' : 'light'
-  useAppStore().setTheme(theme.value)
+  theme.value = theme.value === 'light' ? 'dark' : 'light';
+  useAppStore().setTheme(theme.value);
 }
 </script>
 
@@ -85,8 +85,7 @@ function toggleTheme() {
           </template>
         </v-list>
       </v-menu>
-
-      <v-btn class="mobile-hide" icon="mdi-home" title="Home" href="/" />
+      <v-btn v-show="!mobile" icon="mdi-home" title="Home" href="/" />
     </template>
     <p class="text-h5"></p>
     <template #append>
@@ -102,7 +101,11 @@ function toggleTheme() {
         title="Discord"
         :href="discordInvite"
       />
-      <v-btn :icon="theme === 'light' ? 'mdi-weather-night' : 'mdi-weather-sunny'" @click="toggleTheme" title="Toggle Theme" />
+      <v-btn
+        :icon="theme === 'light' ? 'mdi-weather-night' : 'mdi-weather-sunny'"
+        @click="toggleTheme"
+        title="Toggle Theme"
+      />
       <TranslateButton />
       <SearchButton />
       <AccountButton />
