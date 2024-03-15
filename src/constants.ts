@@ -1,10 +1,11 @@
 import { useAppStore } from '@/store/app';
-import { Ref } from 'vue';
+import {ref, Ref} from 'vue';
 import { toast } from 'vuetify-sonner';
 
 export const reCAPTCHAKey = '6Lczc24pAAAAAAxzBZbRy8CZc_ba06Qn_3OJ_Vg-';
 export const cloudflareCAPTCHAKey = '0x4AAAAAAARtCTyyGc1nbVUm';
 export const discordInvite = 'https://discord.gg/fCxmEyFgAd';
+export const theme = ref(useAppStore().theme)
 
 export type Profile = {
   id: number;

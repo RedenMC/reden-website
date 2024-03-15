@@ -8,6 +8,7 @@ type AppState = {
   uid: number;
   csrfToken?: string;
   userCache?: Profile;
+  theme: 'light' | 'dark'
 };
 
 function getState(): AppState {
@@ -21,6 +22,7 @@ function getState(): AppState {
     uid: -1,
     csrfToken: undefined,
     userCache: undefined,
+    theme: 'dark'
   };
 }
 
@@ -42,6 +44,7 @@ export const useAppStore = defineStore('reden', {
           uid: this.uid,
           csrfToken: this.csrfToken,
           userCache: this.userCache,
+          theme: this.theme,
         }),
       );
     },
@@ -60,6 +63,10 @@ export const useAppStore = defineStore('reden', {
     },
     setCsrfToken(token: string) {
       this.csrfToken = token;
+      this.save();
+    },
+    setTheme(theme: 'light' | 'dark') {
+      this.theme = theme;
       this.save();
     },
     logout() {

@@ -2,10 +2,11 @@
 import DefaultView from './View.vue';
 import RedenAppBar from '@/appbar/RedenAppBar.vue';
 import { VSonner } from 'vuetify-sonner';
+import {theme} from "@/constants";
 </script>
 
 <template>
-  <v-app theme="dark">
+  <v-app :theme="theme">
     <RedenAppBar />
 
     <VSonner :expand="true" :position="'top-right'" />

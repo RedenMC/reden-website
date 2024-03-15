@@ -3,11 +3,15 @@ import SearchButton from './SearchButton.vue';
 import TranslateButton from './TranslateButton.vue';
 import '@/main.css';
 import AccountButton from '@/appbar/AccountButton.vue';
-import { discordInvite } from '@/constants';
+import {discordInvite, theme} from '@/constants';
 import { useAppStore } from '@/store/app';
 import { useDisplay } from 'vuetify';
 
 const { mobile } = useDisplay();
+function toggleTheme() {
+  theme.value = theme.value === 'light' ? 'dark' : 'light'
+  useAppStore().setTheme(theme.value)
+}
 </script>
 
 <template>
@@ -98,6 +102,7 @@ const { mobile } = useDisplay();
         title="Discord"
         :href="discordInvite"
       />
+      <v-btn :icon="theme === 'light' ? 'mdi-weather-night' : 'mdi-weather-sunny'" @click="toggleTheme" title="Toggle Theme" />
       <TranslateButton />
       <SearchButton />
       <AccountButton />
