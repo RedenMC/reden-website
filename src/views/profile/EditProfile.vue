@@ -283,7 +283,7 @@ function savePreferences() {
         Save Preferences
       </v-btn>
     </v-row>
-  </v-card >
+  </v-card>
 
   <v-card v-if="user" class="setting-section-card" rounded="lg" border>
     <h3 class="setting-section-title">Password</h3>

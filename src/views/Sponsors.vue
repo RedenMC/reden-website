@@ -22,7 +22,7 @@ const unitDisplay: Record<string, string> = {
   CAD: 'C$',
   AUD: 'A$',
   HKD: 'HK$',
-}
+};
 
 const sponsors: Ref<Sponsor[]> = ref([]);
 doFetchGet('/api/sponsors')
@@ -57,15 +57,13 @@ doFetchGet('/api/sponsors')
   <p class="text-center">
     {{ $t('sponsors.description') }}
   </p>
-  <div class="content-common">
+  <v-card class="content-common" border>
     <v-list
       subheader
       three-line
       link
       v-for="sponsor in sponsors"
       :key="sponsor.name"
-      border
-      :elevation="2"
     >
       <!--suppress VueUnrecognizedDirective -->
       <v-list-item :key="sponsor.name" v-ripple>
@@ -82,7 +80,7 @@ doFetchGet('/api/sponsors')
         <div v-html="sponsor.message" />
       </v-list-item>
     </v-list>
-  </div>
+  </v-card>
   <div class="text-center content-common notice">
     <p>
       {{ $t('sponsors.notice') }}
