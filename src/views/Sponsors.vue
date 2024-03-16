@@ -64,6 +64,8 @@ doFetchGet('/api/sponsors')
       link
       v-for="sponsor in sponsors"
       :key="sponsor.name"
+      border
+      :elevation="2"
     >
       <!--suppress VueUnrecognizedDirective -->
       <v-list-item :key="sponsor.name" v-ripple>

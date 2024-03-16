@@ -140,6 +140,10 @@ function deleteAvatar() {
       <p v-if="user?.bio" class="user-bio">
         {{ user?.bio }}
       </p>
+      <p v-if="user?.preference?.pronouns" class="user-pronoun">
+        <span>{{ user?.preference?.pronouns }}</span>
+      </p>
+
       <div v-if="user" class="user-details-list">
         <p class="user-id">
           <v-icon class="profile-item-icon">mdi-account</v-icon>
@@ -150,12 +154,9 @@ function deleteAvatar() {
           class="user-email"
         >
           <v-icon class="profile-item-icon">mdi-email</v-icon>
-          <a :href="'mailto:' + user?.email" class="link">
+          <a :href="'mailto:' + user?.email">
             {{ user?.email }}
           </a>
-        </p>
-        <p v-if="user?.preference?.pronouns" class="user-pronoun">
-          <span>{{ user?.preference?.pronouns }}</span>
         </p>
         <p
           v-if="user.mcUUID && (!applyPreference || user.preference.showMC)"
@@ -170,7 +171,7 @@ function deleteAvatar() {
         >
           <v-icon class="profile-item-icon">mdi-github</v-icon>
           <span v-if="user?.githubId != null">
-            <a :href="'//github.com/' + user.githubId" class="link">
+            <a :href="'//github.com/' + user.githubId">
               {{ user!.githubId }}
             </a>
           </span>
@@ -232,21 +233,22 @@ function deleteAvatar() {
   margin: 0;
   padding: 0;
   font-weight: bold;
-  text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
 }
 
 p {
-  color: #cccccc;
+  opacity: 0.8;
 }
 
-a.link {
-  color: #cccccc;
+a {
+  color: inherit;
+  opacity: 0.8;
   text-decoration: none;
   transition: all 0.5s;
 }
 
-a:hover.link {
-  color: #eeeeee;
+a:hover {
+  color: inherit;
+  opacity: 1;
   text-decoration: underline;
   transition: all 0.5s;
 }
@@ -276,8 +278,12 @@ a:hover.link {
 }
 
 .user-bio {
-  color: #eeeeee;
+  opacity: 1;
   font-size: 1.2em;
+}
+
+.user-pronoun {
+  opacity: 0.5;
 }
 
 .user-details-list {
