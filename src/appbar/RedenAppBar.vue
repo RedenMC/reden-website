@@ -13,27 +13,38 @@ function toggleTheme() {
   useAppStore().setTheme(theme.value);
 }
 </script>
-
 <template>
   <v-app-bar :elevation="2" color="transparent" class="reden-app-bar">
     <template #prepend>
-      <v-menu v-show="mobile" :close-on-content-click="true">
+      <v-btn title="Home" href="/" class="custom-height">
+        <img src="../../public/favicon.ico" alt="Reden" />
+        <span class="text-h4 font-weight-bold">Reden</span>
+      </v-btn>
+      <v-btn
+        title="Download"
+        href="/download"
+        class="main-button"
+        prepend-icon="mdi-download"
+      >
+      </v-btn>
+    </template>
+    <template #append>
+      <v-btn
+        :icon="theme === 'light' ? 'mdi-weather-night' : 'mdi-weather-sunny'"
+        @click="toggleTheme"
+        title="Toggle Theme"
+      />
+      <search-button />
+      <AccountButton />
+      <v-menu :close-on-content-click="true">
         <template #activator="{ props }">
           <v-btn
-            class="mobile-show"
             icon="mdi-menu"
             title="Menu"
             v-bind="props"
           />
         </template>
-
         <v-list class="w-100">
-          <v-list-item href="/">
-            <template #prepend>
-              <v-icon>mdi-home</v-icon>
-            </template>
-            <v-list-item-title> Home </v-list-item-title>
-          </v-list-item>
           <v-list-item href="/feature">
             <template #prepend>
               <v-icon>mdi-view-dashboard</v-icon>
@@ -47,7 +58,7 @@ function toggleTheme() {
                 <v-avatar
                   v-if="useAppStore().userCache?.avatarUrl"
                   :size="40"
-                  :image="useAppStore().userCache?.avatarUrl"
+                  :image="useAppStore().userCache?.avatarUrl || ''"
                 />
                 <v-icon v-else> mdi-account</v-icon>
               </template>
@@ -85,30 +96,6 @@ function toggleTheme() {
           </template>
         </v-list>
       </v-menu>
-      <v-btn v-show="!mobile" icon="mdi-home" title="Home" href="/" />
-    </template>
-    <p class="text-h5"></p>
-    <template #append>
-      <v-btn
-        class="mobile-hide"
-        icon="mdi-github"
-        title="Github"
-        href="https://github.com/zly2006/reden-is-what-we-made"
-      />
-      <v-btn
-        class="mobile-hide"
-        icon="custom:DiscordIcon"
-        title="Discord"
-        :href="discordInvite"
-      />
-      <v-btn
-        :icon="theme === 'light' ? 'mdi-weather-night' : 'mdi-weather-sunny'"
-        @click="toggleTheme"
-        title="Toggle Theme"
-      />
-      <TranslateButton />
-      <SearchButton />
-      <AccountButton />
     </template>
   </v-app-bar>
 </template>

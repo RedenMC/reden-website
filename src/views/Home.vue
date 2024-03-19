@@ -15,49 +15,61 @@ document.title = t('reden.title.home') + ' - Reden';
 <template>
   <div class="main-page">
     <div>
-      <v-row>
-        <v-col>
-          <h1 class="text-h2 font-weight-bold">Reden</h1>
-          <p style="font-size: larger">
-            {{ $t('reden.description') }}
-          </p>
+      <v-row dense>
+        <v-col cols="12" sm="8">
+          <v-row dense>
+            <v-col cols="4" class="d-flex justify-center align-center">
+              <v-img src="/reden_256.png" style="font-size: 75%" />
+            </v-col>
+            <v-col cols="7" justify="center">
+              <v-row class="d-flex justify-center align-center">
+                <h1 class="font-weight-bold" style="font-size: 10vw;">Reden</h1>
+              </v-row>
+              <v-row class="d-flex justify-center" dense>
+                  <v-col cols="12" sm="auto">
+                    <v-btn
+                      class="main-button"
+                      prepend-icon="mdi-download"
+                      size="large"
+                      rounded="rounded"
+                      color="white"
+                      href="/download"
+                    >
+                      {{ $t('reden.download') }}
+                    </v-btn>
+                  </v-col>
+                  <v-col cols="12" sm="auto">
+                    <v-btn
+                      class="main-button"
+                      href="https://github.com/zly2006/reden-is-what-we-made"
+                      prepend-icon="mdi-github"
+                      size="large"
+                      rounded="rounded"
+                      variant="outlined"
+                    >
+                      Github
+                    </v-btn>
+                  </v-col>
+                  <v-col cols="12" sm="auto">
+                    <v-btn
+                      class="main-button"
+                      href="//wiki.redenmc.com"
+                      prepend-icon="mdi-book-open"
+                      size="large"
+                      rounded="rounded"
+                      variant="outlined"
+                    >
+                      {{ $t('reden.wiki') }}
+                    </v-btn>
+                  </v-col>
+              </v-row>
+            </v-col>
+          </v-row>
         </v-col>
-        <v-col cols="3" class="icon">
-          <v-img src="/reden_256.png" width="148" />
+        <v-col cols="12" sm="4" class="d-flex justify-center align-center">
+          <p style="font-size: 150%">{{ $t('reden.description') }}</p>
         </v-col>
       </v-row>
-      <div class="buttons">
-        <v-btn
-          class="main-button"
-          prepend-icon="mdi-download"
-          size="x-large"
-          rounded="rounded"
-          color="primary"
-          href="/download"
-        >
-          {{ $t('reden.download') }}
-        </v-btn>
-        <v-btn
-          class="main-button"
-          href="https://github.com/zly2006/reden-is-what-we-made"
-          prepend-icon="mdi-github"
-          size="x-large"
-          rounded="rounded"
-          variant="outlined"
-        >
-          Github
-        </v-btn>
-        <v-btn
-          class="main-button"
-          href="//wiki.redenmc.com"
-          prepend-icon="mdi-book-open"
-          size="x-large"
-          rounded="rounded"
-          variant="outlined"
-        >
-          {{ $t('reden.wiki') }}
-        </v-btn>
-      </div>
     </div>
   </div>
 
@@ -151,7 +163,7 @@ body {
 }
 
 .main-page {
-  max-width: 800px;
+  max-width: 90%;
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 64px;
@@ -161,9 +173,6 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-
-  .buttons {
-  }
 
   @media (max-width: 750px) {
     .icon {
