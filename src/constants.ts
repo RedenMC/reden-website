@@ -19,6 +19,8 @@ export type Profile = {
   isStaff?: boolean;
   githubId?: string;
   passwordNotSet: boolean;
+  lastLoginTime?: number;
+  lastLoginIp?: string;
   bannedUntil?: number;
   canChangeNameUntil?: number;
   bannedReason?: string;
