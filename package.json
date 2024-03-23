@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@mdi/font": "7.0.96",
+    "@typescript-eslint/typescript-estree": "^7.2.0",
     "axios": "^1.6.0",
     "blockly": "^10.2.2",
     "core-js": "^3.29.0",
@@ -34,7 +35,7 @@
     "eslint-plugin-vue": "^9.3.0",
     "prettier": "3.2.5",
     "sass": "^1.60.0",
-    "typescript": "^5.0.0",
+    "typescript": "5.1.x",
     "unplugin-fonts": "^1.0.3",
     "vite": "^5.1.2",
     "vite-plugin-vuetify": "^1.0.0",
