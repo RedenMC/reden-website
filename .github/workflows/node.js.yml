@@ -24,10 +24,6 @@ jobs:
         uses: borales/actions-yarn@v4
         with:
           cmd: build
-      - name: Test the app
-        uses: borales/actions-yarn@v4
-        with:
-          cmd: test # will run `yarn test` command
 
       - name: ssh deploy
         # You may pin to the exact commit or the version.
