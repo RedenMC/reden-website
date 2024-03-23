@@ -38,7 +38,7 @@ const headers = [
   { title: 'Role', key: 'roles' },
   { title: 'Last Login IP', key: 'lastLoginIp' },
   { title: 'Last Login Time', key: 'lastLoginTime' },
-  { title: 'Banned', key: 'ban' },
+  { title: 'Banned', key: 'bannedUntil' },
   { title: 'Actions', key: 'actions', sortable: false },
 ];
 
@@ -65,7 +65,7 @@ function isBanned(user: Profile) {
     <template #[`item.roles`]="{ value }">
       <user-badges :roles="value" />
     </template>
-    <template #[`item.ban`]="{ item }">
+    <template #[`item.bannedUntil`]="{ item }">
       <v-chip
         v-if="isBanned(item)"
         color="error"
