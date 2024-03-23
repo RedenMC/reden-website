@@ -8,6 +8,7 @@ import {
   isStrongPassword,
   toastError,
 } from '@/constants';
+import { useI18n } from 'vue-i18n';
 
 const email = ref('');
 const username = ref('');
@@ -38,8 +39,8 @@ function register() {
   doFetchPost('/api/account/register/start', req)
     .then((res) => {
       if (res.ok) {
-        toast('Register Successful', {
-          description: 'Please check your email to complete the registration',
+        toast(t("register.toast.successful.title"), {
+          description: t("register.toast.successful.message"),
           duration: 1000,
           cardProps: {
             color: 'green',
@@ -177,7 +178,7 @@ function register() {
         ></v-icon>
 
         <h2 class="text-h5 mb-6">{{ $t('register.sent.title') }}</h2>
-        <span>{{ $t('register.sent.msg', { email: email }) }}</span>
+        <span>{{ $t('register.sent.message', { email: email }) }}</span>
 
         <v-divider class="mb-4"></v-divider>
 

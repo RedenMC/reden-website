@@ -135,12 +135,12 @@ const messages = {
       login: 'Login',
       sent: {
         title: 'One more step',
-        msg: "We have sent an email to {email} with a link to complete your registration.If you don't see the email, please check other places it might be, like your junk, spam, social, or other folders.",
+        message: "We have sent an email to {email} with a link to complete your registration.If you don't see the email, please check other places it might be, like your junk, spam, social, or other folders.",
       },
       toast: {
-        suc: {
+        successful: {
           title: 'Register Successful',
-          msg: 'Please check your email to complete the registration',
+          message: 'Please check your email to complete the registration',
         },
         try: 'Please try again later',
         failed: 'Failed to register',
@@ -267,12 +267,12 @@ const messages = {
       login: '登录',
       sent: {
         title: '最后一步',
-        msg1: '我们向 {email} 发送了一封包含链接的验证邮件。如果你没有看见该邮件，请注意垃圾站或其他文件夹。',
+        message1: '我们向 {email} 发送了一封包含链接的验证邮件。如果你没有看见该邮件，请注意垃圾站或其他文件夹。',
       },
       toast: {
-        suc: {
+        successful: {
           title: '注册成功！',
-          msg: '请检查你的邮箱来完成注册',
+          message: '请检查你的邮箱来完成注册',
         },
         try: '请稍后再试',
       },
