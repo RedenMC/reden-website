@@ -7,13 +7,16 @@ import { toast } from 'vuetify-sonner';
 import { useAppStore } from '@/store/app';
 import { getTimezone } from 'countries-and-timezones';
 
-const props = withDefaults(defineProps<{
-  user?: Profile,
-  canEdit: boolean,
-  applyPreference?: boolean,
-}>(), {
-  canEdit: true,
-});
+const props = withDefaults(
+  defineProps<{
+    user?: Profile;
+    canEdit: boolean;
+    applyPreference?: boolean;
+  }>(),
+  {
+    canEdit: true,
+  },
+);
 const { user, canEdit, applyPreference } = toRefs(props);
 
 defineSlots<{

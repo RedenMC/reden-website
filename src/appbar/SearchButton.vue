@@ -15,7 +15,7 @@ const items = [
     toast(item.title, {
       description: item.preview,
     });
-  }
+  },
 }));
 
 export default {
@@ -26,7 +26,7 @@ export default {
     };
   },
   computed: {
-    filteredList () {
+    filteredList() {
       return items.filter((item) => {
         return item.title.toLowerCase().includes(this.searchText.toLowerCase());
       });
