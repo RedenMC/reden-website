@@ -162,7 +162,6 @@ body {
   flex-direction: column;
   justify-content: center;
 
-
   @media (max-width: 750px) {
     .icon {
       display: none;

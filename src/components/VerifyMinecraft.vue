@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import {ref} from 'vue';
-import {doFetchGet, Profile, toastError} from '@/constants';
-import {toast} from 'vuetify-sonner';
+import { ref } from 'vue';
+import { doFetchGet, Profile, toastError } from '@/constants';
+import { toast } from 'vuetify-sonner';
 
-const {user, showActions} = defineProps<{
+const { user, showActions } = defineProps<{
   user: Profile | undefined;
   showActions: boolean;
 }>();
@@ -74,7 +74,8 @@ function verifyMinecraft() {
       </template>
     </v-tooltip>
   </span>
-  <span v-else>No verified minecraft account linked<v-dialog width="500">
+  <span v-else
+    >No verified minecraft account linked<v-dialog width="500">
       <template #activator="{ props }">
         <v-btn
           v-if="showActions"
@@ -105,7 +106,8 @@ function verifyMinecraft() {
           </v-card-actions>
         </v-card>
       </template>
-    </v-dialog></span>
+    </v-dialog></span
+  >
 </template>
 
 <style scoped></style>

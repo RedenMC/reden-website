@@ -1,8 +1,13 @@
 <script lang="ts" setup>
 import { toast } from 'vuetify-sonner';
-import {ref} from 'vue';
-import VueTurnstile from "vue-turnstile";
-import {cloudflareCAPTCHAKey, doFetchPost, isStrongPassword, toastError} from '@/constants';
+import { ref } from 'vue';
+import VueTurnstile from 'vue-turnstile';
+import {
+  cloudflareCAPTCHAKey,
+  doFetchPost,
+  isStrongPassword,
+  toastError,
+} from '@/constants';
 
 const email = ref('');
 const username = ref('');
@@ -12,7 +17,7 @@ const invitationCode = ref('');
 const loading = ref(false);
 const registerOk = ref(false);
 const token = ref('');
-const {t} = useI18n()
+const { t } = useI18n();
 function register() {
   if (!isStrongPassword(password.value)) return;
   if (confirmPassword.value != password.value) return;
@@ -31,7 +36,7 @@ function register() {
     },
   };
   doFetchPost('/api/account/register/start', req)
-    .then(res => {
+    .then((res) => {
       if (res.ok) {
         toast('Register Successful', {
           description: 'Please check your email to complete the registration',
@@ -45,7 +50,7 @@ function register() {
         return Promise.reject(res);
       }
     })
-    .catch(e => toastError(e, 'Failed to register'))
+    .catch((e) => toastError(e, 'Failed to register'))
     .finally(() => {
       loading.value = false;
     });
@@ -62,8 +67,11 @@ function register() {
         v-model="email"
         :label="t('register.placeholder.email')"
         :placeholder="t('register.placeholder.email')"
-        :rules="[() => /.+@.+\..+/i.test(email) || $t('register.invalid.email')]"
-        required>
+        :rules="[
+          () => /.+@.+\..+/i.test(email) || $t('register.invalid.email'),
+        ]"
+        required
+      >
         <template #prepend>
           <v-icon>mdi-email</v-icon>
         </template>
@@ -72,8 +80,13 @@ function register() {
         v-model="username"
         :label="t('register.placeholder.username')"
         :placeholder="t('register.placeholder.username')"
-        :rules="[() => /^[\w\-\u4e00-\u9fa5]{3,20}$/.test(username) || $t('register.invalid.username')]"
-        required>
+        :rules="[
+          () =>
+            /^[\w\-\u4e00-\u9fa5]{3,20}$/.test(username) ||
+            $t('register.invalid.username'),
+        ]"
+        required
+      >
         <template #prepend>
           <v-icon>mdi-account</v-icon>
         </template>
@@ -82,7 +95,11 @@ function register() {
         v-model="password"
         :label="t('register.placeholder.password')"
         :placeholder="t('register.placeholder.password')"
-        :rules="[() => isStrongPassword(password) || $t('register.invalid.password.strength')]"
+        :rules="[
+          () =>
+            isStrongPassword(password) ||
+            $t('register.invalid.password.strength'),
+        ]"
         required
         type="password"
       >
@@ -94,7 +111,11 @@ function register() {
         v-model="confirmPassword"
         :label="t('register.placeholder.confirm')"
         :placeholder="t('register.placeholder.confirm')"
-        :rules="[() => confirmPassword == password || $t('register.invalid.password.mismatching')]"
+        :rules="[
+          () =>
+            confirmPassword == password ||
+            $t('register.invalid.password.mismatching'),
+        ]"
         required
         type="password"
       >
@@ -111,9 +132,10 @@ function register() {
         v-model="invitationCode"
         :label="t('register.placeholder.invitation')"
         :placeholder="t('register.placeholder.invitation')"
-        />
-      <span >
-        {{ $t("register.existing") }} <a href="/login">{{ $t("register.login") }}</a>
+      />
+      <span>
+        {{ $t('register.existing') }}
+        <a href="/login">{{ $t('register.login') }}</a>
       </span>
       <v-btn
         :disabled="!token"
@@ -139,8 +161,7 @@ function register() {
       </v-btn>
     </div>
 
-
-    <div v-if="registerOk" >
+    <div v-if="registerOk">
       <v-sheet
         class="ok-screen pa-4 text-center mx-auto"
         elevation="12"
@@ -155,8 +176,8 @@ function register() {
           size="112"
         ></v-icon>
 
-        <h2 class="text-h5 mb-6">{{ $t("register.sent.title") }}</h2>
-        <span>{{ $t("register.sent.msg",{email:email}) }}</span>
+        <h2 class="text-h5 mb-6">{{ $t('register.sent.title') }}</h2>
+        <span>{{ $t('register.sent.msg', { email: email }) }}</span>
 
         <v-divider class="mb-4"></v-divider>
 
@@ -169,7 +190,7 @@ function register() {
             variant="flat"
             width="90"
           >
-            {{ $t("register.button.done") }}
+            {{ $t('register.button.done') }}
           </v-btn>
         </div>
       </v-sheet>
@@ -200,9 +221,7 @@ function register() {
   margin-top: 100px;
 }
 
-.captcha{
+.captcha {
   margin: auto;
 }
-
-
 </style>

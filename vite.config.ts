@@ -12,10 +12,10 @@ export default defineConfig({
   plugins: [
     vue({
       template: {
-        transformAssetUrls ,
-        compilerOptions:{
-          isCustomElement: (tag) => tag.startsWith("i18n")
-        }
+        transformAssetUrls,
+        compilerOptions: {
+          isCustomElement: (tag) => tag.startsWith('i18n'),
+        },
       },
     }),
     // https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vite-plugin

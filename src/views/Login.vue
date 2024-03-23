@@ -165,9 +165,8 @@ function login() {
   align-content: center;
 }
 
-.captcha{
+.captcha {
   margin: auto;
   margin-bottom: 15px;
 }
-
 </style>
