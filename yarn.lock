@@ -565,12 +565,11 @@
   resolved "https://registry.yarnpkg.com/@vue/shared/-/shared-3.4.19.tgz#28105147811bcf1e6612bf1c9ab0c6d91ada019c"
   integrity sha512-/KliRRHMF6LoiThEy+4c1Z4KB/gbPrGjWwJR+crg2otgrf/egKzRaCPvJ51S5oetgsgXLfc4Rm5ZgrKHZrtMSw==
 
-"@vuetify/loader-shared@^1.7.1":
-  version "1.7.1"
-  resolved "https://registry.yarnpkg.com/@vuetify/loader-shared/-/loader-shared-1.7.1.tgz#0f63a3d41b6df29a2db1ff438aa1819b237c37a3"
-  integrity sha512-kLUvuAed6RCvkeeTNJzuy14pqnkur8lTuner7v7pNE/kVhPR97TuyXwBSBMR1cJeiLiOfu6SF5XlCYbXByEx1g==
+"@vuetify/loader-shared@^2.0.3":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@vuetify/loader-shared/-/loader-shared-2.0.3.tgz#11451c717e4a352ec311da52a79c857cd256c92f"
+  integrity sha512-Ss3GC7eJYkp2SF6xVzsT7FAruEmdihmn4OCk2+UocREerlXKWgOKKzTN5PN3ZVN5q05jHHrsNhTuWbhN61Bpdg==
   dependencies:
-    find-cache-dir "^3.3.2"
     upath "^2.0.1"
 
 abab@^2.0.6:
@@ -739,11 +738,6 @@ combined-stream@^1.0.8:
   integrity sha512-FQN4MRfuJeHf7cBbBMJFXhKSDq+2kAArBlmRBvcvFE5BB1HZKXtSFASDhdlz9zOYwxh8lDdnvmMOe/+5cdoEdg==
   dependencies:
     delayed-stream "~1.0.0"
-
-commondir@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/commondir/-/commondir-1.0.1.tgz#ddd800da0c66127393cca5950ea968a3aaf1253b"
-  integrity sha512-W9pAhw0ja1Edb5GVdIF1mjZw/ASI0AlShXM83UUGe2DVr5TdAPEA1OA8m/g8zWp9x6On7gqufY+FatDbC3MDQg==
 
 computeds@^0.0.1:
   version "0.0.1"
@@ -1060,23 +1054,6 @@ fill-range@^7.0.1:
   dependencies:
     to-regex-range "^5.0.1"
 
-find-cache-dir@^3.3.2:
-  version "3.3.2"
-  resolved "https://registry.yarnpkg.com/find-cache-dir/-/find-cache-dir-3.3.2.tgz#b30c5b6eff0730731aea9bbd9dbecbd80256d64b"
-  integrity sha512-wXZV5emFEjrridIgED11OoUKLxiYjAcqot/NJdAkOhlJ+vGzwhOAfcG5OX1jP+S0PcjEn8bdMJv+g2jwQ3Onig==
-  dependencies:
-    commondir "^1.0.1"
-    make-dir "^3.0.2"
-    pkg-dir "^4.1.0"
-
-find-up@^4.0.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/find-up/-/find-up-4.1.0.tgz#97afe7d6cdc0bc5928584b7c8d7b16e8a9aa5d19"
-  integrity sha512-PpOwAdQ/YlXQ2vj8a3h8IipDuYRi3wceVQQGYWxNINccq40Anw7BlsEXCMbt1Zt+OLA6Fq9suIpIWD0OsnISlw==
-  dependencies:
-    locate-path "^5.0.0"
-    path-exists "^4.0.0"
-
 find-up@^5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/find-up/-/find-up-5.0.0.tgz#4c92819ecb7083561e4f4a240a86be5198f536fc"
@@ -1355,13 +1332,6 @@ levn@^0.4.1:
     prelude-ls "^1.2.1"
     type-check "~0.4.0"
 
-locate-path@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/locate-path/-/locate-path-5.0.0.tgz#1afba396afd676a6d42504d0a67a3a7eb9f62aa0"
-  integrity sha512-t7hw9pI+WvuwNJXwk5zVHpyhIqzg2qTlklJOf0mVxGSbe3Fp2VieZcduNYjaLDoy6p9uGpQEGWG87WpMKlNq8g==
-  dependencies:
-    p-locate "^4.1.0"
-
 locate-path@^6.0.0:
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/locate-path/-/locate-path-6.0.0.tgz#55321eb309febbc59c4801d931a72452a681d286"
@@ -1392,13 +1362,6 @@ magic-string@^0.30.6:
   integrity sha512-8vBuFF/I/+OSLRmdf2wwFCJCz+nSn0m6DPvGH1fS/KiQoSaR+sETbov0eIk9KhEKy8CYqIkIAnbohxT/4H0kuA==
   dependencies:
     "@jridgewell/sourcemap-codec" "^1.4.15"
-
-make-dir@^3.0.2:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/make-dir/-/make-dir-3.1.0.tgz#415e967046b3a7f1d185277d84aa58203726a13f"
-  integrity sha512-g3FeP20LNwhALb/6Cz6Dd4F2ngze0jz7tbzrD2wAV+o9FeNHe4rL+yK2md0J/fiSf1sa1ADhXqi5+oVwOM/eGw==
-  dependencies:
-    semver "^6.0.0"
 
 merge2@^1.3.0, merge2@^1.4.1:
   version "1.4.1"
@@ -1500,13 +1463,6 @@ optionator@^0.9.3:
     prelude-ls "^1.2.1"
     type-check "^0.4.0"
 
-p-limit@^2.2.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/p-limit/-/p-limit-2.3.0.tgz#3dd33c647a214fdfffd835933eb086da0dc21db1"
-  integrity sha512-//88mFWSJx8lxCzwdAABTJL2MyWB12+eIY7MDL2SqLmAkeKU9qxRvWuSyTjm3FUmpBEMuFfckAIqEaVGUDxb6w==
-  dependencies:
-    p-try "^2.0.0"
-
 p-limit@^3.0.2:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/p-limit/-/p-limit-3.1.0.tgz#e1daccbe78d0d1388ca18c64fea38e3e57e3706b"
@@ -1514,24 +1470,12 @@ p-limit@^3.0.2:
   dependencies:
     yocto-queue "^0.1.0"
 
-p-locate@^4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/p-locate/-/p-locate-4.1.0.tgz#a3428bb7088b3a60292f66919278b7c297ad4f07"
-  integrity sha512-R79ZZ/0wAxKGu3oYMlz8jy/kbhsNrS7SKZ7PxEHBgJ5+F2mtFW2fK2cOtBh1cHYkQsbzFV7I+EoRKe6Yt0oK7A==
-  dependencies:
-    p-limit "^2.2.0"
-
 p-locate@^5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/p-locate/-/p-locate-5.0.0.tgz#83c8315c6785005e3bd021839411c9e110e6d834"
   integrity sha512-LaNjtRWUBY++zB5nE/NwcaoMylSPk+S+ZHNB1TzdbMJMny6dynpAGt7X/tl/QYq3TIeE6nxHppbo2LGymrG5Pw==
   dependencies:
     p-limit "^3.0.2"
-
-p-try@^2.0.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/p-try/-/p-try-2.2.0.tgz#cb2868540e313d61de58fafbe35ce9004d5540e6"
-  integrity sha512-R4nPAVTAU0B9D35/Gk3uJf/7XYbQcyohSKdvAxIRSNghFl4e71hVoGnBNQz9cWaXxO2I10KTC+3jMdvvoKw6dQ==
 
 parent-module@^1.0.0:
   version "1.0.1"
@@ -1589,13 +1533,6 @@ pinia@^2.0.0:
   dependencies:
     "@vue/devtools-api" "^6.5.0"
     vue-demi ">=0.14.5"
-
-pkg-dir@^4.1.0:
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/pkg-dir/-/pkg-dir-4.2.0.tgz#f099133df7ede422e81d1d8448270eeb3e4261f3"
-  integrity sha512-HRDzbaKjC+AOWVXxAU/x54COGeIv9eb+6CkDSQoNTt4XyWoIJvuPsXizxu/Fr23EiekbtZwmh1IcIG/l/a10GQ==
-  dependencies:
-    find-up "^4.0.0"
 
 postcss-selector-parser@^6.0.13:
   version "6.0.15"
@@ -1737,11 +1674,6 @@ saxes@^6.0.0:
   integrity sha512-xAg7SOnEhrm5zI3puOOKyy1OMcMlIJZYNJY7xLBwSze0UjhPLnWfj2GF2EpT0jmzaJKIWKHLsaSSajf35bcYnA==
   dependencies:
     xmlchars "^2.2.0"
-
-semver@^6.0.0:
-  version "6.3.1"
-  resolved "https://registry.yarnpkg.com/semver/-/semver-6.3.1.tgz#556d2ef8689146e46dcea4bfdd095f3434dffcb4"
-  integrity sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==
 
 semver@^7.3.6, semver@^7.3.7, semver@^7.5.4:
   version "7.6.0"
@@ -1912,12 +1844,12 @@ util-deprecate@^1.0.2:
   resolved "https://registry.yarnpkg.com/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
   integrity sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==
 
-vite-plugin-vuetify@^1.0.0:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/vite-plugin-vuetify/-/vite-plugin-vuetify-1.0.2.tgz#d1777c63aa1b3a308756461b3d0299fd101ee8f4"
-  integrity sha512-MubIcKD33O8wtgQXlbEXE7ccTEpHZ8nPpe77y9Wy3my2MWw/PgehP9VqTp92BLqr0R1dSL970Lynvisx3UxBFw==
+vite-plugin-vuetify@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/vite-plugin-vuetify/-/vite-plugin-vuetify-2.0.3.tgz#b65ee4e05cfc6bf2b478a32b6d58b42398519f1e"
+  integrity sha512-HbYajgGgb/noaVKNRhnnXIiQZrNXfNIeanUGAwXgOxL6h/KULS40Uf51Kyz8hNmdegF+DwjgXXI/8J1PNS83xw==
   dependencies:
-    "@vuetify/loader-shared" "^1.7.1"
+    "@vuetify/loader-shared" "^2.0.3"
     debug "^4.3.3"
     upath "^2.0.1"
 
