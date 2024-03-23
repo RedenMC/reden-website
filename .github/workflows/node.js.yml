@@ -2,44 +2,44 @@ name: Build and Deploy
 
 on:
   push:
-    branches: [ "master" ]
+    branches: ['master']
   pull_request:
-    branches: [ "master" ]
+    branches: ['master']
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: 20.x
+      - uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.x
 
-    - name: Run install
-      uses: borales/actions-yarn@v4
-      with:
-        cmd: install # will run `yarn install` command
-    - name: Build production bundle
-      uses: borales/actions-yarn@v4
-      with:
-        cmd: build
-    - name: Test the app
-      uses: borales/actions-yarn@v4
-      with:
-        cmd: test # will run `yarn test` command
+      - name: Run install
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: install # will run `yarn install` command
+      - name: Build production bundle
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: build
+      - name: Test the app
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: test # will run `yarn test` command
 
-    - name: ssh deploy
-      # You may pin to the exact commit or the version.
-      # uses: easingthemes/ssh-deploy@01a39e33483634cbd7ac99020c55b72ca7f098fe
-      uses: easingthemes/ssh-deploy@v5.0.3
-      with:
-        # Private key part of an SSH key pair
-        SSH_PRIVATE_KEY: ${{secrets.DEPLOY_SSH_PRIVATE_KEY}}
-        # Remote host
-        REMOTE_HOST: ${{secrets.DEPLOY_REMOTE_HOST}}
-        # Remote user
-        REMOTE_USER: ${{secrets.DEPLOY_REMOTE_USER}}
-        REMOTE_PORT: ${{secrets.DEPLOY_REMOTE_PORT}}
-        SOURCE: dist/
-        TARGET: reden-website
+      - name: ssh deploy
+        # You may pin to the exact commit or the version.
+        # uses: easingthemes/ssh-deploy@01a39e33483634cbd7ac99020c55b72ca7f098fe
+        uses: easingthemes/ssh-deploy@v5.0.3
+        with:
+          # Private key part of an SSH key pair
+          SSH_PRIVATE_KEY: ${{secrets.DEPLOY_SSH_PRIVATE_KEY}}
+          # Remote host
+          REMOTE_HOST: ${{secrets.DEPLOY_REMOTE_HOST}}
+          # Remote user
+          REMOTE_USER: ${{secrets.DEPLOY_REMOTE_USER}}
+          REMOTE_PORT: ${{secrets.DEPLOY_REMOTE_PORT}}
+          SOURCE: dist/
+          TARGET: reden-website

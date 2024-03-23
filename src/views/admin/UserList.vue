@@ -12,13 +12,13 @@ async function loadItems(options: {
   page: number;
   itemsPerPage: number;
   sortBy: {
-    key: string,
-    order: 'asc' | 'desc'
+    key: string;
+    order: 'asc' | 'desc';
   }[];
   sortDesc: boolean;
 }) {
   loading.value = true;
-  console.log(options)
+  console.log(options);
   const response = await doFetchGet(
     `/api/admin/user/list?page=${options.page}&pageSize=${options.itemsPerPage}&sort=${options.sortBy[0]?.key}&order=${options.sortBy[0]?.order}&search=${search.value}`,
   );
