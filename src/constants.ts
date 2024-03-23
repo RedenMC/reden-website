@@ -1,10 +1,11 @@
 import { useAppStore } from '@/store/app';
-import { Ref } from 'vue';
+import { ref, Ref } from 'vue';
 import { toast } from 'vuetify-sonner';
 
 export const reCAPTCHAKey = '6Lczc24pAAAAAAxzBZbRy8CZc_ba06Qn_3OJ_Vg-';
 export const cloudflareCAPTCHAKey = '0x4AAAAAAARtCTyyGc1nbVUm';
 export const discordInvite = 'https://discord.gg/fCxmEyFgAd';
+export const theme = ref(useAppStore().theme);
 
 export type Profile = {
   id: number;
@@ -17,12 +18,16 @@ export type Profile = {
   mcUUID?: string;
   isStaff?: boolean;
   githubId?: string;
-  timezone?: string;
   passwordNotSet: boolean;
+  lastLoginTime?: number;
+  lastLoginIp?: string;
   bannedUntil?: number;
   canChangeNameUntil?: number;
   bannedReason?: string;
   preference: Preference;
+  followers?: number;
+  following?: number;
+  followingProjects?: number;
 };
 
 export type Preference = {
@@ -30,6 +35,7 @@ export type Preference = {
   showQQ: boolean;
   showMC: boolean;
   showGithub: boolean;
+  timezone?: string;
   showTimezone: boolean;
   pronouns?: string;
 };
@@ -144,8 +150,8 @@ export type ErrorResponse = {
   error_description: string;
 };
 
-export function fetchUser(userRef: Ref<Profile | undefined>) {
-  return doFetchGet('/api/account/profile')
+export const fetchUser = (userRef: Ref<Profile | undefined>) =>
+  doFetchGet('/api/account/profile')
     .then(async (response) => {
       if (response.ok) {
         const data: Profile = await response.json();
@@ -166,9 +172,8 @@ export function fetchUser(userRef: Ref<Profile | undefined>) {
       }
     })
     .catch((e) => toastError(e, 'Failed to get user profile'));
-}
 
-export function fetchOtherUser(uid: number, ref: Ref<Profile | undefined>) {
+export const fetchOtherUser = (uid: number, ref: Ref<Profile | undefined>) =>
   doFetchGet(`/api/users/${uid}`)
     .then(async (response) => {
       if (response.ok) {
@@ -178,7 +183,6 @@ export function fetchOtherUser(uid: number, ref: Ref<Profile | undefined>) {
       }
     })
     .catch((e) => toastError(e, 'Failed to get user profile'));
-}
 
 export type OAuthAccount = {
   type: string;

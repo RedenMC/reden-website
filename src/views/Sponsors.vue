@@ -5,10 +5,23 @@ import { toast } from 'vuetify-sonner';
 
 type Sponsor = {
   name: string;
-  detail: string;
+  detail?: string;
   avatar: string;
   amount: number;
-  message: string;
+  unit: string;
+  message?: string;
+};
+
+const unitDisplay: Record<string, string> = {
+  CNY: '¥',
+  USD: '$',
+  EUR: '€',
+  JPY: 'JP¥',
+  KRW: '₩',
+  GBP: '£',
+  CAD: 'C$',
+  AUD: 'A$',
+  HKD: 'HK$',
 };
 
 const sponsors: Ref<Sponsor[]> = ref([]);
@@ -44,7 +57,7 @@ doFetchGet('/api/sponsors')
   <p class="text-center">
     {{ $t('sponsors.description') }}
   </p>
-  <div class="content-common">
+  <v-card class="content-common" border>
     <v-list
       subheader
       three-line
@@ -52,12 +65,13 @@ doFetchGet('/api/sponsors')
       v-for="sponsor in sponsors"
       :key="sponsor.name"
     >
+      <!--suppress VueUnrecognizedDirective -->
       <v-list-item :key="sponsor.name" v-ripple>
         <v-list-item-title class="text-h6">{{
           sponsor.name
         }}</v-list-item-title>
         <v-list-item-subtitle>{{
-          sponsor.detail || '¥' + sponsor.amount
+          sponsor.detail || unitDisplay[sponsor.unit] + sponsor.amount
         }}</v-list-item-subtitle>
         <v-list-item-action>
           <v-img :src="sponsor.avatar" />
@@ -66,7 +80,7 @@ doFetchGet('/api/sponsors')
         <div v-html="sponsor.message" />
       </v-list-item>
     </v-list>
-  </div>
+  </v-card>
   <div class="text-center content-common notice">
     <p>
       {{ $t('sponsors.notice') }}

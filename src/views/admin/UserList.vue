@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { Ref, ref } from 'vue';
-import { doFetchGet, ErrorResponse, Profile } from '@/constants';
-import { toast } from 'vuetify-sonner';
+import { doFetchGet, ErrorResponse, Profile, toastError } from '@/constants';
 import UserBadges from '@/components/UserBadges.vue';
 
 const pageSize = ref(20);
@@ -12,12 +11,16 @@ const search = ref('');
 async function loadItems(options: {
   page: number;
   itemsPerPage: number;
-  sortBy: string[];
+  sortBy: {
+    key: string;
+    order: 'asc' | 'desc';
+  }[];
   sortDesc: boolean;
 }) {
   loading.value = true;
+  console.log(options);
   const response = await doFetchGet(
-    `/api/admin/user/list?page=${options.page}&pageSize=${options.itemsPerPage}&sort=${options.sortBy[0]}&order=${options.sortDesc ? 'desc' : 'asc'}&search=${search.value}`,
+    `/api/admin/user/list?page=${options.page}&pageSize=${options.itemsPerPage}&sort=${options.sortBy[0]?.key}&order=${options.sortBy[0]?.order}&search=${search.value}`,
   );
   if (response.ok) {
     const data: {
@@ -28,13 +31,7 @@ async function loadItems(options: {
     totalItems.value = data.total;
   } else {
     const error: ErrorResponse = await response.json();
-    toast('Error', {
-      description: error.error,
-      duration: 10000,
-      cardProps: {
-        color: 'error',
-      },
-    });
+    await toastError(error);
   }
   loading.value = false;
 }
@@ -45,7 +42,7 @@ const headers = [
   { title: 'Role', key: 'roles' },
   { title: 'Last Login IP', key: 'lastLoginIp' },
   { title: 'Last Login Time', key: 'lastLoginTime' },
-  { title: 'Banned', key: 'ban' },
+  { title: 'Banned', key: 'bannedUntil' },
   { title: 'Actions', key: 'actions', sortable: false },
 ];
 
@@ -72,15 +69,33 @@ function isBanned(user: Profile) {
     <template #[`item.roles`]="{ value }">
       <user-badges :roles="value" />
     </template>
-    <template #[`item.ban`]="{ item }">
+    <template #[`item.bannedUntil`]="{ item }">
       <v-chip
         v-if="isBanned(item)"
         color="error"
-        :text="`Banned until ${new Date(item.bannedUntil).toLocaleString()}, ${item.bannedReason}`"
+        :text="`Banned until ${new Date(item.bannedUntil ?? 0).toLocaleString()}, ${item.bannedReason}`"
       />
       <v-chip v-else color="success" text="Not Banned" />
+    </template>
+    <template #[`item.username`]="{ item }">
+      <a class="username" :href="`/user/${item.id}`">
+        <v-avatar :image="item.avatarUrl" />
+        {{ item.username }}
+      </a>
     </template>
   </v-data-table-server>
 </template>
 
-<style scoped></style>
+<style scoped>
+.username {
+  font-size: 1.3rem;
+  text-decoration: none;
+  color: #dddddd;
+}
+
+.username:hover {
+  transition: all 0.5s;
+  color: #66ccff;
+  text-decoration: underline;
+}
+</style>

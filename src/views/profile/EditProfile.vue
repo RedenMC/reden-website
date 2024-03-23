@@ -16,6 +16,8 @@ fetchUser(user).then(() => {
   userCopy.value = JSON.parse(JSON.stringify(user.value));
 });
 
+const timezones = Intl.supportedValuesOf('timeZone');
+
 const oldPassword = ref('');
 const newPassword = ref('');
 const confirmNewPassword = ref('');
@@ -49,7 +51,6 @@ function saveInfo() {
     .finally(() => {
       savingInfo.value = false;
     });
-  // backend: todo
 }
 function changed(a: Record<string, unknown>, b: Record<string, unknown>) {
   console.log('comparing', a, 'and', b);
@@ -91,7 +92,7 @@ function savePreferences() {
 </script>
 
 <template>
-  <v-card v-if="user" class="setting-section-card" rounded="lg">
+  <v-card v-if="user" class="setting-section-card" rounded="lg" border>
     <h3 class="setting-section-title">Basic Information</h3>
     <v-row>
       <v-col>
@@ -167,7 +168,7 @@ function savePreferences() {
     </v-row>
   </v-card>
 
-  <v-card class="setting-section-card" rounded="lg" v-if="user">
+  <v-card class="setting-section-card" rounded="lg" v-if="user" border>
     <h3 class="setting-section-title">Preferences</h3>
     <v-row>
       <v-col cols="9">
@@ -258,6 +259,19 @@ function savePreferences() {
       </v-col>
     </v-row>
     <v-row>
+      <v-col>
+        <p class="setting-label">Timezone</p>
+        <p class="setting-description">Your timezone.</p>
+      </v-col>
+      <v-col>
+        <v-select
+          class="setting-input"
+          v-model="user.preference.timezone"
+          :items="timezones"
+        />
+      </v-col>
+    </v-row>
+    <v-row>
       <v-spacer />
       <v-btn
         :loading="savingPreferences"
@@ -271,7 +285,7 @@ function savePreferences() {
     </v-row>
   </v-card>
 
-  <v-card v-if="user" class="setting-section-card" rounded="lg">
+  <v-card v-if="user" class="setting-section-card" rounded="lg" border>
     <h3 class="setting-section-title">Password</h3>
     <p>You can change your password here.</p>
     <v-text-field
@@ -323,7 +337,7 @@ function savePreferences() {
       </v-btn>
     </v-row>
   </v-card>
-  <v-card class="setting-section-card" rounded="lg">
+  <v-card class="setting-section-card" rounded="lg" border>
     <h3 class="setting-section-title">Third Party Accounts</h3>
     <OAuthAccountLine icon="mdi-microsoft" type="microsoft" />
     <OAuthAccountLine icon="mdi-github" type="github" />

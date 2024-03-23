@@ -16,11 +16,6 @@ const routes = [
           import(/* webpackChunkName: "home" */ '@/views/Home.vue'),
       },
       {
-        path: '/code',
-        name: 'Code Editor',
-        component: () => import('@/views/EditorPage.vue'),
-      },
-      {
         path: '/login',
         name: 'Login',
         component: () => import('@/views/Login.vue'),
@@ -38,12 +33,12 @@ const routes = [
       {
         path: '/home',
         name: 'UserHome',
-        component: () => import('@/views/UserHome.vue'),
+        component: () => import('@/views/profile/UserHome.vue'),
       },
       {
         path: '/home/edit',
         name: 'EditProfile',
-        component: () => import('@/views/EditProfile.vue'),
+        component: () => import('@/views/profile/EditProfile.vue'),
       },
       {
         path: '/download',

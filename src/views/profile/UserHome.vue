@@ -21,7 +21,8 @@ if (csrf) {
 }
 
 let user = ref<Profile>();
-fetchUser(user);
+const loading = ref(true);
+fetchUser(user).then(() => (loading.value = false));
 
 function logout() {
   doFetchGet('/api/account/logout')
@@ -45,9 +46,14 @@ function logout() {
 </script>
 
 <template>
-  <div class="d-flex flex-row">
+  <div class="d-flex flex-wrap flex-row w-100">
     <div>
-      <UserProfileCard :user="user">
+      <v-skeleton-loader
+        v-show="loading"
+        type="card-avatar"
+        width="300"
+      ></v-skeleton-loader>
+      <UserProfileCard v-show="!loading" :user="user">
         <template #actions>
           <v-row>
             <v-col>

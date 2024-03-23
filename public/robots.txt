@@ -1,0 +1,9 @@
+User-agent: *
+Disallow: /api/
+Disallow: /admin/
+Disallow: *.mp3
+Disallow: *.mp4
+Disallow: *.woff
+Disallow: *.ttf
+Disallow: *.eot
+Disallow: *.woff2

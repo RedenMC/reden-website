@@ -1,22 +1,23 @@
 <script lang="ts" setup>
-import { Ref, ref, VueElement } from 'vue';
+import { ref, VueElement, toRefs } from 'vue';
 import { doFetchDelete, Profile, toastError } from '@/constants';
 import UserBadges from '@/components/UserBadges.vue';
 import VerifyMinecraft from '@/components/VerifyMinecraft.vue';
 import { toast } from 'vuetify-sonner';
 import { useAppStore } from '@/store/app';
+import { getTimezone } from 'countries-and-timezones';
 
-const { user, canEdit, applyPreference } = defineProps({
-  user: {
-    type: Object as () => Ref<Profile | undefined>,
-    required: true,
+const props = withDefaults(
+  defineProps<{
+    user?: Profile;
+    canEdit: boolean;
+    applyPreference?: boolean;
+  }>(),
+  {
+    canEdit: true,
   },
-  canEdit: {
-    type: Boolean,
-    default: true,
-  },
-  applyPreference: Boolean,
-});
+);
+const { user, canEdit, applyPreference } = toRefs(props);
 
 defineSlots<{
   actions: VueElement[] | undefined;
@@ -139,6 +140,10 @@ function deleteAvatar() {
       <p v-if="user?.bio" class="user-bio">
         {{ user?.bio }}
       </p>
+      <p v-if="user?.preference?.pronouns" class="user-pronoun">
+        <span>{{ user?.preference?.pronouns }}</span>
+      </p>
+
       <div v-if="user" class="user-details-list">
         <p class="user-id">
           <v-icon class="profile-item-icon">mdi-account</v-icon>
@@ -149,12 +154,9 @@ function deleteAvatar() {
           class="user-email"
         >
           <v-icon class="profile-item-icon">mdi-email</v-icon>
-          <a :href="'mailto:' + user?.email" class="link">
+          <a :href="'mailto:' + user?.email">
             {{ user?.email }}
           </a>
-        </p>
-        <p v-if="user?.preference?.pronouns" class="user-pronoun">
-          <span>{{ user?.preference?.pronouns }}</span>
         </p>
         <p
           v-if="user.mcUUID && (!applyPreference || user.preference.showMC)"
@@ -169,25 +171,50 @@ function deleteAvatar() {
         >
           <v-icon class="profile-item-icon">mdi-github</v-icon>
           <span v-if="user?.githubId != null">
-            <a :href="'//github.com/' + user.githubId" class="link">
+            <a :href="'//github.com/' + user.githubId">
               {{ user!.githubId }}
             </a>
           </span>
-          <span v-else>
-            Account not linked
-            <a v-if="canEdit" href="/api/oauth/github?redirect_url=/home">
-              Link Now
-            </a>
+          <template v-else>
+            <span>Account not linked</span>
+            <!-- prettier-ignore -->
+            <a v-if="canEdit" href="/api/oauth/github?redirect_url=/home">Link Now</a>
+          </template>
+        </p>
+        <p v-if="user.preference.timezone" class="user-timezone">
+          <v-icon class="profile-item-icon">mdi-clock</v-icon>
+          <span>{{
+            new Date().toLocaleString('en-us', {
+              timeZone: user.preference.timezone,
+              hour: '2-digit',
+              minute: '2-digit',
+              hour12: false,
+            })
+          }}</span>
+          <span
+            v-if="
+              -new Date().getTimezoneOffset() ==
+              getTimezone(user.preference.timezone)?.utcOffset
+            "
+          >
+            (Your timezone)
           </span>
         </p>
-        <p
-          v-if="
-            user?.timezone && (!applyPreference || user.preference.showTimezone)
-          "
-          class="user-timezone"
-        >
-          <v-icon class="profile-item-icon">mdi-clock</v-icon>
-          <span>{{ user?.timezone }}</span>
+      </div>
+
+      <!-- followers and following and following projects -->
+      <div>
+        <p class="user-followers">
+          <v-icon class="profile-item-icon">mdi-account-group</v-icon>
+          <span>{{ user?.followers || 0 }} followers </span>
+        </p>
+        <p class="user-following">
+          <v-icon class="profile-item-icon">mdi-account-group-outline</v-icon>
+          <span>{{ user?.following || 0 }} following </span>
+        </p>
+        <p class="user-following-projects">
+          <v-icon class="profile-item-icon">mdi-source-branch</v-icon>
+          <span>{{ user?.followingProjects || 0 }} following projects </span>
         </p>
       </div>
       <slot name="actions" />
@@ -206,21 +233,22 @@ function deleteAvatar() {
   margin: 0;
   padding: 0;
   font-weight: bold;
-  text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
 }
 
 p {
-  color: #cccccc;
+  opacity: 0.8;
 }
 
-a.link {
-  color: #cccccc;
+a {
+  color: inherit;
+  opacity: 0.8;
   text-decoration: none;
   transition: all 0.5s;
 }
 
-a:hover.link {
-  color: #eeeeee;
+a:hover {
+  color: inherit;
+  opacity: 1;
   text-decoration: underline;
   transition: all 0.5s;
 }
@@ -250,8 +278,12 @@ a:hover.link {
 }
 
 .user-bio {
-  color: #eeeeee;
+  opacity: 1;
   font-size: 1.2em;
+}
+
+.user-pronoun {
+  opacity: 0.5;
 }
 
 .user-details-list {

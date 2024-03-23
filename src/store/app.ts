@@ -8,10 +8,11 @@ type AppState = {
   uid: number;
   csrfToken?: string;
   userCache?: Profile;
+  theme: 'light' | 'dark';
 };
 
-function getState(): AppState {
-  const data = localStorage.getItem('appState');
+function state(): AppState {
+  const data = localStorage.getItem('redenCache');
   if (data) {
     return JSON.parse(data);
   }
@@ -21,27 +22,23 @@ function getState(): AppState {
     uid: -1,
     csrfToken: undefined,
     userCache: undefined,
+    theme: 'dark',
   };
 }
 
-export const useAppStore = defineStore('app', {
-  hydrate(storeState, initialState) {
-    return {
-      ...storeState,
-      ...initialState,
-    };
-  },
-  state: getState,
+export const useAppStore = defineStore('reden', {
+  state,
   actions: {
     save() {
       localStorage.setItem(
-        'appState',
+        'redenCache',
         JSON.stringify({
           logined: this.logined,
           username: this.username,
           uid: this.uid,
           csrfToken: this.csrfToken,
           userCache: this.userCache,
+          theme: this.theme,
         }),
       );
     },
@@ -60,6 +57,10 @@ export const useAppStore = defineStore('app', {
     },
     setCsrfToken(token: string) {
       this.csrfToken = token;
+      this.save();
+    },
+    setTheme(theme: 'light' | 'dark') {
+      this.theme = theme;
       this.save();
     },
     logout() {
