@@ -69,7 +69,7 @@ function isBanned(user: Profile) {
       <v-chip
         v-if="isBanned(item)"
         color="error"
-        :text="`Banned until ${new Date(item.bannedUntil).toLocaleString()}, ${item.bannedReason}`"
+        :text="`Banned until ${new Date(item.bannedUntil ?? 0).toLocaleString()}, ${item.bannedReason}`"
       />
       <v-chip v-else color="success" text="Not Banned" />
     </template>

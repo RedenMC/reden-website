@@ -2,26 +2,21 @@
 import { mergeProps } from 'vue';
 import { toast } from 'vue-sonner';
 
-const items: {
-  title: string;
-  preview?: string;
-  action?: () => void;
-}[] = [
+const items = [
   { title: 'R-Debugger' },
   { title: 'Undo & Redo' },
   { title: 'Super Right' },
   { title: 'Other Server Side Features', preview: 'AAA' },
   { title: 'Other Client Side Features', preview: 'AAA' },
-];
-
-for (const item of items) {
-  item.preview = item.preview || item.title;
-  item.action = () => {
+].map((item) => ({
+  title: item.title,
+  preview: item.preview ?? item.title,
+  action: () => {
     toast(item.title, {
       description: item.preview,
     });
-  };
-}
+  }
+}));
 
 export default {
   data() {
@@ -30,17 +25,17 @@ export default {
       items,
     };
   },
-  watch: {
-    searchText(val) {
-      this.items = items.filter((item) => {
-        return item.title.toLowerCase().includes(val.toLowerCase());
+  computed: {
+    filteredList () {
+      return items.filter((item) => {
+        return item.title.toLowerCase().includes(this.searchText.toLowerCase());
       });
     },
   },
   methods: {
     mergeProps,
-    checkEnter(e) {
-      if (e.key === 'Enter') this.items[0].action();
+    checkEnter() {
+      this.items[0].action();
     },
   },
 };
@@ -65,11 +60,11 @@ export default {
             clear-icon="mdi-close-circle-outline"
             :clearable="true"
             @click:clear="searchText = ''"
-            @keydown="checkEnter(this)"
+            @keyup.enter="checkEnter"
           />
         </v-list-item>
         <v-list-item
-          v-for="(item, index) in items"
+          v-for="(item, index) in filteredList"
           :key="index"
           @click="item.action"
         >
