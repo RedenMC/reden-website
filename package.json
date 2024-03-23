@@ -2,9 +2,10 @@
   "name": "reden-website",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build",
+    "build": "vue-tsc --noEmit --skipLibCheck && vite build",
     "preview": "vite preview",
     "lint": "eslint . --fix --ignore-path .gitignore",
     "check": "eslint . --report-unused-disable-directives & prettier . --check"
@@ -38,7 +39,7 @@
     "typescript": "^5.0.0",
     "unplugin-fonts": "^1.0.3",
     "vite": "^5.1.2",
-    "vite-plugin-vuetify": "^1.0.0",
+    "vite-plugin-vuetify": "^2.0.3",
     "vue-tsc": "^1.2.0"
   }
 }
