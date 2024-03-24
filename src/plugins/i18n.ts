@@ -154,7 +154,7 @@ const messages = {
         username: 'Username',
         password: 'Password',
         confirm: 'Confirm Password',
-        invitation: 'Invitation Code, optional',
+        invitation: 'Invitation Code (optional)',
       },
       button: {
         register: 'Register',
