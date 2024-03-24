@@ -177,8 +177,12 @@ function register() {
           size="112"
         ></v-icon>
 
-        <h2 class="text-h5 mb-6">{{ $t('register.email_verification.title') }}</h2>
-        <span>{{ $t('register.email_verification.message', { email: email }) }}</span>
+        <h2 class="text-h5 mb-6">
+          {{ $t('register.email_verification.title') }}
+        </h2>
+        <span>{{
+          $t('register.email_verification.message', { email: email })
+        }}</span>
 
         <v-divider class="mb-4"></v-divider>
 
