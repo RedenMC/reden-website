@@ -135,7 +135,8 @@ const messages = {
       login: 'Login',
       sent: {
         title: 'One more step',
-        message: "We have sent an email to {email} with a link to complete your registration.If you don't see the email, please check other places it might be, like your junk, spam, social, or other folders.",
+        message:
+          "We have sent an email to {email} with a link to complete your registration.If you don't see the email, please check other places it might be, like your junk, spam, social, or other folders.",
       },
       toast: {
         successful: {
@@ -267,7 +268,8 @@ const messages = {
       login: '登录',
       sent: {
         title: '最后一步',
-        message1: '我们向 {email} 发送了一封包含链接的验证邮件。如果你没有看见该邮件，请注意垃圾站或其他文件夹。',
+        message1:
+          '我们向 {email} 发送了一封包含链接的验证邮件。如果你没有看见该邮件，请注意垃圾站或其他文件夹。',
       },
       toast: {
         successful: {
