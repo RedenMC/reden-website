@@ -11,12 +11,7 @@ import { fileURLToPath, URL } from 'node:url';
 export default defineConfig({
   plugins: [
     vue({
-      template: {
-        transformAssetUrls,
-        compilerOptions: {
-          isCustomElement: (tag) => tag.startsWith('i18n'),
-        },
-      },
+      template: { transformAssetUrls },
     }),
     // https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vite-plugin
     vuetify({
