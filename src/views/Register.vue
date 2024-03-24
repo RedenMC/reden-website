@@ -131,8 +131,8 @@ function register() {
       />
       <v-text-field
         v-model="invitationCode"
-        :label="t('register.placeholder.invitation')"
-        :placeholder="t('register.placeholder.invitation')"
+        :label="t('register.placeholder.invitation_code')"
+        :placeholder="t('register.placeholder.invitation_code')"
       />
       <span>
         {{ $t('register.existing') }}
@@ -177,8 +177,8 @@ function register() {
           size="112"
         ></v-icon>
 
-        <h2 class="text-h5 mb-6">{{ $t('register.sent.title') }}</h2>
-        <span>{{ $t('register.sent.message', { email: email }) }}</span>
+        <h2 class="text-h5 mb-6">{{ $t('register.email_verification.title') }}</h2>
+        <span>{{ $t('register.email_verification.message', { email: email }) }}</span>
 
         <v-divider class="mb-4"></v-divider>
 

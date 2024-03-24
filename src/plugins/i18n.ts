@@ -133,7 +133,7 @@ const messages = {
       },
       existing: 'Already have an account?',
       login: 'Login',
-      sent: {
+      email_verification: {
         title: 'One more step',
         message:
           "We have sent an email to {email} with a link to complete your registration. If you don't see the email, please check other places it might be, like your junk, spam, social, or other folders.",
@@ -154,7 +154,7 @@ const messages = {
         username: 'Username',
         password: 'Password',
         confirm: 'Confirm Password',
-        invitation: 'Invitation Code (optional)',
+        invitation_code: 'Invitation Code (optional)',
       },
       button: {
         register: 'Register',
@@ -266,7 +266,7 @@ const messages = {
       },
       existing: '已经有账号了？',
       login: '登录',
-      sent: {
+      email_verification: {
         title: '最后一步',
         message1:
           '我们向 {email} 发送了一封包含链接的验证邮件。如果你没有看见该邮件，请注意垃圾站或其他文件夹。',
@@ -283,7 +283,7 @@ const messages = {
         username: '用户名',
         password: '密码',
         confirm: '重复密码',
-        invitation: '邀请码(可选)',
+        invitation_code: '邀请码(可选)',
       },
       button: {
         register: '注册',
