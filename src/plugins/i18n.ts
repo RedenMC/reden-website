@@ -136,7 +136,7 @@ const messages = {
       sent: {
         title: 'One more step',
         message:
-          "We have sent an email to {email} with a link to complete your registration.If you don't see the email, please check other places it might be, like your junk, spam, social, or other folders.",
+          "We have sent an email to {email} with a link to complete your registration. If you don't see the email, please check other places it might be, like your junk, spam, social, or other folders.",
       },
       toast: {
         successful: {
@@ -154,7 +154,7 @@ const messages = {
         username: 'Username',
         password: 'Password',
         confirm: 'Confirm Password',
-        invitation: 'Invitation Code,optional',
+        invitation: 'Invitation Code, optional',
       },
       button: {
         register: 'Register',
