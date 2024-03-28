@@ -22,7 +22,7 @@ onMounted(() => {
     <VSonner :expand="true" :position="'top-right'" />
     <default-view />
 
-    <v-footer class="flex-column" border>
+    <v-footer class="flex-column mt-2" border>
       <v-row class="text-center">
         <v-col>
           <div class="footer-list-title">
@@ -31,24 +31,24 @@ onMounted(() => {
             </b>
           </div>
           <div class="footer-list-item">
-            <a href="/download">
+            <RouterLink to="/download">
               {{ $t('reden.download') }}
-            </a>
+            </RouterLink>
           </div>
           <div class="footer-list-item">
-            <a href="/feature/undo">
+            <RouterLink to="/feature/undo">
               {{ $t('reden.footer.reden_mod.undo_redo') }}
-            </a>
+            </RouterLink>
           </div>
           <div class="footer-list-item">
-            <a href="/feature/rvc">
+            <RouterLink to="/feature/rvc">
               {{ $t('reden.footer.reden_mod.rvc') }}
-            </a>
+            </RouterLink>
           </div>
           <div class="footer-list-item">
-            <a href="/feature/debugger">
+            <RouterLink to="/feature/debugger">
               {{ $t('reden.footer.reden_mod.debugger') }}
-            </a>
+            </RouterLink>
           </div>
         </v-col>
         <v-col>
@@ -68,9 +68,9 @@ onMounted(() => {
             </a>
           </div>
           <div class="footer-list-item">
-            <a href="/sponsors">
+            <RouterLink to="/sponsors">
               {{ $t('reden.footer.reden_ecosystem.sponsors') }}
-            </a>
+            </RouterLink>
           </div>
           <div class="footer-list-item">
             <a href="//github.com/RedenMC">
@@ -85,19 +85,19 @@ onMounted(() => {
             </b>
           </div>
           <div class="footer-list-item">
-            <a href="/discord">
+            <RouterLink to="/discord">
               {{ $t('reden.footer.reden_community.discord') }}
-            </a>
+            </RouterLink>
           </div>
           <div class="footer-list-item">
-            <a href="/community-guidelines">
+            <RouterLink to="/community-guidelines">
               {{ $t('reden.footer.reden_community.community_guidelines') }}
-            </a>
+            </RouterLink>
           </div>
           <div class="footer-list-item">
-            <a href="/community-events">
+            <RouterLink to="/community-events">
               {{ $t('reden.footer.reden_community.community_events') }}
-            </a>
+            </RouterLink>
           </div>
         </v-col>
         <v-col>
@@ -107,10 +107,10 @@ onMounted(() => {
             </b>
           </div>
           <div class="footer-list-item">
-            <a href="/blog">
+            <RouterLink to="/blog">
               <v-icon icon="mdi-rss" />
               {{ $t('reden.footer.follow_us.blog') }}
-            </a>
+            </RouterLink>
           </div>
           <div class="footer-list-item">
             <a href="//youtube.com/@zly2006">

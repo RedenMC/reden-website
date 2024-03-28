@@ -4,10 +4,14 @@ import Lever from '@/assets/lever.png';
 import LeverBase from '@/assets/lever_base.png';
 import LampOff from '@/assets/redstone_lamp.png';
 import LampOn from '@/assets/redstone_lamp_on.png';
+import RedenOff from '@/assets/favicon/reden_256_close.png';
+import RedenOn from '@/assets/favicon/reden_256.png';
 
-const { title } = defineProps({
+const { title,relaying } = defineProps<
+{
   title: String,
-});
+  relaying?: boolean
+}>();
 
 const all: Ref<Element | null> = ref(null);
 const leverOn = ref(false);
@@ -34,11 +38,14 @@ onMounted(() => {
 });
 const lampOnStyle = 'url(' + LampOn + ')';
 const lampOffStyle = 'url(' + LampOff + ')';
+
+const redenOnStyle = 'url(' + RedenOn + ')';
+const redenOffStyle = 'url(' + RedenOff + ')';
 </script>
 
 <template>
-  <div class="redstone-section-title">
-    <div class="lever-all" ref="all" @click="leverOn = !leverOn">
+  <div class="redstone-section-title -translate-x-1" :class="relaying && 'mt-5'">
+    <div class="lever-all" ref="all" @click="leverOn = !leverOn" v-if="!relaying">
       <img
         :src="Lever"
         :class="{ 'lever-on': leverOn, 'lever-off': !leverOn }"
@@ -48,6 +55,15 @@ const lampOffStyle = 'url(' + LampOff + ')';
       />
       <img :src="LeverBase" class="lever-base" alt="" />
     </div>
+
+    <div class="absolute -translate-y-[65%]" ref="all" @click="leverOn = !leverOn" v-if="relaying">
+      <div
+        :class="{ 'reden-on': leverOn, 'reden-off': !leverOn, 'lamp-common': true }"
+      ></div>
+    </div>
+
+
+
     <div
       :class="{ 'lamp-on': leverOn, 'lamp-off': !leverOn, 'lamp-common': true }"
     ></div>
@@ -97,6 +113,16 @@ const lampOffStyle = 'url(' + LampOff + ')';
 
 .lamp-off {
   background-image: v-bind(lampOffStyle);
+}
+
+.reden-on {
+  background-image: v-bind(redenOnStyle);
+  transition: background-image 0.5s;
+  transition-delay: 0.2s;
+}
+
+.reden-off {
+  background-image: v-bind(redenOffStyle);
 }
 
 .lamp-common {

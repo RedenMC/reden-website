@@ -3,7 +3,7 @@ import ModrinthFull from '@/plugins/icons/ModrinthFull.vue';
 </script>
 
 <template>
-  <h2>
+  <h2 class="text-2xl font-bold">
     {{ $t('reden.download_page.sorry_constructing') }}
     <a href="https://modrinth.com/mod/reden">
       <ModrinthFull style="height: 24px" />

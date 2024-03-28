@@ -2,10 +2,11 @@
 import NetherPortalVideo from '@/assets/nether_protal.mp4';
 import RedStoneSection from '@/components/RedStoneSection.vue';
 import RedstoneSectionTitle from '@/components/RedstoneSectionTitle.vue';
+import AuiButton from '@/components/ui/AuiButton.vue';
 </script>
 
 <template>
-  <div class="features-intro content-common">
+<!--  <div class="features-intro content-common">-->
     <RedstoneSectionTitle :title="$t('reden.home.feature_intro.title')" />
     <RedStoneSection :video="NetherPortalVideo" :size="3">
       <template #title> Undo </template>
@@ -15,15 +16,9 @@ import RedstoneSectionTitle from '@/components/RedstoneSectionTitle.vue';
         </p>
       </template>
       <template #action>
-        <v-btn
-          href="/feature/undo"
-          color="primary"
-          rounded="rounded"
-          variant="outlined"
-          class="main-button"
-        >
-          {{ $t('reden.learn_more') }}
-        </v-btn>
+        <RouterLink to="/feature/undo">
+          <AuiButton class="w-32">{{ $t('reden.learn_more') }}</AuiButton>
+        </RouterLink>
       </template>
     </RedStoneSection>
     <RedStoneSection :size="3">
@@ -34,15 +29,9 @@ import RedstoneSectionTitle from '@/components/RedstoneSectionTitle.vue';
         </p>
       </template>
       <template #action>
-        <v-btn
-          href="/feature/rvc"
-          color="primary"
-          variant="outlined"
-          rounded="rounded"
-          class="main-button"
-        >
-          {{ $t('reden.learn_more') }}
-        </v-btn>
+        <RouterLink to="/feature/rvc">
+          <AuiButton class="w-32">{{ $t('reden.learn_more') }}</AuiButton>
+        </RouterLink>
       </template>
     </RedStoneSection>
     <RedStoneSection :size="3">
@@ -53,18 +42,12 @@ import RedstoneSectionTitle from '@/components/RedstoneSectionTitle.vue';
         </p>
       </template>
       <template #action>
-        <v-btn
-          href="/feature/debugger"
-          color="primary"
-          variant="outlined"
-          rounded="rounded"
-          class="main-button"
-        >
-          {{ $t('reden.learn_more') }}
-        </v-btn>
+        <RouterLink to="/feature/debugger">
+          <AuiButton class="w-32">{{ $t('reden.learn_more') }}</AuiButton>
+        </RouterLink>
       </template>
     </RedStoneSection>
-  </div>
+<!--  </div>-->
 </template>
 
 <style scoped></style>

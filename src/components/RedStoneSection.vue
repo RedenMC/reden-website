@@ -1,12 +1,17 @@
 <script setup lang="ts">
 import { onMounted, type Ref, ref, VueElement } from 'vue';
+import { useAppStore } from '@/store/app';
+
+const theme = () => {
+  return useAppStore().theme === 'light';
+};
 
 // todo: 不透明度渐变
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const { size, imageTransparentPercentage, video } = defineProps({
   size: Number,
   imageTransparentPercentage: Number,
-  video: String,
+  video: String
 });
 if (size === undefined || size < 1) {
   throw new Error('size must be greater than 0');
@@ -40,8 +45,8 @@ onMounted(() => {
       });
     },
     {
-      threshold: [0, 1],
-    },
+      threshold: [0, 1]
+    }
   );
   observer.observe(lightLine.value as Element);
 });
@@ -59,19 +64,13 @@ const autoPlay = ref(true);
 <template>
   <div class="line">
     <div ref="card">
-      <v-card class="card" :min-height="sizz * 100 - 80">
-        <template #title>
-          <slot name="title" />
-        </template>
-        <template #subtitle>
-          <slot name="subtitle" />
-        </template>
-        <template #text>
-          <div class="my-text-wrap">
-            <slot name="text" />
-          </div>
-        </template>
-        <template #image>
+      <div class="card w-auto shadow border relative overflow-hidden"
+           :class="theme()? 'bg-stone-100':'bg-stone-800'"
+           :style="`min-height: ${sizz * 100 - 80}px;max-height: ${sizz * 100 - 80}px`">
+
+        <div class="absolute top-0 right-0 z-0
+        after:w-full after:h-full after:absolute after:top-0 after:left-0  after:bg-opacity-25"
+             :class="useAppStore().theme == 'light'?'after:bg-white':'after:bg-black'">
           <div class="bg-img-wrap">
             <slot v-if="video == undefined" name="image" />
             <video
@@ -84,8 +83,31 @@ const autoPlay = ref(true);
               playsinline
             />
           </div>
-        </template>
-        <template #actions>
+        </div>
+
+        <div class="absolute top-0 left-0 z-10 w-full h-full px-8 py-6 flex flex-col justify-between">
+          <div class="">
+            <div class="flex flex-col items-start">
+              <div class="font-serif font-bold text-xl tracking-wide">
+                <slot name="title" />
+              </div>
+              <div class="font-mono text-xs" :class="useAppStore().theme == 'light'?'text-gray-600':'text-gray-300'">
+                <slot name="subtitle" />
+              </div>
+            </div>
+            <div>
+              <div class="font-mono mt-2 text-base">
+                <slot name="text" />
+              </div>
+            </div>
+          </div>
+          <div>
+            <slot name="action" />
+          </div>
+        </div>
+
+
+        <div>
           <!--
           <v-tooltip text="Auto play">
             <template #activator="{ props }">
@@ -97,9 +119,8 @@ const autoPlay = ref(true);
             </template>
           </v-tooltip>
           -->
-          <slot name="action" />
-        </template>
-      </v-card>
+        </div>
+      </div>
     </div>
     <div class="darkLine lineLayout">
       <div class="photo r0" v-for="n in sizz" :key="n"></div>
@@ -108,6 +129,7 @@ const autoPlay = ref(true);
     <div class="lightLine lineLayout invisible" ref="lightLine">
       <div class="photo r15" v-for="n in sizz" :key="n"></div>
     </div>
+
   </div>
 </template>
 
@@ -196,9 +218,9 @@ const autoPlay = ref(true);
 .card {
   position: absolute;
   top: 2rem;
-  margin-left: 40px;
+  margin-left: 60px;
   translate: 0;
-  min-width: calc(100% - 80px);
+  min-width: calc(100% - 100px);
   transform: none;
 }
 

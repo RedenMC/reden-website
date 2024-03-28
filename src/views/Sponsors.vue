@@ -51,10 +51,10 @@ doFetchGet('/api/sponsors')
 </script>
 
 <template>
-  <h1 class="text-center">
+  <h1 class="text-center text-3xl font-bold mt-8">
     {{ $t('sponsors.title') }}
   </h1>
-  <p class="text-center">
+  <p class="text-center my-2">
     {{ $t('sponsors.description') }}
   </p>
   <v-card class="content-common" border>
@@ -81,7 +81,7 @@ doFetchGet('/api/sponsors')
       </v-list-item>
     </v-list>
   </v-card>
-  <div class="text-center content-common notice">
+  <div class="flex flex-col items-center content-common notice">
     <p>
       {{ $t('sponsors.notice') }}
     </p>
