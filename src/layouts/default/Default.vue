@@ -22,7 +22,7 @@ onMounted(() => {
     <VSonner :expand="true" :position="'top-right'" />
     <default-view />
 
-    <v-footer class="flex-column mt-2" border>
+    <v-footer class="flex-column" border>
       <v-row class="text-center">
         <v-col>
           <div class="footer-list-title">
