@@ -51,7 +51,7 @@ const lampOffStyle = 'url(' + LampOff + ')';
     <div
       :class="{ 'lamp-on': leverOn, 'lamp-off': !leverOn, 'lamp-common': true }"
     ></div>
-    <div class="title">{{ title }}</div>
+    <div class="title font-['MinecraftTen']">{{ title }}</div>
   </div>
 </template>
 
