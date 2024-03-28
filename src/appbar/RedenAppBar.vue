@@ -7,10 +7,12 @@ import { discordInvite, theme } from '@/constants';
 import { useAppStore } from '@/store/app';
 import { useDisplay } from 'vuetify';
 
+const store = useAppStore();
+
 const { mobile } = useDisplay();
 function toggleTheme() {
   theme.value = theme.value === 'light' ? 'dark' : 'light';
-  useAppStore().setTheme(theme.value);
+  store.setTheme(theme.value);
 }
 </script>
 

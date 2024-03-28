@@ -6,11 +6,13 @@ import { theme } from '@/constants';
 import { onMounted } from 'vue';
 import vuetify from '@/plugins/vuetify';
 
+
 onMounted(() => {
   // set body background color
   document.body.style.backgroundColor =
     vuetify.theme.themes.value[theme.value].colors['background']!;
 });
+
 </script>
 
 <template>

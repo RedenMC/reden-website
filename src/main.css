@@ -1,3 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@font-face {
+  font-family: 'MinecraftTen';
+  src: url("./assets/font/Minecraft-Ten.ttf.woff");
+}
+
 @media (max-width: 500px) {
   .mobile-hide {
     display: none;

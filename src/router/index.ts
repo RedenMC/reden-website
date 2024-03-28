@@ -8,7 +8,6 @@ const routes = [
     children: [
       {
         path: '',
-        name: 'Home',
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
@@ -75,6 +74,12 @@ const routes = [
         name: 'AdminUserList',
         component: () => import('@/views/admin/UserList.vue'),
       },
+      {
+        path: '/:pathMatch(.*)*',
+        name: '404 NotFound',
+        component: () => import('@/views/error/NotFound.vue'),
+        meta: {title: "reden.title.404"},
+      }
     ],
   },
 ];
@@ -82,6 +87,19 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+});
+
+
+router.beforeEach((to, from, next) => {
+
+    if (to.name && to.path != "/") {
+
+        document.title = `${to.name.toString()} | Reden`;
+      }else {
+        document.title = "REDEN ~ for the Redstone open source community."
+    }
+     if (from)
+  next();
 });
 
 export default router;
