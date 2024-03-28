@@ -96,7 +96,7 @@ const autoPlay = ref(true);
               </div>
             </div>
             <div>
-              <div class="font-mono mt-2 text-base">
+              <div class=" mt-2 text-base">
                 <slot name="text" />
               </div>
             </div>

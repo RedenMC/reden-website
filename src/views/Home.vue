@@ -19,7 +19,7 @@ const introContent = ref<HTMLElement | null>(null);
     <div class="w-full flex flex-row justify-between items-center mt-10">
       <div class="z-20">
         <div class="text-6xl font-['MinecraftTen'] drop-shadow shadow-white">Reden</div>
-        <p style="font-size: larger" class="mt-2 font-mono">
+        <p style="font-size: larger" class="mt-2">
           {{ $t('reden.description') }}
         </p>
       </div>
