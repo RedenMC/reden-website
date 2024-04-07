@@ -85,13 +85,11 @@ function login() {
           <v-icon>mdi-lock</v-icon>
         </template>
       </v-text-field>
-
       <vue-turnstile
         :site-key="cloudflareCAPTCHAKey"
         v-model="token"
         v-show="!token"
       />
-
       <v-btn
         :loading="loading"
         :disabled="!token"
@@ -164,5 +162,10 @@ function login() {
   display: flex;
   justify-content: center;
   align-content: center;
+}
+
+.captcha {
+  margin: auto;
+  margin-bottom: 15px;
 }
 </style>
