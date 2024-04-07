@@ -159,7 +159,7 @@ function deleteAvatar() {
           </a>
         </p>
         <p
-          v-if="user.mcUUID && (!applyPreference || user.preference.showMC)"
+          v-if="!applyPreference || user.preference.showMC"
           class="minecraft"
         >
           <v-icon class="profile-item-icon">mdi-minecraft</v-icon>
