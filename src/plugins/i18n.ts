@@ -3,7 +3,8 @@ import { createI18n } from 'vue-i18n';
 const messages = {
   en: {
     en: 'English',
-    zh: '中文',
+    zh_CN: '简体中文(中国大陆)',
+    zh_TW: '繁體中文(台灣)',
     $vuetify: {
       close: 'Close',
       open: 'Open',
@@ -131,9 +132,7 @@ const messages = {
       hover: 'Search Reden Features',
     },
   },
-  zh: {
-    en: 'English',
-    zh: '中文',
+  zh_CN: {
     reden: {
       learn_more: '了解更多',
       footer: {
@@ -169,7 +168,7 @@ const messages = {
         feature_intro: {
           title: '功能介绍',
           undo: '不小心出了错？Reden 可以通过按下 Ctrl+Z 快速撤销您的操作。所有连锁反应都将被撤销。',
-          rvc: 'RVC (Reden 版本控制) 是专为红石设计的版本控制系统。它可以让您轻松管理所有版本的红石项目。',
+          rvc: 'RVC（Reden 版本控制）是专为红石设计的版本控制系统。它可以让您轻松管理所有版本的红石项目。',
           debugger:
             '搞不清楚为什么您的红石装置不工作？Reden 调试器可以帮助您查看游戏如何处理您的红石装置。',
         },
@@ -212,7 +211,7 @@ const messages = {
     },
     login: {
       title: '登录 Reden',
-      oauth: '使用以下方式登录',
+      oauth: '或使用以下方式登录',
       button: {
         login: '登录',
         captcha: '请先完成验证码',
@@ -227,6 +226,102 @@ const messages = {
     },
     search: {
       hover: '搜索 Reden 功能',
+    },
+  },
+  zh_TW: {
+    reden: {
+      learn_more: '了解更多',
+      footer: {
+        reden_mod: {
+          title: 'Reden Mod',
+          undo_redo: '撤銷 & 重作',
+          rvc: 'Reden 版本控制 (RVC)',
+          debugger: 'Reden 調試器',
+        },
+        reden_ecosystem: {
+          title: 'Reden 生態系統',
+          wiki: 'Reden Wiki',
+          sponsors: '贊助者',
+          github_organization: 'Github 組織',
+        },
+        reden_community: {
+          title: 'Reden 社區',
+          discord: 'Discord',
+          community_guidelines: '社區指南',
+          community_events: '社區活動',
+        },
+        follow_us: {
+          title: '關注我們',
+          blog: '部落格',			//?
+          youtube: 'Youtube',
+          bilibili: 'Bilibili',
+        },
+      },
+      title: {
+        home: '首頁',
+      },
+      home: {
+        feature_intro: {
+          title: '功能介紹',
+          undo: '不小心出錯了？Reden 可以通過按下 Ctrl+Z 快速撤銷您的操作。所有連鎖反應都將被撤銷。',
+          rvc: 'RVC（Reden 版本控制）是專為紅石設計的版本控制系統。它可以讓您輕鬆管理所有版本的紅石專案。',
+          debugger:
+            '搞不清楚為什麼您的紅石裝置不工作？Reden 調試器可以幫助您查看遊戲如何處理您的紅石裝置。',
+        },
+        community_intro: {
+          title: '社區',
+          open_source:
+            'Reden 是一個開源項目，對所有人免費。我們歡迎所有人為 Reden 做出貢獻，包括代碼、文檔、Wiki 等。',
+          wiki: 'Reden Wiki 幾乎包含了您需要了解的關於紅石和 Reden 的所有內容。這也是與社區分享知識的好地方。',
+          discord:
+            '加入我們的 Discord 伺服器，與其他紅石開發者們聊天並從社區獲得幫助。',
+          sponsor: 'Reden 得到了社區的贊助。我們感謝每一位支持我們的贊助者。',
+        },
+      },
+      download: '下載',
+      download_page: {
+        sorry_constructing:
+          '抱歉，我們的下載頁面正在建設中，我們建議您前往此處下載：',
+      },
+      my_account: '我的帳號',
+      wiki: 'Wiki',
+      description:
+        '為紅石機器開發者提供一站式工作環境，成為最好的紅石調試和教學工具。',
+    },
+    user: {
+      developer: '開發者',
+      developer_hover: '此用戶是本項目的活躍開發者',
+      contributor: '貢獻者',
+      contributor_hover: '此用戶參與過本項目的開發',
+      sponsor: '贊助者',
+      sponsor_hover: '此用戶贊助過本項目',
+      staff: '管理員',
+      staff_hover: '此用戶是本項目的管理員',
+    },
+    sponsors: {
+      title: '贊助者',
+      description: 'Reden 得到了你們的支持，我們在此由衷地感謝每一位贊助者。',
+      alipay: '使用支付寶贊助',		//?
+      notice:
+        'Reden 是一個開源專案，永遠對所有人免費。我們沒有從任何公司或組織獲得資金。我們依靠您的支持來維持專案運行。當您支持我們時，您會在此頁面被列出，因此請確保在您捐款時提供您的姓名和電子郵件。感謝您的支持！',
+    },
+    login: {
+      title: '登入 Reden',
+      oauth: '或使用以下方式登入',
+      button: {
+        login: '登入',
+        captcha: '請先完成驗證碼',
+      },
+    },
+    register: {
+      oauth: '使用以下方式註冊',
+      button: {
+        register: '註冊',
+        captcha: '請先完成驗證碼',
+      },
+    },
+    search: {
+      hover: '搜尋 Reden 功能',
     },
   },
 };

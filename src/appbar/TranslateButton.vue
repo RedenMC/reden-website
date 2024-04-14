@@ -23,9 +23,8 @@ export default {
   <div class="text-center">
     <v-menu :close-on-content-click="true">
       <template #activator="{ props }">
-        <v-btn icon="mdi-translate" v-bind="props" />
+        <v-btn icon="mdi-web" title="Language" v-bind="props" />
       </template>
-
       <v-list>
         <v-list-item
           v-for="locale in $i18n.availableLocales"

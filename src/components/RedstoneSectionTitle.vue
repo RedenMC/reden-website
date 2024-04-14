@@ -37,16 +37,20 @@ const lampOffStyle = 'url(' + LampOff + ')';
 </script>
 
 <template>
-  <div class="redstone-section-title">
+  <div class="redstone-section-title" draggable="false">
     <div class="lever-all" ref="all" @click="leverOn = !leverOn">
       <img
         :src="Lever"
         :class="{ 'lever-on': leverOn, 'lever-off': !leverOn }"
-        height="50"
+        height="100"
         width="50"
-        alt=""
-      />
-      <img :src="LeverBase" class="lever-base" alt="" />
+        style="user-select: none;"
+        alt="" />
+      <img
+        :src="LeverBase"
+        class="lever-base"
+        style="user-select: none;"
+        alt=""/>
     </div>
     <div
       :class="{ 'lamp-on': leverOn, 'lamp-off': !leverOn, 'lamp-common': true }"
@@ -63,16 +67,17 @@ const lampOffStyle = 'url(' + LampOff + ')';
 
 .lever-on {
   position: absolute;
-  transform: translateY(-36px) rotate(45deg) translateX(25px);
-  transition: transform 0.4s;
-  transition-delay: 0.2s;
+  top: -28px;
+  transform:rotate(45deg);
+  transition: transform 0.5s;
   image-rendering: pixelated;
 }
 
 .lever-off {
   position: absolute;
-  transform: translateY(-36px) rotate(-45deg) translateX(-25px);
-  transition: transform 0.2s;
+  top: -28px;
+  transform:rotate(-45deg);
+  transition: transform 0.5s;
   image-rendering: pixelated;
 }
 
@@ -91,15 +96,13 @@ const lampOffStyle = 'url(' + LampOff + ')';
 }
 
 .lamp-on {
-  box-shadow:0px 0px 360px 180px rgba(255, 0, 0, 0.8);
   background-image: v-bind(lampOnStyle);
-  transition: background-image 0.2s, box-shadow 0.2s;
+  transition: background-image 0.5s;
   transition-delay: 0.2s;
 }
 
 .lamp-off {
   background-image: v-bind(lampOffStyle);
-  transition: background-image 0.2s, box-shadow 0.2s;
 }
 
 .lamp-common {

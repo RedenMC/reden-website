@@ -46,13 +46,6 @@ onMounted(() => {
   observer.observe(lightLine.value as Element);
 });
 
-defineSlots<{
-  title: VueElement;
-  subtitle: VueElement;
-  text: VueElement;
-  image: VueElement;
-  action: VueElement[];
-}>();
 const autoPlay = ref(true);
 </script>
 

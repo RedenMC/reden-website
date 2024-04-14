@@ -1,70 +1,72 @@
 <script setup lang="ts">
+
+import UndoIcon from '../../public/feature/Undo.png';
+import RVCIcon from '../../public/feature/RVC.png';
+import DebuggerIcon from '../../public/feature/Debugger.png';
 import NetherPortalVideo from '@/assets/nether_protal.mp4';
-import RedStoneSection from '@/components/RedStoneSection.vue';
-import RedstoneSectionTitle from '@/components/RedstoneSectionTitle.vue';
+import FeatureSection from '@/components/FeatureSection.vue';
+import FeatureSectionTitle from '@/components/FeatureSectionTitle.vue';
 </script>
 
 <template>
-  <div class="features-intro content-common">
-    <RedstoneSectionTitle :title="$t('reden.home.feature_intro.title')" />
-    <RedStoneSection :video="NetherPortalVideo" :size="3">
-      <template #title> Undo </template>
-      <template #text>
-        <p>
-          {{ $t('reden.home.feature_intro.undo') }}
-        </p>
-      </template>
-      <template #action>
-        <v-btn
-          href="/feature/undo"
-          color="primary"
-          rounded="rounded"
-          variant="outlined"
-          class="main-button"
-        >
-          {{ $t('reden.learn_more') }}
-        </v-btn>
-      </template>
-    </RedStoneSection>
-    <RedStoneSection :size="3">
-      <template #title> RVC </template>
-      <template #text>
-        <p>
-          {{ $t('reden.home.feature_intro.rvc') }}
-        </p>
-      </template>
-      <template #action>
-        <v-btn
-          href="/feature/rvc"
-          color="primary"
-          variant="outlined"
-          rounded="rounded"
-          class="main-button"
-        >
-          {{ $t('reden.learn_more') }}
-        </v-btn>
-      </template>
-    </RedStoneSection>
-    <RedStoneSection :size="3">
-      <template #title> Reden Debugger </template>
-      <template #text>
-        <p>
-          {{ $t('reden.home.feature_intro.debugger') }}
-        </p>
-      </template>
-      <template #action>
-        <v-btn
-          href="/feature/debugger"
-          color="primary"
-          variant="outlined"
-          rounded="rounded"
-          class="main-button"
-        >
-          {{ $t('reden.learn_more') }}
-        </v-btn>
-      </template>
-    </RedStoneSection>
+  <div class="boundary height">
+    <FeatureSectionTitle :title="$t('reden.home.feature_intro.title')" />
+    <v-row>
+      <v-col cols="12" md="4">
+        <FeatureSection :icon="UndoIcon" :video="NetherPortalVideo" link="/feature/undo">
+          <template #title> Undo </template>
+          <template #text>
+            <p>
+              {{ $t('reden.home.feature_intro.undo') }}
+            </p>
+          </template>
+        </FeatureSection>
+      </v-col>
+      <v-col cols="12" md="4">
+        <FeatureSection :icon="RVCIcon" link="/feature/rvc">
+          <template #title> RVC </template>
+          <template #text>
+            <p>
+              {{ $t('reden.home.feature_intro.rvc') }}
+            </p>
+          </template>
+        </FeatureSection>
+      </v-col>
+      <v-col cols="12" md="4">
+        <FeatureSection :icon="DebuggerIcon" link="/feature/debugger">
+          <template #title> Reden Debugger </template>
+          <template #text>
+            <p>
+              {{ $t('reden.home.feature_intro.debugger') }}
+            </p>
+          </template>
+        </FeatureSection>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.boundary {
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
+@media (max-width: 600px) {
+  .height{
+    height: 1450px;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 960px) {
+  .height{
+    height: 940px;
+  }
+}
+
+@media (min-width: 960px) {
+  .height{
+    height: 620px;
+  }
+}
+</style>

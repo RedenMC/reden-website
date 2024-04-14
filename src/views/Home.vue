@@ -1,80 +1,89 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useAppStore } from '@/store/app';
 import RedStoneSection from '@/components/RedStoneSection.vue';
 import RedstoneSectionTitle from '@/components/RedstoneSectionTitle.vue';
 import Feature from '@/views/Feature.vue';
-import { discordInvite } from '@/constants';
+import { discordInvite, githubLink } from '@/constants';
 
 const { t } = useI18n();
 
+const light = ref(useAppStore().theme === 'light');
 const introContent = ref<HTMLElement | null>(null);
 document.title = t('reden.title.home') + ' - Reden';
+
+watch(() => useAppStore().theme, (newValue) => {
+  light.value = newValue === 'light';
+});
 </script>
 
 <template>
   <div class="main-page">
     <div>
-      <v-row dense>
-        <v-col cols="12" sm="8">
-          <v-row dense>
-            <v-col cols="4" class="d-flex justify-center align-center">
-              <v-img src="/reden_256.png" style="font-size: 75%" />
+      <v-row no-gutters>
+        <v-col cols="12" md="8">
+          <v-row no-gutters>
+            <v-col cols="6" sm="4" class="d-flex justify-center align-center">
+              <v-img src="/Reden.png" style="image-rendering: pixelated;" />
             </v-col>
-            <v-col cols="7" justify="center">
+            <v-col cols="6" sm="8" justify="center">
               <v-row class="d-flex justify-center align-center">
-                <h1 class="font-weight-bold" style="font-size: 10vw;">Reden</h1>
+                <h1 class="font-weight-bold" style="font-size: 12vw; z-index: 5;">Reden</h1>
               </v-row>
-              <v-row class="d-flex justify-center" dense>
-                  <v-col cols="12" sm="auto">
-                    <v-btn
-                      class="main-button"
-                      prepend-icon="mdi-download"
-                      size="large"
-                      rounded="rounded"
-                      color="white"
-                      href="/download"
-                    >
-                      {{ $t('reden.download') }}
-                    </v-btn>
-                  </v-col>
-                  <v-col cols="12" sm="auto">
-                    <v-btn
-                      class="main-button"
-                      href="https://github.com/zly2006/reden-is-what-we-made"
-                      prepend-icon="mdi-github"
-                      size="large"
-                      rounded="rounded"
-                      variant="outlined"
-                    >
-                      Github
-                    </v-btn>
-                  </v-col>
-                  <v-col cols="12" sm="auto">
-                    <v-btn
-                      class="main-button"
-                      href="//wiki.redenmc.com"
-                      prepend-icon="mdi-book-open"
-                      size="large"
-                      rounded="rounded"
-                      variant="outlined"
-                    >
-                      {{ $t('reden.wiki') }}
-                    </v-btn>
-                  </v-col>
+              <v-row class="d-flex justify-center" no-gutters>
+                <v-col cols="12" sm="auto">
+                  <v-btn
+                    class="main-button"
+                    prepend-icon="mdi-download"
+                    size="large"
+                    rounded="rounded"
+                    :color="light ? 'black' : 'white'"
+                    href="/download"
+                  >
+                    {{ $t('reden.download') }}
+                  </v-btn>
+                </v-col>
+                <v-col cols="12" sm="auto">
+                  <v-btn
+                    class="main-button"
+                    :href="githubLink"
+                    prepend-icon="mdi-github"
+                    size="large"
+                    rounded="rounded"
+                    variant="outlined"
+                  >
+                    Github
+                  </v-btn>
+                </v-col>
+                <v-col cols="12" sm="auto">
+                  <v-btn
+                    class="main-button"
+                    href="//wiki.redenmc.com"
+                    prepend-icon="mdi-book-open"
+                    size="large"
+                    rounded="rounded"
+                    variant="outlined"
+                  >
+                    {{ $t('reden.wiki') }}
+                  </v-btn>
+                </v-col>
               </v-row>
             </v-col>
           </v-row>
         </v-col>
-        <v-col cols="12" sm="4" class="d-flex justify-center align-center">
+        <v-col cols="12" md="4" class="d-flex justify-center align-center" style="z-index: 5;">
           <p style="font-size: 150%">{{ $t('reden.description') }}</p>
         </v-col>
       </v-row>
     </div>
   </div>
-
+  <div style="display: flex; justify-content: center;">
+    <div class="intro-content" style="max-width: 1500px;" ref="introContent">
+      <Feature />
+    </div>
+  </div>
   <div class="intro-content" ref="introContent">
-    <Feature />
     <div class="community-intro content-common">
       <RedstoneSectionTitle :title="$t('reden.home.community_intro.title')" />
       <RedStoneSection :size="3">
@@ -86,7 +95,7 @@ document.title = t('reden.title.home') + ' - Reden';
         </template>
         <template #action>
           <v-btn
-            href="//github.com/zly2006/reden-is-what-we-made"
+            :href="githubLink"
             color="primary"
             variant="outlined"
             rounded="rounded"
@@ -163,22 +172,15 @@ body {
 }
 
 .main-page {
-  max-width: 90%;
-  margin-left: auto;
-  margin-right: auto;
+  margin-left: 2%;
+  margin-right: 2%;
   margin-bottom: 64px;
-  height: calc(100vh - 120px);
+  height: calc(100vh - 100px);
   padding-left: 30px;
   padding-right: 30px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-
-  @media (max-width: 750px) {
-    .icon {
-      display: none;
-    }
-  }
 }
 
 * {

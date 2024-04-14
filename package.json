@@ -22,7 +22,7 @@
     "vue-router": "^4.0.0",
     "vue-sonner": "^1.0.1",
     "vue-turnstile": "^1.0.8",
-    "vuetify": "^3.5.9",
+    "vuetify": "^3.0.0",
     "vuetify-sonner": "^0.3.2"
   },
   "devDependencies": {
@@ -41,5 +41,6 @@
     "vite-plugin-vuetify": "^2.0.3",
     "vue-cli-plugin-vuetify": "~2.5.8",
     "vue-tsc": "^1.2.0"
-  }
+  },
+  "packageManager": "yarn@4.1.1"
 }
