@@ -83,7 +83,6 @@ watch(() => useAppStore().theme, (Value) => {
           <slot name="text" />
         </div>
       </template>
-      <template #image>
         <div
           class="overlay overlay-responsive"
           @click="goToLink"
@@ -106,7 +105,6 @@ watch(() => useAppStore().theme, (Value) => {
             {{ $t('reden.learn_more') }}
           </div>
         </div>
-      </template>
     </v-card>
   </div>
 </template>
@@ -212,6 +210,7 @@ watch(() => useAppStore().theme, (Value) => {
 
   .overlay-responsive{
     display: flex;
+    top: 0;
     right: 0;
     width: 50%;
     height: 100%;
