@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { Ref, ref } from 'vue';
-import { doFetchGet, ErrorResponse, Profile, toastError } from '@/constants';
+import {Ref, ref} from 'vue';
+import {doFetchGet, ErrorResponse, Profile, toastError} from '@/constants';
 import UserBadges from '@/components/UserBadges.vue';
+import AdminEditUserButton from "@/views/admin/AdminEditUserButton.vue";
 
 const pageSize = ref(20);
 const totalItems = ref(0);
@@ -82,6 +83,9 @@ function isBanned(user: Profile) {
         <v-avatar :image="item.avatarUrl" />
         {{ item.username }}
       </a>
+    </template>
+    <template #[`item.actions`]="{ item }">
+      <AdminEditUserButton :item="item" />
     </template>
   </v-data-table-server>
 </template>
