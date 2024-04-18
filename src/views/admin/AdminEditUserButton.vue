@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {ref} from "vue";
-import {doFetchPost, Profile, toastError} from "@/constants";
+import {Profile, toastError} from "@/constants";
 import UserBadges from "@/components/UserBadges.vue";
 import {useAppStore} from "@/store/app";
 import {toast} from "vuetify-sonner";
@@ -53,7 +53,7 @@ function changed() {
     <template v-slot:activator="{ props: activatorProps }">
       <v-btn
         color="surface-variant"
-        icon="pencil"
+        icon="mdi-pencil"
         text="Open Dialog"
         v-bind="activatorProps"
         variant="flat"

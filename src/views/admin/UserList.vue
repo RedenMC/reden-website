@@ -1,14 +1,16 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import {Ref, ref} from 'vue';
 import {doFetchGet, ErrorResponse, Profile, toastError} from '@/constants';
 import UserBadges from '@/components/UserBadges.vue';
 import AdminEditUserButton from "@/views/admin/AdminEditUserButton.vue";
+import AdminBanUserButton from "@/views/admin/AdminBanUserButton.vue";
 
 const pageSize = ref(20);
 const totalItems = ref(0);
 const serverItems: Ref<Profile[]> = ref([]);
 const loading = ref(false);
 const search = ref('');
+
 async function loadItems(options: {
   page: number;
   itemsPerPage: number;
@@ -36,15 +38,16 @@ async function loadItems(options: {
   }
   loading.value = false;
 }
+
 const headers = [
-  { title: 'UID', key: 'id' },
-  { title: 'Username', key: 'username' },
-  { title: 'Email', key: 'email' },
-  { title: 'Role', key: 'roles' },
-  { title: 'Last Login IP', key: 'lastLoginIp' },
-  { title: 'Last Login Time', key: 'lastLoginTime' },
-  { title: 'Banned', key: 'bannedUntil' },
-  { title: 'Actions', key: 'actions', sortable: false },
+  {title: 'UID', key: 'id'},
+  {title: 'Username', key: 'username'},
+  {title: 'Email', key: 'email'},
+  {title: 'Role', key: 'roles'},
+  {title: 'Last Login IP', key: 'lastLoginIp'},
+  {title: 'Last Login Time', key: 'lastLoginTime'},
+  {title: 'Banned', key: 'bannedUntil'},
+  {title: 'Actions', key: 'actions', sortable: false},
 ];
 
 function isBanned(user: Profile) {
@@ -56,8 +59,8 @@ function isBanned(user: Profile) {
   <v-data-table-server
     v-model:items-per-page="pageSize"
     :headers="headers"
-    :items-length="totalItems"
     :items="serverItems"
+    :items-length="totalItems"
     :items-per-page-options="[10, 20, 50, 100]"
     :loading="loading"
     :search="search"
@@ -73,19 +76,20 @@ function isBanned(user: Profile) {
     <template #[`item.bannedUntil`]="{ item }">
       <v-chip
         v-if="isBanned(item)"
-        color="error"
         :text="`Banned until ${new Date(item.bannedUntil ?? 0).toLocaleString()}, ${item.bannedReason}`"
+        color="error"
       />
       <v-chip v-else color="success" text="Not Banned" />
     </template>
     <template #[`item.username`]="{ item }">
-      <a class="username" :href="`/user/${item.id}`">
+      <a :href="`/user/${item.id}`" class="username">
         <v-avatar :image="item.avatarUrl" />
         {{ item.username }}
       </a>
     </template>
     <template #[`item.actions`]="{ item }">
       <AdminEditUserButton :item="item" />
+      <AdminBanUserButton :item="item" />
     </template>
   </v-data-table-server>
 </template>
