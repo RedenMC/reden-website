@@ -67,14 +67,14 @@ const lampOffStyleDark = 'url(' + LampOffDark + ')';
 
 .lamp-on-light {
   background-image: v-bind(lampOnStyleLight);
-  box-shadow: 0 0 100px 50px #ff8000ff,0 0 100px 150px #ff800040, 0 0 200px 300px #ffa00086;
+  box-shadow: 0 0 100px 100px rgba(255, 255, 0, 0.28), 0 0 200px 300px rgba(245, 162, 22, 0.53);
   transition: background-image 0.2s, box-shadow 0.2s;
   transition-delay: 0.2s;
 }
 
 .lamp-on-dark {
   background-image: v-bind(lampOnStyleDark);
-  box-shadow: 0 0 100px 100px #ff000057, 0 0 150px 220px #ff000025, 0 0 200px 300px #ff00003a;
+  box-shadow: 0 0 100px 100px rgba(255, 0, 0, 0.34), 0 0 150px 220px rgba(255, 0, 0, 0.15), 0 0 200px 300px rgba(255, 0, 0, 0.23);
   transition: background-image 0.1s, box-shadow 0.2s;
   transition-delay: 0.2s;
 }
