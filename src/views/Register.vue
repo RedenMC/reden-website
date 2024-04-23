@@ -8,6 +8,7 @@ import {
   isStrongPassword,
   toastError,
 } from '@/constants';
+import { useI18n } from 'vue-i18n';
 
 const email = ref('');
 const username = ref('');
@@ -17,7 +18,7 @@ const invitationCode = ref('');
 const loading = ref(false);
 const registerOk = ref(false);
 const token = ref('');
-
+const { t } = useI18n();
 function register() {
   if (!isStrongPassword(password.value)) return;
   if (confirmPassword.value != password.value) return;
@@ -38,8 +39,8 @@ function register() {
   doFetchPost('/api/account/register/start', req)
     .then((res) => {
       if (res.ok) {
-        toast('Register Successful', {
-          description: 'Please check your email to complete the registration',
+        toast(t('register.toast.successful.title'), {
+          description: t('register.toast.successful.message'),
           duration: 1000,
           cardProps: {
             color: 'green',
@@ -60,12 +61,16 @@ function register() {
 <template>
   <div class="main-page">
     <div v-if="!registerOk" class="register-form">
-      <h1>Register RedenMC Account</h1>
+      <h1>
+        {{ $t('register.title') }}
+      </h1>
       <v-text-field
         v-model="email"
-        label="Email"
-        placeholder="Email"
-        :rules="[() => /.+@.+\..+/i.test(email) || 'Invalid email address']"
+        :label="t('register.placeholder.email')"
+        :placeholder="t('register.placeholder.email')"
+        :rules="[
+          () => /.+@.+\..+/i.test(email) || $t('register.invalid.email'),
+        ]"
         required
       >
         <template #prepend>
@@ -74,11 +79,12 @@ function register() {
       </v-text-field>
       <v-text-field
         v-model="username"
-        label="Username"
-        placeholder="Username"
+        :label="t('register.placeholder.username')"
+        :placeholder="t('register.placeholder.username')"
         :rules="[
           () =>
-            /^[\w\-\u4e00-\u9fa5]{3,20}$/.test(username) || 'Invalid username',
+            /^[\w\-\u4e00-\u9fa5]{3,20}$/.test(username) ||
+            $t('register.invalid.username'),
         ]"
         required
       >
@@ -88,13 +94,13 @@ function register() {
       </v-text-field>
       <v-text-field
         v-model="password"
+        :label="t('register.placeholder.password')"
+        :placeholder="t('register.placeholder.password')"
         :rules="[
           () =>
             isStrongPassword(password) ||
-            'Password is not strong enough, must contain at least 8 characters, including uppercase, lowercase, and numbers',
+            $t('register.invalid.password.strength'),
         ]"
-        label="Password"
-        placeholder="Password"
         required
         type="password"
       >
@@ -104,9 +110,13 @@ function register() {
       </v-text-field>
       <v-text-field
         v-model="confirmPassword"
-        :rules="[() => confirmPassword == password || 'Passwords do not match']"
-        label="Confirm Password"
-        placeholder="Confirm Password"
+        :label="t('register.placeholder.confirm')"
+        :placeholder="t('register.placeholder.confirm')"
+        :rules="[
+          () =>
+            confirmPassword == password ||
+            $t('register.invalid.password.mismatching'),
+        ]"
         required
         type="password"
       >
@@ -121,10 +131,13 @@ function register() {
       />
       <v-text-field
         v-model="invitationCode"
-        label="Invitation Code (Optional)"
-        placeholder="Invitation Code, optional"
+        :label="t('register.placeholder.invitation_code')"
+        :placeholder="t('register.placeholder.invitation_code')"
       />
-      <span> Already have an account? <a href="/login">Login</a> </span>
+      <span>
+        {{ $t('register.existing') }}
+        <a href="/login">{{ $t('register.login') }}</a>
+      </span>
       <v-btn
         :disabled="!token"
         :loading="loading"
@@ -164,15 +177,12 @@ function register() {
           size="112"
         ></v-icon>
 
-        <h2 class="text-h5 mb-6">One more step</h2>
-
-        <p class="mb-4 text-medium-emphasis">
-          We have sent an email to <strong>{{ email }}</strong> with a link to
-          complete your registration.
-          <br />
-          If you don't see the email, please check other places it might be,
-          like your junk, spam, social, or other folders.
-        </p>
+        <h2 class="text-h5 mb-6">
+          {{ $t('register.email_verification.title') }}
+        </h2>
+        <span>{{
+          $t('register.email_verification.message', { email: email })
+        }}</span>
 
         <v-divider class="mb-4"></v-divider>
 
@@ -185,7 +195,7 @@ function register() {
             variant="flat"
             width="90"
           >
-            Done
+            {{ $t('register.button.done') }}
           </v-btn>
         </div>
       </v-sheet>
@@ -214,5 +224,9 @@ function register() {
 .ok-screen {
   margin-bottom: 100px;
   margin-top: 100px;
+}
+
+.captcha {
+  margin: auto;
 }
 </style>

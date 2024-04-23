@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { Ref, ref, VueElement } from 'vue';
+import { ref, VueElement, toRefs } from 'vue';
 import { doFetchDelete, Profile, toastError } from '@/constants';
 import UserBadges from '@/components/UserBadges.vue';
 import VerifyMinecraft from '@/components/VerifyMinecraft.vue';
@@ -7,17 +7,17 @@ import { toast } from 'vuetify-sonner';
 import { useAppStore } from '@/store/app';
 import { getTimezone } from 'countries-and-timezones';
 
-const { user, canEdit, applyPreference } = defineProps({
-  user: {
-    type: Object as () => Ref<Profile | undefined>,
-    required: true,
+const props = withDefaults(
+  defineProps<{
+    user?: Profile;
+    canEdit: boolean;
+    applyPreference?: boolean;
+  }>(),
+  {
+    canEdit: true,
   },
-  canEdit: {
-    type: Boolean,
-    default: true,
-  },
-  applyPreference: Boolean,
-});
+);
+const { user, canEdit, applyPreference } = toRefs(props);
 
 defineSlots<{
   actions: VueElement[] | undefined;
@@ -159,7 +159,7 @@ function deleteAvatar() {
           </a>
         </p>
         <p
-          v-if="user.mcUUID && (!applyPreference || user.preference.showMC)"
+          v-if="!applyPreference || user.preference.showMC"
           class="minecraft"
         >
           <v-icon class="profile-item-icon">mdi-minecraft</v-icon>

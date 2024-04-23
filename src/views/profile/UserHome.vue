@@ -53,7 +53,7 @@ function logout() {
         type="card-avatar"
         width="300"
       ></v-skeleton-loader>
-      <UserProfileCard v-show="!loading" :user="user">
+      <UserProfileCard v-show="!loading" :user="user" :apply-preference="false">
         <template #actions>
           <v-row>
             <v-col>
