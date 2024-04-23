@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import {ref} from "vue";
-import {Profile, toastError} from "@/constants";
-import UserBadges from "@/components/UserBadges.vue";
-import {useAppStore} from "@/store/app";
-import {toast} from "vuetify-sonner";
+import { ref } from 'vue';
+import { Profile, toastError } from '@/constants';
+import UserBadges from '@/components/UserBadges.vue';
+import { useAppStore } from '@/store/app';
+import { toast } from 'vuetify-sonner';
 
 const saving = ref(false);
 const availableRoles = ['sponsor', 'staff', 'developer', 'contributor'];
@@ -22,22 +22,24 @@ function save() {
     },
     credentials: 'include',
     body: JSON.stringify(mutableCopy.value),
-  }).then(async res => {
-    if (res.ok) {
-      toast('Success', {
-        description: 'User updated',
-        duration: 3000,
-        cardProps: {
-          color: 'green',
-        },
-      });
-    } else {
-      return Promise.reject(res);
-    }
-  }).catch(e => {
-    mutableCopy.value = JSON.parse(JSON.stringify(props.item));
-    toastError(e, 'Failed to update user');
-  });
+  })
+    .then(async (res) => {
+      if (res.ok) {
+        toast('Success', {
+          description: 'User updated',
+          duration: 3000,
+          cardProps: {
+            color: 'green',
+          },
+        });
+      } else {
+        return Promise.reject(res);
+      }
+    })
+    .catch((e) => {
+      mutableCopy.value = JSON.parse(JSON.stringify(props.item));
+      toastError(e, 'Failed to update user');
+    });
   setTimeout(() => {
     saving.value = false;
   }, 1000);
@@ -64,7 +66,9 @@ function changed() {
       <v-card>
         <v-card-title>
           Edit user
-          <router-link :to="`/user/${mutableCopy.id}`"> {{ mutableCopy.username }}</router-link>
+          <router-link :to="`/user/${mutableCopy.id}`">
+            {{ mutableCopy.username }}</router-link
+          >
         </v-card-title>
         <v-card-text>
           <v-text-field
@@ -73,12 +77,7 @@ function changed() {
             outlined
             dense
           />
-          <v-text-field
-            v-model="mutableCopy.bio"
-            label="Bio"
-            outlined
-            dense
-          />
+          <v-text-field v-model="mutableCopy.bio" label="Bio" outlined dense />
           <v-text-field
             v-model="mutableCopy.email"
             label="Email"
@@ -108,7 +107,10 @@ function changed() {
 
           <v-btn
             text="Close"
-            @click="isActive.value = false; mutableCopy = JSON.parse(JSON.stringify(props.item))"
+            @click="
+              isActive.value = false;
+              mutableCopy = JSON.parse(JSON.stringify(props.item));
+            "
           />
 
           <v-btn
