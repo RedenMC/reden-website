@@ -18,8 +18,10 @@ export type Profile = {
   qq?: number;
   mcUUID?: string;
   isStaff?: boolean;
-  githubId?: string;
+  githubId?: string | null;
   passwordNotSet: boolean;
+  lastLoginTime?: number;
+  lastLoginIp?: string;
   bannedUntil?: number;
   canChangeNameUntil?: number;
   bannedReason?: string;
