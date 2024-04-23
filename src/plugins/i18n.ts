@@ -10,7 +10,7 @@ const messages = {
       open: 'Open',
       noDataText: 'No data available',
       dataIterator: {
-        rowsPerPageText: 'Items per page:',
+        rowsPerPageText: 'Items per page: ',
         rowsPerPageAll: 'All',
         pageText: '{0}-{1} of {2}',
         noResultsText: 'No matching records found',
@@ -19,7 +19,7 @@ const messages = {
         loadingText: 'Loading items...',
       },
       dataFooter: {
-        itemsPerPageText: 'Items per page:',
+        itemsPerPageText: 'Items per page: ',
         itemsPerPageAll: 'All',
         prevPage: 'Previous page',
         nextPage: 'Next page',
@@ -122,11 +122,47 @@ const messages = {
       },
     },
     register: {
-      oauth: 'Or register with',
+      title: 'Register to Reden',
+      invalid: {
+        email: 'Invalid email address.',
+        password: {
+          strength:
+            'Password is not strong enough, please use at least 8 characters, including uppercase, lowercase and numbers.',
+          mismatching: 'Passwords do not match',
+        },
+        username: 'Invalid Username.',
+      },
+      existing: 'Already have an account?',
+      login: 'Login',
+      email_verification: {
+        title: 'One more step',
+        message:
+          "We have sent an email to {email} with a link to complete your registration. If you don't see the email, please check other places it might be, like your junk, spam, social, or other folders.",
+      },
+      toast: {
+        successful: {
+          title: 'Register Successful',
+          message: 'Please check your email to complete the registration',
+        },
+        try: 'Please try again later',
+        failed: 'Failed to register',
+        error: {
+          unknown: 'Unknown error',
+        },
+      },
+      placeholder: {
+        email: 'Email',
+        username: 'Username',
+        password: 'Password',
+        confirm: 'Confirm Password',
+        invitation_code: 'Invitation Code (optional)',
+      },
       button: {
         register: 'Register',
         captcha: 'Please complete the captcha first',
+        done: 'Done',
       },
+      oauth: 'Or register with: ',
     },
     search: {
       hover: 'Search Reden Features',
@@ -218,11 +254,42 @@ const messages = {
       },
     },
     register: {
-      oauth: '使用以下方式注册',
+      title: '注册 Reden',
+      invalid: {
+        email: '无效的邮箱地址',
+        password: {
+          strength: '密码需使用至少8个字符（大写、小写和数字）',
+          mismatching: '密码不符',
+        },
+        username: '无效用户名',
+      },
+      existing: '已经有账号了？',
+      login: '登录',
+      email_verification: {
+        title: '最后一步',
+        message1:
+          '我们向 {email} 发送了一封包含链接的验证邮件。如果你没有看见该邮件，请注意垃圾站或其他文件夹。',
+      },
+      toast: {
+        successful: {
+          title: '注册成功！',
+          message: '请检查你的邮箱来完成注册',
+        },
+        try: '请稍后再试',
+      },
+      placeholder: {
+        email: '电子邮箱',
+        username: '用户名',
+        password: '密码',
+        confirm: '重复密码',
+        invitation_code: '邀请码(可选)',
+      },
       button: {
         register: '注册',
         captcha: '请先完成验证码',
+        done: '完成',
       },
+      oauth: '或使用以下方式注册',
     },
     search: {
       hover: '搜索 Reden 功能',
@@ -301,7 +368,7 @@ const messages = {
     sponsors: {
       title: '贊助者',
       description: 'Reden 得到了你們的支持，我們在此由衷地感謝每一位贊助者。',
-      alipay: '使用支付寶贊助',		//?
+      alipay: '使用支付寶贊助',
       notice:
         'Reden 是一個開源專案，永遠對所有人免費。我們沒有從任何公司或組織獲得資金。我們依靠您的支持來維持專案運行。當您支持我們時，您會在此頁面被列出，因此請確保在您捐款時提供您的姓名和電子郵件。感謝您的支持！',
     },
@@ -314,11 +381,42 @@ const messages = {
       },
     },
     register: {
-      oauth: '使用以下方式註冊',
+      title: '註冊 Reden',
+      invalid: {
+        email: '無效的電子郵件',
+        password: {
+          strength: '密碼需使用至少8個字符（大寫、小寫以及數字）',
+          mismatching: '密碼不符',
+        },
+        username: '無效用戶名',
+      },
+      existing: '已經有帳號了？',
+      login: '登入',
+      email_verification: {
+        title: '最後一步',
+        message1:
+          '我們向 {email} 傳送了一封包含驗證連結的電子郵件。如果你沒有看見該郵件，請注意垃圾郵件或其他資料夾。',
+      },
+      toast: {
+        successful: {
+          title: '註冊成功！',
+          message: '請檢查你的電子郵件來完成註冊',
+        },
+        try: '請稍後再試',
+      },
+      placeholder: {
+        email: '電子郵件',
+        username: '用戶名稱',
+        password: '密碼',
+        confirm: '重複密碼',
+        invitation_code: '邀請碼（可選）',
+      },
       button: {
         register: '註冊',
         captcha: '請先完成驗證碼',
+        done: '完成',
       },
+      oauth: '或使用以下方式註冊',
     },
     search: {
       hover: '搜尋 Reden 功能',
