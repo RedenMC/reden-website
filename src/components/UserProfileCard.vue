@@ -158,10 +158,7 @@ function deleteAvatar() {
             {{ user?.email }}
           </a>
         </p>
-        <p
-          v-if="!applyPreference || user.preference.showMC"
-          class="minecraft"
-        >
+        <p v-if="!applyPreference || user.preference.showMC" class="minecraft">
           <v-icon class="profile-item-icon">mdi-minecraft</v-icon>
           <VerifyMinecraft :showActions="canEdit" :user="user" />
         </p>
