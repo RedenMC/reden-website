@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import {Ref, ref} from 'vue';
-import {doFetchGet, ErrorResponse, Profile, toastError} from '@/constants';
+import { Ref, ref } from 'vue';
+import { doFetchGet, ErrorResponse, Profile, toastError } from '@/constants';
 import UserBadges from '@/components/UserBadges.vue';
-import AdminEditUserButton from "@/views/admin/AdminEditUserButton.vue";
-import AdminBanUserButton from "@/views/admin/AdminBanUserButton.vue";
+import AdminEditUserButton from '@/views/admin/AdminEditUserButton.vue';
+import AdminBanUserButton from '@/views/admin/AdminBanUserButton.vue';
 
 const pageSize = ref(20);
 const totalItems = ref(0);
@@ -40,14 +40,14 @@ async function loadItems(options: {
 }
 
 const headers = [
-  {title: 'UID', key: 'id'},
-  {title: 'Username', key: 'username'},
-  {title: 'Email', key: 'email'},
-  {title: 'Role', key: 'roles'},
-  {title: 'Last Login IP', key: 'lastLoginIp'},
-  {title: 'Last Login Time', key: 'lastLoginTime'},
-  {title: 'Banned', key: 'bannedUntil'},
-  {title: 'Actions', key: 'actions', sortable: false},
+  { title: 'UID', key: 'id' },
+  { title: 'Username', key: 'username' },
+  { title: 'Email', key: 'email' },
+  { title: 'Role', key: 'roles' },
+  { title: 'Last Login IP', key: 'lastLoginIp' },
+  { title: 'Last Login Time', key: 'lastLoginTime' },
+  { title: 'Banned', key: 'bannedUntil' },
+  { title: 'Actions', key: 'actions', sortable: false },
 ];
 
 function isBanned(user: Profile) {
