@@ -2,7 +2,7 @@
 import DefaultView from './View.vue';
 import RedenAppBar from '@/appbar/RedenAppBar.vue';
 import { VSonner } from 'vuetify-sonner';
-import { theme } from '@/constants';
+import { githubLink, theme } from '@/constants';
 import { onMounted } from 'vue';
 import vuetify from '@/plugins/vuetify';
 
@@ -56,9 +56,7 @@ onMounted(() => {
             </b>
           </div>
           <div class="footer-list-item">
-            <a href="https://github.com/zly2006/reden-is-what-we-made">
-              Reden on Github
-            </a>
+            <a :href="githubLink"> Reden on Github </a>
           </div>
           <div class="footer-list-item">
             <a href="//wiki.redenmc.com">
@@ -125,7 +123,7 @@ onMounted(() => {
       </v-row>
       <v-row class="last-line">
         <v-col class="text-center" :cols="12">
-          <a href="https://github.com/zly2006/reden-is-what-we-made">Reden</a>
+          <a :href="githubLink">Reden</a>
           and
           <a href="https://github.com/RedenMC/reden-website">this website</a>
           are both free software.

@@ -39,7 +39,7 @@ document.title = t('reden.title.home') + ' - Reden';
         </v-btn>
         <v-btn
           class="main-button"
-          href="https://github.com/zly2006/reden-is-what-we-made"
+          :href="githubLink"
           prepend-icon="mdi-github"
           size="x-large"
           rounded="rounded"
