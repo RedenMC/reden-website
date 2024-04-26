@@ -5,6 +5,7 @@ import { toast } from 'vuetify-sonner';
 export const reCAPTCHAKey = '6Lczc24pAAAAAAxzBZbRy8CZc_ba06Qn_3OJ_Vg-';
 export const cloudflareCAPTCHAKey = '0x4AAAAAAARtCTyyGc1nbVUm';
 export const discordInvite = 'https://discord.gg/fCxmEyFgAd';
+export const githubLink = 'https://github.com/zly2006/reden-is-what-we-made';
 export const theme = ref(useAppStore().theme);
 
 export type Profile = {

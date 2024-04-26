@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, type Ref, ref, VueElement } from 'vue';
+import { onMounted, type Ref, ref } from 'vue';
 
 // todo: 不透明度渐变
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -46,13 +46,6 @@ onMounted(() => {
   observer.observe(lightLine.value as Element);
 });
 
-defineSlots<{
-  title: VueElement;
-  subtitle: VueElement;
-  text: VueElement;
-  image: VueElement;
-  action: VueElement[];
-}>();
 const autoPlay = ref(true);
 </script>
 
