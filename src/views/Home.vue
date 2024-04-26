@@ -60,9 +60,12 @@ document.title = t('reden.title.home') + ' - Reden';
       </div>
     </div>
   </div>
-
+  <div style="display: flex; justify-content: center;">
+    <div class="intro-content" style="max-width: 1500px;" ref="introContent">
+      <Feature />
+    </div>
+  </div>
   <div class="intro-content" ref="introContent">
-    <Feature />
     <div class="community-intro content-common">
       <RedstoneSectionTitle :title="$t('reden.home.community_intro.title')" />
       <RedStoneSection :size="3">

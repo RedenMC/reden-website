@@ -37,16 +37,20 @@ const lampOffStyle = 'url(' + LampOff + ')';
 </script>
 
 <template>
-  <div class="redstone-section-title">
+  <div class="redstone-section-title" draggable="false">
     <div class="lever-all" ref="all" @click="leverOn = !leverOn">
       <img
         :src="Lever"
         :class="{ 'lever-on': leverOn, 'lever-off': !leverOn }"
-        height="50"
+        height="100"
         width="50"
-        alt=""
-      />
-      <img :src="LeverBase" class="lever-base" alt="" />
+        style="user-select: none;"
+        alt="" />
+      <img
+        :src="LeverBase"
+        class="lever-base"
+        style="user-select: none;"
+        alt=""/>
     </div>
     <div
       :class="{ 'lamp-on': leverOn, 'lamp-off': !leverOn, 'lamp-common': true }"
@@ -63,14 +67,16 @@ const lampOffStyle = 'url(' + LampOff + ')';
 
 .lever-on {
   position: absolute;
-  transform: translateY(-36px) rotate(45deg) translateX(25px);
+  top: -28px;
+  transform:rotate(45deg);
   transition: transform 0.5s;
   image-rendering: pixelated;
 }
 
 .lever-off {
   position: absolute;
-  transform: translateY(-36px) rotate(-45deg) translateX(-25px);
+  top: -28px;
+  transform:rotate(-45deg);
   transition: transform 0.5s;
   image-rendering: pixelated;
 }
