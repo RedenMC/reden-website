@@ -319,7 +319,7 @@ const messages = {
         },
         follow_us: {
           title: '關注我們',
-          blog: '部落格', //?
+          blog: '部落格',
           youtube: 'Youtube',
           bilibili: 'Bilibili',
         },
