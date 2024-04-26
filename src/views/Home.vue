@@ -4,7 +4,7 @@ import { useI18n } from 'vue-i18n';
 import RedStoneSection from '@/components/RedStoneSection.vue';
 import RedstoneSectionTitle from '@/components/RedstoneSectionTitle.vue';
 import Feature from '@/views/Feature.vue';
-import { discordInvite } from '@/constants';
+import { discordInvite, githubLink } from '@/constants';
 
 const { t } = useI18n();
 
@@ -39,7 +39,7 @@ document.title = t('reden.title.home') + ' - Reden';
         </v-btn>
         <v-btn
           class="main-button"
-          href="https://github.com/zly2006/reden-is-what-we-made"
+          :href="githubLink"
           prepend-icon="mdi-github"
           size="x-large"
           rounded="rounded"
