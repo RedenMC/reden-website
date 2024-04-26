@@ -3,7 +3,7 @@ import SearchButton from './SearchButton.vue';
 import TranslateButton from './TranslateButton.vue';
 import '@/main.css';
 import AccountButton from '@/appbar/AccountButton.vue';
-import { discordInvite, theme } from '@/constants';
+import { discordInvite, githubLink, theme } from '@/constants';
 import { useAppStore } from '@/store/app';
 import { useDisplay } from 'vuetify';
 
@@ -93,7 +93,7 @@ function toggleTheme() {
         class="mobile-hide"
         icon="mdi-github"
         title="Github"
-        href="https://github.com/zly2006/reden-is-what-we-made"
+        :href="githubLink"
       />
       <v-btn
         class="mobile-hide"
