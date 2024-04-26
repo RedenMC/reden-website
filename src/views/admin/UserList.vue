@@ -47,7 +47,7 @@ const headers = [
   { title: 'Last Login IP', key: 'lastLoginIp' },
   { title: 'Last Login Time', key: 'lastLoginTime' },
   { title: 'Banned', key: 'bannedUntil' },
-  { title: 'Actions', key: 'actions', sortable: false },
+  { title: 'Actions', key: 'actions', sortable: false, minWidth: 150 },
 ];
 
 function isBanned(user: Profile) {
@@ -68,7 +68,13 @@ function isBanned(user: Profile) {
     @update:options="loadItems"
   >
     <template #[`item.lastLoginTime`]="{ value }">
-      {{ value ? new Date(value) : 'Never logged in' }}
+      <v-tooltip text="Based on your timezone" location="bottom">
+        <template #activator="{ props }">
+          <span v-bind="props">
+            {{ value ? new Date(value).toLocaleString() : 'Never logged in' }}
+          </span>
+        </template>
+      </v-tooltip>
     </template>
     <template #[`item.roles`]="{ value }">
       <user-badges :roles="value" />
