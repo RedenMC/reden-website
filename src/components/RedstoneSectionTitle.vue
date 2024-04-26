@@ -44,13 +44,9 @@ const lampOffStyle = 'url(' + LampOff + ')';
         :class="{ 'lever-on': leverOn, 'lever-off': !leverOn }"
         height="100"
         width="50"
-        style="user-select: none;"
-        alt="" />
-      <img
-        :src="LeverBase"
-        class="lever-base"
-        style="user-select: none;"
-        alt=""/>
+        alt=""
+      />
+      <img :src="LeverBase" class="lever-base" alt="" />
     </div>
     <div
       :class="{ 'lamp-on': leverOn, 'lamp-off': !leverOn, 'lamp-common': true }"
@@ -68,7 +64,7 @@ const lampOffStyle = 'url(' + LampOff + ')';
 .lever-on {
   position: absolute;
   top: -28px;
-  transform:rotate(45deg);
+  transform: rotate(45deg);
   transition: transform 0.5s;
   image-rendering: pixelated;
 }
@@ -76,7 +72,7 @@ const lampOffStyle = 'url(' + LampOff + ')';
 .lever-off {
   position: absolute;
   top: -28px;
-  transform:rotate(-45deg);
+  transform: rotate(-45deg);
   transition: transform 0.5s;
   image-rendering: pixelated;
 }
@@ -93,6 +89,7 @@ const lampOffStyle = 'url(' + LampOff + ')';
   position: absolute;
   width: 50px;
   height: 75px;
+  user-select: none;
 }
 
 .lamp-on {
