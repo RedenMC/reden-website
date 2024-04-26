@@ -47,7 +47,7 @@ const headers = [
   { title: 'Last Login IP', key: 'lastLoginIp' },
   { title: 'Last Login Time', key: 'lastLoginTime' },
   { title: 'Banned', key: 'bannedUntil' },
-  { title: 'Actions', key: 'actions', sortable: false, minWidth: 150 },
+  { title: 'Actions', key: 'actions', sortable: false, minWidth: '150px' },
 ];
 
 function isBanned(user: Profile) {
