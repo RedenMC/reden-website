@@ -17,3 +17,17 @@
   margin-left: auto;
   margin-right: auto;
 }
+
+a.router-active {
+  color: inherit;
+  opacity: 0.8;
+  text-decoration: none;
+  transition: all 0.5s;
+}
+
+a.router-active:hover {
+  color: inherit;
+  opacity: 1;
+  text-decoration: underline;
+  transition: all 0.5s;
+}

@@ -43,9 +43,66 @@ function logout() {
     })
     .catch((e) => toastError(e, 'Failed to logout'));
 }
+
+// webhook
+const needInstallWebhook = ref(false);
+doFetchGet('/api/account/activity').then((response) => {
+  if (response.ok) {
+    response.json().then((data) => {
+      console.log(data);
+    });
+  } else {
+    toastError(response);
+    if (response.status === 412) {
+      needInstallWebhook.value = true;
+    }
+  }
+});
+
+function installWebhook() {
+  fetch('/api/github/reden-webhook', {
+    method: 'PUT',
+  })
+    .then((response) =>
+      response.ok ? response.json() : Promise.reject(response),
+    )
+    .then((data: { action: string; redirect?: string | null }) => {
+      if (data.action === 'confirm' && data.redirect) {
+        location.href = data.redirect;
+      }
+      console.log(data);
+    })
+    .catch((e) => toastError(e, 'Failed to update webhook'));
+}
 </script>
 
 <template>
+  <v-banner
+    border
+    :stacked="true"
+    color="info"
+    icon="mdi-information-variant"
+    v-if="needInstallWebhook"
+  >
+    <v-banner-text>
+      You have not installed the webhook yet. Please install the webhook to
+      enable the activity tracking feature.
+    </v-banner-text>
+    <template #actions>
+      <v-btn color="primary" @click="installWebhook">
+        Install Webhook
+
+        <v-dialog activator="parent">
+          <v-card>
+            <v-card-title>Install Webhook</v-card-title>
+            <v-card-text> Redirecting... </v-card-text>
+          </v-card>
+        </v-dialog>
+      </v-btn>
+      <v-btn @click="needInstallWebhook = false"> Dismiss </v-btn>
+    </template>
+  </v-banner>
+
   <div class="d-flex flex-wrap flex-row w-100">
     <div>
       <v-skeleton-loader
@@ -53,65 +110,31 @@ function logout() {
         type="card-avatar"
         width="300"
       ></v-skeleton-loader>
-      <UserProfileCard v-show="!loading" :user="user" :apply-preference="false">
+      <UserProfileCard v-show="!loading" :apply-preference="false" :user="user">
         <template #actions>
           <v-row>
             <v-col>
-              <v-btn
-                color="secondary"
-                href="/home/edit"
-                rounded="lg"
-                class="text-none"
-                variant="outlined"
-              >
-                Edit Profile
-              </v-btn>
+              <router-link to="/home/edit">
+                <v-btn
+                  class="text-none"
+                  color="secondary"
+                  rounded="lg"
+                  variant="outlined"
+                >
+                  Edit Profile
+                </v-btn>
+              </router-link>
             </v-col>
           </v-row>
         </template>
       </UserProfileCard>
       <v-btn color="primary" @click="logout"> Logout </v-btn>
     </div>
-    <v-timeline>
-      <v-timeline-item
-        v-for="event in [
-          {
-            id: 1,
-            title: 'Title',
-            subtitle: 'Subtitle',
-            subtitle2: 'Subtitle 2',
-            description: 'Description',
-            color: 'primary',
-            icon: 'mdi-account',
-          },
-          {
-            id: 2,
-            title: 'Title',
-            subtitle: 'Subtitle',
-            subtitle2: 'Subtitle 2',
-            description: 'Description',
-            color: 'primary',
-            icon: 'mdi-account',
-          },
-        ]"
-        :key="event.id"
-        :color="event.color"
-        :icon="event.icon"
-        :title="event.title"
-        :subtitle="event.subtitle"
-        :subtitle-2="event.subtitle2"
-      >
-        <template #opposite>
-          <v-card>
-            <v-card-title>{{ event.title }}</v-card-title>
-            <v-card-text>{{ event.description }}</v-card-text>
-            <template #actions>
-              <v-btn color="primary">Action</v-btn>
-            </template>
-          </v-card>
-        </template>
-      </v-timeline-item>
-    </v-timeline>
+
+    <div class="flex-column">
+      <v-timeline>
+      </v-timeline>
+    </div>
   </div>
 </template>
 

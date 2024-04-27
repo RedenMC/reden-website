@@ -85,7 +85,10 @@ export function doFetchDelete(url: string) {
   });
 }
 
-export async function toastError(e: any, message?: string) {
+export async function toastError(
+  e: Error | Response | ErrorResponse | any,
+  message?: string,
+) {
   if (e instanceof Error) {
     console.log('error', e);
     toast(message || 'Error', {

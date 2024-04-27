@@ -42,17 +42,19 @@ function toggleTheme() {
           </v-list-item>
           <v-divider />
           <template v-if="useAppStore().logined">
-            <v-list-item href="/home">
-              <template #prepend>
-                <v-avatar
-                  v-if="useAppStore().userCache?.avatarUrl"
-                  :size="40"
-                  :image="useAppStore().userCache?.avatarUrl"
-                />
-                <v-icon v-else> mdi-account</v-icon>
-              </template>
-              <v-list-item-title> My Profile </v-list-item-title>
-            </v-list-item>
+            <router-link to="/home">
+              <v-list-item>
+                <template #prepend>
+                  <v-avatar
+                    v-if="useAppStore().userCache?.avatarUrl"
+                    :size="40"
+                    :image="useAppStore().userCache?.avatarUrl"
+                  />
+                  <v-icon v-else> mdi-account</v-icon>
+                </template>
+                <v-list-item-title> My Profile </v-list-item-title>
+              </v-list-item>
+            </router-link>
             <v-list-item>
               <v-list-item-title> My Machines </v-list-item-title>
             </v-list-item>
@@ -76,12 +78,14 @@ function toggleTheme() {
           </template>
           <template v-if="useAppStore().userCache?.isStaff">
             <v-divider />
-            <v-list-item href="/admin/users">
-              <template #prepend>
-                <v-icon>mdi-cog</v-icon>
-              </template>
-              <v-list-item-title> Admin </v-list-item-title>
-            </v-list-item>
+            <router-link to="/admin/users">
+              <v-list-item>
+                <template #prepend>
+                  <v-icon>mdi-cog</v-icon>
+                </template>
+                <v-list-item-title> Admin </v-list-item-title>
+              </v-list-item>
+            </router-link>
           </template>
         </v-list>
       </v-menu>
