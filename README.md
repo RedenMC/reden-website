@@ -6,6 +6,11 @@ This is the source code for the [Reden website](https://RedenMC.com)(RedenMC.com
 
 Feel free to open a PR.
 
+## Test Environments
+
+[Reden Staging](https://devtest.redenmc.com:22334/)
+[Vercel](https://reden-website.vercel.app/)
+
 ## License
 
 MIT
