@@ -6,12 +6,13 @@ import AdminEditUserButton from '@/views/admin/AdminEditUserButton.vue';
 import AdminBanUserButton from '@/views/admin/AdminBanUserButton.vue';
 import { useRouter } from 'vue-router';
 
+const router = useRouter();
+const page = ref(Number(router.currentRoute.value.query.page) || 1);
 const pageSize = ref(20);
 const totalItems = ref(0);
 const serverItems: Ref<Profile[]> = ref([]);
 const loading = ref(false);
 const search = ref('');
-const router = useRouter();
 
 async function loadItems(options: {
   page: number;
@@ -56,12 +57,14 @@ const headers = [
 function isBanned(user: Profile) {
   return (user.bannedUntil || 0) > Date.now();
 }
+
+console.log('router page', router.currentRoute.value.query.page);
 </script>
 
 <template>
   <v-data-table-server
     v-model:items-per-page="pageSize"
-    :page="Number(router.currentRoute.value.query.page) || 1"
+    v-model:page="page"
     :headers="headers"
     :items="serverItems"
     :items-length="totalItems"
