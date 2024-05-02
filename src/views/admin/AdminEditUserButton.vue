@@ -4,6 +4,7 @@ import { Profile, toastError } from '@/constants';
 import UserBadges from '@/components/UserBadges.vue';
 import { useAppStore } from '@/store/app';
 import { toast } from 'vuetify-sonner';
+import RedenRouter from '@/router/RedenRouter.vue';
 
 const saving = ref(false);
 const availableRoles = ['sponsor', 'staff', 'developer', 'contributor'];
@@ -66,9 +67,9 @@ function changed() {
       <v-card>
         <v-card-title>
           Edit user
-          <router-link :to="`/user/${mutableCopy.id}`">
-            {{ mutableCopy.username }}</router-link
-          >
+          <reden-router :to="`/user/${mutableCopy.id}`">{{
+            mutableCopy.username
+          }}</reden-router>
         </v-card-title>
         <v-card-text>
           <v-text-field

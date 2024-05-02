@@ -4,6 +4,7 @@ import { toast } from 'vuetify-sonner';
 import { useAppStore } from '@/store/app';
 import UserProfileCard from '@/components/UserProfileCard.vue';
 import { ref } from 'vue';
+import RedenRouter from '@/router/RedenRouter.vue';
 
 // oauth login csrf token is not passed by json, but by query string
 const queries = window.location.search.substring(1).split('&');
@@ -114,16 +115,17 @@ function installWebhook() {
         <template #actions>
           <v-row>
             <v-col>
-              <router-link to="/home/edit">
+              <reden-router to="/home/edit">
                 <v-btn
                   class="text-none"
                   color="secondary"
+                  href="/"
                   rounded="lg"
                   variant="outlined"
                 >
                   Edit Profile
                 </v-btn>
-              </router-link>
+              </reden-router>
             </v-col>
           </v-row>
         </template>
@@ -132,8 +134,7 @@ function installWebhook() {
     </div>
 
     <div class="flex-column">
-      <v-timeline>
-      </v-timeline>
+      <v-timeline> </v-timeline>
     </div>
   </div>
 </template>

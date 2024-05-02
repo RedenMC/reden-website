@@ -5,6 +5,7 @@ import { VSonner } from 'vuetify-sonner';
 import { githubLink, theme } from '@/constants';
 import { onMounted } from 'vue';
 import vuetify from '@/plugins/vuetify';
+import RedenRouter from '@/router/RedenRouter.vue';
 
 onMounted(() => {
   // set body background color
@@ -123,9 +124,11 @@ onMounted(() => {
       </v-row>
       <v-row class="last-line">
         <v-col class="text-center" :cols="12">
-          <a :href="githubLink">Reden</a>
+          <reden-router :to="githubLink">Reden</reden-router>
           and
-          <a href="https://github.com/RedenMC/reden-website">this website</a>
+          <reden-router to="https://github.com/RedenMC/reden-website"
+            >this website</reden-router
+          >
           are both free software.
           <br />
           {{ new Date().getFullYear() }} — <b>RedenMC</b>

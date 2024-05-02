@@ -87,22 +87,16 @@ doFetchGet('/api/sponsors')
     </p>
     <p class="text-md-h5">
       {{ $t('sponsors.alipay') }}
+      <br />
+      <img src="@/assets/reden-alipay.png" alt="" width="200" />
     </p>
-    <img src="@/assets/reden-alipay.png" alt="" width="200" />
+    <a class="text-md-h5" href="https://paypal.me/zly2006">
+      {{ $t('sponsors.paypal') }}
+    </a>
   </div>
 </template>
 
 <style scoped>
-a {
-  color: #cccccc;
-  text-decoration: none;
-}
-
-a:hover {
-  color: #ffffff;
-  text-decoration: underline;
-}
-
 .notice {
   padding: 40px;
 }

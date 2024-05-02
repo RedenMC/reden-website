@@ -108,6 +108,7 @@ const messages = {
       description:
         'Reden is supported by you, and we are sincerely grateful to every sponsor.',
       alipay: 'Support us with Alipay',
+      paypal: 'Support us with PayPal',
       notice:
         'Reden is an open-source project and always free for everyone. We receive no funding from any company or organization. We rely on your support to keep the project running. When you support us, you will be listed here as a sponsor so please make sure you provide your name and email address when you donate. Thank you for your support!',
       badge:

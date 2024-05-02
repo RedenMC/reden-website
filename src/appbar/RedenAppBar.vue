@@ -6,6 +6,7 @@ import AccountButton from '@/appbar/AccountButton.vue';
 import { discordInvite, githubLink, theme } from '@/constants';
 import { useAppStore } from '@/store/app';
 import { useDisplay } from 'vuetify';
+import RedenRouter from '@/router/RedenRouter.vue';
 
 const { mobile } = useDisplay();
 function toggleTheme() {
@@ -42,8 +43,8 @@ function toggleTheme() {
           </v-list-item>
           <v-divider />
           <template v-if="useAppStore().logined">
-            <router-link to="/home">
-              <v-list-item>
+            <reden-router to="/home">
+              <v-list-item link>
                 <template #prepend>
                   <v-avatar
                     v-if="useAppStore().userCache?.avatarUrl"
@@ -54,7 +55,7 @@ function toggleTheme() {
                 </template>
                 <v-list-item-title> My Profile </v-list-item-title>
               </v-list-item>
-            </router-link>
+            </reden-router>
             <v-list-item>
               <v-list-item-title> My Machines </v-list-item-title>
             </v-list-item>
@@ -63,29 +64,34 @@ function toggleTheme() {
             </v-list-item>
           </template>
           <template v-else>
-            <v-list-item href="/login">
-              <template #prepend>
-                <v-icon>mdi-account</v-icon>
-              </template>
-              <v-list-item-title> Login </v-list-item-title>
-            </v-list-item>
-            <v-list-item href="/register">
-              <template #prepend>
-                <v-icon>mdi-account-plus</v-icon>
-              </template>
-              <v-list-item-title> Register </v-list-item-title>
-            </v-list-item>
+            <reden-router to="/login">
+              <v-list-item link>
+                <template #prepend>
+                  <v-icon>mdi-account</v-icon>
+                </template>
+                <v-list-item-title> Login </v-list-item-title>
+              </v-list-item>
+            </reden-router>
+
+            <reden-router to="/register">
+              <v-list-item link>
+                <template #prepend>
+                  <v-icon>mdi-account-plus</v-icon>
+                </template>
+                <v-list-item-title> Register </v-list-item-title>
+              </v-list-item>
+            </reden-router>
           </template>
           <template v-if="useAppStore().userCache?.isStaff">
             <v-divider />
-            <router-link to="/admin/users">
-              <v-list-item>
+            <reden-router to="/admin/users">
+              <v-list-item link>
                 <template #prepend>
                   <v-icon>mdi-cog</v-icon>
                 </template>
                 <v-list-item-title> Admin </v-list-item-title>
               </v-list-item>
-            </router-link>
+            </reden-router>
           </template>
         </v-list>
       </v-menu>

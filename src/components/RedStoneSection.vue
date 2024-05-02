@@ -222,7 +222,6 @@ const autoPlay = ref(true);
 .my-text-wrap {
   min-width: 200px;
   max-width: 350px;
-  text-shadow: black 1px 1px 1px;
   font-size: 16px;
 }
 </style>

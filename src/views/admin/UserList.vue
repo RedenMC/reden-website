@@ -4,12 +4,14 @@ import { doFetchGet, ErrorResponse, Profile, toastError } from '@/constants';
 import UserBadges from '@/components/UserBadges.vue';
 import AdminEditUserButton from '@/views/admin/AdminEditUserButton.vue';
 import AdminBanUserButton from '@/views/admin/AdminBanUserButton.vue';
+import { useRouter } from 'vue-router';
 
 const pageSize = ref(20);
 const totalItems = ref(0);
 const serverItems: Ref<Profile[]> = ref([]);
 const loading = ref(false);
 const search = ref('');
+const router = useRouter();
 
 async function loadItems(options: {
   page: number;
@@ -22,6 +24,7 @@ async function loadItems(options: {
 }) {
   loading.value = true;
   console.log(options);
+  router.push({ query: { page: options.page, search: search.value } });
   const response = await doFetchGet(
     `/api/admin/user/list?page=${options.page}&pageSize=${options.itemsPerPage}&sort=${options.sortBy[0]?.key}&order=${options.sortBy[0]?.order}&search=${search.value}`,
   );
@@ -58,6 +61,7 @@ function isBanned(user: Profile) {
 <template>
   <v-data-table-server
     v-model:items-per-page="pageSize"
+    :page="Number(router.currentRoute.value.query.page) || 1"
     :headers="headers"
     :items="serverItems"
     :items-length="totalItems"

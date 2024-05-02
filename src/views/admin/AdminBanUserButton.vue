@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { Profile } from '@/constants';
 import { useAppStore } from '@/store/app';
+import RedenRouter from '@/router/RedenRouter.vue';
 
 const props = defineProps<{
   item: Profile;
@@ -40,9 +41,9 @@ function ban() {
       <v-card>
         <v-card-title>
           Ban
-          <router-link :to="`/user/${item.id}`">
-            {{ item.username }}</router-link
-          >
+          <reden-router :to="`/user/${item.id}`">{{
+            item.username
+          }}</reden-router>
         </v-card-title>
 
         <v-card-text>
