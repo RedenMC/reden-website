@@ -1,8 +1,9 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { Profile } from '@/constants';
+import {Profile, toastError} from '@/constants';
 import { useAppStore } from '@/store/app';
 import RedenRouter from '@/router/RedenRouter.vue';
+import {SubmitEventPromise} from "vuetify";
 
 const props = defineProps<{
   item: Profile;
@@ -13,7 +14,12 @@ const banDays = ref(0);
 const banHours = ref();
 const banMinutes = ref();
 
-function ban() {
+async function ban(e: SubmitEventPromise) {
+  const result = await e;
+  if (!result.valid) {
+    await toastError(result.errors[0].errorMessages[0], 'Invalid input');
+    return;
+  }
   const duration =
     (banDays.value || 0) * 24 * 60 * 60 * 1000 +
     (banHours.value || 0) * 60 * 60 * 1000 +

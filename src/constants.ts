@@ -11,6 +11,7 @@ export const theme = ref(useAppStore().theme);
 export type Profile = {
   id: number;
   username: string;
+  password?: string | null;
   email: string;
   bio?: string;
   avatarUrl: string;

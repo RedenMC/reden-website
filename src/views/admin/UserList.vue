@@ -1,18 +1,24 @@
 <script lang="ts" setup>
-import { Ref, ref } from 'vue';
+import {Ref, ref, watch} from 'vue';
 import { doFetchGet, ErrorResponse, Profile, toastError } from '@/constants';
 import UserBadges from '@/components/UserBadges.vue';
 import AdminEditUserButton from '@/views/admin/AdminEditUserButton.vue';
 import AdminBanUserButton from '@/views/admin/AdminBanUserButton.vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 const router = useRouter();
-const page = ref(Number(router.currentRoute.value.query.page) || 1);
-const pageSize = ref(20);
-const totalItems = ref(0);
+const page = ref(Number(useRoute().query.page) || 1);
+const pageSize = ref(10);
+const totalItems = ref(10000000); // use a very large number to avoid reload
 const serverItems: Ref<Profile[]> = ref([]);
 const loading = ref(false);
-const search = ref('');
+const search = ref();
+
+watch(page, () => {
+  console.log(page.value)
+  // eslint-disable-next-line no-debugger
+  debugger
+})
 
 async function loadItems(options: {
   page: number;
@@ -25,22 +31,23 @@ async function loadItems(options: {
 }) {
   loading.value = true;
   console.log(options);
-  router.push({ query: { page: options.page, search: search.value } });
   const response = await doFetchGet(
-    `/api/admin/user/list?page=${options.page}&pageSize=${options.itemsPerPage}&sort=${options.sortBy[0]?.key}&order=${options.sortBy[0]?.order}&search=${search.value}`,
+    `/api/admin/user/list?page=${options.page}&pageSize=${options.itemsPerPage}&sort=${options.sortBy[0]?.key || ''}&order=${options.sortBy[0]?.order || ''}&search=${search.value || ''}`,
   );
   if (response.ok) {
     const data: {
       users: Profile[];
       total: number;
     } = await response.json();
-    serverItems.value = data.users;
     totalItems.value = data.total;
+    serverItems.value = data.users;
   } else {
     const error: ErrorResponse = await response.json();
     await toastError(error);
   }
   loading.value = false;
+  // console.log('before router.push')
+  router.replace({query: {page: options.page, search: search.value}})
 }
 
 const headers = [
@@ -74,8 +81,30 @@ console.log('router page', router.currentRoute.value.query.page);
     item-value="name"
     @update:options="loadItems"
   >
+    <template v-slot:loading>
+      <v-skeleton-loader type="table-row@10"></v-skeleton-loader>
+    </template>
+    <template #top>
+      <v-card border elevation="0">
+          <v-btn color="primary">
+            Create
+
+            <v-dialog activator="parent">
+              <v-card>
+                <v-card-title>New User</v-card-title>
+                <v-form @submit="(e) => console.log(e)">
+                  <!-- username -->
+                  <!-- email -->
+                  <!-- password -->
+
+                </v-form>
+              </v-card>
+            </v-dialog>
+          </v-btn>
+      </v-card>
+    </template>
     <template #[`item.lastLoginTime`]="{ value }">
-      <v-tooltip text="Based on your timezone" location="bottom">
+      <v-tooltip location="bottom" text="Based on your timezone">
         <template #activator="{ props }">
           <span v-bind="props">
             {{ value ? new Date(value).toLocaleString() : 'Never logged in' }}

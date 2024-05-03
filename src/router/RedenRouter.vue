@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import { computed } from 'vue';
 import { RouterLink } from 'vue-router';
 
@@ -31,6 +31,7 @@ const isExternalLink = computed(() => {
   <router-link
     v-else
     v-bind="$props"
+    :to="props.to"
     custom
     v-slot="{ isActive, href, navigate }"
   >
