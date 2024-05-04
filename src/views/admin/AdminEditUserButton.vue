@@ -59,8 +59,10 @@ function changed() {
     text="Open Dialog"
     variant="flat"
   >
+    <!-- wtf-->
+    <v-icon icon="mdi-pencil" />
     <v-dialog max-width="500" activator="parent" :persistent="changed()">
-      <template v-slot:default="{ isActive }">
+      <template #default="{ isActive }">
         <v-card>
           <v-card-title>
             Edit user

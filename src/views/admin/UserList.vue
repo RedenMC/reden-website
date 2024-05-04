@@ -14,12 +14,6 @@ const serverItems: Ref<Profile[]> = ref([]);
 const loading = ref(false);
 const search = ref();
 
-watch(page, () => {
-  console.log(page.value)
-  // eslint-disable-next-line no-debugger
-  debugger
-})
-
 async function loadItems(options: {
   page: number;
   itemsPerPage: number;
