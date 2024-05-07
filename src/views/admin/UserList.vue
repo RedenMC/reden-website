@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {Ref, ref, watch} from 'vue';
+import { Ref, ref } from 'vue';
 import { doFetchGet, ErrorResponse, Profile, toastError } from '@/constants';
 import UserBadges from '@/components/UserBadges.vue';
 import AdminEditUserButton from '@/views/admin/AdminEditUserButton.vue';
@@ -41,7 +41,7 @@ async function loadItems(options: {
   }
   loading.value = false;
   // console.log('before router.push')
-  router.replace({query: {page: options.page, search: search.value}})
+  router.replace({ query: { page: options.page, search: search.value } });
 }
 
 const headers = [
@@ -80,21 +80,20 @@ console.log('router page', router.currentRoute.value.query.page);
     </template>
     <template #top>
       <v-card border elevation="0">
-          <v-btn color="primary">
-            Create
+        <v-btn color="primary">
+          Create
 
-            <v-dialog activator="parent">
-              <v-card>
-                <v-card-title>New User</v-card-title>
-                <v-form @submit="(e) => console.log(e)">
-                  <!-- username -->
-                  <!-- email -->
-                  <!-- password -->
-
-                </v-form>
-              </v-card>
-            </v-dialog>
-          </v-btn>
+          <v-dialog activator="parent">
+            <v-card>
+              <v-card-title>New User</v-card-title>
+              <v-form @submit="(e) => console.log(e)">
+                <!-- username -->
+                <!-- email -->
+                <!-- password -->
+              </v-form>
+            </v-card>
+          </v-dialog>
+        </v-btn>
       </v-card>
     </template>
     <template #[`item.lastLoginTime`]="{ value }">

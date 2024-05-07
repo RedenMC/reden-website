@@ -67,8 +67,8 @@ function changed() {
           <v-card-title>
             Edit user
             <reden-router :to="`/user/${mutableCopy.id}`">{{
-                mutableCopy.username
-              }}</reden-router>
+              mutableCopy.username
+            }}</reden-router>
           </v-card-title>
           <v-card-text>
             <v-text-field
@@ -77,14 +77,24 @@ function changed() {
               outlined
               dense
             />
-            <v-text-field v-model="mutableCopy.bio" label="Bio" outlined dense />
+            <v-text-field
+              v-model="mutableCopy.bio"
+              label="Bio"
+              outlined
+              dense
+            />
             <v-text-field
               v-model="mutableCopy.email"
               label="Email"
               outlined
               dense
             />
-            <v-switch label="Reset password?" hide-spin-buttons hide-details v-model="resetPassword" />
+            <v-switch
+              label="Reset password?"
+              hide-spin-buttons
+              hide-details
+              v-model="resetPassword"
+            />
             <v-text-field
               v-show="resetPassword"
               v-model="mutableCopy.password"
@@ -114,9 +124,9 @@ function changed() {
             <v-btn
               text="Close"
               @click="
-              isActive.value = false;
-              mutableCopy = JSON.parse(JSON.stringify(props.item));
-            "
+                isActive.value = false;
+                mutableCopy = JSON.parse(JSON.stringify(props.item));
+              "
             />
 
             <v-btn

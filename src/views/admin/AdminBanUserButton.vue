@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
-import {Profile, toastError} from '@/constants';
+import { Profile, toastError } from '@/constants';
 import { useAppStore } from '@/store/app';
 import RedenRouter from '@/router/RedenRouter.vue';
-import {SubmitEventPromise} from "vuetify";
+import { SubmitEventPromise } from 'vuetify';
 
 const props = defineProps<{
   item: Profile;
