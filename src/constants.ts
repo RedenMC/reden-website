@@ -178,8 +178,8 @@ export const fetchUser = (userRef: Ref<Profile | undefined>) =>
     })
     .catch((e) => toastError(e, 'Failed to get user profile'));
 
-export const fetchOtherUser = (uid: number, ref: Ref<Profile | undefined>) =>
-  doFetchGet(`/api/users/${uid}`)
+export const fetchOtherUser = (lookup: number | string, ref: Ref<Profile | undefined>) =>
+  doFetchGet(`/api/users/${lookup}`)
     .then(async (response) => {
       if (response.ok) {
         ref.value = await response.json();

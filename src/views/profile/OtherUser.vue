@@ -2,18 +2,19 @@
 import { ref } from 'vue';
 import { fetchOtherUser, Profile } from '@/constants';
 import UserProfileCard from '@/components/UserProfileCard.vue';
+import {useRoute} from "vue-router";
 // to number
-const uid = window.location.pathname.split('/').pop();
-const numUid = Number(uid);
+const route = useRoute()
+const lookup = route.params.uid || route.params.username;
 const loading = ref(true);
 const user = ref<Profile>();
-if (numUid) {
-  fetchOtherUser(numUid, user).then(() => (loading.value = false));
+if (lookup) {
+  fetchOtherUser(lookup.toString(), user).then(() => (loading.value = false));
 }
 </script>
 
 <template>
-  <v-card v-if="!numUid">
+  <v-card v-if="!lookup">
     <v-card-title>
       <h1>Invalid User</h1>
     </v-card-title>
