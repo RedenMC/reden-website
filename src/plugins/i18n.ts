@@ -4,7 +4,7 @@ const messages = {
   en: {
     en: 'English',
     zh_CN: '简体中文(中国大陆)',
-    zh_TW: '繁體中文(中国台灣)',
+    zh_TW: '繁體中文(中國台灣)',
     $vuetify: {
       close: 'Close',
       open: 'Open',
@@ -117,6 +117,9 @@ const messages = {
     login: {
       title: 'Login to Reden',
       oauth: 'Or login with',
+      forgot_password: 'Forgot Password?',
+      or: 'Or',
+      register: 'Register',
       button: {
         login: 'Login',
         captcha: 'Please complete the captcha first',
@@ -249,6 +252,9 @@ const messages = {
     login: {
       title: '登录 Reden',
       oauth: '或使用以下方式登录',
+      forgot_password: '忘记密码？',
+      or: '或者',
+      register: '去注册',
       button: {
         login: '登录',
         captcha: '请先完成验证码',

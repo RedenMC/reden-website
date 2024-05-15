@@ -100,8 +100,9 @@ function login() {
       </v-btn>
 
       <span class="text-center" style="padding: 4px">
-        <a href="/forgot-password">Forgot Password?</a> or
-        <a href="/register">Register</a>
+        <a href="/forgot-password">{{ $t('login.forgot_password') }}</a>
+        {{ $t('login.or') }}
+        <a href="/register">{{ $t('login.register') }}</a>
       </span>
 
       <h1>

@@ -2,9 +2,9 @@
 import { ref } from 'vue';
 import { fetchOtherUser, Profile } from '@/constants';
 import UserProfileCard from '@/components/UserProfileCard.vue';
-import {useRoute} from "vue-router";
+import { useRoute } from 'vue-router';
 // to number
-const route = useRoute()
+const route = useRoute();
 const lookup = route.params.uid || route.params.username;
 const loading = ref(true);
 const user = ref<Profile>();

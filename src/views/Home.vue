@@ -5,7 +5,7 @@ import RedStoneSection from '@/components/RedStoneSection.vue';
 import RedstoneSectionTitle from '@/components/RedstoneSectionTitle.vue';
 import Feature from '@/views/Feature.vue';
 import { discordInvite, githubLink } from '@/constants';
-import RedenRouter from "@/router/RedenRouter.vue";
+import RedenRouter from '@/router/RedenRouter.vue';
 
 const { t } = useI18n();
 
@@ -93,7 +93,6 @@ document.title = t('reden.title.home') + ' - Reden';
           </v-card>
         </v-col>
       </v-row>
-
 
       <RedstoneSectionTitle :title="$t('reden.home.community_intro.title')" />
       <RedStoneSection :size="3">
