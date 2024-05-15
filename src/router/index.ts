@@ -67,13 +67,18 @@ const routes = [
       },
       {
         path: '/user/:uid(\\d+)',
-        name: 'UserProfile',
+        name: 'UserProfileById',
         component: () => import('@/views/profile/OtherUser.vue'),
       },
       {
         path: '/@:username',
-        name: 'UserProfile',
+        name: 'UserProfileByName',
         component: () => import('@/views/profile/OtherUser.vue'),
+      },
+      {
+        path: '/mc-services/download/yisibite',
+        name: 'YisibiteDownload',
+        component: () => import('@/views/yisibite/Download.vue'),
       },
       {
         path: '/admin/users',
