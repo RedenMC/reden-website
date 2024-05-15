@@ -64,6 +64,18 @@ export function doFetchPost(url: string, data: any) {
   });
 }
 
+export function doFetchPut(url: string, data: any) {
+  return fetch(url, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-Token': useAppStore().csrfToken || '[Reden] no csrf token',
+    },
+    credentials: 'include',
+    body: JSON.stringify(data),
+  });
+}
+
 export function doFetchGet(url: string) {
   return fetch(url, {
     method: 'GET',

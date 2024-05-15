@@ -1,8 +1,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { Profile, toastError } from '@/constants';
+import { doFetchPut, Profile, toastError } from '@/constants';
 import UserBadges from '@/components/UserBadges.vue';
-import { useAppStore } from '@/store/app';
 import { toast } from 'vuetify-sonner';
 import RedenRouter from '@/router/RedenRouter.vue';
 
@@ -16,15 +15,7 @@ const resetPassword = ref(false);
 
 function save() {
   saving.value = true;
-  fetch(`/api/admin/user/${props.item.id}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-CSRF-Token': useAppStore().csrfToken || '[Reden] no csrf token',
-    },
-    credentials: 'include',
-    body: JSON.stringify(mutableCopy.value),
-  })
+  doFetchPut(`/api/admin/user/${props.item.id}`, mutableCopy.value)
     .then(async (res) => {
       if (res.ok) {
         toast('Success', {

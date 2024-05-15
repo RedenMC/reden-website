@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { ref, VueElement, toRefs } from 'vue';
-import { doFetchDelete, Profile, toastError } from '@/constants';
+import { doFetchDelete, doFetchPut, Profile, toastError } from '@/constants';
 import UserBadges from '@/components/UserBadges.vue';
 import VerifyMinecraft from '@/components/VerifyMinecraft.vue';
 import { toast } from 'vuetify-sonner';
@@ -44,13 +44,7 @@ function fileSelected() {
     );
     return;
   }
-  fetch('/api/account/avatar', {
-    method: 'PUT',
-    body: file,
-    headers: {
-      'X-CSRF-Token': useAppStore().csrfToken || '<no csrf token>',
-    },
-  })
+  doFetchPut('/api/account/avatar', file)
     .then((response) => {
       if (response.ok) {
         console.log('avatar updated');

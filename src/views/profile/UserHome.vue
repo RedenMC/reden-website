@@ -1,5 +1,11 @@
 <script lang="ts" setup>
-import { doFetchGet, fetchUser, Profile, toastError } from '@/constants';
+import {
+  doFetchGet,
+  doFetchPut,
+  fetchUser,
+  Profile,
+  toastError,
+} from '@/constants';
 import { toast } from 'vuetify-sonner';
 import { useAppStore } from '@/store/app';
 import UserProfileCard from '@/components/UserProfileCard.vue';
@@ -61,9 +67,7 @@ doFetchGet('/api/account/activity').then((response) => {
 });
 
 function installWebhook() {
-  fetch('/api/github/reden-webhook', {
-    method: 'PUT',
-  })
+  doFetchPut('/api/github/reden-webhook', {})
     .then((response) =>
       response.ok ? response.json() : Promise.reject(response),
     )
