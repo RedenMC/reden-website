@@ -59,9 +59,10 @@ doFetchGet('/api/account/activity').then((response) => {
       console.log(data);
     });
   } else {
-    toastError(response);
     if (response.status === 412) {
       needInstallWebhook.value = true;
+    } else {
+      toastError(response);
     }
   }
 });
