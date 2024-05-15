@@ -7,6 +7,8 @@ export const cloudflareCAPTCHAKey = '0x4AAAAAAARtCTyyGc1nbVUm';
 export const discordInvite = 'https://discord.gg/fCxmEyFgAd';
 export const githubLink = 'https://github.com/zly2006/reden-is-what-we-made';
 export const theme = ref(useAppStore().theme);
+export const usernameRegex =
+  /^[a-zA-Z\-\u4e00-\u9fa5][\w\-\u4e00-\u9fa5]{3,19}$/;
 
 export type Profile = {
   id: number;

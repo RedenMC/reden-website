@@ -2,9 +2,8 @@
 import { ref } from 'vue';
 import { useAppStore } from '@/store/app';
 import { SubmitEventPromise } from 'vuetify';
-import { useRouter } from 'vue-router';
+import RedenRouter from '@/router/RedenRouter.vue';
 
-const router = useRouter();
 const xSize = ref(0);
 const zSize = ref(0);
 const loading = ref(false);
@@ -68,30 +67,32 @@ function submit(e: SubmitEventPromise) {
     <h1>投影在线生成</h1>
     <v-row>
       <v-col> 请选择下载的机器 </v-col>
-      <v-combobox
+      <v-select
         v-model="name"
         :item-title="(item) => names[item]?.name"
+        :item-value="(item) => item"
         :items="Object.keys(names)"
         autofocus
+        @click="() => console.log(name)"
       />
     </v-row>
     <v-row v-if="names[name]?.hasX">
       <v-col> x宽度 </v-col>
       <v-text-field
         v-model="xSize"
-        :rules="[(v) => v > 0 || '宽度必须是整数', ...names[name]?.conditions]"
+        :rules="[(v) => v > 0 || '宽度必须是正数', ...names[name]?.conditions]"
       />
     </v-row>
     <v-row v-if="names[name]?.hasZ">
       <v-col> z宽度 （出发和返回站的距离） </v-col>
       <v-text-field
         v-model="zSize"
-        :rules="[(v) => v > 0 || '宽度必须是整数']"
+        :rules="[(v) => v > 0 || '宽度必须是正数']"
       />
     </v-row>
     <v-row v-if="!useAppStore().logined">
       未登录用户每分钟最多生成5次投影以防范ddos，如果被限制请
-      <a href="/login">登录</a>
+      <reden-router to="/login">登录</reden-router>
     </v-row>
     <v-row>
       <v-spacer />

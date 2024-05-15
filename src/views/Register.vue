@@ -7,8 +7,11 @@ import {
   doFetchPost,
   isStrongPassword,
   toastError,
+  usernameRegex,
 } from '@/constants';
 import { useI18n } from 'vue-i18n';
+import RedenRouter from '@/router/RedenRouter.vue';
+import { SubmitEventPromise } from 'vuetify';
 
 const email = ref('');
 const username = ref('');
@@ -19,48 +22,48 @@ const loading = ref(false);
 const registerOk = ref(false);
 const token = ref('');
 const { t } = useI18n();
-function register() {
-  if (!isStrongPassword(password.value)) return;
-  if (confirmPassword.value != password.value) return;
-  if (email.value.indexOf('@') == -1) return;
-  if (!/^[\w\-\u4e00-\u9fa5]{3,20}$/.test(username.value)) return;
-  loading.value = true;
-  const req = {
-    email: email.value,
-    username: username.value,
-    password: password.value,
-    invitationCode: invitationCode.value,
-    timestamp: new Date().getTime(),
-    captcha: {
-      token: token.value,
-      provider: 'cloudflare',
-    },
-  };
-  doFetchPost('/api/account/register/start', req)
-    .then((res) => {
-      if (res.ok) {
-        toast(t('register.toast.successful.title'), {
-          description: t('register.toast.successful.message'),
-          duration: 1000,
-          cardProps: {
-            color: 'green',
-          },
-        });
-        registerOk.value = true;
-      } else {
-        return Promise.reject(res);
-      }
-    })
-    .catch((e) => toastError(e, 'Failed to register'))
-    .finally(() => {
-      loading.value = false;
-    });
+function register(e: SubmitEventPromise) {
+  e.preventDefault();
+  e.then((e) => {
+    if (!e.valid) return;
+    loading.value = true;
+    const req = {
+      email: email.value,
+      username: username.value,
+      password: password.value,
+      invitationCode: invitationCode.value,
+      timestamp: new Date().getTime(),
+      captcha: {
+        token: token.value,
+        provider: 'cloudflare',
+      },
+    };
+    doFetchPost('/api/account/register/start', req)
+      .then((res) => {
+        if (res.ok) {
+          toast(t('register.toast.successful.title'), {
+            description: t('register.toast.successful.message'),
+            duration: 1000,
+            cardProps: {
+              color: 'green',
+            },
+          });
+          registerOk.value = true;
+        } else {
+          return Promise.reject(res);
+        }
+      })
+      .catch((e) => toastError(e, 'Failed to register'))
+      .finally(() => {
+        loading.value = false;
+      });
+  });
 }
 </script>
 
 <template>
   <div class="main-page">
-    <div v-if="!registerOk" class="register-form">
+    <v-form v-if="!registerOk" class="register-form">
       <h1>
         {{ $t('register.title') }}
       </h1>
@@ -79,12 +82,10 @@ function register() {
       </v-text-field>
       <v-text-field
         v-model="username"
-        :label="t('register.placeholder.username')"
-        :placeholder="t('register.placeholder.username')"
+        :label="$t('register.placeholder.username')"
+        :placeholder="$t('register.placeholder.username')"
         :rules="[
-          () =>
-            /^[\w\-\u4e00-\u9fa5]{3,20}$/.test(username) ||
-            $t('register.invalid.username'),
+          () => usernameRegex.test(username) || $t('register.invalid.username'),
         ]"
         required
       >
@@ -111,7 +112,7 @@ function register() {
       <v-text-field
         v-model="confirmPassword"
         :label="t('register.placeholder.confirm')"
-        :placeholder="t('register.placeholder.confirm')"
+        :placeholder="$t('register.placeholder.confirm')"
         :rules="[
           () =>
             confirmPassword == password ||
@@ -136,7 +137,7 @@ function register() {
       />
       <span>
         {{ $t('register.existing') }}
-        <a href="/login">{{ $t('register.login') }}</a>
+        <reden-router to="/login">{{ $t('register.login') }}</reden-router>
       </span>
       <v-btn
         :disabled="!token"
@@ -160,7 +161,7 @@ function register() {
       >
         Microsoft
       </v-btn>
-    </div>
+    </v-form>
 
     <div v-if="registerOk">
       <v-sheet
@@ -186,7 +187,8 @@ function register() {
 
         <v-divider class="mb-4"></v-divider>
 
-        <div class="text-end">
+        <v-row>
+          <v-spacer />
           <v-btn
             class="text-none"
             color="success"
@@ -197,7 +199,7 @@ function register() {
           >
             {{ $t('register.button.done') }}
           </v-btn>
-        </div>
+        </v-row>
       </v-sheet>
     </div>
   </div>

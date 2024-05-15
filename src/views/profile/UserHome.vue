@@ -105,7 +105,7 @@ function installWebhook() {
           </v-card>
         </v-dialog>
       </v-btn>
-      <v-btn @click="needInstallWebhook = false"> Dismiss </v-btn>
+      <v-btn color="gray" @click="needInstallWebhook = false"> Dismiss </v-btn>
     </template>
   </v-banner>
 

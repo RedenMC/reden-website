@@ -10,6 +10,7 @@ import { useAppStore } from '@/store/app';
 import { toast } from 'vuetify-sonner';
 import { ref } from 'vue';
 import router from '@/router';
+import RedenRouter from '@/router/RedenRouter.vue';
 
 const username = ref('');
 const password = ref('');
@@ -100,9 +101,11 @@ function login() {
       </v-btn>
 
       <span class="text-center" style="padding: 4px">
-        <a href="/forgot-password">{{ $t('login.forgot_password') }}</a>
+        <reden-router to="/forgot-password">{{
+          $t('login.forgot_password')
+        }}</reden-router>
         {{ $t('login.or') }}
-        <a href="/register">{{ $t('login.register') }}</a>
+        <reden-router to="/register">{{ $t('login.register') }}</reden-router>
       </span>
 
       <h1>

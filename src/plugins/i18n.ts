@@ -435,5 +435,6 @@ export const i18n: I18n = createI18n({
   legacy: false, // Vuetify does not support the legacy mode of vue-i18n
   locale: localStorage.getItem('locale') || 'en',
   fallbackLocale: 'en',
+  fallbackWarn: false,
   messages,
 });
