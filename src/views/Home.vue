@@ -5,6 +5,7 @@ import RedStoneSection from '@/components/RedStoneSection.vue';
 import RedstoneSectionTitle from '@/components/RedstoneSectionTitle.vue';
 import Feature from '@/views/Feature.vue';
 import { discordInvite, githubLink } from '@/constants';
+import RedenRouter from "@/router/RedenRouter.vue";
 
 const { t } = useI18n();
 
@@ -64,6 +65,36 @@ document.title = t('reden.title.home') + ' - Reden';
   <div class="intro-content" ref="introContent">
     <Feature />
     <div class="community-intro content-common">
+      <v-row>
+        <v-col>
+          <v-card color="light-blue">
+            <v-card-title>投影在线生成</v-card-title>
+            <v-card-text>
+              一键生成世吞、地吞、盾构各种机器的投影！
+            </v-card-text>
+            <v-card-actions>
+              <reden-router to="/mc-services/download/yisibite">
+                <v-btn color="White">点击前往</v-btn>
+              </reden-router>
+            </v-card-actions>
+          </v-card>
+        </v-col>
+        <v-col>
+          <v-card color="orange">
+            <v-card-title>Github 同步</v-card-title>
+            <v-card-text>
+              绑定 GitHub Apps，同步机器、配置、你关注的仓库和创作者：你的世界！
+            </v-card-text>
+            <v-card-actions>
+              <reden-router to="/home">
+                <v-btn color="White">点击前往</v-btn>
+              </reden-router>
+            </v-card-actions>
+          </v-card>
+        </v-col>
+      </v-row>
+
+
       <RedstoneSectionTitle :title="$t('reden.home.community_intro.title')" />
       <RedStoneSection :size="3">
         <template #title> Open Source </template>
@@ -175,5 +206,9 @@ body {
 
 .main-button {
   margin: 6px;
+}
+
+.v-col {
+  min-width: 180px;
 }
 </style>
