@@ -63,7 +63,7 @@ function register(e: SubmitEventPromise) {
 
 <template>
   <div class="main-page">
-    <v-form v-if="!registerOk" class="register-form">
+    <v-form v-if="!registerOk" @submit="register" class="register-form">
       <h1>
         {{ $t('register.title') }}
       </h1>
@@ -143,7 +143,7 @@ function register(e: SubmitEventPromise) {
         :disabled="!token"
         :loading="loading"
         color="primary"
-        @click="register"
+        type="submit"
       >
         {{
           token ? $t('register.button.register') : $t('register.button.captcha')
