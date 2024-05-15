@@ -17,7 +17,7 @@ type Machine = {
 
 const names: { [key: string]: Machine } = {
   'yisibite-world-eater': {
-    name: '6宽无沟世吞x3.1 - 火弦月',
+    name: '无沟世吞 v3.1 - 火弦月',
     hasX: true,
     hasZ: true,
     conditions: [() => xSize.value % 6 == 0 || '宽度必须是6的倍数'],
