@@ -20,6 +20,7 @@ function changeLanguage(newLocale: Locale) {
 <template>
   <div class="text-center">
     <v-btn icon="mdi-translate">
+      <v-icon icon="mdi-translate" />
       <v-menu :close-on-content-click="true" activator="parent">
         <v-list>
           <v-list-item
