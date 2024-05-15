@@ -4,7 +4,7 @@ const messages = {
   en: {
     en: 'English',
     zh_CN: '简体中文(中国大陆)',
-    zh_TW: '繁體中文(台灣)',
+    zh_TW: '繁體中文(中国台灣)',
     $vuetify: {
       close: 'Close',
       open: 'Open',
