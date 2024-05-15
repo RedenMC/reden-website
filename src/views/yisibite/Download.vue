@@ -24,11 +24,23 @@ const names: { [key: string]: Machine } = {
     hasZ: true,
     conditions: [() => xSize.value % 6 == 0 || '宽度必须是6的倍数']
   },
+  'yisibite-nether-eater': {
+    name: '16高无沟地吞V1.2 - 火弦月',
+    hasX: true,
+    hasZ: true,
+    conditions: [() => xSize.value % 6 == 0 || '宽度必须是6的倍数']
+  },
   'yisibite-once-miner': {
     name: '5x3单发盾构 - 火弦月',
     hasX: true,
     hasZ: false,
-    conditions: [() => xSize.value % 5 == 0 || '宽度必须是5的倍数']
+    conditions: [() => xSize.value % 6 == 1 || '宽度必须是 6n+1']
+  },
+  'yisibite-3-miner': {
+    name: '5x3三连发盾构 - 火弦月',
+    hasX: true,
+    hasZ: false,
+    conditions: [() => xSize.value % 7 == 1 || '宽度必须是 7n+1']
   },
 }
 
