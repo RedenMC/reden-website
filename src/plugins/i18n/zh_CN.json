@@ -3,30 +3,30 @@
   "zh_CN": "简体中文(中国大陆)",
   "zh_TW": "繁體中文(中國台灣)",
   "$vuetify": {
-    "close": "Close",
-    "open": "Open",
-    "noDataText": "No data available",
+    "close": "关闭",
+    "open": "打开",
+    "noDataText": "没有可用数据",
     "dataIterator": {
-      "rowsPerPageText": "Items per page: ",
-      "rowsPerPageAll": "All",
-      "pageText": "{0}-{1} of {2}",
-      "noResultsText": "No matching records found",
-      "nextPage": "Next page",
-      "prevPage": "Previous page",
-      "loadingText": "Loading items..."
+      "rowsPerPageText": "每页项目: ",
+      "rowsPerPageAll": "全部",
+      "pageText": "{0}-{1}, 共 {2} 项",
+      "noResultsText": "没有找到相关记录",
+      "nextPage": "下一页",
+      "prevPage": "上一页",
+      "loadingText": "正在加载项目"
     },
     "dataFooter": {
-      "itemsPerPageText": "Items per page: ",
-      "itemsPerPageAll": "All",
-      "prevPage": "Previous page",
-      "nextPage": "Next page",
-      "firstPage": "First page",
-      "lastPage": "Last page",
-      "pageText": "{0}-{1} items of {2}"
+      "itemsPerPageText": "每页项目: ",
+      "itemsPerPageAll": "全部",
+      "prevPage": "上一页",
+      "nextPage": "下一页",
+      "firstPage": "第一页",
+      "lastPage": "最后一页",
+      "pageText": "{0}-{1}, 共 {2} 项"
     },
     "pagination": {
       "ariaLabel": {
-        "root": "Pagination"
+        "root": "分页"
       }
     }
   },
@@ -98,9 +98,9 @@
     "title": "赞助者",
     "description": "Reden 得到了你们的支持，我们在此由衷地感谢每一位赞助者。",
     "alipay": "使用支付宝赞助",
-    "paypal": "Support us with PayPal",
+    "paypal": "使用 PayPal 支持我们",
     "notice": "Reden 是一个开源项目，永远对所有人免费。我们没有从任何公司或组织获得资金。我们依靠您的支持来维持项目运行。当您支持我们时，您会在此页面被列出，因此请确保您在捐款时提供您的姓名和电子邮件地址。感谢您的支持！",
-    "badge": "You can get this Sponsor badge by supporting us, and it will be displayed on your profile."
+    "badge": "你可以通过支持我们来获得此赞助者徽章，它将显示在你的个人资料上。"
   },
   "login": {
     "title": "登录 Reden",
@@ -127,7 +127,7 @@
     "login": "登录",
     "email_verification": {
       "title": "最后一步",
-      "message": "We have sent an email to {email} with a link to complete your registration. If you don't see the email, please check other places it might be, like your junk, spam, social, or other folders."
+      "message": "我们向 {email} 发送了一封包含注册链接的邮件，请点击链接已完成注册。如果没有收到此邮件，请检查其他它可能在的地方，比如垃圾邮件文件夹。"
     },
     "toast": {
       "successful": {
@@ -135,9 +135,9 @@
         "message": "请检查你的邮箱来完成注册"
       },
       "try": "请稍后再试",
-      "failed": "Failed to register",
+      "failed": "注册失败",
       "error": {
-        "unknown": "Unknown error"
+        "unknown": "未知错误"
       }
     },
     "placeholder": {
