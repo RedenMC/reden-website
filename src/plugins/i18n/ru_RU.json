@@ -1,13 +1,13 @@
 {
-  "en": "",
-  "zh_CN": "",
-  "zh_TW": "",
+  "en": "Английский",
+  "zh_CN": "Китайский (Упрощённый)",
+  "zh_TW": "Китайский (Традиционный)",
   "$vuetify": {
-    "close": "",
-    "open": "",
-    "noDataText": "",
+    "close": "Закрыть",
+    "open": "Открыть",
+    "noDataText": "Нет доступных данных",
     "dataIterator": {
-      "rowsPerPageText": "",
+      "rowsPerPageText": "Результатов на странице: ",
       "rowsPerPageAll": "",
       "pageText": "",
       "noResultsText": "",
