@@ -10,6 +10,14 @@ const ySize = ref(0);
 const zSize = ref(0);
 const loading = ref(false);
 const name = ref('yisibite-world-eater');
+const xSizeRef = ref()
+const ySizeRef = ref()
+const zSizeRef = ref()
+const inputRefs = {
+  x: xSizeRef,
+  y: ySizeRef,
+  z: zSizeRef,
+}
 
 type Machine = {
   name: string;
@@ -19,7 +27,7 @@ type Machine = {
   zTitle?: string;
   downloads?: number;
   available?: boolean | null;
-  conditions: (() => any)[];
+  conditions: { [key: string]: (() => any)[] };
 };
 
 function min(a: number) {
@@ -32,61 +40,88 @@ const names = ref<{ [key: string]: Machine }>({
     hasX: true,
     hasZ: true,
     zTitle: 'z宽度 （出发和返回站的距离）',
-    conditions: [() => xSize.value % 6 == 0 || '宽度必须是6的倍数', min(30)],
+    conditions: {x: [() => xSize.value % 6 == 0 || '宽度必须是6的倍数', min(30)]},
   },
   'yisibite-nether-eater': {
     name: '16高无沟地吞V1.2 - 火弦月',
     hasX: true,
     hasZ: true,
     zTitle: 'z宽度 （出发和返回站的距离）',
-    conditions: [() => xSize.value % 6 == 0 || '宽度必须是6的倍数', min(30)],
+    conditions: {
+      x: [() => xSize.value % 6 == 0 || '宽度必须是6的倍数'
+        , min(30)]
+    },
   },
   'yisibite-once-miner': {
     name: '5x3单发盾构 - 火弦月',
     hasX: true,
     hasZ: false,
-    conditions: [() => xSize.value % 6 == 1 || '宽度必须是 6n+1', min(19)],
+    conditions: {x: [() => xSize.value % 6 == 1 || '宽度必须是 6n+1', min(19)]},
   },
   'yisibite-3-miner': {
     name: '5x3三连发盾构 - 火弦月',
     hasX: true,
     hasZ: false,
-    conditions: [() => xSize.value % 7 == 1 || '宽度必须是 7n+1', min(22)],
+    conditions: {x: [() => xSize.value % 7 == 1 || '宽度必须是 7n+1', min(22)]},
   },
   'yisibite-quarry-z': {
     name: '采矿机-东西方向 - 火弦月',
     hasX: true,
     hasY: true,
     hasZ: true,
-    conditions: [],
+    conditions: {},
   },
   'yisibite-quarry-x': {
     name: '采矿机-南北方向 - 火弦月',
     hasX: true,
     hasY: true,
     hasZ: true,
-    conditions: [],
+    conditions: {},
   }
 });
 
 doFetchGet('/api/mc-services/yisibite/').then(async (res) => {
   if (res.ok) {
-    let data: { [key: string]: Machine } = await res.json();
-    for (const key in names.value) {
-      if (data[key]) {
-        if (!data[key].conditions) {
-          data[key].conditions = names.value[key].conditions;
-        } else {
-          data[key].conditions = data[key].conditions.map((c: any) => {
-            return Function(c) as any;
-          });
+    let data: {
+      [key: string]: {
+        name: string;
+        hasX?: boolean;
+        hasY?: boolean;
+        hasZ?: boolean;
+        zTitle?: string;
+        downloads?: number;
+        available?: boolean | null;
+        conditions: { [key: string]: string }
+      }
+    } = await res.json();
+    let newNames: { [key: string]: Machine } = {};
+    for (const key in data) {
+      let machine: Machine = {
+        ...data[key],
+        zTitle: data[key].zTitle || names.value[key]?.zTitle,
+        conditions: {
+          x: [],
+          y: [],
+          z: [],
+          ...names.value[key]?.conditions
+        },
+      }
+      console.log('a')
+      for (const input in data[key].conditions) {
+        const conditions = data[key].conditions[input];
+        console.log(conditions)
+        for (const cond of conditions) {
+          machine.conditions[input].push(() => eval(cond));
         }
       }
+      console.log('b')
+      newNames[key] = machine;
     }
-    names.value = data;
+    console.log('c', newNames)
+    names.value = newNames;
     console.log(names.value)
   }
-});
+}).catch(e => console.log(e));
 
 function submit(e: SubmitEventPromise) {
   e.preventDefault();
@@ -115,7 +150,10 @@ function submit(e: SubmitEventPromise) {
       >
         <template #append-inner>
           <v-chip>
-            下载人数：{{ names[name]?.downloads?.toString() || '查询失败' }}
+            下载人数：{{ names[name]?.downloads }}
+            <template v-if="names[name]?.downloads === undefined">
+              查询失败
+            </template>
           </v-chip>
         </template>
       </v-select>
@@ -124,14 +162,14 @@ function submit(e: SubmitEventPromise) {
       <v-col>x宽度</v-col>
       <v-text-field
         v-model="xSize"
-        :rules="[(v) => v > 0 || '宽度必须是正数', ...names[name]?.conditions]"
+        :rules="[(v) => v > 0 || '宽度必须是正数', ...names[name]?.conditions?.x]"
       />
     </v-row>
     <v-row v-if="names[name]?.hasY">
       <v-col>y高度</v-col>
       <v-text-field
         v-model="ySize"
-        :rules="[(v) => v > 0 || '宽度必须是正数', ...names[name]?.conditions]"
+        :rules="[(v) => v > 0 || '宽度必须是正数', ...names[name]?.conditions?.y]"
       />
     </v-row>
     <v-row v-if="names[name]?.hasZ">
@@ -141,7 +179,7 @@ function submit(e: SubmitEventPromise) {
       </v-col>
       <v-text-field
         v-model="zSize"
-        :rules="[(v) => v > 0 || '宽度必须是正数', ...names[name]?.conditions]"
+        :rules="[(v) => v > 0 || '宽度必须是正数', ...names[name]?.conditions?.z]"
       />
     </v-row>
     <v-row v-if="!useAppStore().logined">
@@ -151,10 +189,10 @@ function submit(e: SubmitEventPromise) {
     <v-row>
       <v-spacer />
       <v-btn
+        :disabled="names[name].available === false"
         :loading="loading"
         color="primary"
         type="submit"
-        :disabled="names[name].available === false"
       >
         下载
       </v-btn>
