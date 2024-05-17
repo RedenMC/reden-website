@@ -162,14 +162,14 @@ function submit(e: SubmitEventPromise) {
       <v-col>x宽度</v-col>
       <v-text-field
         v-model="xSize"
-        :rules="[(v) => v > 0 || '宽度必须是正数', ...names[name]?.conditions?.x]"
+        :rules="[(v) => v > 0 || '宽度必须是正数', ...(names[name]?.conditions?.x)]"
       />
     </v-row>
     <v-row v-if="names[name]?.hasY">
       <v-col>y高度</v-col>
       <v-text-field
         v-model="ySize"
-        :rules="[(v) => v > 0 || '宽度必须是正数', ...names[name]?.conditions?.y]"
+        :rules="[(v) => v > 0 || '宽度必须是正数', ...(names[name]?.conditions?.y)]"
       />
     </v-row>
     <v-row v-if="names[name]?.hasZ">
@@ -179,7 +179,7 @@ function submit(e: SubmitEventPromise) {
       </v-col>
       <v-text-field
         v-model="zSize"
-        :rules="[(v) => v > 0 || '宽度必须是正数', ...names[name]?.conditions?.z]"
+        :rules="[(v) => v > 0 || '宽度必须是正数', ...(names[name]?.conditions?.z)]"
       />
     </v-row>
     <v-row v-if="!useAppStore().logined">
