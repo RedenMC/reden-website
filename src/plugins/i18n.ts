@@ -1,8 +1,8 @@
-import type {I18n} from 'vue-i18n';
-import {createI18n} from 'vue-i18n';
-import en from "@/plugins/i18n/en.json" ;
-import zh_CN from "@/plugins/i18n/zh_CN.json" ;
-import zh_TW from "@/plugins/i18n/zh_TW.json" ;
+import type { I18n } from 'vue-i18n';
+import { createI18n } from 'vue-i18n';
+import en from '@/plugins/i18n/en.json';
+import zh_CN from '@/plugins/i18n/zh_CN.json';
+import zh_TW from '@/plugins/i18n/zh_TW.json';
 
 const messages = {
   en,
