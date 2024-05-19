@@ -41,7 +41,7 @@ const names = ref<{ [key: string]: Machine }>({
     hasZ: true,
     zTitle: 'z宽度 （出发和返回站的距离）',
     conditions: {
-      x: [() => xSize.value % 6 == 0 || '宽度必须是6的倍数', min(30)],
+      x: [() => xSize.value % 6 == 0 || '宽度必须是6的倍数 , 建议数值'+(xSize.value-xSize.value%6)+'或者'+(xSize.value-xSize.value%6+6), min(30)],
     },
   },
   'yisibite-nether-eater': {
@@ -50,7 +50,7 @@ const names = ref<{ [key: string]: Machine }>({
     hasZ: true,
     zTitle: 'z宽度 （出发和返回站的距离）',
     conditions: {
-      x: [() => xSize.value % 6 == 0 || '宽度必须是6的倍数', min(30)],
+      x: [() => xSize.value % 6 == 0 || '宽度必须是6的倍数 , 建议数值'+(xSize.value-xSize.value%6)+'或者'+(xSize.value-xSize.value%6+6), min(30)],
     },
   },
   'yisibite-once-miner': {
@@ -58,7 +58,7 @@ const names = ref<{ [key: string]: Machine }>({
     hasX: true,
     hasZ: false,
     conditions: {
-      x: [() => xSize.value % 6 == 1 || '宽度必须是 6n+1', min(19)],
+      x: [() => xSize.value % 6 == 1 || '宽度必须是 6n+1 , 建议数值'+((Math.floor(xSize.value/6)+1)*6+1)+"或者"+((Math.floor(xSize.value/6)+1)*6+7), min(19)],
     },
   },
   'yisibite-3-miner': {
@@ -66,7 +66,7 @@ const names = ref<{ [key: string]: Machine }>({
     hasX: true,
     hasZ: false,
     conditions: {
-      x: [() => xSize.value % 7 == 1 || '宽度必须是 7n+1', min(22)],
+      x: [() => xSize.value % 7 == 1 || '宽度必须是 7n+1 , 建议数值'+((Math.floor(xSize.value/7)+1)*7+1)+"或者"+((Math.floor(xSize.value/7)+1)*7+8), min(22)],
     },
   },
   'yisibite-quarry-z': {
