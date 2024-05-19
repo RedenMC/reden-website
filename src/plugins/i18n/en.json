@@ -59,7 +59,8 @@
       }
     },
     "title": {
-      "home": "Home"
+      "home": "Home",
+      "my_account": "My Account"
     },
     "home": {
       "feature_intro": {

@@ -17,5 +17,5 @@ import 'vuetify/styles';
 import { i18n } from '@/plugins/i18n';
 
 export function registerPlugins(app: App) {
-  app.use(vuetify).use(router).use(pinia).use(i18n);
+  app.use(vuetify).use(i18n).use(router).use(pinia);
 }

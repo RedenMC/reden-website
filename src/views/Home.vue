@@ -10,7 +10,6 @@ import RedenRouter from '@/router/RedenRouter.vue';
 const { t } = useI18n();
 
 const introContent = ref<HTMLElement | null>(null);
-document.title = t('reden.title.home') + ' - Reden';
 </script>
 
 <template>

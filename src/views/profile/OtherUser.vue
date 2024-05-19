@@ -3,13 +3,18 @@ import { ref } from 'vue';
 import { fetchOtherUser, Profile } from '@/constants';
 import UserProfileCard from '@/components/UserProfileCard.vue';
 import { useRoute } from 'vue-router';
+import {useTitle} from "@vueuse/core";
 // to number
 const route = useRoute();
 const lookup = route.params.uid || route.params.username;
 const loading = ref(true);
 const user = ref<Profile>();
+const title = useTitle();
 if (lookup) {
-  fetchOtherUser(lookup.toString(), user).then(() => (loading.value = false));
+  fetchOtherUser(lookup.toString(), user).then(() => {
+    loading.value = false;
+    title.value = user.value?.username + ' - Reden';
+  });
 }
 </script>
 

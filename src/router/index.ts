@@ -1,5 +1,8 @@
 // Composables
 import { createRouter, createWebHistory } from 'vue-router';
+import {useTitle} from "@vueuse/core";
+
+const title = useTitle();
 
 const routes = [
   {
@@ -8,61 +11,63 @@ const routes = [
     children: [
       {
         path: '',
-        name: 'Home',
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        component: () =>
-          import(/* webpackChunkName: "home" */ '@/views/Home.vue'),
+        meta: { title: 'reden.title.home' },
+        component: () => import('@/views/Home.vue'),
       },
       {
         path: '/login',
-        name: 'Login',
+        meta: { title: 'login.title' },
         component: () => import('@/views/Login.vue'),
       },
       {
         path: '/register',
-        name: 'Register',
+        meta: { title: 'register.title' },
         component: () => import('@/views/Register.vue'),
       },
       {
         path: '/sponsors',
-        name: 'Sponsors',
+        meta: { title: 'sponsors.title' },
         component: () => import('@/views/Sponsors.vue'),
       },
       {
         path: '/home',
-        name: 'UserHome',
+        meta: { title: 'reden.title.my_account' },
         component: () => import('@/views/profile/UserHome.vue'),
       },
       {
         path: '/home/edit',
         name: 'EditProfile',
+        meta: { title: 'reden.title.edit_profile' },
         component: () => import('@/views/profile/EditProfile.vue'),
       },
       {
         path: '/download',
         name: 'Download',
+        meta: { title: 'download.title' },
         component: () => import('@/views/Download.vue'),
       },
       {
         path: '/feature',
         name: 'Feature',
+        meta: { title: 'reden.title.feature' },
         component: () => import('@/views/Feature.vue'),
       },
       {
         path: '/feature/undo',
         name: 'Undo',
+        meta: { title: 'reden.title.undo' },
         component: () => import('@/views/feature/Undo.vue'),
       },
       {
         path: '/feature/rvc',
         name: 'RVC',
+        meta: { title: 'reden.title.rvc' },
         component: () => import('@/views/feature/RVC.vue'),
       },
       {
         path: '/feature/debugger',
         name: 'Debugger',
+        meta: { title: 'reden.title.debugger' },
         component: () => import('@/views/feature/Debugger.vue'),
       },
       {
@@ -78,11 +83,13 @@ const routes = [
       {
         path: '/mc-services/download/yisibite',
         name: 'YisibiteDownload',
+        meta: { title: '投影在线生成在线下载' },
         component: () => import('@/views/yisibite/Download.vue'),
       },
       {
         path: '/admin/users',
         name: 'AdminUserList',
+        meta: { title: 'admin.title.users' },
         component: () => import('@/views/admin/UserList.vue'),
       },
     ],
