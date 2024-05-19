@@ -2,7 +2,7 @@
 import DefaultView from './View.vue';
 import RedenAppBar from '@/appbar/RedenAppBar.vue';
 import { VSonner } from 'vuetify-sonner';
-import { githubLink, theme } from '@/constants';
+import { discordInvite, githubLink, theme } from '@/constants';
 import { onMounted } from 'vue';
 import vuetify from '@/plugins/vuetify';
 import RedenRouter from '@/router/RedenRouter.vue';
@@ -30,24 +30,24 @@ onMounted(() => {
             </b>
           </div>
           <div class="footer-list-item">
-            <a href="/download">
+            <reden-router to="/download">
               {{ $t('reden.download') }}
-            </a>
+            </reden-router>
           </div>
           <div class="footer-list-item">
-            <a href="/feature/undo">
+            <reden-router to="/feature/undo">
               {{ $t('reden.footer.reden_mod.undo_redo') }}
-            </a>
+            </reden-router>
           </div>
           <div class="footer-list-item">
-            <a href="/feature/rvc">
+            <reden-router to="/feature/rvc">
               {{ $t('reden.footer.reden_mod.rvc') }}
-            </a>
+            </reden-router>
           </div>
           <div class="footer-list-item">
-            <a href="/feature/debugger">
+            <reden-router to="/feature/debugger">
               {{ $t('reden.footer.reden_mod.debugger') }}
-            </a>
+            </reden-router>
           </div>
         </v-col>
         <v-col>
@@ -57,22 +57,22 @@ onMounted(() => {
             </b>
           </div>
           <div class="footer-list-item">
-            <a :href="githubLink"> Reden on Github </a>
+            <reden-router :to="githubLink"> Reden on Github </reden-router>
           </div>
           <div class="footer-list-item">
-            <a href="//wiki.redenmc.com">
+            <reden-router to="https://wiki.redenmc.com">
               {{ $t('reden.footer.reden_ecosystem.wiki') }}
-            </a>
+            </reden-router>
           </div>
           <div class="footer-list-item">
-            <a href="/sponsors">
+            <reden-router to="/sponsors">
               {{ $t('reden.footer.reden_ecosystem.sponsors') }}
-            </a>
+            </reden-router>
           </div>
           <div class="footer-list-item">
-            <a href="//github.com/RedenMC">
+            <reden-router to="https://github.com/RedenMC">
               {{ $t('reden.footer.reden_ecosystem.github_organization') }}
-            </a>
+            </reden-router>
           </div>
         </v-col>
         <v-col>
@@ -82,19 +82,19 @@ onMounted(() => {
             </b>
           </div>
           <div class="footer-list-item">
-            <a href="/discord">
+            <reden-router :to="discordInvite">
               {{ $t('reden.footer.reden_community.discord') }}
-            </a>
+            </reden-router>
           </div>
           <div class="footer-list-item">
-            <a href="/community-guidelines">
+            <reden-router to="/community-guidelines">
               {{ $t('reden.footer.reden_community.community_guidelines') }}
-            </a>
+            </reden-router>
           </div>
           <div class="footer-list-item">
-            <a href="/community-events">
+            <reden-router to="/community-events">
               {{ $t('reden.footer.reden_community.community_events') }}
-            </a>
+            </reden-router>
           </div>
         </v-col>
         <v-col>
@@ -104,21 +104,24 @@ onMounted(() => {
             </b>
           </div>
           <div class="footer-list-item">
-            <a href="/blog">
+            <reden-router to="/blog">
               <v-icon icon="mdi-rss" />
               {{ $t('reden.footer.follow_us.blog') }}
-            </a>
+            </reden-router>
           </div>
           <div class="footer-list-item">
-            <a href="//youtube.com/@zly2006">
+            <reden-router to="https://youtube.com/@zly2006" external-icon>
               <v-icon icon="mdi-youtube" />
               {{ $t('reden.footer.follow_us.youtube') }}
-            </a>
+            </reden-router>
           </div>
           <div class="footer-list-item">
-            <a href="https://space.bilibili.com/1545239761">
+            <reden-router
+              to="https://space.bilibili.com/1545239761"
+              external-icon
+            >
               {{ $t('reden.footer.follow_us.bilibili') }}
-            </a>
+            </reden-router>
           </div>
         </v-col>
       </v-row>

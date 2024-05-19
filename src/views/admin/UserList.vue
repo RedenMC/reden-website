@@ -117,10 +117,10 @@ console.log('router page', router.currentRoute.value.query.page);
       <v-chip v-else color="success" text="Not Banned" />
     </template>
     <template #[`item.username`]="{ item }">
-      <a :href="`/user/${item.id}`" class="username">
+      <router-link :to="`/user/${item.id}`" class="username">
         <v-avatar :image="item.avatarUrl" />
         {{ item.username }}
-      </a>
+      </router-link>
     </template>
     <template #[`item.actions`]="{ item }">
       <AdminEditUserButton :item="item" />

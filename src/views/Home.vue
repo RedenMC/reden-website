@@ -49,7 +49,7 @@ const introContent = ref<HTMLElement | null>(null);
         </v-btn>
         <v-btn
           class="main-button"
-          href="//wiki.redenmc.com"
+          href="https://wiki.redenmc.com"
           prepend-icon="mdi-book-open"
           size="x-large"
           rounded="rounded"
@@ -121,15 +121,16 @@ const introContent = ref<HTMLElement | null>(null);
           </p>
         </template>
         <template #action>
-          <v-btn
-            href="/sponsors"
-            color="primary"
-            variant="outlined"
-            rounded="rounded"
-            class="main-button"
-          >
-            Sponsors
-          </v-btn>
+          <router-link to="/sponsors">
+            <v-btn
+              color="primary"
+              variant="outlined"
+              rounded="rounded"
+              class="main-button"
+            >
+              Sponsors
+            </v-btn>
+          </router-link>
         </template>
       </RedStoneSection>
       <RedStoneSection :size="3">

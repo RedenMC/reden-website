@@ -189,16 +189,17 @@ function register(e: SubmitEventPromise) {
 
         <v-row>
           <v-spacer />
-          <v-btn
-            class="text-none"
-            color="success"
-            href="/"
-            rounded
-            variant="flat"
-            width="90"
-          >
-            {{ $t('register.button.done') }}
-          </v-btn>
+          <router-link to="/">
+            <v-btn
+              class="text-none"
+              color="success"
+              rounded
+              variant="flat"
+              width="90"
+            >
+              {{ $t('register.button.done') }}
+            </v-btn>
+          </router-link>
         </v-row>
       </v-sheet>
     </div>

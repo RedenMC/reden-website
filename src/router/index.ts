@@ -1,6 +1,6 @@
 // Composables
 import { createRouter, createWebHistory } from 'vue-router';
-import {useTitle} from "@vueuse/core";
+import { useTitle } from '@vueuse/core';
 
 const title = useTitle();
 
