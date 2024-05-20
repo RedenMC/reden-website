@@ -60,8 +60,12 @@
     },
     "title": {
       "home": "首頁",
+      "download": "Download",
       "my_account": "My Account",
-      "edit_profile": "Edit Profile"
+      "edit_profile": "Edit Profile",
+      "undo": "Undo",
+      "rvc": "RVC",
+      "debugger": "Reden Debugger"
     },
     "home": {
       "feature_intro": {
