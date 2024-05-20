@@ -8,21 +8,21 @@
     "noDataText": "Нет доступных данных",
     "dataIterator": {
       "rowsPerPageText": "Результатов на странице: ",
-      "rowsPerPageAll": "All",
-      "pageText": "{0}-{1} of {2}",
-      "noResultsText": "No matching records found",
-      "nextPage": "Next page",
-      "prevPage": "Previous page",
-      "loadingText": "Loading items..."
+      "rowsPerPageAll": "Все",
+      "pageText": "{0}-{1} из {2}",
+      "noResultsText": "Нет совпадений",
+      "nextPage": "Следующая страница",
+      "prevPage": "Предыдущая страница",
+      "loadingText": "Загрузка элементов..."
     },
     "dataFooter": {
-      "itemsPerPageText": "Items per page: ",
-      "itemsPerPageAll": "All",
-      "prevPage": "Previous page",
-      "nextPage": "Next page",
-      "firstPage": "First page",
-      "lastPage": "Last page",
-      "pageText": "{0}-{1} items of {2}"
+      "itemsPerPageText": "Элементов на странице: ",
+      "itemsPerPageAll": "Все",
+      "prevPage": "Предыдущая страница",
+      "nextPage": "Следующая страница",
+      "firstPage": "Первая страница",
+      "lastPage": "Последняя страница",
+      "pageText": "{0}-{1} элементов из {2}"
     },
     "pagination": {
       "ariaLabel": {
