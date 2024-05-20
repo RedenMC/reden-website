@@ -192,7 +192,7 @@ function register(e: SubmitEventPromise) {
           <v-btn
             class="text-none"
             color="success"
-            href="/"
+            to="/"
             rounded
             variant="flat"
             width="90"

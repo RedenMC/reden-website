@@ -1,6 +1,6 @@
 // Composables
 import { createRouter, createWebHistory } from 'vue-router';
-import {useTitle} from "@vueuse/core";
+import { useTitle } from '@vueuse/core';
 
 const title = useTitle();
 
@@ -43,7 +43,7 @@ const routes = [
       {
         path: '/download',
         name: 'Download',
-        meta: { title: 'download.title' },
+        meta: { title: 'reden.title.download' },
         component: () => import('@/views/Download.vue'),
       },
       {
@@ -99,6 +99,10 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+  scrollBehavior(to, from, savedPosition) {
+    // always scroll to top
+    return { top: 0 };
+  },
 });
 
 export default router;

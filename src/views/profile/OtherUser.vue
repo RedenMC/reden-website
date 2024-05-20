@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import { fetchOtherUser, Profile } from '@/constants';
 import UserProfileCard from '@/components/UserProfileCard.vue';
 import { useRoute } from 'vue-router';
-import {useTitle} from "@vueuse/core";
+import { useTitle } from '@vueuse/core';
 // to number
 const route = useRoute();
 const lookup = route.params.uid || route.params.username;

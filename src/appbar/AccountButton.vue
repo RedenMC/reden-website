@@ -1,10 +1,10 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { useAppStore } from '@/store/app';
 </script>
 
 <template>
   <v-btn
-    :href="useAppStore().logined ? '/home' : '/login'"
+    :to="useAppStore().logined ? '/home' : '/login'"
     icon="mdi-account"
     title="Account"
   />

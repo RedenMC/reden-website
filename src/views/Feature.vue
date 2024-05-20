@@ -16,7 +16,7 @@ import RedstoneSectionTitle from '@/components/RedstoneSectionTitle.vue';
       </template>
       <template #action>
         <v-btn
-          href="/feature/undo"
+          to="/feature/undo"
           color="primary"
           rounded="rounded"
           variant="outlined"
@@ -35,7 +35,7 @@ import RedstoneSectionTitle from '@/components/RedstoneSectionTitle.vue';
       </template>
       <template #action>
         <v-btn
-          href="/feature/rvc"
+          to="/feature/rvc"
           color="primary"
           variant="outlined"
           rounded="rounded"
@@ -54,7 +54,7 @@ import RedstoneSectionTitle from '@/components/RedstoneSectionTitle.vue';
       </template>
       <template #action>
         <v-btn
-          href="/feature/debugger"
+          to="/feature/debugger"
           color="primary"
           variant="outlined"
           rounded="rounded"
