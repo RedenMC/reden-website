@@ -53,6 +53,7 @@ const lampOffStyle = 'url(' + LampOff + ')';
     ></div>
     <div class="title">{{ title }}</div>
   </div>
+  <slot name="default" :leverOn="leverOn" />
 </template>
 
 <style scoped>

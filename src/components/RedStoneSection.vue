@@ -6,6 +6,10 @@ import { onMounted, type Ref, ref } from 'vue';
 const { size, imageTransparentPercentage, video } = defineProps({
   size: Number,
   imageTransparentPercentage: Number,
+  leverOn: {
+    type: Boolean,
+    default: true
+  },
   video: String,
 });
 if (size === undefined || size < 1) {
@@ -19,7 +23,13 @@ onMounted(() => {
   let observer = new IntersectionObserver(
     (it) => {
       it.forEach((entry) => {
-        if (entry.target.getBoundingClientRect().top > 0) {
+        console.log(
+          "entry top: ", entry.target.getBoundingClientRect().top,
+          "entry bottom: ", entry.target.getBoundingClientRect().bottom,
+          "window innerHeight: ", window.innerHeight,
+          "element", entry.target
+        )
+        if (entry.target.getBoundingClientRect().top > 100 || entry.target.clientHeight > window.innerHeight) {
           // only operate when the element is at the bottom of the screen
           if (entry.intersectionRatio == 1) {
             if (entry.target.classList.contains('invisible')) {
@@ -99,7 +109,7 @@ const autoPlay = ref(true);
     </div>
 
     <div class="lightLine lineLayout invisible" ref="lightLine">
-      <div class="photo r15" v-for="n in sizz" :key="n"></div>
+      <div v-show="leverOn" class="photo r15" v-for="n in sizz" :key="n"></div>
     </div>
   </div>
 </template>
