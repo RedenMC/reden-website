@@ -90,6 +90,11 @@
     "wiki": "Wiki",
     "description": "为红石机器开发者提供一站式工作环境，成为最好的红石调试和教学工具。"
   },
+  "admin": {
+    "title": {
+      "users": "All Users"
+    }
+  },
   "user": {
     "developer": "开发者",
     "developer_hover": "此用户是本项目的活跃开发者",
