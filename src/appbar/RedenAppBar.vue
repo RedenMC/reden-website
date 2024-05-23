@@ -7,15 +7,10 @@ import { discordInvite, githubLink, theme } from '@/constants';
 import { useAppStore } from '@/store/app';
 import { useDisplay } from 'vuetify';
 import RedenRouter from '@/router/RedenRouter.vue';
-import { watch } from 'vue';
 
 const { mobile } = useDisplay({
   mobileBreakpoint: 500,
 });
-watch(mobile, (nv) => {
-  console.log(nv);
-});
-console.log(mobile.value);
 
 function toggleTheme() {
   theme.value = theme.value === 'light' ? 'dark' : 'light';

@@ -8,7 +8,7 @@ const { size, imageTransparentPercentage, video } = defineProps({
   imageTransparentPercentage: Number,
   leverOn: {
     type: Boolean,
-    default: true
+    default: true,
   },
   video: String,
 });
@@ -23,13 +23,23 @@ onMounted(() => {
   let observer = new IntersectionObserver(
     (it) => {
       it.forEach((entry) => {
-        console.log(
-          "entry top: ", entry.target.getBoundingClientRect().top,
-          "entry bottom: ", entry.target.getBoundingClientRect().bottom,
-          "window innerHeight: ", window.innerHeight,
-          "element", entry.target
-        )
-        if (entry.target.getBoundingClientRect().top > 100 || entry.target.clientHeight > window.innerHeight) {
+        // eslint-disable-next-line no-constant-condition
+        if (0) {
+          console.log(
+            'entry top: ',
+            entry.target.getBoundingClientRect().top,
+            'entry bottom: ',
+            entry.target.getBoundingClientRect().bottom,
+            'window innerHeight: ',
+            window.innerHeight,
+            'element',
+            entry.target,
+          );
+        }
+        if (
+          entry.target.getBoundingClientRect().top > 100 ||
+          entry.target.clientHeight > window.innerHeight
+        ) {
           // only operate when the element is at the bottom of the screen
           if (entry.intersectionRatio == 1) {
             if (entry.target.classList.contains('invisible')) {

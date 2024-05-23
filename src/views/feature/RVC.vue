@@ -1,5 +1,4 @@
-<script setup lang="ts">
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <v-row>
@@ -18,14 +17,12 @@
         <h3>Share with the World</h3>
 
         <p>
-          RVC helps you to share your creation to Github,
-          and collaborate with other players.
+          RVC helps you to share your creation to Github, and collaborate with
+          other players.
         </p>
       </v-col>
       <v-col class="section">
-        <h3>
-          Go ahead, make a change
-        </h3>
+        <h3>Go ahead, make a change</h3>
 
         <p>
           RVC can help you to track changes, and revert to any previous state.
@@ -33,23 +30,17 @@
         </p>
       </v-col>
       <v-col class="section">
-        <h3>
-          Sharing can be so easy
-        </h3>
+        <h3>Sharing can be so easy</h3>
 
-        <p>
-          Share your machine with a link to Github.
-        </p>
+        <p>Share your machine with a link to Github.</p>
       </v-col>
       <v-col class="section">
-        <h3>
-          Together with the community
-        </h3>
+        <h3>Together with the community</h3>
 
         <p>
-          RVC can help you to collaborate with other players.
-          Players can fork your machine, and make changes.
-          Then you can merge them back, thus, their improvements can be shared with the you back.
+          RVC can help you to collaborate with other players. Players can fork
+          your machine, and make changes. Then you can merge them back, thus,
+          their improvements can be shared with the you back.
         </p>
 
         <p>
@@ -60,13 +51,7 @@
     </v-row>
     <v-row class="text-center">
       <v-col>
-        <v-btn
-          to="/download"
-          color="primary"
-          rounded
-        >
-          Download Reden
-        </v-btn>
+        <v-btn to="/download" color="primary" rounded> Download Reden </v-btn>
       </v-col>
     </v-row>
   </div>

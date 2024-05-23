@@ -92,6 +92,11 @@ const routes = [
         meta: { title: 'admin.title.users' },
         component: () => import('@/views/admin/UserList.vue'),
       },
+      {
+        path: '/:any(.*)*',
+        meta: { title: '404 Not Found' },
+        component: () => import('@/views/NotFound.vue'),
+      },
     ],
   },
 ];
