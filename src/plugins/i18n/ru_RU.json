@@ -90,6 +90,11 @@
     "wiki": "Wiki",
     "description": "Provide a one-stop working environment for redstone developers and become the best redstone debugging and teaching tool."
   },
+  "admin": {
+    "title": {
+      "users": "All Users"
+    }
+  },
   "user": {
     "developer": "Developer",
     "developer_hover": "This user is an active developer of this project",
