@@ -90,6 +90,11 @@
     "wiki": "Wiki",
     "description": "為紅石機器開發者提供一站式工作環境，成為最好的紅石調試和教學工具。"
   },
+  "admin": {
+    "title": {
+      "users": "All Users"
+    }
+  },
   "user": {
     "developer": "開發者",
     "developer_hover": "此用戶是本項目的活躍開發者",
