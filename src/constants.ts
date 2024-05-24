@@ -1,6 +1,8 @@
 import { useAppStore } from '@/store/app';
 import { ref, Ref } from 'vue';
 import { toast } from 'vuetify-sonner';
+import {da} from "vuetify/locale";
+import {Exception} from "sass";
 
 export const reCAPTCHAKey = '6Lczc24pAAAAAAxzBZbRy8CZc_ba06Qn_3OJ_Vg-';
 export const cloudflareCAPTCHAKey = '0x4AAAAAAARtCTyyGc1nbVUm';
@@ -66,15 +68,36 @@ export function doFetchPost(url: string, data: any) {
   });
 }
 
+function getPayloadType(data: any): {
+  isJson: boolean,
+  fetchBody: any
+} {
+  if (data instanceof File) {
+    return {isJson: false, fetchBody: data}
+  }
+  if (data instanceof Object) {
+    return {isJson: true, fetchBody: JSON.stringify(data)}
+  }
+  if (data instanceof String) {
+    return {isJson: false, fetchBody: data}
+  }
+  throw new Error("Unknown type.")
+}
+
 export function doFetchPut(url: string, data: any) {
+  const {fetchBody, isJson} = getPayloadType(data)
+  console.log(fetchBody, isJson)
+  const headers: { [key: string]: string } = {
+    'X-CSRF-Token': useAppStore().csrfToken || '[Reden] no csrf token',
+  }
+  if (isJson) {
+    headers['Content-Type'] = 'application/json';
+  }
   return fetch(url, {
     method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-CSRF-Token': useAppStore().csrfToken || '[Reden] no csrf token',
-    },
     credentials: 'include',
-    body: JSON.stringify(data),
+    headers,
+    body: fetchBody
   });
 }
 

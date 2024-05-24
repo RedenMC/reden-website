@@ -61,6 +61,8 @@ doFetchGet('/api/account/activity').then((response) => {
   } else {
     if (response.status === 412) {
       needInstallWebhook.value = true;
+    } else if (response.status === 404) {
+      // nothing
     } else {
       toastError(response);
     }

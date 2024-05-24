@@ -4,7 +4,6 @@ import { doFetchDelete, doFetchPut, Profile, toastError } from '@/constants';
 import UserBadges from '@/components/UserBadges.vue';
 import VerifyMinecraft from '@/components/VerifyMinecraft.vue';
 import { toast } from 'vuetify-sonner';
-import { useAppStore } from '@/store/app';
 import { getTimezone } from 'countries-and-timezones';
 
 const props = withDefaults(
@@ -25,6 +24,7 @@ defineSlots<{
 
 const uploader = ref<HTMLInputElement>();
 const selectedFile = ref<File | null | undefined>();
+const avatarUploading = ref(false);
 
 function editAvatar() {
   uploader.value?.click();
@@ -44,6 +44,7 @@ function fileSelected() {
     );
     return;
   }
+  avatarUploading.value = true;
   doFetchPut('/api/account/avatar', file)
     .then((response) => {
       if (response.ok) {
@@ -60,7 +61,8 @@ function fileSelected() {
         return Promise.reject(response);
       }
     })
-    .catch((e) => toastError(e, 'Failed to update avatar'));
+    .catch((e) => toastError(e, 'Failed to update avatar'))
+    .finally(() => avatarUploading.value = false);
 }
 
 function deleteAvatar() {
@@ -100,6 +102,7 @@ function deleteAvatar() {
                   :color="isHovering ? 'primary' : undefined"
                   icon="mdi-pencil"
                   v-bind="props"
+                  :loading="avatarUploading"
                   @click="editAvatar"
                 />
               </template>
