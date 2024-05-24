@@ -99,14 +99,14 @@ function toggleTheme() {
     <template #append>
       <v-btn
         v-show="!mobile"
-        :to="githubLink"
+        :href="githubLink"
         icon="mdi-github"
         title="Github"
       />
 
       <v-btn
         v-show="!mobile"
-        :to="discordInvite"
+        :href="discordInvite"
         icon="custom:DiscordIcon"
         title="Discord"
       />
