@@ -33,7 +33,9 @@ export type Profile = {
   preference: Preference;
   mmRecord?: {
     city?: string;
+    city_zh?: string;
     country?: string;
+    country_zh?: string;
   };
   followers?: number;
   following?: number;

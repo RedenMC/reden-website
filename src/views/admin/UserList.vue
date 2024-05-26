@@ -106,11 +106,11 @@ console.log('router page', router.currentRoute.value.query.page);
       </v-tooltip>
     </template>
     <template #[`item.lastLoginIp`]="{ item, value }">
-      <span>
+      <span title="">
         {{ value }}
         <v-tooltip
           location="bottom"
-          :text="`${item.mmRecord?.city}, ${item.mmRecord?.country}`"
+          :text="`${item.mmRecord?.city_zh ?? item.mmRecord?.city}, ${item.mmRecord?.country_zh ?? item.mmRecord?.country}`"
           activator="parent"
         />
       </span>
