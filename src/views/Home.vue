@@ -67,13 +67,15 @@ const introContent = ref<HTMLElement | null>(null);
       <v-row>
         <v-col>
           <v-card color="light-blue">
-            <v-card-title>投影在线生成</v-card-title>
+            <v-card-title>
+              {{ $t('litematica_generator.title') }}
+            </v-card-title>
             <v-card-text>
-              一键生成世吞、地吞、盾构各种机器的投影！
+              {{ $t('litematica_generator.description') }}
             </v-card-text>
             <v-card-actions>
               <reden-router to="/mc-services/download/yisibite">
-                <v-btn color="White">点击前往</v-btn>
+                <v-btn color="White">Go</v-btn>
               </reden-router>
             </v-card-actions>
           </v-card>

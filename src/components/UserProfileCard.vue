@@ -62,7 +62,7 @@ function fileSelected() {
       }
     })
     .catch((e) => toastError(e, 'Failed to update avatar'))
-    .finally(() => avatarUploading.value = false);
+    .finally(() => (avatarUploading.value = false));
 }
 
 function deleteAvatar() {

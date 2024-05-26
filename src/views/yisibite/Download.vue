@@ -4,107 +4,90 @@ import { useAppStore } from '@/store/app';
 import { SubmitEventPromise } from 'vuetify';
 import RedenRouter from '@/router/RedenRouter.vue';
 import { doFetchGet } from '@/constants';
-import {useI18n} from "vue-i18n";
+import { useI18n } from 'vue-i18n';
 
 const xSize = ref(0);
 const ySize = ref(0);
 const zSize = ref(0);
 const loading = ref(false);
 const name = ref('yisibite-world-eater');
-const xSizeRef = ref();
-const ySizeRef = ref();
-const zSizeRef = ref();
-const {t} = useI18n();
+const { t } = useI18n();
 
 type Machine = {
   name: string;
-  hasX?: boolean;
-  hasY?: boolean;
-  hasZ?: boolean;
   downloads?: number;
   available?: boolean | null;
   conditions: { [key: string]: ((v: number) => any)[] };
 };
 
-function min(size: number) {
-  return (v: number) => v >= size || t("litematica_generator.size_min", {size});
-}
-function max(size: number) {
-  return (v: number) => v <= size || t("litematica_generator.size_max", {size});
-}
-function mod(mod: number, rem: number) {
-  return (v: number) => v % mod === rem || t("litematica_generator.size_mod", {mod, rem});
-}
+const min = (size: number) => (v: number) =>
+  v >= size || t('litematica_generator.size_min', { size });
+const max = (size: number) => (v: number) =>
+  v <= size || t('litematica_generator.size_max', { size });
+const mod = (mod: number, rem: number) => (v: number) =>
+  v % mod === rem || t('litematica_generator.size_mod', { mod, rem });
 
 const names = ref<{ [key: string]: Machine }>({
   'yisibite-world-eater': {
     name: '无沟世吞 / Trenchless World Eater v3.1 by 火弦月',
-    hasX: true,
-    hasZ: true,
     conditions: {
       x: [mod(6, 0), min(30), max(1000)],
+      z: [min(130), max(1000)],
     },
   },
   'yisibite-nether-eater': {
     name: '16高无沟地吞 / Trenchless Nether world eater (16 high) v1.2 by 火弦月',
-    hasX: true,
-    hasZ: true,
     conditions: {
       x: [mod(6, 0), min(30), max(1000)],
+      z: [min(130), max(1000)],
     },
   },
   'yisibite-once-miner': {
     name: '5x3 单发盾构 / tunnelbores by 火弦月',
-    hasX: true,
-    hasZ: false,
     conditions: {
       x: [mod(6, 1), min(19), max(1000)],
     },
   },
   'yisibite-3-miner': {
     name: '5x3 三连发盾构 / triple shot tunnelbore by 火弦月',
-    hasX: true,
-    hasZ: false,
     conditions: {
       x: [mod(7, 1), min(22), max(1000)],
     },
   },
   'yisibite-quarry-z': {
     name: '采矿机-东西方向 / Quarry east-west direction by 火弦月',
-    hasY: true,
-    hasZ: true,
     conditions: {
       y: [mod(2, 1), min(129), max(320)],
-      z: [mod(42, 6), min(174), max(1000)]
+      z: [mod(42, 6), min(174), max(1000)],
     },
   },
   'yisibite-quarry-x': {
-    name: '采矿机-南北方向 Quarry north-south direction by 火弦月',
-    hasX: true,
-    hasY: true,
+    name: '采矿机-南北方向 / Quarry north-south direction by 火弦月',
     conditions: {
       y: [mod(2, 1), min(129), max(320)],
-      x: [mod(42, 6), min(174), max(1000)]
+      x: [mod(42, 6), min(174), max(1000)],
     },
   },
 });
 
-doFetchGet('/api/mc-services/yisibite/')
-  .then(async (res) => {
-    if (res.ok) {
-      let data: {
-        [key: string]: {
-          downloads?: number;
-        };
-      } = await res.json();
-      for (let key in names.value) {
-        if (key in data) {
-          names.value[key].downloads = data[key].downloads;
+const updateDownloads = () =>
+  doFetchGet('/api/mc-services/yisibite/')
+    .then(async (res) => {
+      if (res.ok) {
+        let data: {
+          [key: string]: {
+            downloads?: number;
+          };
+        } = await res.json();
+        for (let key in names.value) {
+          if (key in data) {
+            names.value[key].downloads = data[key].downloads;
+          }
         }
       }
-    }
-  })
-  .catch((e) => console.log(e));
+    })
+    .catch((e) => console.log(e));
+updateDownloads();
 
 function submit(e: SubmitEventPromise) {
   e.preventDefault();
@@ -114,6 +97,9 @@ function submit(e: SubmitEventPromise) {
       window.open(
         `/api/mc-services/yisibite/${name.value}?xSize=${xSize.value}&ySize=${ySize.value}&zSize=${zSize.value}`,
       );
+      setTimeout(() => {
+        updateDownloads();
+      }, 1000);
     }
   });
 }
@@ -121,17 +107,19 @@ function submit(e: SubmitEventPromise) {
 
 <template>
   <v-form class="content-common" @submit="submit" fast-fail>
-    <v-col>
-      <h1>
-        {{$t("litematica_generator.title")}}
-      </h1>
-      <p>
-        {{$t("litematica_generator.description")}}
-      </p>
-    </v-col>
+    <v-row>
+      <v-col>
+        <h1>
+          {{ $t('litematica_generator.title') }}
+        </h1>
+        <p>
+          {{ $t('litematica_generator.description') }}
+        </p>
+      </v-col>
+    </v-row>
     <v-row>
       <v-col style="min-width: 130px">
-        {{$t("litematica_generator.select")}}
+        {{ $t('litematica_generator.select') }}
       </v-col>
       <v-select
         v-model="name"
@@ -140,12 +128,16 @@ function submit(e: SubmitEventPromise) {
         :items="Object.keys(names)"
         autofocus
       >
+        <template #selection="{ item }">
+          {{ item.title }}
+        </template>
         <template #append-inner>
           <v-chip>
-            {{ $t("litematica_generator.download_count", {count: names[name]?.downloads}) }}
-            <template v-if="names[name]?.downloads === undefined">
-              查询失败
-            </template>
+            {{
+              $t('litematica_generator.download_count', {
+                count: names[name]?.downloads ?? '查询失败',
+              })
+            }}
           </v-chip>
         </template>
       </v-select>
@@ -153,50 +145,44 @@ function submit(e: SubmitEventPromise) {
     <v-row>
       <v-col>
         <p>
-          {{$t("litematica_generator.size_description")}}
+          {{ $t('litematica_generator.size_description') }}
         </p>
       </v-col>
     </v-row>
-    <v-row v-if="names[name]?.hasX">
+    <v-row v-if="names[name]?.conditions?.x">
       <v-col>
-        {{$t("litematica_generator.size_x")}}
+        {{ $t('litematica_generator.size_x') }}
       </v-col>
       <v-text-field
         v-model="xSize"
-        :rules="[
-          ...(names[name]?.conditions?.x || []),
-        ]"
+        :rules="[...(names[name]?.conditions?.x || [])]"
       />
     </v-row>
-    <v-row v-if="names[name]?.hasY">
+    <v-row v-if="names[name]?.conditions?.y">
       <v-col>
-        {{$t("litematica_generator.size_y")}}
+        {{ $t('litematica_generator.size_y') }}
       </v-col>
       <v-text-field
         v-model="ySize"
-        :rules="[
-          ...(names[name]?.conditions?.y || []),
-        ]"
+        :rules="[...(names[name]?.conditions?.y || [])]"
       />
     </v-row>
-    <v-row v-if="names[name]?.hasZ">
+    <v-row v-if="names[name]?.conditions?.z">
       <v-col>
-        {{$t("litematica_generator.size_z")}}
+        {{ $t('litematica_generator.size_z') }}
       </v-col>
       <v-text-field
         v-model="zSize"
-        :rules="[
-          ...(names[name]?.conditions?.z || []),
-        ]"
+        :rules="[...(names[name]?.conditions?.z || [])]"
       />
     </v-row>
     <v-row v-if="!useAppStore().logined">
       <reden-router to="/login">
-        {{$t("litematica_generator.not_logged_in")}}
+        {{ $t('litematica_generator.not_logged_in') }}
       </reden-router>
     </v-row>
     <v-row>
-      {{$t("litematica_generator.contribute")}}
+      {{ $t('litematica_generator.contribute') }}
     </v-row>
     <v-row>
       <v-spacer />
@@ -206,17 +192,13 @@ function submit(e: SubmitEventPromise) {
         color="primary"
         type="submit"
       >
-        {{$t("litematica_generator.download")}}
+        {{ $t('litematica_generator.download') }}
       </v-btn>
     </v-row>
   </v-form>
 </template>
 
 <style scoped>
-.v-select__content-item {
-  word-wrap: break-word;
-}
-
 p {
   font-size: 1em;
 }
