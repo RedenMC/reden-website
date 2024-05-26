@@ -167,5 +167,21 @@
   },
   "search": {
     "hover": "搜索 Reden 功能"
+  },
+  "litematica_generator": {
+    "title": "投影在线生成器",
+    "select": "今天你想生成什么？",
+    "description": "在这里在线生成投影文件，例如世界吞噬者",
+    "not_logged_in": "游客用户每分钟只能生成 5 次，登录后解锁此限制",
+    "download": "下载",
+    "download_count": "{count} 次下载",
+    "contribute": "想要你的机器（例如世界吞噬者）被收录在这里？现在就为 Reden 做出贡献！发送邮件至 me@redenmc.com 联系我",
+    "size_min": "机器的最小尺寸为 {size}",
+    "size_max": "机器的最大尺寸为 {size}",
+    "size_mod": "尺寸除以 {mod} 的余数必须为 {rem}",
+    "size_x": "x 方向尺寸",
+    "size_y": "y 方向尺寸",
+    "size_z": "z 方向尺寸",
+    "size_description": "机器的 x, y, z 尺寸。对于世界吞噬者，z 尺寸是出发站和返回站之间的距离。"
   }
 }
