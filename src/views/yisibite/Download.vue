@@ -4,6 +4,7 @@ import { useAppStore } from '@/store/app';
 import { SubmitEventPromise } from 'vuetify';
 import RedenRouter from '@/router/RedenRouter.vue';
 import { doFetchGet } from '@/constants';
+import {useI18n} from "vue-i18n";
 
 const xSize = ref(0);
 const ySize = ref(0);
@@ -13,75 +14,78 @@ const name = ref('yisibite-world-eater');
 const xSizeRef = ref();
 const ySizeRef = ref();
 const zSizeRef = ref();
-const inputRefs = {
-  x: xSizeRef,
-  y: ySizeRef,
-  z: zSizeRef,
-};
+const {t} = useI18n();
 
 type Machine = {
   name: string;
   hasX?: boolean;
   hasY?: boolean;
   hasZ?: boolean;
-  zTitle?: string;
   downloads?: number;
   available?: boolean | null;
-  conditions: { [key: string]: (() => any)[] };
+  conditions: { [key: string]: ((v: number) => any)[] };
 };
 
-function min(a: number) {
-  return () => xSize.value >= a || `宽度最小${a}`;
+function min(size: number) {
+  return (v: number) => v >= size || t("litematica_generator.size_min", {size});
+}
+function max(size: number) {
+  return (v: number) => v <= size || t("litematica_generator.size_max", {size});
+}
+function mod(mod: number, rem: number) {
+  return (v: number) => v % mod === rem || t("litematica_generator.size_mod", {mod, rem});
 }
 
 const names = ref<{ [key: string]: Machine }>({
   'yisibite-world-eater': {
-    name: '无沟世吞 v3.1 - 火弦月',
+    name: '无沟世吞 / Trenchless World Eater v3.1 by 火弦月',
     hasX: true,
     hasZ: true,
-    zTitle: 'z宽度 （出发和返回站的距离）',
     conditions: {
-      x: [() => xSize.value % 6 == 0 || '宽度必须是6的倍数', min(30)],
+      x: [mod(6, 0), min(30), max(1000)],
     },
   },
   'yisibite-nether-eater': {
-    name: '16高无沟地吞V1.2 - 火弦月',
+    name: '16高无沟地吞 / Trenchless Nether world eater (16 high) v1.2 by 火弦月',
     hasX: true,
     hasZ: true,
-    zTitle: 'z宽度 （出发和返回站的距离）',
     conditions: {
-      x: [() => xSize.value % 6 == 0 || '宽度必须是6的倍数', min(30)],
+      x: [mod(6, 0), min(30), max(1000)],
     },
   },
   'yisibite-once-miner': {
-    name: '5x3单发盾构 - 火弦月',
+    name: '5x3 单发盾构 / tunnelbores by 火弦月',
     hasX: true,
     hasZ: false,
     conditions: {
-      x: [() => xSize.value % 6 == 1 || '宽度必须是 6n+1', min(19)],
+      x: [mod(6, 1), min(19), max(1000)],
     },
   },
   'yisibite-3-miner': {
-    name: '5x3三连发盾构 - 火弦月',
+    name: '5x3 三连发盾构 / triple shot tunnelbore by 火弦月',
     hasX: true,
     hasZ: false,
     conditions: {
-      x: [() => xSize.value % 7 == 1 || '宽度必须是 7n+1', min(22)],
+      x: [mod(7, 1), min(22), max(1000)],
     },
   },
   'yisibite-quarry-z': {
-    name: '采矿机-东西方向 - 火弦月',
-    hasX: true,
+    name: '采矿机-东西方向 / Quarry east-west direction by 火弦月',
     hasY: true,
     hasZ: true,
-    conditions: {},
+    conditions: {
+      y: [mod(2, 1), min(129), max(320)],
+      z: [mod(42, 6), min(174), max(1000)]
+    },
   },
   'yisibite-quarry-x': {
-    name: '采矿机-南北方向 - 火弦月',
+    name: '采矿机-南北方向 Quarry north-south direction by 火弦月',
     hasX: true,
     hasY: true,
-    hasZ: true,
-    conditions: {},
+    conditions: {
+      y: [mod(2, 1), min(129), max(320)],
+      x: [mod(42, 6), min(174), max(1000)]
+    },
   },
 });
 
@@ -90,42 +94,14 @@ doFetchGet('/api/mc-services/yisibite/')
     if (res.ok) {
       let data: {
         [key: string]: {
-          name: string;
-          hasX?: boolean;
-          hasY?: boolean;
-          hasZ?: boolean;
-          zTitle?: string;
           downloads?: number;
-          available?: boolean | null;
-          conditions: { [key: string]: string };
         };
       } = await res.json();
-      let newNames: { [key: string]: Machine } = {};
-      for (const key in data) {
-        let machine: Machine = {
-          ...data[key],
-          zTitle: data[key].zTitle || names.value[key]?.zTitle,
-          conditions: {
-            x: [],
-            y: [],
-            z: [],
-            ...names.value[key]?.conditions,
-          },
-        };
-        console.log('a');
-        for (const input in data[key].conditions) {
-          const conditions = data[key].conditions[input];
-          console.log(conditions);
-          for (const cond of conditions) {
-            machine.conditions[input].push(() => eval(cond));
-          }
+      for (let key in names.value) {
+        if (key in data) {
+          names.value[key].downloads = data[key].downloads;
         }
-        console.log('b');
-        newNames[key] = machine;
       }
-      console.log('c', newNames);
-      names.value = newNames;
-      console.log(names.value);
     }
   })
   .catch((e) => console.log(e));
@@ -145,9 +121,18 @@ function submit(e: SubmitEventPromise) {
 
 <template>
   <v-form class="content-common" @submit="submit" fast-fail>
-    <h1>投影在线生成</h1>
+    <v-col>
+      <h1>
+        {{$t("litematica_generator.title")}}
+      </h1>
+      <p>
+        {{$t("litematica_generator.description")}}
+      </p>
+    </v-col>
     <v-row>
-      <v-col style="min-width: 130px">请选择下载的机器</v-col>
+      <v-col style="min-width: 130px">
+        {{$t("litematica_generator.select")}}
+      </v-col>
       <v-select
         v-model="name"
         :item-title="(item) => names[item]?.name"
@@ -157,7 +142,7 @@ function submit(e: SubmitEventPromise) {
       >
         <template #append-inner>
           <v-chip>
-            下载人数：{{ names[name]?.downloads }}
+            {{ $t("litematica_generator.download_count", {count: names[name]?.downloads}) }}
             <template v-if="names[name]?.downloads === undefined">
               查询失败
             </template>
@@ -165,42 +150,53 @@ function submit(e: SubmitEventPromise) {
         </template>
       </v-select>
     </v-row>
+    <v-row>
+      <v-col>
+        <p>
+          {{$t("litematica_generator.size_description")}}
+        </p>
+      </v-col>
+    </v-row>
     <v-row v-if="names[name]?.hasX">
-      <v-col>x宽度</v-col>
+      <v-col>
+        {{$t("litematica_generator.size_x")}}
+      </v-col>
       <v-text-field
         v-model="xSize"
         :rules="[
-          (v) => v > 0 || '宽度必须是正数',
           ...(names[name]?.conditions?.x || []),
         ]"
       />
     </v-row>
     <v-row v-if="names[name]?.hasY">
-      <v-col>y高度</v-col>
+      <v-col>
+        {{$t("litematica_generator.size_y")}}
+      </v-col>
       <v-text-field
         v-model="ySize"
         :rules="[
-          (v) => v > 0 || '宽度必须是正数',
           ...(names[name]?.conditions?.y || []),
         ]"
       />
     </v-row>
     <v-row v-if="names[name]?.hasZ">
       <v-col>
-        <template v-if="names[name].zTitle"> {{ names[name].zTitle }}</template>
-        <template v-else>z宽度</template>
+        {{$t("litematica_generator.size_z")}}
       </v-col>
       <v-text-field
         v-model="zSize"
         :rules="[
-          (v) => v > 0 || '宽度必须是正数',
           ...(names[name]?.conditions?.z || []),
         ]"
       />
     </v-row>
     <v-row v-if="!useAppStore().logined">
-      未登录用户每分钟最多生成5次投影以防范ddos，如果被限制请
-      <reden-router to="/login">登录</reden-router>
+      <reden-router to="/login">
+        {{$t("litematica_generator.not_logged_in")}}
+      </reden-router>
+    </v-row>
+    <v-row>
+      {{$t("litematica_generator.contribute")}}
     </v-row>
     <v-row>
       <v-spacer />
@@ -210,7 +206,7 @@ function submit(e: SubmitEventPromise) {
         color="primary"
         type="submit"
       >
-        下载
+        {{$t("litematica_generator.download")}}
       </v-btn>
     </v-row>
   </v-form>
@@ -219,5 +215,9 @@ function submit(e: SubmitEventPromise) {
 <style scoped>
 .v-select__content-item {
   word-wrap: break-word;
+}
+
+p {
+  font-size: 1em;
 }
 </style>

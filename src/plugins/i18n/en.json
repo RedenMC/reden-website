@@ -167,5 +167,21 @@
   },
   "search": {
     "hover": "Search Reden Features"
+  },
+  "litematica_generator": {
+    "title": "Litematica Online Generator",
+    "select": "What do you want to generate today?",
+    "description": "Generate Litematica files online from Reden projects, e.g. World Eaters",
+    "not_logged_in": "Guest users can only generate 5 times per minute, please log in to unlock this limit",
+    "download": "Download",
+    "download_count": "{count} downloads",
+    "contribute": "Want your own machines such as world eaters to be collected here? Contribute to Reden now! Email me at me@redenmc.com for more information.",
+    "size_min": "The minimum size of the machine is {size}",
+    "size_max": "The maximum size of the machine is {size}",
+    "size_mod": "The size divided by {mod} must leave {rem}",
+    "size_x": "Size in x",
+    "size_y": "Size in y",
+    "size_z": "Size in z",
+    "size_description": "The size of the machine in x, y, z. for world eaters, the z size is the distance between the starting side and the returning side."
   }
 }
