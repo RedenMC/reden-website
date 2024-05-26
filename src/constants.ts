@@ -31,6 +31,10 @@ export type Profile = {
   canChangeNameUntil?: number;
   bannedReason?: string;
   preference: Preference;
+  mmRecord?: {
+    city?: string;
+    country?: string;
+  };
   followers?: number;
   following?: number;
   followingProjects?: number;
