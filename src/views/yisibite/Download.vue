@@ -5,12 +5,15 @@ import { SubmitEventPromise } from 'vuetify';
 import RedenRouter from '@/router/RedenRouter.vue';
 import { doFetchGet } from '@/constants';
 import { useI18n } from 'vue-i18n';
+import { useRoute, useRouter } from 'vue-router';
 
+const route = useRoute();
+const router = useRouter();
 const xSize = ref(0);
 const ySize = ref(0);
 const zSize = ref(0);
 const loading = ref(false);
-const name = ref('yisibite-world-eater');
+const name = ref(route.query.m?.toString() || 'yisibite-world-eater');
 const { t } = useI18n();
 
 type Machine = {
@@ -54,18 +57,18 @@ const names = ref<{ [key: string]: Machine }>({
       x: [mod(7, 1), min(22), max(1000)],
     },
   },
-  'yisibite-quarry-z': {
-    name: '采矿机-东西方向 / Quarry east-west direction by 火弦月',
-    conditions: {
-      y: [mod(2, 1), min(129), max(320)],
-      z: [mod(42, 6), min(174), max(1000)],
-    },
-  },
   'yisibite-quarry-x': {
     name: '采矿机-南北方向 / Quarry north-south direction by 火弦月',
     conditions: {
       y: [mod(2, 1), min(129), max(320)],
       x: [mod(42, 6), min(174), max(1000)],
+    },
+  },
+  'yisibite-quarry-z': {
+    name: '采矿机-东西方向 / Quarry east-west direction by 火弦月',
+    conditions: {
+      y: [mod(2, 1), min(129), max(320)],
+      z: [mod(42, 6), min(174), max(1000)],
     },
   },
 });
@@ -118,7 +121,7 @@ function submit(e: SubmitEventPromise) {
       </v-col>
     </v-row>
     <v-row>
-      <v-col style="min-width: 130px">
+      <v-col style="min-width: 200px">
         {{ $t('litematica_generator.select') }}
       </v-col>
       <v-select
@@ -127,6 +130,7 @@ function submit(e: SubmitEventPromise) {
         :item-value="(item) => item"
         :items="Object.keys(names)"
         autofocus
+        @update:model-value="router.replace({ query: { m: name } })"
       >
         <template #selection="{ item }">
           {{ item.title }}
@@ -141,13 +145,13 @@ function submit(e: SubmitEventPromise) {
           </v-chip>
         </template>
       </v-select>
-    </v-row>
-    <v-row>
-      <v-col>
-        <p>
-          {{ $t('litematica_generator.size_description') }}
-        </p>
-      </v-col>
+      <v-row>
+        <v-col>
+          <p>
+            {{ $t('litematica_generator.size_description') }}
+          </p>
+        </v-col>
+      </v-row>
     </v-row>
     <v-row v-if="names[name]?.conditions?.x">
       <v-col>
