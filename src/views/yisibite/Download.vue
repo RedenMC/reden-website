@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {ref, watch} from 'vue';
+import { ref, watch } from 'vue';
 import { useAppStore } from '@/store/app';
 import { SubmitEventPromise } from 'vuetify';
 import RedenRouter from '@/router/RedenRouter.vue';
@@ -24,7 +24,7 @@ type MachineDef = {
   hasX?: boolean;
   hasY?: boolean;
   hasZ?: boolean;
-}
+};
 
 type Machine = MachineDef & {
   conditions: { [key: string]: ((v: number) => any)[] };
@@ -43,33 +43,27 @@ const mod = (mod: number, rem: number) => (v: number) =>
 const names = ref<{ [key: string]: Machine }>({
   'yisibite-world-eater': {
     name: '无沟世吞 / Trenchless World Eater v3.1 by 火弦月',
-    conditions: {
-    },
+    conditions: {},
   },
   'yisibite-nether-eater': {
     name: '16高无沟地吞 / Trenchless Nether world eater (16 high) v1.2 by 火弦月',
-    conditions: {
-    },
+    conditions: {},
   },
   'yisibite-once-miner': {
     name: '5x3 单发盾构 / tunnelbores by 火弦月',
-    conditions: {
-    },
+    conditions: {},
   },
   'yisibite-3-miner': {
     name: '5x3 三连发盾构 / triple shot tunnelbore by 火弦月',
-    conditions: {
-    },
+    conditions: {},
   },
   'yisibite-quarry-x': {
     name: '采矿机-南北方向 / Quarry north-south direction by 火弦月',
-    conditions: {
-    },
+    conditions: {},
   },
   'yisibite-quarry-z': {
     name: '采矿机-东西方向 / Quarry east-west direction by 火弦月',
-    conditions: {
-    },
+    conditions: {},
   },
 });
 
@@ -79,23 +73,23 @@ const updateDownloads = () =>
       if (res.ok) {
         let data: {
           [key: string]: MachineDef & {
-            conditions: {
-              x: string[]
-              y: string[]
-              z: string[]
-            }
+            conditions?: {
+              x: string[];
+              y: string[];
+              z: string[];
+            };
           };
         } = await res.json();
-        let machines: { [key: string]: Machine } = {}
+        let machines: { [key: string]: Machine } = {};
         for (let key in data) {
           machines[key] = {
             ...data[key],
             conditions: {
-              x: data[key].conditions.x.map(s => eval(s)),
-              y: data[key].conditions.y.map(s => eval(s)),
-              z: data[key].conditions.z.map(s => eval(s))
-            }
-          }
+              x: data[key].conditions?.x?.map((s) => eval(s)) ?? [],
+              y: data[key].conditions?.y?.map((s) => eval(s)) ?? [],
+              z: data[key].conditions?.z?.map((s) => eval(s)) ?? [],
+            },
+          };
         }
         names.value = machines;
       }
@@ -119,7 +113,7 @@ function submit(e: SubmitEventPromise) {
 }
 
 watch(name, () => {
-  console.log(names.value[name.value])
+  console.log(names.value[name.value]);
 });
 </script>
 
