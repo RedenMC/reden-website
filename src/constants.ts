@@ -78,7 +78,7 @@ function getPayloadType(data: any): {
   isJson: boolean;
   fetchBody: any;
 } {
-  if (data instanceof File) {
+  if (data instanceof File || data instanceof FormData) {
     return { isJson: false, fetchBody: data };
   }
   if (data instanceof Object) {

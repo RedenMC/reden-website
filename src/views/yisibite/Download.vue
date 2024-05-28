@@ -1,11 +1,12 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import {ref, watch} from 'vue';
 import { useAppStore } from '@/store/app';
 import { SubmitEventPromise } from 'vuetify';
 import RedenRouter from '@/router/RedenRouter.vue';
 import { doFetchGet } from '@/constants';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
+import LitematicaUpload from '@/views/yisibite/LitematicaUpload.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -13,20 +14,29 @@ const xSize = ref(0);
 const ySize = ref(0);
 const zSize = ref(0);
 const loading = ref(false);
-const name = ref(route.query.m?.toString() || 'yisibite-world-eater');
+const name = ref(route.query.m?.toString() || '');
 const { t } = useI18n();
 
-type Machine = {
+type MachineDef = {
   name: string;
   downloads?: number;
   available?: boolean | null;
+  hasX?: boolean;
+  hasY?: boolean;
+  hasZ?: boolean;
+}
+
+type Machine = MachineDef & {
   conditions: { [key: string]: ((v: number) => any)[] };
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const min = (size: number) => (v: number) =>
   v >= size || t('litematica_generator.size_min', { size });
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const max = (size: number) => (v: number) =>
   v <= size || t('litematica_generator.size_max', { size });
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const mod = (mod: number, rem: number) => (v: number) =>
   v % mod === rem || t('litematica_generator.size_mod', { mod, rem });
 
@@ -34,41 +44,31 @@ const names = ref<{ [key: string]: Machine }>({
   'yisibite-world-eater': {
     name: '无沟世吞 / Trenchless World Eater v3.1 by 火弦月',
     conditions: {
-      x: [mod(6, 0), min(30), max(1000)],
-      z: [min(130), max(1000)],
     },
   },
   'yisibite-nether-eater': {
     name: '16高无沟地吞 / Trenchless Nether world eater (16 high) v1.2 by 火弦月',
     conditions: {
-      x: [mod(6, 0), min(30), max(1000)],
-      z: [min(130), max(1000)],
     },
   },
   'yisibite-once-miner': {
     name: '5x3 单发盾构 / tunnelbores by 火弦月',
     conditions: {
-      x: [mod(6, 1), min(19), max(1000)],
     },
   },
   'yisibite-3-miner': {
     name: '5x3 三连发盾构 / triple shot tunnelbore by 火弦月',
     conditions: {
-      x: [mod(7, 1), min(22), max(1000)],
     },
   },
   'yisibite-quarry-x': {
     name: '采矿机-南北方向 / Quarry north-south direction by 火弦月',
     conditions: {
-      y: [mod(2, 1), min(129), max(320)],
-      x: [mod(42, 6), min(174), max(1000)],
     },
   },
   'yisibite-quarry-z': {
     name: '采矿机-东西方向 / Quarry east-west direction by 火弦月',
     conditions: {
-      y: [mod(2, 1), min(129), max(320)],
-      z: [mod(42, 6), min(174), max(1000)],
     },
   },
 });
@@ -78,15 +78,26 @@ const updateDownloads = () =>
     .then(async (res) => {
       if (res.ok) {
         let data: {
-          [key: string]: {
-            downloads?: number;
+          [key: string]: MachineDef & {
+            conditions: {
+              x: string[]
+              y: string[]
+              z: string[]
+            }
           };
         } = await res.json();
-        for (let key in names.value) {
-          if (key in data) {
-            names.value[key].downloads = data[key].downloads;
+        let machines: { [key: string]: Machine } = {}
+        for (let key in data) {
+          machines[key] = {
+            ...data[key],
+            conditions: {
+              x: data[key].conditions.x.map(s => eval(s)),
+              y: data[key].conditions.y.map(s => eval(s)),
+              z: data[key].conditions.z.map(s => eval(s))
+            }
           }
         }
+        names.value = machines;
       }
     })
     .catch((e) => console.log(e));
@@ -106,6 +117,10 @@ function submit(e: SubmitEventPromise) {
     }
   });
 }
+
+watch(name, () => {
+  console.log(names.value[name.value])
+});
 </script>
 
 <template>
@@ -153,7 +168,7 @@ function submit(e: SubmitEventPromise) {
         </v-col>
       </v-row>
     </v-row>
-    <v-row v-if="names[name]?.conditions?.x">
+    <v-row v-show="names[name]?.hasX">
       <v-col>
         {{ $t('litematica_generator.size_x') }}
       </v-col>
@@ -162,7 +177,7 @@ function submit(e: SubmitEventPromise) {
         :rules="[...(names[name]?.conditions?.x || [])]"
       />
     </v-row>
-    <v-row v-if="names[name]?.conditions?.y">
+    <v-row v-show="names[name]?.hasY">
       <v-col>
         {{ $t('litematica_generator.size_y') }}
       </v-col>
@@ -171,7 +186,7 @@ function submit(e: SubmitEventPromise) {
         :rules="[...(names[name]?.conditions?.y || [])]"
       />
     </v-row>
-    <v-row v-if="names[name]?.conditions?.z">
+    <v-row v-if="names[name]?.hasZ">
       <v-col>
         {{ $t('litematica_generator.size_z') }}
       </v-col>
@@ -191,7 +206,7 @@ function submit(e: SubmitEventPromise) {
     <v-row>
       <v-spacer />
       <v-btn
-        :disabled="names[name].available === false"
+        :disabled="names[name]?.available === false"
         :loading="loading"
         color="primary"
         type="submit"
@@ -200,6 +215,7 @@ function submit(e: SubmitEventPromise) {
       </v-btn>
     </v-row>
   </v-form>
+  <LitematicaUpload v-if="useAppStore().userCache?.isStaff" />
 </template>
 
 <style scoped>
