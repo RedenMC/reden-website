@@ -40,32 +40,7 @@ const max = (size: number) => (v: number) =>
 const mod = (mod: number, rem: number) => (v: number) =>
   v % mod === rem || t('litematica_generator.size_mod', { mod, rem });
 
-const names = ref<{ [key: string]: Machine }>({
-  'yisibite-world-eater': {
-    name: '无沟世吞 / Trenchless World Eater v3.1 by 火弦月',
-    conditions: {},
-  },
-  'yisibite-nether-eater': {
-    name: '16高无沟地吞 / Trenchless Nether world eater (16 high) v1.2 by 火弦月',
-    conditions: {},
-  },
-  'yisibite-once-miner': {
-    name: '5x3 单发盾构 / tunnelbores by 火弦月',
-    conditions: {},
-  },
-  'yisibite-3-miner': {
-    name: '5x3 三连发盾构 / triple shot tunnelbore by 火弦月',
-    conditions: {},
-  },
-  'yisibite-quarry-x': {
-    name: '采矿机-南北方向 / Quarry north-south direction by 火弦月',
-    conditions: {},
-  },
-  'yisibite-quarry-z': {
-    name: '采矿机-东西方向 / Quarry east-west direction by 火弦月',
-    conditions: {},
-  },
-});
+const names = ref<{ [key: string]: Machine }>({});
 
 const updateDownloads = () =>
   doFetchGet('/api/mc-services/yisibite/')
@@ -169,13 +144,13 @@ watch(name, () => {
         </v-col>
       </v-row>
     </v-row>
-    <v-row v-show="names[name]?.hasX">
+    <v-row v-if="names[name]?.hasX">
       <v-col>
         {{ $t('litematica_generator.size_x') }}
       </v-col>
       <v-text-field v-model="xSize" :rules="names[name]?.conditions?.x || []" />
     </v-row>
-    <v-row v-show="names[name]?.hasY">
+    <v-row v-if="names[name]?.hasY">
       <v-col>
         {{ $t('litematica_generator.size_y') }}
       </v-col>
