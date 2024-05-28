@@ -88,21 +88,20 @@ const updateDownloads = () =>
             v <= size || t('litematica_generator.size_max', { size });
           const mod = (mod: number, rem: number) => (v: number) =>
             v % mod === rem || t('litematica_generator.size_mod', { mod, rem });
+          const defaultChecker = [min(0), max(1000), mod(1, 0)];
           machines[key] = {
             ...data[key],
             conditions: {
-              x: data[key].conditions?.x?.map((s) => eval(s)) ?? [],
-              y: data[key].conditions?.y?.map((s) => eval(s)) ?? [],
-              z: data[key].conditions?.z?.map((s) => eval(s)) ?? [],
+              x: data[key].conditions?.x?.map((s) => eval(s)) ?? defaultChecker,
+              y: data[key].conditions?.y?.map((s) => eval(s)) ?? defaultChecker,
+              z: data[key].conditions?.z?.map((s) => eval(s)) ?? defaultChecker,
             },
           };
-          // noinspection CommaExpressionJS
-          min(4), max(5), max(5), mod(1, 0); // make them used
         }
         names.value = machines;
       }
     })
-    .catch((e) => console.log(e));
+    .catch((e) => console.error(e));
 updateDownloads();
 
 function submit(e: SubmitEventPromise) {
