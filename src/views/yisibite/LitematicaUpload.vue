@@ -26,7 +26,7 @@
 import { ref } from 'vue';
 import { SubmitEventPromise } from 'vuetify';
 import { doFetchPut, toastError } from '@/constants';
-import {toast} from "vuetify-sonner";
+import { toast } from 'vuetify-sonner';
 
 const file = ref<File>();
 const loading = ref(false);
@@ -34,7 +34,7 @@ const path = ref('');
 const name = ref('');
 
 function submit(e: SubmitEventPromise) {
-  console.log(file.value)
+  console.log(file.value);
   e.preventDefault();
   e.then((a) => {
     if (a.valid) {
@@ -46,11 +46,11 @@ function submit(e: SubmitEventPromise) {
       doFetchPut('/api/mc-services/yisibite/', data)
         .then((res) => {
           if (!res.ok) return Promise.reject(res);
-          toast("OK", {
+          toast('OK', {
             cardProps: {
-              color: 'green'
-            }
-          })
+              color: 'green',
+            },
+          });
         })
         .catch((e) => toastError(e))
         .finally(() => (loading.value = false));

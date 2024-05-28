@@ -82,6 +82,12 @@ const updateDownloads = () =>
         } = await res.json();
         let machines: { [key: string]: Machine } = {};
         for (let key in data) {
+          const min = (size: number) => (v: number) =>
+            v >= size || t('litematica_generator.size_min', { size });
+          const max = (size: number) => (v: number) =>
+            v <= size || t('litematica_generator.size_max', { size });
+          const mod = (mod: number, rem: number) => (v: number) =>
+            v % mod === rem || t('litematica_generator.size_mod', { mod, rem });
           machines[key] = {
             ...data[key],
             conditions: {
@@ -90,6 +96,8 @@ const updateDownloads = () =>
               z: data[key].conditions?.z?.map((s) => eval(s)) ?? [],
             },
           };
+          // noinspection CommaExpressionJS
+          min(4), max(5), max(5), mod(1, 0); // make them used
         }
         names.value = machines;
       }
@@ -166,28 +174,19 @@ watch(name, () => {
       <v-col>
         {{ $t('litematica_generator.size_x') }}
       </v-col>
-      <v-text-field
-        v-model="xSize"
-        :rules="[...(names[name]?.conditions?.x || [])]"
-      />
+      <v-text-field v-model="xSize" :rules="names[name]?.conditions?.x || []" />
     </v-row>
     <v-row v-show="names[name]?.hasY">
       <v-col>
         {{ $t('litematica_generator.size_y') }}
       </v-col>
-      <v-text-field
-        v-model="ySize"
-        :rules="[...(names[name]?.conditions?.y || [])]"
-      />
+      <v-text-field v-model="ySize" :rules="names[name]?.conditions?.y || []" />
     </v-row>
     <v-row v-if="names[name]?.hasZ">
       <v-col>
         {{ $t('litematica_generator.size_z') }}
       </v-col>
-      <v-text-field
-        v-model="zSize"
-        :rules="[...(names[name]?.conditions?.z || [])]"
-      />
+      <v-text-field v-model="zSize" :rules="names[name]?.conditions?.z || []" />
     </v-row>
     <v-row v-if="!useAppStore().logined">
       <reden-router to="/login">
