@@ -30,16 +30,6 @@ type Machine = MachineDef & {
   conditions: { [key: string]: ((v: number) => any)[] };
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const min = (size: number) => (v: number) =>
-  v >= size || t('litematica_generator.size_min', { size });
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const max = (size: number) => (v: number) =>
-  v <= size || t('litematica_generator.size_max', { size });
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const mod = (mod: number, rem: number) => (v: number) =>
-  v % mod === rem || t('litematica_generator.size_mod', { mod, rem });
-
 const names = ref<{ [key: string]: Machine }>({});
 
 const updateDownloads = () =>
@@ -74,6 +64,7 @@ const updateDownloads = () =>
           };
         }
         names.value = machines;
+        name.value = Object.keys(names.value)[0];
       }
     })
     .catch((e) => console.error(e));
@@ -93,10 +84,6 @@ function submit(e: SubmitEventPromise) {
     }
   });
 }
-
-watch(name, () => {
-  console.log(names.value[name.value]);
-});
 </script>
 
 <template>

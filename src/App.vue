@@ -6,8 +6,7 @@ import { useTitle } from '@vueuse/core';
 const { t } = useI18n();
 const title = useTitle();
 
-useRouter().afterEach((to, from, failure) => {
-  console.log('Route changed', to, from, failure);
+useRouter().afterEach((to) => {
   title.value = t(to.meta.title as string) + ' - Reden';
 });
 </script>
