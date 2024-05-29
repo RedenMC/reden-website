@@ -64,7 +64,7 @@ const updateDownloads = () =>
           };
         }
         names.value = machines;
-        name.value = Object.keys(names.value)[0];
+        if (name.value === '') name.value = Object.keys(names.value)[0];
       }
     })
     .catch((e) => console.error(e));
