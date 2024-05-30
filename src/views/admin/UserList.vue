@@ -5,6 +5,7 @@ import UserBadges from '@/components/UserBadges.vue';
 import AdminEditUserButton from '@/views/admin/AdminEditUserButton.vue';
 import AdminBanUserButton from '@/views/admin/AdminBanUserButton.vue';
 import { useRoute, useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 
 const router = useRouter();
 const page = ref(Number(useRoute().query.page) || 1);
@@ -13,6 +14,7 @@ const totalItems = ref(10000000); // use a very large number to avoid reload
 const serverItems: Ref<Profile[]> = ref([]);
 const loading = ref(false);
 const search = ref();
+const { locale } = useI18n();
 
 async function loadItems(options: {
   page: number;
@@ -108,11 +110,12 @@ console.log('router page', router.currentRoute.value.query.page);
     <template #[`item.lastLoginIp`]="{ item, value }">
       <span title="">
         {{ value }}
-        <v-tooltip
-          location="bottom"
-          :text="`${item.mmRecord?.city_zh ?? item.mmRecord?.city}, ${item.mmRecord?.country_zh ?? item.mmRecord?.country}`"
-          activator="parent"
-        />
+        <template v-if="locale === 'zh_CN'">
+          <br />
+          {{ item.mmRecord?.city_zh ?? item.mmRecord?.city }}
+          ,
+          {{ item.mmRecord?.country_zh ?? item.mmRecord?.country }}
+        </template>
       </span>
     </template>
     <template #[`item.roles`]="{ value }">
