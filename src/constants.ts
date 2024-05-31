@@ -1,8 +1,6 @@
 import { useAppStore } from '@/store/app';
 import { ref, Ref } from 'vue';
 import { toast } from 'vuetify-sonner';
-import { da } from 'vuetify/locale';
-import { Exception } from 'sass';
 
 export const reCAPTCHAKey = '6Lczc24pAAAAAAxzBZbRy8CZc_ba06Qn_3OJ_Vg-';
 export const cloudflareCAPTCHAKey = '0x4AAAAAAARtCTyyGc1nbVUm';

@@ -6,7 +6,11 @@
         <v-card-title>Upload Machine</v-card-title>
         <v-form @submit="submit">
           <v-col>
-            <v-text-field label="path" v-model="path">
+            <v-text-field
+              label="path"
+              v-model="path"
+              @change="uploadCache(path)"
+            >
               <template #details>
                 {{
                   cache?.approved
@@ -43,7 +47,7 @@
   </v-btn>
 </template>
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 import { SubmitEventPromise } from 'vuetify';
 import { doFetchGet, doFetchPut, toastError } from '@/constants';
 import { toast } from 'vuetify-sonner';

@@ -1,8 +1,5 @@
 // Composables
 import { createRouter, createWebHistory } from 'vue-router';
-import { useTitle } from '@vueuse/core';
-
-const title = useTitle();
 
 const routes = [
   {
@@ -104,7 +101,7 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
-  scrollBehavior(to, from, savedPosition) {
+  scrollBehavior() {
     // always scroll to top
     return { top: 0 };
   },

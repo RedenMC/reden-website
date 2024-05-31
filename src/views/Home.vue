@@ -1,13 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useI18n } from 'vue-i18n';
 import RedStoneSection from '@/components/RedStoneSection.vue';
 import RedstoneSectionTitle from '@/components/RedstoneSectionTitle.vue';
 import Feature from '@/views/Feature.vue';
 import { discordInvite, githubLink } from '@/constants';
 import RedenRouter from '@/router/RedenRouter.vue';
-
-const { t } = useI18n();
 
 const introContent = ref<HTMLElement | null>(null);
 </script>
