@@ -8,154 +8,180 @@
     "noDataText": "Нет доступных данных",
     "dataIterator": {
       "rowsPerPageText": "Результатов на странице: ",
-      "rowsPerPageAll": "",
-      "pageText": "",
-      "noResultsText": "",
-      "nextPage": "",
-      "prevPage": "",
-      "loadingText": ""
+      "rowsPerPageAll": "Все",
+      "pageText": "{0}-{1} из {2}",
+      "noResultsText": "Нет совпадений",
+      "nextPage": "Следующая страница",
+      "prevPage": "Предыдущая страница",
+      "loadingText": "Загрузка элементов..."
     },
     "dataFooter": {
-      "itemsPerPageText": "",
-      "itemsPerPageAll": "",
-      "prevPage": "",
-      "nextPage": "",
-      "firstPage": "",
-      "lastPage": "",
-      "pageText": ""
+      "itemsPerPageText": "Элементов на странице: ",
+      "itemsPerPageAll": "Все",
+      "prevPage": "Предыдущая страница",
+      "nextPage": "Следующая страница",
+      "firstPage": "Первая страница",
+      "lastPage": "Последняя страница",
+      "pageText": "{0}-{1} элементов из {2}"
     },
     "pagination": {
       "ariaLabel": {
-        "root": ""
+        "root": "Pagination"
       }
     }
   },
   "reden": {
-    "learn_more": "",
+    "learn_more": "Learn More",
     "footer": {
       "reden_mod": {
-        "title": "",
-        "undo_redo": "",
-        "rvc": "",
-        "debugger": ""
+        "title": "Reden Mod",
+        "undo_redo": "Undo & Redo",
+        "rvc": "Reden Version Control",
+        "debugger": "Reden Debugger"
       },
       "reden_ecosystem": {
-        "title": "",
-        "wiki": "",
-        "sponsors": "",
-        "github_organization": ""
+        "title": "Reden Ecosystem",
+        "wiki": "Reden Wiki",
+        "sponsors": "Sponsors",
+        "github_organization": "Github Organization"
       },
       "reden_community": {
-        "title": "",
-        "discord": "",
-        "community_guidelines": "",
-        "community_events": ""
+        "title": "Reden Community",
+        "discord": "Discord",
+        "community_guidelines": "Community Guidelines",
+        "community_events": "Community Events"
       },
       "follow_us": {
-        "title": "",
-        "blog": "",
-        "youtube": "",
-        "bilibili": ""
+        "title": "Follow Us",
+        "blog": "Blog",
+        "youtube": "Youtube",
+        "bilibili": "Bilibili"
       }
     },
     "title": {
-      "home": ""
+      "home": "Home",
+      "download": "Download",
+      "my_account": "My Account",
+      "edit_profile": "Edit Profile",
+      "undo": "Undo",
+      "rvc": "RVC",
+      "debugger": "Reden Debugger"
     },
     "home": {
       "feature_intro": {
-        "title": "",
-        "undo": "",
-        "rvc": "",
-        "debugger": ""
+        "title": "Features",
+        "undo": "Made a mistake? Reden can quickly undo your actions by just pressing Ctrl+Z. All chain reactions will be undone.",
+        "rvc": "RVC (Reden Version Control) is a version control system designed for redstone. It allows you to manage your redstone projects in all versions with ease.",
+        "debugger": "Can't figure out why your redstone contraption isn't working? Reden Debugger can help you see how the game exactly processes your redstone contraption."
       },
       "community_intro": {
-        "title": "",
-        "open_source": "",
-        "wiki": "",
-        "discord": "",
-        "sponsor": ""
+        "title": "Community",
+        "open_source": "Reden is an open-source project and free for everyone. We welcome everyone to contribute to Reden including code, documentation, wiki, and more.",
+        "wiki": "Reden Wiki contains almost everything you need to know about redstone ans Reden. It is also a great place to share your knowledge with the community.",
+        "discord": "Join our Discord server to chat with other redstone developers and get help from the community.",
+        "sponsor": "Reden is sponsored by the community. We appreciate every sponsor who supports us."
       }
     },
-    "download": "",
+    "download": "Download",
     "download_page": {
-      "sorry_constructing": ""
+      "sorry_constructing": "Sorry, our download page is under construction, we suggest you to download at"
     },
-    "my_account": "",
-    "wiki": "",
-    "description": ""
+    "my_account": "My Account",
+    "wiki": "Wiki",
+    "description": "Provide a one-stop working environment for redstone developers and become the best redstone debugging and teaching tool."
+  },
+  "admin": {
+    "title": {
+      "users": "All Users"
+    }
   },
   "user": {
-    "developer": "",
-    "developer_hover": "",
-    "contributor": "",
-    "contributor_hover": "",
-    "sponsor": "",
-    "sponsor_hover": "",
-    "staff": "",
-    "staff_hover": ""
+    "developer": "Developer",
+    "developer_hover": "This user is an active developer of this project",
+    "contributor": "Contributor",
+    "contributor_hover": "This user has contributed to this project",
+    "sponsor": "Sponsor",
+    "sponsor_hover": "This user has sponsored this project",
+    "staff": "Staff",
+    "staff_hover": "This user is a staff member of this project"
   },
   "sponsors": {
-    "title": "",
-    "description": "",
-    "alipay": "",
-    "paypal": "",
-    "notice": "",
-    "badge": ""
+    "title": "Sponsors",
+    "description": "Reden is supported by you, and we are sincerely grateful to every sponsor.",
+    "alipay": "Support us with Alipay",
+    "paypal": "Support us with PayPal",
+    "notice": "Reden is an open-source project and always free for everyone. We receive no funding from any company or organization. We rely on your support to keep the project running. When you support us, you will be listed here as a sponsor so please make sure you provide your name and email address when you donate. Thank you for your support!",
+    "badge": "You can get this Sponsor badge by supporting us, and it will be displayed on your profile."
   },
   "login": {
-    "title": "",
-    "oauth": "",
-    "forgot_password": "",
-    "or": "",
-    "register": "",
+    "title": "Login to Reden",
+    "oauth": "Or login with",
+    "forgot_password": "Forgot Password?",
+    "or": "Or",
+    "register": "Register",
     "button": {
-      "login": "",
-      "captcha": ""
+      "login": "Login",
+      "captcha": "Please complete the captcha first"
     }
   },
   "register": {
-    "title": "",
+    "title": "Register to Reden",
     "invalid": {
-      "email": "",
+      "email": "Invalid email address.",
       "password": {
-        "strength": "",
-        "mismatching": ""
+        "strength": "Password is not strong enough, please use at least 8 characters, including uppercase, lowercase and numbers.",
+        "mismatching": "Passwords do not match"
       },
-      "username": ""
+      "username": "Invalid Username."
     },
-    "existing": "",
-    "login": "",
+    "existing": "Already have an account?",
+    "login": "Login",
     "email_verification": {
-      "title": "",
-      "message": ""
+      "title": "One more step",
+      "message": "We have sent an email to {email} with a link to complete your registration. If you don't see the email, please check other places it might be, like your junk, spam, social, or other folders."
     },
     "toast": {
       "successful": {
-        "title": "",
-        "message": ""
+        "title": "Register Successful",
+        "message": "Please check your email to complete the registration"
       },
-      "try": "",
-      "failed": "",
+      "try": "Please try again later",
+      "failed": "Failed to register",
       "error": {
-        "unknown": ""
+        "unknown": "Unknown error"
       }
     },
     "placeholder": {
-      "email": "",
-      "username": "",
-      "password": "",
-      "confirm": "",
-      "invitation_code": ""
+      "email": "Email",
+      "username": "Username",
+      "password": "Password",
+      "confirm": "Confirm Password",
+      "invitation_code": "Invitation Code (optional)"
     },
     "button": {
-      "register": "",
-      "captcha": "",
-      "done": ""
+      "register": "Register",
+      "captcha": "Please complete the captcha first",
+      "done": "Done"
     },
-    "oauth": ""
+    "oauth": "Or register with: "
   },
   "search": {
-    "hover": ""
+    "hover": "Search Reden Features"
+  },
+  "litematica_generator": {
+    "title": "Litematica Online Generator",
+    "select": "What do you want to generate today?",
+    "description": "Generate Litematica files online from Reden projects, e.g. World Eaters",
+    "not_logged_in": "Guest users can only generate 5 times per minute, please log in to unlock this limit",
+    "download": "Download",
+    "download_count": "{count} downloads",
+    "contribute": "Want your own machines such as world eaters to be collected here? Contribute to Reden now! Email me at me@redenmc.com for more information.",
+    "size_min": "The minimum size of the machine is {size}",
+    "size_max": "The maximum size of the machine is {size}",
+    "size_mod": "The size divided by {mod} must leave {rem}",
+    "size_x": "Size in x",
+    "size_y": "Size in y",
+    "size_z": "Size in z",
+    "size_description": "The size of the machine in x, y, z. for world eaters, the z size is the distance between the starting side and the returning side."
   }
 }
-
