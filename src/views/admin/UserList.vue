@@ -112,9 +112,9 @@ console.log('router page', router.currentRoute.value.query.page);
         {{ value }}
         <template v-if="locale === 'zh_CN'">
           <br />
-          {{ item.mmRecord?.city_zh ?? item.mmRecord?.city }}
-          ,
           {{ item.mmRecord?.country_zh ?? item.mmRecord?.country }}
+          {{ item.mmRecord?.subdivision_zh ?? item.mmRecord?.subdivision }}
+          {{ item.mmRecord?.city_zh ?? item.mmRecord?.city }}
         </template>
       </span>
     </template>

@@ -32,6 +32,8 @@ export type Profile = {
   mmRecord?: {
     city?: string;
     city_zh?: string;
+    subdivision?: string;
+    subdivision_zh?: string;
     country?: string;
     country_zh?: string;
   };
