@@ -159,6 +159,7 @@ function submit(e: SubmitEventPromise) {
     </v-row>
     <v-row>
       <v-spacer />
+      <LitematicaUpload />
       <v-btn
         :disabled="names[name]?.available === false"
         :loading="loading"
@@ -169,7 +170,6 @@ function submit(e: SubmitEventPromise) {
       </v-btn>
     </v-row>
   </v-form>
-  <LitematicaUpload v-if="useAppStore().userCache?.isStaff" />
 </template>
 
 <style scoped>

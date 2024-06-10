@@ -22,6 +22,9 @@
               </template>
             </v-text-field>
             <v-text-field label="name" v-model="name" />
+            <a href="https://v8g1c-my.sharepoint.com/:w:/g/personal/zly2006_redenmc_com1/Eb_9sZGN-EhBsMU8sCkfN7sBNO7FdK81OUumXFAhb5byxQ ">
+              View requirements and the format here
+            </a>
             <v-file-input
               label="file"
               v-model="file"
