@@ -41,31 +41,31 @@
       },
       "reden_ecosystem": {
         "title": "Reden 生态系统",
-        "wiki": "Reden Wiki",
+        "wiki": "Reden 维基",
         "sponsors": "赞助者",
         "github_organization": "Github 组织"
       },
       "reden_community": {
         "title": "Reden 社区",
-        "discord": "Discord",
+        "discord": "Discord群组",
         "community_guidelines": "社区指南",
         "community_events": "社区活动"
       },
       "follow_us": {
         "title": "关注我们",
         "blog": "博客",
-        "youtube": "Youtube",
-        "bilibili": "Bilibili"
+        "youtube": "油管",
+        "bilibili": "B站"
       }
     },
     "title": {
       "home": "首页",
-      "download": "Download",
-      "my_account": "My Account",
-      "edit_profile": "Edit Profile",
-      "undo": "Undo",
+      "download": "下载",
+      "my_account": "我的账号",
+      "edit_profile": "更改配置",
+      "undo": "撤销",
       "rvc": "RVC",
-      "debugger": "Reden Debugger"
+      "debugger": "Reden 调试器"
     },
     "home": {
       "feature_intro": {
@@ -87,12 +87,12 @@
       "sorry_constructing": "抱歉，我们的下载页面正在建设中，我们建议您前往此处下载："
     },
     "my_account": "我的账户",
-    "wiki": "Wiki",
+    "wiki": "维基",
     "description": "为红石机器开发者提供一站式工作环境，成为最好的红石调试和教学工具。"
   },
   "admin": {
     "title": {
-      "users": "All Users"
+      "users": "全部用户"
     }
   },
   "user": {
