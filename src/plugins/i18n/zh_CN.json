@@ -13,7 +13,7 @@
       "noResultsText": "没有找到相关记录",
       "nextPage": "下一页",
       "prevPage": "上一页",
-      "loadingText": "正在加载项目"
+      "loadingText": "正在加载项目..."
     },
     "dataFooter": {
       "itemsPerPageText": "每页项目: ",
@@ -47,22 +47,22 @@
       },
       "reden_community": {
         "title": "Reden 社区",
-        "discord": "Discord群组",
+        "discord": "Discord 群组",
         "community_guidelines": "社区指南",
         "community_events": "社区活动"
       },
       "follow_us": {
         "title": "关注我们",
         "blog": "博客",
-        "youtube": "油管",
-        "bilibili": "B站"
+        "youtube": "Youtube",
+        "bilibili": "哔哩哔哩"
       }
     },
     "title": {
       "home": "首页",
       "download": "下载",
       "my_account": "我的账号",
-      "edit_profile": "更改配置",
+      "edit_profile": "编辑个人资料",
       "undo": "撤销",
       "rvc": "RVC",
       "debugger": "Reden 调试器"
@@ -129,16 +129,16 @@
     "invalid": {
       "email": "无效的邮箱地址",
       "password": {
-        "strength": "密码需使用至少8个字符（大写、小写和数字）",
-        "mismatching": "密码不符"
+        "strength": "密码需使用至少8个字符，并同时包含大写字母、小写字母和数字",
+        "mismatching": "密码不匹配"
       },
       "username": "无效用户名"
     },
     "existing": "已经有账号了？",
     "login": "登录",
     "email_verification": {
-      "title": "最后一步",
-      "message": "我们向 {email} 发送了一封包含注册链接的邮件，请点击链接已完成注册。如果没有收到此邮件，请检查其他它可能在的地方，比如垃圾邮件文件夹。"
+      "title": "还差一步",
+      "message": "我们向 {email} 发送了一封包含注册链接的邮件，请点击链接已完成注册。如果没有收到此邮件，请检查其他它可能在的地方，如垃圾邮件文件夹。"
     },
     "toast": {
       "successful": {
@@ -163,7 +163,7 @@
       "captcha": "请先完成验证码",
       "done": "完成"
     },
-    "oauth": "或使用以下方式注册"
+    "oauth": "或使用以下方式注册: "
   },
   "search": {
     "hover": "搜索 Reden 功能"
