@@ -13,7 +13,7 @@
       "noResultsText": "没有找到相关记录",
       "nextPage": "下一页",
       "prevPage": "上一页",
-      "loadingText": "正在加载项目"
+      "loadingText": "正在加载项目..."
     },
     "dataFooter": {
       "itemsPerPageText": "每页项目: ",
@@ -41,13 +41,13 @@
       },
       "reden_ecosystem": {
         "title": "Reden 生态系统",
-        "wiki": "Reden Wiki",
+        "wiki": "Reden 维基",
         "sponsors": "赞助者",
         "github_organization": "Github 组织"
       },
       "reden_community": {
         "title": "Reden 社区",
-        "discord": "Discord",
+        "discord": "Discord 群组",
         "community_guidelines": "社区指南",
         "community_events": "社区活动"
       },
@@ -55,17 +55,17 @@
         "title": "关注我们",
         "blog": "博客",
         "youtube": "Youtube",
-        "bilibili": "Bilibili"
+        "bilibili": "哔哩哔哩"
       }
     },
     "title": {
       "home": "首页",
-      "download": "Download",
-      "my_account": "My Account",
-      "edit_profile": "Edit Profile",
-      "undo": "Undo",
+      "download": "下载",
+      "my_account": "我的账号",
+      "edit_profile": "编辑个人资料",
+      "undo": "撤销",
       "rvc": "RVC",
-      "debugger": "Reden Debugger"
+      "debugger": "Reden 调试器"
     },
     "home": {
       "feature_intro": {
@@ -87,12 +87,12 @@
       "sorry_constructing": "抱歉，我们的下载页面正在建设中，我们建议您前往此处下载："
     },
     "my_account": "我的账户",
-    "wiki": "Wiki",
+    "wiki": "维基",
     "description": "为红石机器开发者提供一站式工作环境，成为最好的红石调试和教学工具。"
   },
   "admin": {
     "title": {
-      "users": "All Users"
+      "users": "全部用户"
     }
   },
   "user": {
@@ -129,16 +129,16 @@
     "invalid": {
       "email": "无效的邮箱地址",
       "password": {
-        "strength": "密码需使用至少8个字符（大写、小写和数字）",
-        "mismatching": "密码不符"
+        "strength": "密码需使用至少8个字符，并同时包含大写字母、小写字母和数字",
+        "mismatching": "密码不匹配"
       },
       "username": "无效用户名"
     },
     "existing": "已经有账号了？",
     "login": "登录",
     "email_verification": {
-      "title": "最后一步",
-      "message": "我们向 {email} 发送了一封包含注册链接的邮件，请点击链接已完成注册。如果没有收到此邮件，请检查其他它可能在的地方，比如垃圾邮件文件夹。"
+      "title": "还差一步",
+      "message": "我们向 {email} 发送了一封包含注册链接的邮件，请点击链接已完成注册。如果没有收到此邮件，请检查其他它可能在的地方，如垃圾邮件文件夹。"
     },
     "toast": {
       "successful": {
@@ -163,7 +163,7 @@
       "captcha": "请先完成验证码",
       "done": "完成"
     },
-    "oauth": "或使用以下方式注册"
+    "oauth": "或使用以下方式注册: "
   },
   "search": {
     "hover": "搜索 Reden 功能"
