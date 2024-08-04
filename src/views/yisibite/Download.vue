@@ -24,13 +24,15 @@ type MachineDef = {
   hasX?: boolean;
   hasY?: boolean;
   hasZ?: boolean;
+  link?: string;
+  linkChina?: string;
 };
 
 type Machine = MachineDef & {
   conditions: { [key: string]: ((v: number) => any)[] };
 };
 
-const names = ref<{ [key: string]: Machine }>({});
+const generators = ref<{ [key: string]: Machine }>({});
 
 const updateDownloads = () =>
   doFetchGet('/api/mc-services/yisibite/')
@@ -63,8 +65,8 @@ const updateDownloads = () =>
             },
           };
         }
-        names.value = machines;
-        if (name.value === '') name.value = Object.keys(names.value)[0];
+        generators.value = machines;
+        if (name.value === '') name.value = Object.keys(generators.value)[0];
       }
     })
     .catch((e) => console.error(e));
@@ -105,9 +107,9 @@ function submit(e: SubmitEventPromise) {
       </v-col>
       <v-select
         v-model="name"
-        :item-title="(item) => names[item]?.name"
+        :item-title="(item) => generators[item]?.name"
         :item-value="(item) => item"
-        :items="Object.keys(names)"
+        :items="Object.keys(generators)"
         density="comfortable"
         autofocus
         hide-details
@@ -120,16 +122,16 @@ function submit(e: SubmitEventPromise) {
           <v-chip>
             {{
               $t('litematica_generator.download_count', {
-                count: names[name]?.downloads ?? '查询失败',
+                count: generators[name]?.downloads ?? '查询失败',
               })
             }}
           </v-chip>
         </template>
       </v-select>
-      <v-col cols="12">
-        <a class="router" href="https://www.bilibili.com/video/BV1za4y1P7cw">
+      <v-col cols="12" v-if="generators[name]?.link">
+        <a class="router" :href="generators[name]?.link">
           <v-icon>mdi-link</v-icon>
-          https://www.bilibili.com/video/BV1za4y1P7cw
+          {{ generators[name]?.link }}
         </a>
       </v-col>
     </v-row>
@@ -138,13 +140,17 @@ function submit(e: SubmitEventPromise) {
       <v-col>
         <v-card
           border
-          v-if="names[name]?.hasX || names[name]?.hasY || names[name]?.hasZ"
+          v-if="
+            generators[name]?.hasX ||
+            generators[name]?.hasY ||
+            generators[name]?.hasZ
+          "
         >
           <v-card-subtitle class="text-wrap pa-3">
             {{ $t('litematica_generator.size_description') }}
           </v-card-subtitle>
           <v-card-text>
-            <v-row v-if="names[name]?.hasX">
+            <v-row v-if="generators[name]?.hasX">
               <v-col class="text-md-body-1">
                 {{ $t('litematica_generator.size_x') }}
               </v-col>
@@ -152,10 +158,10 @@ function submit(e: SubmitEventPromise) {
                 density="compact"
                 variant="underlined"
                 v-model="xSize"
-                :rules="names[name]?.conditions?.x || []"
+                :rules="generators[name]?.conditions?.x || []"
               />
             </v-row>
-            <v-row v-if="names[name]?.hasY">
+            <v-row v-if="generators[name]?.hasY">
               <v-col class="text-md-body-1">
                 {{ $t('litematica_generator.size_y') }}
               </v-col>
@@ -163,10 +169,10 @@ function submit(e: SubmitEventPromise) {
                 density="compact"
                 variant="underlined"
                 v-model="ySize"
-                :rules="names[name]?.conditions?.y || []"
+                :rules="generators[name]?.conditions?.y || []"
               />
             </v-row>
-            <v-row v-if="names[name]?.hasZ">
+            <v-row v-if="generators[name]?.hasZ">
               <v-col class="text-md-body-1">
                 {{ $t('litematica_generator.size_z') }}
               </v-col>
@@ -174,14 +180,14 @@ function submit(e: SubmitEventPromise) {
                 density="compact"
                 variant="underlined"
                 v-model="zSize"
-                :rules="names[name]?.conditions?.z || []"
+                :rules="generators[name]?.conditions?.z || []"
               />
             </v-row>
             <v-row>
               <v-spacer />
               <LitematicaUpload class="ma-3" />
               <v-btn
-                :disabled="names[name]?.available === false"
+                :disabled="generators[name]?.available === false"
                 :loading="loading"
                 class="ma-3"
                 color="primary"

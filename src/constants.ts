@@ -270,3 +270,27 @@ export function isStrongPassword(password: string) {
     password.match(/[0-9]/)
   );
 }
+
+export const isInChina = () =>
+  doFetchGet('/api/ip')
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.resolve({});
+    })
+    .then(
+      (data: {
+        ip: string;
+        mm?: {
+          country_code?: string;
+        };
+      }) => {
+        if (data.mm?.country_code === 'CN') {
+          // 判断中国ip只是用来防止有墙的网站，没别的意思
+          console.log('ip', data.ip, 'is in china.');
+          return true;
+        }
+        return false;
+      },
+    );
