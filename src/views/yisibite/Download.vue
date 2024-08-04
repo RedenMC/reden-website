@@ -87,7 +87,7 @@ function submit(e: SubmitEventPromise) {
 </script>
 
 <template>
-  <v-form class="content-common" @submit="submit" fast-fail>
+  <v-form class="content-common" fast-fail @submit="submit">
     <v-row>
       <v-col>
         <h1>
@@ -98,6 +98,7 @@ function submit(e: SubmitEventPromise) {
         </p>
       </v-col>
     </v-row>
+
     <v-row>
       <v-col style="min-width: 200px">
         {{ $t('litematica_generator.select') }}
@@ -107,7 +108,9 @@ function submit(e: SubmitEventPromise) {
         :item-title="(item) => names[item]?.name"
         :item-value="(item) => item"
         :items="Object.keys(names)"
+        density="comfortable"
         autofocus
+        hide-details
         @update:model-value="router.replace({ query: { m: name } })"
       >
         <template #selection="{ item }">
@@ -123,51 +126,81 @@ function submit(e: SubmitEventPromise) {
           </v-chip>
         </template>
       </v-select>
-      <v-row>
-        <v-col>
-          <p>
+      <v-col cols="12">
+        <a class="router" href="https://www.bilibili.com/video/BV1za4y1P7cw">
+          <v-icon>mdi-link</v-icon>
+          https://www.bilibili.com/video/BV1za4y1P7cw
+        </a>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col>
+        <v-card
+          border
+          v-if="names[name]?.hasX || names[name]?.hasY || names[name]?.hasZ"
+        >
+          <v-card-subtitle class="text-wrap pa-3">
             {{ $t('litematica_generator.size_description') }}
-          </p>
-        </v-col>
-      </v-row>
-    </v-row>
-    <v-row v-if="names[name]?.hasX">
-      <v-col>
-        {{ $t('litematica_generator.size_x') }}
+          </v-card-subtitle>
+          <v-card-text>
+            <v-row v-if="names[name]?.hasX">
+              <v-col class="text-md-body-1">
+                {{ $t('litematica_generator.size_x') }}
+              </v-col>
+              <v-text-field
+                density="compact"
+                variant="underlined"
+                v-model="xSize"
+                :rules="names[name]?.conditions?.x || []"
+              />
+            </v-row>
+            <v-row v-if="names[name]?.hasY">
+              <v-col class="text-md-body-1">
+                {{ $t('litematica_generator.size_y') }}
+              </v-col>
+              <v-text-field
+                density="compact"
+                variant="underlined"
+                v-model="ySize"
+                :rules="names[name]?.conditions?.y || []"
+              />
+            </v-row>
+            <v-row v-if="names[name]?.hasZ">
+              <v-col class="text-md-body-1">
+                {{ $t('litematica_generator.size_z') }}
+              </v-col>
+              <v-text-field
+                density="compact"
+                variant="underlined"
+                v-model="zSize"
+                :rules="names[name]?.conditions?.z || []"
+              />
+            </v-row>
+            <v-row>
+              <v-spacer />
+              <LitematicaUpload class="ma-3" />
+              <v-btn
+                :disabled="names[name]?.available === false"
+                :loading="loading"
+                class="ma-3"
+                color="primary"
+                type="submit"
+              >
+                {{ $t('litematica_generator.download') }}
+              </v-btn>
+            </v-row>
+          </v-card-text>
+        </v-card>
       </v-col>
-      <v-text-field v-model="xSize" :rules="names[name]?.conditions?.x || []" />
     </v-row>
-    <v-row v-if="names[name]?.hasY">
-      <v-col>
-        {{ $t('litematica_generator.size_y') }}
-      </v-col>
-      <v-text-field v-model="ySize" :rules="names[name]?.conditions?.y || []" />
-    </v-row>
-    <v-row v-if="names[name]?.hasZ">
-      <v-col>
-        {{ $t('litematica_generator.size_z') }}
-      </v-col>
-      <v-text-field v-model="zSize" :rules="names[name]?.conditions?.z || []" />
-    </v-row>
-    <v-row v-if="!useAppStore().logined">
+    <v-row v-if="!useAppStore().logined" class="text-sm-body-1">
       <reden-router to="/login">
         {{ $t('litematica_generator.not_logged_in') }}
       </reden-router>
     </v-row>
     <v-row>
       {{ $t('litematica_generator.contribute') }}
-    </v-row>
-    <v-row>
-      <v-spacer />
-      <LitematicaUpload />
-      <v-btn
-        :disabled="names[name]?.available === false"
-        :loading="loading"
-        color="primary"
-        type="submit"
-      >
-        {{ $t('litematica_generator.download') }}
-      </v-btn>
     </v-row>
   </v-form>
 </template>
