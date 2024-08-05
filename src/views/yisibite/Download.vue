@@ -24,6 +24,7 @@ type MachineDef = {
   hasX?: boolean;
   hasY?: boolean;
   hasZ?: boolean;
+  note?: string;
   link?: string;
   linkChina?: string;
 };
@@ -134,6 +135,10 @@ function submit(e: SubmitEventPromise) {
           {{ generators[name]?.link }}
         </a>
       </v-col>
+      <v-col v-html="generators[name]?.note"
+        cols="12"
+        v-if="generators[name]?.note"
+      />
     </v-row>
 
     <v-row>

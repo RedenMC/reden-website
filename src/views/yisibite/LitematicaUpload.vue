@@ -83,11 +83,10 @@ function submit(e: SubmitEventPromise) {
   e.then((a) => {
     if (a.valid) {
       loading.value = true;
-      const data = new FormData();
-      data.set('name', name.value);
-      data.set('id', path.value);
-      data.set('file', file.value!);
-      doFetchPut('/api/mc-services/yisibite/', data)
+      doFetchPut(
+        `/api/mc-services/yisibite/${path.value}?name=${name.value}`,
+        file.value!,
+      )
         .then((res) => {
           if (!res.ok) return Promise.reject(res);
           toast('OK', {
