@@ -66,7 +66,13 @@ const updateDownloads = () =>
             },
           };
         }
-        generators.value = machines;
+        generators.value = Object.keys(machines)
+          .sort()
+          .reduce((obj: typeof machines, key) => {
+            obj[key] = machines[key];
+            return obj;
+          }, {});
+
         if (name.value === '') name.value = Object.keys(generators.value)[0];
       }
     })
@@ -135,7 +141,8 @@ function submit(e: SubmitEventPromise) {
           {{ generators[name]?.link }}
         </a>
       </v-col>
-      <v-col v-html="generators[name]?.note"
+      <v-col
+        v-html="generators[name]?.note"
         cols="12"
         v-if="generators[name]?.note"
       />
