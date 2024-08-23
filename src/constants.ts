@@ -1,6 +1,7 @@
 import { useAppStore } from '@/store/app';
 import { ref, Ref } from 'vue';
 import { toast } from 'vuetify-sonner';
+import { useMeta } from '@/store/meta';
 
 export const reCAPTCHAKey = '6Lczc24pAAAAAAxzBZbRy8CZc_ba06Qn_3OJ_Vg-';
 export const cloudflareCAPTCHAKey = '0x4AAAAAAARtCTyyGc1nbVUm';
@@ -111,7 +112,6 @@ export function doFetchGet(url: string) {
   return fetch(url, {
     method: 'GET',
     headers: {
-      'Content-Type': 'application/json',
       'X-CSRF-Token': useAppStore().csrfToken || '<no csrf token>',
     },
     credentials: 'include',
@@ -270,6 +270,8 @@ export function isStrongPassword(password: string) {
     password.match(/[0-9]/)
   );
 }
+
+export const debugMessages = () => !useMeta().get().production;
 
 export const isInChina = () =>
   doFetchGet('/api/ip')

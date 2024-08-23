@@ -51,12 +51,26 @@ const updateDownloads = () =>
         } = await res.json();
         let machines: { [key: string]: Machine } = {};
         for (let key in data) {
-          const min = (size: number) => (v: number) =>
-            v >= size || t('litematica_generator.size_min', { size });
-          const max = (size: number) => (v: number) =>
-            v <= size || t('litematica_generator.size_max', { size });
-          const mod = (mod: number, rem: number) => (v: number) =>
-            v % mod === rem || t('litematica_generator.size_mod', { mod, rem });
+          const min = (size: number) => {
+            const f = (v: number) =>
+              v >= size || t('litematica_generator.size_min', { size });
+            f.min = size;
+            return f;
+          };
+          const max = (size: number) => {
+            const f = (v: number) =>
+              v <= size || t('litematica_generator.size_max', { size });
+            f.max = size;
+            return f;
+          };
+          const mod = (mod: number, rem: number) => {
+            const f = (v: number) =>
+              v % mod === rem ||
+              t('litematica_generator.size_mod', { mod, rem });
+            f.mod = mod;
+            f.rem = rem;
+            return f;
+          };
           const defaultChecker = [min(0), max(1000), mod(1, 0)];
           machines[key] = {
             ...data[key],
@@ -163,9 +177,9 @@ function submit(e: SubmitEventPromise) {
             {{ $t('litematica_generator.size_description') }}
           </v-card-subtitle>
           <v-card-text>
-            <SizeInput :def="generators[name]" xyz="x" v-model="xSize"/>
-            <SizeInput :def="generators[name]" xyz="y" v-model="ySize"/>
-            <SizeInput :def="generators[name]" xyz="z" v-model="zSize"/>
+            <SizeInput v-model="xSize" :def="generators[name]" xyz="x" />
+            <SizeInput v-model="ySize" :def="generators[name]" xyz="y" />
+            <SizeInput v-model="zSize" :def="generators[name]" xyz="z" />
             <v-row>
               <v-spacer />
               <LitematicaUpload class="ma-3" />

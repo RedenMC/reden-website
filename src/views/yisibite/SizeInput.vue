@@ -1,21 +1,17 @@
 <template>
   <v-row v-if="toggle">
-    <v-col class="text-md-body-1">
+    <v-col class="info">
       {{ $t('litematica_generator.size_' + $props.xyz) }}
     </v-col>
     <v-text-field
-      :rules="cond"
       v-model="model"
-      type="number"
+      :rules="cond"
       density="compact"
+      type="number"
       variant="underlined"
     >
       <template v-if="false" #append-inner>
-        <span
-          v-show="
-            suggestedValues(model, props.def?.conditions?.x)?.length
-          "
-        >
+        <span v-show="suggestedValues(model, props.def?.conditions?.x)?.length">
           Suggested values:
           <v-btn
             v-for="i in suggestedValues(model, cond)"
@@ -45,16 +41,19 @@
 </template>
 <script lang="ts" setup>
 import { Machine } from '@/views/yisibite/Download.vue';
-import {computed} from "vue";
+import { computed } from 'vue';
+import { debugMessages } from '@/constants';
 
 const props = defineProps<{
   def: Machine;
   xyz: 'x' | 'y' | 'z';
 }>();
 
-const model = defineModel<number>();
+const model = defineModel<number | string>();
 const cond = computed(() => props.def.conditions[props.xyz]);
-const toggle = computed(() => (props.def as any)['has' + props.xyz.toUpperCase()] as boolean);
+const toggle = computed(
+  () => (props.def as any)['has' + props.xyz.toUpperCase()] as boolean,
+);
 
 const suggestedValues = (
   current: number | string | undefined,
@@ -62,45 +61,67 @@ const suggestedValues = (
 ): number[] | undefined => {
   current = Number(current);
   if (!current || !conditions || conditions.length === 0) {
-    console.error('bad args!', current, conditions)
+    if (debugMessages()) console.error('bad args!', current, conditions);
     return;
   }
   for (let func of conditions) {
     if (!func || !(func instanceof Function)) {
-      console.error(func, 'is not function');
+      if (debugMessages()) console.error(func, 'is not function');
       return;
     }
   }
+  let start = current;
   const check = (value: number) => {
     let accepted = true;
     for (let func of conditions) {
-      if (typeof func(value) !== 'boolean') {
+      if (func(value) !== true) {
         accepted = false;
+        if (func.min) {
+          if (start < func.min) start = func.min;
+        }
+        if (func.max) {
+          if (start > func.max) start = func.max;
+        }
       }
     }
     return accepted;
   };
-  console.log(current, model, model.value)
   if (check(current)) return [];
-  let i = current - 1;
-  let ret = [];
-  while (i > current - 50 && i > 0) {
+  if (debugMessages())
+    console.log('suggestedValues', { current, model, start });
+  let i = start;
+  let ret: number[] = [];
+  while (i > start - 50 && i > 0) {
     if (check(i)) {
-      ret.push(i);
+      if (ret.indexOf(i) == -1) {
+        ret.push(i);
+      }
       break;
     }
     i--;
   }
-  i = current + 1;
-  while (i < current + 50 && i < 1000) {
+  i = start;
+  while (i < start + 50 && i < 1000) {
     if (check(i)) {
-      ret.push(i);
+      if (ret.indexOf(i) == -1) {
+        ret.push(i);
+      }
       break;
     }
     i++;
   }
-  console.log(current, model, model.value, ret)
+  if (debugMessages())
+    console.log({ current, start, model, modelValue: model.value, ret });
   return ret;
 };
 </script>
-<style scoped></style>
+<style scoped>
+.info {
+  font-size: 1rem !important;
+  font-weight: 400;
+  letter-spacing: 0.03125em !important;
+  font-family: 'Roboto', sans-serif;
+  text-transform: none !important;
+  min-width: 70px;
+}
+</style>
