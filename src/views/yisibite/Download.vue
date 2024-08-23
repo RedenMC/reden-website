@@ -7,6 +7,7 @@ import { doFetchGet } from '@/constants';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 import LitematicaUpload from '@/views/yisibite/LitematicaUpload.vue';
+import SizeInput from '@/views/yisibite/SizeInput.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -17,7 +18,7 @@ const loading = ref(false);
 const name = ref(route.query.m?.toString() || '');
 const { t } = useI18n();
 
-type MachineDef = {
+export type MachineDef = {
   name: string;
   downloads?: number;
   available?: boolean | null;
@@ -29,7 +30,7 @@ type MachineDef = {
   linkChina?: string;
 };
 
-type Machine = MachineDef & {
+export type Machine = MachineDef & {
   conditions: { [key: string]: ((v: number) => any)[] };
 };
 
@@ -117,8 +118,8 @@ function submit(e: SubmitEventPromise) {
         :item-title="(item) => generators[item]?.name"
         :item-value="(item) => item"
         :items="Object.keys(generators)"
-        density="comfortable"
         autofocus
+        density="comfortable"
         hide-details
         @update:model-value="router.replace({ query: { m: name } })"
       >
@@ -135,66 +136,36 @@ function submit(e: SubmitEventPromise) {
           </v-chip>
         </template>
       </v-select>
-      <v-col cols="12" v-if="generators[name]?.link">
-        <a class="router" :href="generators[name]?.link">
+      <v-col v-if="generators[name]?.link" cols="12">
+        <a :href="generators[name]?.link" class="router">
           <v-icon>mdi-link</v-icon>
           {{ generators[name]?.link }}
         </a>
       </v-col>
       <v-col
-        v-html="generators[name]?.note"
-        cols="12"
         v-if="generators[name]?.note"
+        cols="12"
+        v-html="generators[name]?.note"
       />
     </v-row>
 
     <v-row>
       <v-col>
         <v-card
-          border
           v-if="
             generators[name]?.hasX ||
             generators[name]?.hasY ||
             generators[name]?.hasZ
           "
+          border
         >
           <v-card-subtitle class="text-wrap pa-3">
             {{ $t('litematica_generator.size_description') }}
           </v-card-subtitle>
           <v-card-text>
-            <v-row v-if="generators[name]?.hasX">
-              <v-col class="text-md-body-1">
-                {{ $t('litematica_generator.size_x') }}
-              </v-col>
-              <v-text-field
-                density="compact"
-                variant="underlined"
-                v-model="xSize"
-                :rules="generators[name]?.conditions?.x || []"
-              />
-            </v-row>
-            <v-row v-if="generators[name]?.hasY">
-              <v-col class="text-md-body-1">
-                {{ $t('litematica_generator.size_y') }}
-              </v-col>
-              <v-text-field
-                density="compact"
-                variant="underlined"
-                v-model="ySize"
-                :rules="generators[name]?.conditions?.y || []"
-              />
-            </v-row>
-            <v-row v-if="generators[name]?.hasZ">
-              <v-col class="text-md-body-1">
-                {{ $t('litematica_generator.size_z') }}
-              </v-col>
-              <v-text-field
-                density="compact"
-                variant="underlined"
-                v-model="zSize"
-                :rules="generators[name]?.conditions?.z || []"
-              />
-            </v-row>
+            <SizeInput :def="generators[name]" xyz="x" v-model="xSize"/>
+            <SizeInput :def="generators[name]" xyz="y" v-model="ySize"/>
+            <SizeInput :def="generators[name]" xyz="z" v-model="zSize"/>
             <v-row>
               <v-spacer />
               <LitematicaUpload class="ma-3" />
