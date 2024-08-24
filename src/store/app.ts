@@ -56,7 +56,7 @@ export const useAppStore = defineStore('reden', {
     },
     setCsrfToken(token: string) {
       this.csrfToken = token;
-      sessionStorage.setItem('csrfToken', token)
+      sessionStorage.setItem('csrfToken', token);
     },
     setTheme(theme: 'light' | 'dark') {
       this.theme = theme;

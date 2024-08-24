@@ -88,7 +88,7 @@ const suggestedValues = (
   };
   if (check(current)) return [];
   if (debugMessages())
-    console.log('suggestedValues', { current, model, start });
+    console.log('suggestedValues', 'current', current, 'start', start);
   let i = start;
   let ret: number[] = [];
   while (i > start - 50 && i > 0) {
@@ -111,7 +111,7 @@ const suggestedValues = (
     i++;
   }
   if (debugMessages())
-    console.log({ current, start, model, modelValue: model.value, ret });
+    console.log('current', current, 'start', start, 'ret', ret);
   return ret;
 };
 </script>
