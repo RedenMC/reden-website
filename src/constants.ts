@@ -68,6 +68,7 @@ export function doFetchPost(url: string, data: any) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'X-Requested-With': 'Reden',
       'X-CSRF-Token': useAppStore().csrfToken || '[Reden] no csrf token',
     },
     credentials: 'include',
@@ -95,6 +96,7 @@ export function doFetchPut(url: string, data: any) {
   const { fetchBody, isJson } = getPayloadType(data);
   console.log(fetchBody, isJson);
   const headers: { [key: string]: string } = {
+    'X-Requested-With': 'Reden',
     'X-CSRF-Token': useAppStore().csrfToken || '[Reden] no csrf token',
   };
   if (isJson) {
@@ -112,6 +114,7 @@ export function doFetchGet(url: string) {
   return fetch(url, {
     method: 'GET',
     headers: {
+      'X-Requested-With': 'Reden',
       'X-CSRF-Token': useAppStore().csrfToken || '<no csrf token>',
     },
     credentials: 'include',
@@ -122,7 +125,7 @@ export function doFetchDelete(url: string) {
   return fetch(url, {
     method: 'DELETE',
     headers: {
-      'Content-Type': 'application/json',
+      'X-Requested-With': 'Reden',
       'X-CSRF-Token': useAppStore().csrfToken || '<no csrf token>',
     },
     credentials: 'include',
