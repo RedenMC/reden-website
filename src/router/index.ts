@@ -115,7 +115,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to) => {
-  console.log(to?.meta)
+  console.log(to?.meta);
   if (to?.meta?.admin) {
     if (!useAppStore().userCache?.isStaff) {
       return '/login';

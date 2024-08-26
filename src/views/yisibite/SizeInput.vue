@@ -13,10 +13,10 @@
     </v-text-field>
 
     <v-expand-transition>
-      <v-col v-show="suggestedValues()?.length" cols="12">
+      <v-col style="height: 60px" v-show="suggestedValues?.length" cols="12">
         <span> {{ $t('litematica_generator.suggested_values') }} </span>
         <v-btn
-          v-for="i in suggestedValues()"
+          v-for="i in suggestedValues"
           :key="i"
           color="secondary"
           variant="outlined"
@@ -45,15 +45,7 @@ const cond: ({
 } & ((v: number) => any))[] = props.def.conditions[props.xyz];
 const toggle = (props.def as any)['has' + props.xyz.toUpperCase()] as boolean;
 
-let cache: number[] | undefined = undefined;
-watch(model, () => {
-  cache = undefined;
-});
-
-const suggestedValues = (): number[] | undefined => {
-  if (cache) {
-    return cache;
-  }
+const suggestedValues = computed(() => {
   const current = Number(model.value);
   if (!current || !cond || cond.length === 0) {
     if (debugMessages()) console.error('bad args!', current, cond);
@@ -101,9 +93,8 @@ const suggestedValues = (): number[] | undefined => {
   }
   if (debugMessages())
     console.log('current', current, 'start', start, 'ret', ret);
-  cache = ret;
   return ret;
-};
+});
 </script>
 <style scoped>
 .info {

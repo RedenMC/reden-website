@@ -101,8 +101,11 @@ function toggleTheme() {
         </v-menu>
       </template>
       <template v-else>
-        <v-btn icon="mdi-home" title="Home" to="/" />
+        <v-btn stacked title="Home" to="/">
+          <v-img src="/reden_256.png" width="36" />
+        </v-btn>
         <v-btn
+          stacked
           v-if="useAppStore().userCache?.isStaff"
           prepend-icon="mdi-cog"
           title="Admin"
