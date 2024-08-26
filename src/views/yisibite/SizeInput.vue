@@ -10,38 +10,27 @@
       type="number"
       variant="underlined"
     >
-      <template v-if="false" #append-inner>
-        <span v-show="suggestedValues(model, props.def?.conditions?.x)?.length">
-          Suggested values:
-          <v-btn
-            v-for="i in suggestedValues(model, cond)"
-            :key="i"
-            color="secondary"
-            variant="outlined"
-          >
-            {{ i }}
-          </v-btn>
-        </span>
-      </template>
     </v-text-field>
 
-    <v-col v-show="suggestedValues(model, cond)?.length" cols="12">
-      <span> Suggested values: </span>
-      <v-btn
-        v-for="i in suggestedValues(model, cond)"
-        :key="i"
-        color="secondary"
-        variant="outlined"
-        v-on:click="() => (model = i)"
-      >
-        {{ i }}
-      </v-btn>
-    </v-col>
+    <v-expand-transition>
+      <v-col v-show="suggestedValues()?.length" cols="12">
+        <span> {{ $t('litematica_generator.suggested_values') }} </span>
+        <v-btn
+          v-for="i in suggestedValues()"
+          :key="i"
+          color="secondary"
+          variant="outlined"
+          v-on:click="() => (model = i)"
+        >
+          {{ i }}
+        </v-btn>
+      </v-col>
+    </v-expand-transition>
   </v-row>
 </template>
 <script lang="ts" setup>
 import { Machine } from '@/views/yisibite/Download.vue';
-import { computed } from 'vue';
+import { computed, watch } from 'vue';
 import { debugMessages } from '@/constants';
 
 const props = defineProps<{
@@ -50,30 +39,30 @@ const props = defineProps<{
 }>();
 
 const model = defineModel<number | string>();
-const cond = computed(() => props.def.conditions[props.xyz]);
-const toggle = computed(
-  () => (props.def as any)['has' + props.xyz.toUpperCase()] as boolean,
-);
+const cond: ({
+  min?: number;
+  max?: number;
+} & ((v: number) => any))[] = props.def.conditions[props.xyz];
+const toggle = (props.def as any)['has' + props.xyz.toUpperCase()] as boolean;
 
-const suggestedValues = (
-  current: number | string | undefined,
-  conditions: any[],
-): number[] | undefined => {
-  current = Number(current);
-  if (!current || !conditions || conditions.length === 0) {
-    if (debugMessages()) console.error('bad args!', current, conditions);
-    return;
+let cache: number[] | undefined = undefined;
+watch(model, () => {
+  cache = undefined;
+});
+
+const suggestedValues = (): number[] | undefined => {
+  if (cache) {
+    return cache;
   }
-  for (let func of conditions) {
-    if (!func || !(func instanceof Function)) {
-      if (debugMessages()) console.error(func, 'is not function');
-      return;
-    }
+  const current = Number(model.value);
+  if (!current || !cond || cond.length === 0) {
+    if (debugMessages()) console.error('bad args!', current, cond);
+    return;
   }
   let start = current;
   const check = (value: number) => {
     let accepted = true;
-    for (let func of conditions) {
+    for (let func of cond) {
       if (func(value) !== true) {
         accepted = false;
         if (func.min) {
@@ -112,6 +101,7 @@ const suggestedValues = (
   }
   if (debugMessages())
     console.log('current', current, 'start', start, 'ret', ret);
+  cache = ret;
   return ret;
 };
 </script>

@@ -182,6 +182,7 @@
     "size_x": "Size in x",
     "size_y": "Size in y",
     "size_z": "Size in z",
+    "suggested_values": "Suggested Values: ",
     "size_description": "The size of the machine in x, y, z. for world eaters, the z size is the distance between the starting side and the returning side."
   }
 }
