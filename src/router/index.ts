@@ -1,5 +1,6 @@
 // Composables
 import { createRouter, createWebHistory } from 'vue-router';
+import { useAppStore } from '@/store/app';
 
 const routes = [
   {
@@ -86,13 +87,13 @@ const routes = [
       {
         path: '/admin',
         name: 'Admin',
-        meta: { title: 'admin.title' },
+        meta: { title: 'admin.title', admin: true },
         component: () => import('@/views/admin/Admin.vue'),
       },
       {
         path: '/admin/users',
         name: 'AdminUserList',
-        meta: { title: 'admin.title.users' },
+        meta: { title: 'admin.title.users', admin: true },
         component: () => import('@/views/admin/users/UserList.vue'),
       },
       {
@@ -111,6 +112,16 @@ const router = createRouter({
     // always scroll to top
     return { top: 0 };
   },
+});
+
+router.beforeEach((to) => {
+  console.log(to?.meta)
+  if (to?.meta?.admin) {
+    if (!useAppStore().userCache?.isStaff) {
+      return '/login';
+    }
+  }
+  return true;
 });
 
 export default router;
