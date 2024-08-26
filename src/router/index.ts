@@ -84,10 +84,16 @@ const routes = [
         component: () => import('@/views/yisibite/Download.vue'),
       },
       {
+        path: '/admin',
+        name: 'Admin',
+        meta: { title: 'admin.title' },
+        component: () => import('@/views/admin/Admin.vue'),
+      },
+      {
         path: '/admin/users',
         name: 'AdminUserList',
         meta: { title: 'admin.title.users' },
-        component: () => import('@/views/admin/UserList.vue'),
+        component: () => import('@/views/admin/users/UserList.vue'),
       },
       {
         path: '/:any(.*)*',

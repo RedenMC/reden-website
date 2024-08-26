@@ -2,8 +2,8 @@
 import { Ref, ref } from 'vue';
 import { doFetchGet, ErrorResponse, Profile, toastError } from '@/constants';
 import UserBadges from '@/components/UserBadges.vue';
-import AdminEditUserButton from '@/views/admin/AdminEditUserButton.vue';
-import AdminBanUserButton from '@/views/admin/AdminBanUserButton.vue';
+import AdminEditUserButton from '@/views/admin/users/AdminEditUserButton.vue';
+import AdminBanUserButton from '@/views/admin/users/AdminBanUserButton.vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 
