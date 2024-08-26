@@ -182,6 +182,7 @@
     "size_x": "x 方向尺寸",
     "size_y": "y 方向尺寸",
     "size_z": "z 方向尺寸",
+    "suggested_values": "Suggested Values: ",
     "size_description": "機器的 x, y, z 尺寸。對於世界吞噬者，z 尺寸是出發站和返回站之間的距離。"
   }
 }
