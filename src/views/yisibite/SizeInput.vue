@@ -13,8 +13,8 @@
     </v-text-field>
 
     <v-expand-transition>
-      <v-col style="height: 60px" v-show="suggestedValues?.length" cols="12">
-        <span> {{ $t('litematica_generator.suggested_values') }} </span>
+      <div class="suggested-values" v-show="suggestedValues?.length">
+        {{ $t('litematica_generator.suggested_values') }}
         <v-btn
           v-for="i in suggestedValues"
           :key="i"
@@ -24,7 +24,7 @@
         >
           {{ i }}
         </v-btn>
-      </v-col>
+      </div>
     </v-expand-transition>
   </v-row>
 </template>
@@ -104,5 +104,13 @@ const suggestedValues = computed(() => {
   font-family: 'Roboto', sans-serif;
   text-transform: none !important;
   min-width: 70px;
+}
+
+.suggested-values {
+  height: 40px;
+  width: 100%;
+  padding-left: 12px;
+  padding-right: 12px;
+  line-height: 36px;
 }
 </style>
