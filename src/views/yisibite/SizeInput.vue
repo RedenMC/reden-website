@@ -30,7 +30,7 @@
 </template>
 <script lang="ts" setup>
 import { Machine } from '@/views/yisibite/Download.vue';
-import { computed, watch } from 'vue';
+import { computed } from 'vue';
 import { debugMessages } from '@/constants';
 
 const props = defineProps<{

@@ -94,7 +94,6 @@ function getPayloadType(data: any): {
 
 export function doFetchPut(url: string, data: any) {
   const { fetchBody, isJson } = getPayloadType(data);
-  console.log(fetchBody, isJson);
   const headers: { [key: string]: string } = {
     'X-Requested-With': 'Reden',
     'X-CSRF-Token': useAppStore().csrfToken || '[Reden] no csrf token',
@@ -110,7 +109,22 @@ export function doFetchPut(url: string, data: any) {
   });
 }
 
-export function doFetchGet(url: string) {
+export function doFetchGet(
+  url: string,
+  queries: { [key: string]: string } = {},
+) {
+  let queryString = '';
+
+  for (const [key, value] of Object.entries(queries)) {
+    if (queryString.length > 0) {
+      queryString += '&';
+    }
+    queryString += `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+  }
+
+  if (queryString) {
+    url += (url.includes('?') ? '&' : '?') + queryString;
+  }
   return fetch(url, {
     method: 'GET',
     headers: {

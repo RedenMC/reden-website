@@ -8,12 +8,20 @@ import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 
 const router = useRouter();
-const page = ref(Number(useRoute().query.page) || 1);
-const pageSize = ref(10);
+type Parameter = {
+  search: string;
+  pageSize: string;
+  page: string;
+  sort: string;
+  order: 'asc' | 'desc';
+};
+const query = useRoute().query as Parameter;
+const page = ref(Number(query.page) || 1);
+const pageSize = ref(Number(query.pageSize) || 10);
 const totalItems = ref(10000000); // use a very large number to avoid reload
 const serverItems: Ref<Profile[]> = ref([]);
 const loading = ref(false);
-const search = ref();
+const search = ref(query.search || '');
 const { locale } = useI18n();
 
 async function loadItems(options: {
@@ -27,9 +35,14 @@ async function loadItems(options: {
 }) {
   loading.value = true;
   console.log(options);
-  const response = await doFetchGet(
-    `/api/admin/user/list?page=${options.page}&pageSize=${options.itemsPerPage}&sort=${options.sortBy[0]?.key || ''}&order=${options.sortBy[0]?.order || ''}&search=${search.value || ''}`,
-  );
+  const parameters: Parameter = {
+    page: String(options.page),
+    search: search.value || '',
+    pageSize: String(options.itemsPerPage),
+    sort: options.sortBy[0]?.key || '',
+    order: options.sortBy[0]?.order || '',
+  };
+  const response = await doFetchGet(`/api/admin/user/list`, parameters);
   if (response.ok) {
     const data: {
       users: Profile[];
@@ -42,8 +55,7 @@ async function loadItems(options: {
     await toastError(error);
   }
   loading.value = false;
-  // console.log('before router.push')
-  router.replace({ query: { page: options.page, search: search.value } });
+  router.replace({ query: parameters });
 }
 
 const headers = [
@@ -74,6 +86,7 @@ console.log('router page', router.currentRoute.value.query.page);
     :items-per-page-options="[10, 20, 50, 100]"
     :loading="loading"
     :search="search"
+    :sort-by="[{ key: query.sort, order: query.order }]"
     item-value="name"
     @update:options="loadItems"
   >

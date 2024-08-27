@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useAppStore } from '@/store/app';
 import { SubmitEventPromise } from 'vuetify';
 import RedenRouter from '@/router/RedenRouter.vue';
@@ -108,6 +108,7 @@ function submit(e: SubmitEventPromise) {
     }
   });
 }
+const selected = computed(() => generators.value[name.value]);
 </script>
 
 <template>
@@ -144,47 +145,54 @@ function submit(e: SubmitEventPromise) {
           <v-chip>
             {{
               $t('litematica_generator.download_count', {
-                count: generators[name]?.downloads ?? '查询失败',
+                count: selected?.downloads ?? '查询失败',
               })
             }}
           </v-chip>
         </template>
       </v-select>
-      <v-col v-if="generators[name]?.link" cols="12">
-        <a :href="generators[name]?.link" class="router">
+      <v-col v-if="selected?.link" cols="12">
+        <a :href="selected.link" class="router">
           <v-icon>mdi-link</v-icon>
-          {{ generators[name]?.link }}
+          {{ selected.link }}
         </a>
       </v-col>
-      <v-col
-        v-if="generators[name]?.note"
-        cols="12"
-        v-html="generators[name]?.note"
-      />
+      <v-col v-if="selected?.note" cols="12" v-html="selected.note" />
     </v-row>
 
     <v-row>
       <v-col>
         <v-card
-          v-if="
-            generators[name]?.hasX ||
-            generators[name]?.hasY ||
-            generators[name]?.hasZ
-          "
+          v-if="selected?.hasX || selected?.hasY || selected?.hasZ"
           border
         >
           <v-card-subtitle class="text-wrap pa-3">
             {{ $t('litematica_generator.size_description') }}
           </v-card-subtitle>
           <v-card-text>
-            <SizeInput v-model="xSize" :def="generators[name]" xyz="x" />
-            <SizeInput v-model="ySize" :def="generators[name]" xyz="y" />
-            <SizeInput v-model="zSize" :def="generators[name]" xyz="z" />
+            <SizeInput
+              v-model="xSize"
+              v-if="selected.hasX"
+              :def="selected"
+              xyz="x"
+            />
+            <SizeInput
+              v-model="ySize"
+              v-if="selected.hasY"
+              :def="selected"
+              xyz="y"
+            />
+            <SizeInput
+              v-model="zSize"
+              v-if="selected.hasZ"
+              :def="selected"
+              xyz="z"
+            />
             <v-row>
               <v-spacer />
-              <LitematicaUpload class="ma-3" />
+              <LitematicaUpload v-if="useAppStore().logined" class="ma-3" />
               <v-btn
-                :disabled="generators[name]?.available === false"
+                :disabled="selected?.available === false"
                 :loading="loading"
                 class="ma-3"
                 color="primary"
