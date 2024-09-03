@@ -30,6 +30,7 @@ function login() {
   doFetchPost('/api/account/login', req)
     .then(async (response) => {
       if (!response.ok) {
+        token.value = '';
         return Promise.reject(response);
       }
       const data: LoginResponse = await response.json();

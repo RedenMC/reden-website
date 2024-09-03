@@ -15,7 +15,7 @@ type Parameter = {
   sort: string;
   order: 'asc' | 'desc';
 };
-const query = useRoute().query as Parameter;
+const query = { ...useRoute().query } as Parameter;
 const page = ref(Number(query.page) || 1);
 const pageSize = ref(Number(query.pageSize) || 10);
 const totalItems = ref(10000000); // use a very large number to avoid reload
@@ -42,6 +42,8 @@ async function loadItems(options: {
     sort: options.sortBy[0]?.key || '',
     order: options.sortBy[0]?.order || '',
   };
+  router.replace({ query: parameters });
+  console.log(parameters);
   const response = await doFetchGet(`/api/admin/user/list`, parameters);
   if (response.ok) {
     const data: {
@@ -55,7 +57,6 @@ async function loadItems(options: {
     await toastError(error);
   }
   loading.value = false;
-  router.replace({ query: parameters });
 }
 
 const headers = [
@@ -72,8 +73,6 @@ const headers = [
 function isBanned(user: Profile) {
   return (user.bannedUntil || 0) > Date.now();
 }
-
-console.log('router page', router.currentRoute.value.query.page);
 </script>
 
 <template>

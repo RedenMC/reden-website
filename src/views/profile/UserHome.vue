@@ -11,13 +11,12 @@ import { useAppStore } from '@/store/app';
 import UserProfileCard from '@/components/UserProfileCard.vue';
 import { ref } from 'vue';
 import RedenRouter from '@/router/RedenRouter.vue';
+import { useRouter } from 'vue-router';
 
-// oauth login csrf token is not passed by json, but by query string
-const queries = window.location.search.substring(1).split('&');
-const csrf = queries
-  .find((str) => str.startsWith('csrf_token='))
-  ?.substring(11);
-if (csrf) {
+const router = useRouter();
+if (router.currentRoute.value.query?.csrf_token) {
+  // oauth login csrf token is not passed by json, but by query string
+  const csrf = router.currentRoute.value.query.csrf_token! as string;
   useAppStore().setCsrfToken(csrf);
   history.pushState(
     {},
@@ -35,8 +34,7 @@ function logout() {
   doFetchGet('/api/account/logout')
     .then((response) => {
       if (response.ok) {
-        window.location.href = '/';
-        useAppStore().logout();
+        router.push('/');
         toast('Logout Successful', {
           description: 'You have been logged out',
           duration: 1000,
@@ -49,6 +47,7 @@ function logout() {
       }
     })
     .catch((e) => toastError(e, 'Failed to logout'));
+  useAppStore().logout();
 }
 
 // webhook
@@ -130,7 +129,7 @@ function installWebhook() {
                   rounded="lg"
                   variant="outlined"
                 >
-                  Edit Profile
+                  {{ $t('profile.editProfile') }}
                 </v-btn>
               </reden-router>
             </v-col>

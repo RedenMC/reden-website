@@ -170,9 +170,10 @@ function deleteAvatar() {
             </a>
           </span>
           <template v-else>
-            <span>Account not linked</span>
-            <!-- prettier-ignore -->
-            <a v-if="canEdit" href="/api/oauth/github?redirect_url=/home">Link Now</a>
+            <a v-if="canEdit" href="/api/oauth/github?redirect_url=/home"
+              >Account not linked, Link Now!</a
+            >
+            <span v-else>Account not linked</span>
           </template>
         </p>
         <p v-if="user.preference.timezone" class="user-timezone">

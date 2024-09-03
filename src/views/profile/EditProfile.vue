@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import {
+  cloudflareCAPTCHAKey,
   doFetchPost,
   fetchUser,
   isStrongPassword,
@@ -9,6 +10,8 @@ import {
 import { ref } from 'vue';
 import OAuthAccountLine from '@/components/editProfilePage/OAuthAccountLine.vue';
 import { toast } from 'vuetify-sonner';
+import { useI18n } from 'vue-i18n';
+import VueTurnstile from 'vue-turnstile';
 
 const userCopy = ref<Profile>();
 const user = ref<Profile>();
@@ -18,14 +21,51 @@ fetchUser(user).then(() => {
 
 const timezones = Intl.supportedValuesOf('timeZone');
 
+const captchaToken = ref('');
 const oldPassword = ref('');
 const newPassword = ref('');
 const confirmNewPassword = ref('');
+const changingPassword = ref(false);
 function changePassword() {
-  if (!isStrongPassword(newPassword.value)) return;
+  // if (!isStrongPassword(newPassword.value)) return;
   if (newPassword.value !== confirmNewPassword.value) return;
+  if (!captchaToken.value) return;
+  const body = {
+    oldPassword: oldPassword.value,
+    newPassword: newPassword.value,
+    captcha: {
+      provider: 'cloudflare',
+      token: captchaToken.value,
+    },
+  };
+  changingPassword.value = true;
+  captchaToken.value = '';
+  doFetchPost('/api/account/security/change-password', body)
+    .then((response) => {
+      if (response.ok) {
+        toast(t('profile.edit.success'), {
+          description: 'Password Updated',
+          duration: 1000,
+          cardProps: {
+            color: 'green',
+          },
+        });
+        fetchUser(user).then(() => {
+          oldPassword.value = '';
+          newPassword.value = '';
+          confirmNewPassword.value = '';
+        });
+      } else {
+        return Promise.reject(response);
+      }
+    })
+    .catch((e) => toastError(e, 'Failed to change password.'))
+    .finally(() => {
+      changingPassword.value = false;
+    });
 }
 
+const { t } = useI18n();
 const savingInfo = ref(false);
 const savingPreferences = ref(false);
 function saveInfo() {
@@ -33,8 +73,8 @@ function saveInfo() {
   doFetchPost('/api/account/update', user.value)
     .then((response) => {
       if (response.ok) {
-        toast('Success', {
-          description: 'Information saved',
+        toast(t('profile.edit.success'), {
+          description: t('profile.edit.information_saved'),
           duration: 1000,
           cardProps: {
             color: 'green',
@@ -47,7 +87,7 @@ function saveInfo() {
         return Promise.reject(response);
       }
     })
-    .catch((e) => toastError(e, 'Failed to save information'))
+    .catch((e) => toastError(e, t('profile.edit.failedToSaveInformation')))
     .finally(() => {
       savingInfo.value = false;
     });
@@ -62,8 +102,8 @@ function savePreferences() {
   doFetchPost('/api/account/update/preference', user.value?.preference)
     .then((response) => {
       if (response.ok) {
-        toast('Success', {
-          description: 'Preferences saved',
+        toast(t('profile.edit.success'), {
+          description: t('profile.edit.preferencesSaved'),
           duration: 1000,
           cardProps: {
             color: 'green',
@@ -98,7 +138,7 @@ function savePreferences() {
       <v-col>
         <p class="setting-label">Email</p>
         <p class="setting-description">
-          This is the email you use to register and reset your password.
+          {{ t('profile.edit.email_desc') }}
         </p>
       </v-col>
       <div>
@@ -106,16 +146,15 @@ function savePreferences() {
           {{ user.email }}
         </span>
         <v-btn class="text-capitalize setting-button" color="primary">
-          Change Email
+          {{ t('profile.edit.changeEmail') }}
         </v-btn>
       </div>
     </v-row>
     <v-row>
       <v-col>
-        <p class="setting-label">Username</p>
+        <p class="setting-label">{{ t('profile.edit.username') }}</p>
         <p class="setting-description">
-          This is the username you use to login. You can change it once every 48
-          hours.
+          {{ t('profile.edit.username_desc') }}
         </p>
       </v-col>
       <v-col>
@@ -129,21 +168,21 @@ function savePreferences() {
             <v-icon>mdi-account</v-icon>
           </template>
           <template #details v-if="(user.canChangeNameUntil || 0) > Date.now()">
-            You can change your username again in
             {{
-              Math.round(
-                (user.canChangeNameUntil! - Date.now()) / 1000 / 60 / 60,
-              )
+              t('profile.edit.username_timer', [
+                Math.round(
+                  (user.canChangeNameUntil! - Date.now()) / 1000 / 60 / 60,
+                ),
+              ])
             }}
-            hours
           </template>
         </v-text-field>
       </v-col>
     </v-row>
     <v-row>
       <v-col>
-        <p class="setting-label">Bio</p>
-        <p class="setting-description">Introduction about yourself.</p>
+        <p class="setting-label">{{ t('profile.edit.bio') }}</p>
+        <p class="setting-description">{{ t('profile.edit.bio_desc') }}</p>
       </v-col>
       <v-col>
         <v-textarea v-model="user.bio" class="setting-input" color="primary">
@@ -163,16 +202,18 @@ function savePreferences() {
           (userCopy?.bio || '') == user.bio
         "
       >
-        Save
+        {{ t('profile.edit.save') }}
       </v-btn>
     </v-row>
   </v-card>
 
   <v-card class="setting-section-card" rounded="lg" v-if="user" border>
-    <h3 class="setting-section-title">Preferences</h3>
+    <h3 class="setting-section-title">{{ t('profile.edit.preferences') }}</h3>
     <v-row>
       <v-col cols="9">
-        <p class="setting-label">Show Email</p>
+        <p class="setting-label">
+          {{ t('profile.edit.preference.showEmail') }}
+        </p>
         <p class="setting-description">
           Whether to show your email to other users.
         </p>
@@ -187,7 +228,9 @@ function savePreferences() {
     </v-row>
     <v-row>
       <v-col cols="9">
-        <p class="setting-label">Show Minecraft Account</p>
+        <p class="setting-label">
+          {{ t('profile.edit.preference.showMinecraftAccount') }}
+        </p>
         <p class="setting-description">
           Whether to show your Minecraft UUID to other users.
         </p>
@@ -202,9 +245,11 @@ function savePreferences() {
     </v-row>
     <v-row>
       <v-col cols="9">
-        <p class="setting-label">Show GitHub</p>
+        <p class="setting-label">
+          {{ t('profile.edit.preference.showGithub') }}
+        </p>
         <p class="setting-description">
-          Whether to show your GitHub to other users.
+          {{ t('profile.edit.preference.showGithub_desc') }}
         </p>
       </v-col>
       <v-spacer />
@@ -217,7 +262,9 @@ function savePreferences() {
     </v-row>
     <v-row>
       <v-col cols="9">
-        <p class="setting-label">Show Timezone</p>
+        <p class="setting-label">
+          {{ t('profile.edit.preference.showTimezone') }}
+        </p>
         <p class="setting-description">
           Whether to show your timezone to other users.
         </p>
@@ -247,8 +294,10 @@ function savePreferences() {
     </v-row>
     <v-row>
       <v-col>
-        <p class="setting-label">Pronouns</p>
-        <p class="setting-description">Your pronouns.</p>
+        <p class="setting-label">{{ t('profile.edit.preference.pronouns') }}</p>
+        <p class="setting-description">
+          {{ t('profile.edit.preference.pronouns_desc') }}
+        </p>
       </v-col>
       <v-col>
         <v-text-field
@@ -280,60 +329,84 @@ function savePreferences() {
         @click="savePreferences"
         :disabled="userCopy && !changed(user.preference, userCopy!.preference)"
       >
-        Save Preferences
+        {{ t('profile.edit.savePreferences') }}
       </v-btn>
     </v-row>
   </v-card>
 
   <v-card v-if="user" class="setting-section-card" rounded="lg" border>
-    <h3 class="setting-section-title">Password</h3>
-    <p>You can change your password here.</p>
-    <v-text-field
-      v-if="!user.passwordNotSet"
-      v-model="oldPassword"
-      class="setting-input"
-      color="primary"
-      type="password"
-      label="Old Password"
-      placeholder="Enter your old password"
-    />
-    <p v-if="user.passwordNotSet">
-      This is the first time you login, please change your password as soon as
-      possible.
-    </p>
-    <v-text-field
-      v-model="newPassword"
-      class="setting-input"
-      color="primary"
-      type="password"
-      label="New Password"
-      placeholder="Enter your new password"
-      :rules="[
-        (v: string) =>
-          isStrongPassword(v) ||
-          'Password must contain at least 8 characters, and include uppercase, lowercase, and numbers',
-        (v: string) =>
-          v !== oldPassword ||
-          'New password must be different from old password',
-      ]"
-    />
-    <v-text-field
-      v-model="confirmNewPassword"
-      class="setting-input"
-      color="primary"
-      type="password"
-      label="Confirm New Password"
-      placeholder="Enter your new password again"
-      :rules="[(v: string) => v === newPassword || 'Passwords do not match']"
-    />
+    <h3 class="setting-section-title">
+      {{ t('profile.edit.password.title') }}
+    </h3>
+    <p>{{ t('profile.edit.password.desc') }}</p>
+
     <v-row>
       <v-spacer />
-      <v-btn
-        class="text-capitalize setting-button"
-        color="primary"
-        @click="changePassword"
-      >
-        Change Password
+      <v-btn class="text-capitalize setting-button" color="primary">
+        {{ t('profile.edit.password.changePassword') }}
+        <v-dialog activator="parent" scroll-strategy="block">
+          <v-card>
+            <v-card-title>
+              {{ t('profile.edit.password.changePassword') }}
+            </v-card-title>
+            <v-card-text>
+              <v-text-field
+                v-if="!user.passwordNotSet"
+                v-model="oldPassword"
+                class="setting-input"
+                color="primary"
+                type="password"
+                :label="t('profile.edit.password.old')"
+              />
+              <p v-if="user.passwordNotSet">
+                {{ t('profile.edit.password.first') }}
+              </p>
+              <v-text-field
+                v-model="newPassword"
+                class="setting-input"
+                color="primary"
+                type="password"
+                :label="t('profile.edit.password.mew')"
+                :rules="[
+                  (v: string) =>
+                    isStrongPassword(v) ||
+                    t('profile.edit.password.requirements'),
+                  (v: string) =>
+                    v !== oldPassword ||
+                    'New password must be different from old password',
+                ]"
+              />
+              <v-text-field
+                v-model="confirmNewPassword"
+                class="setting-input"
+                color="primary"
+                type="password"
+                :label="t('profile.edit.password.confirm')"
+                :rules="[
+                  (v: string) =>
+                    v === newPassword ||
+                    t('profile.edit.password.passwordsDoNotMatch'),
+                ]"
+              />
+              <vue-turnstile
+                v-model="captchaToken"
+                :site-key="cloudflareCAPTCHAKey"
+              />
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer />
+              <v-btn
+                class="text-capitalize setting-button"
+                color="primary"
+                variant="elevated"
+                :loading="changingPassword"
+                @click="changePassword"
+              >
+                {{ t('profile.edit.password.changePassword') }}
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </v-btn>
     </v-row>
   </v-card>

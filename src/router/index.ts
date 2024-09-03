@@ -118,6 +118,7 @@ router.beforeEach((to) => {
   console.log(to?.meta);
   if (to?.meta?.admin) {
     if (!useAppStore().userCache?.isStaff) {
+      console.log('preventing route to [admin check]', to);
       return '/login';
     }
   }
