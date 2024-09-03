@@ -63,9 +63,10 @@
   },
   "profile": {
     "edit": {
+      "bio": "Bio",
       "bio_desc": "Introduction about yourself.",
       "changeEmail": "Change Email",
-      "email_desc": "This is the email you use to register and reset your password.",
+      "email_desc": "This is the email you used to register, and to receive our security notifications, such as reset your password.",
       "failedToSaveInformation": "Failed to save information",
       "information_saved": "Information saved",
       "password": {
@@ -80,8 +81,10 @@
         "title": "Password"
       },
       "preference": {
+        "pronouns": "Pronouns",
         "pronouns_desc": "Your pronouns.",
         "showEmail": "Show Email",
+        "showGithub": "Show Github",
         "showGithub_desc": "Whether to show your GitHub to other users.",
         "showMinecraftAccount": "Show Minecraft Account",
         "showTimezone": "Show Timezone"
@@ -91,6 +94,7 @@
       "save": "Save",
       "savePreferences": "Save Preferences",
       "success": "Success",
+      "username": "Username",
       "username_desc": "This is the username you use to login. You can change it once every 48 hours.",
       "username_timer": "You can change your username again in {0} hours"
     },

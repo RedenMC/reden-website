@@ -62,9 +62,7 @@
   },
   "profile": {
     "edit": {
-      "bio": {
-        "desc": ""
-      },
+      "bio": "",
       "changeEmail": "",
       "email": {
         "desc": ""
@@ -82,13 +80,9 @@
         "requirements": ""
       },
       "preference": {
-        "pronouns": {
-          "desc": ""
-        },
+        "pronouns": "",
         "showEmail": "",
-        "showGithub": {
-          "desc": ""
-        },
+        "showGithub": "",
         "showMinecraftAccount": "",
         "showTimezone": ""
       },
@@ -97,10 +91,7 @@
       "save": "",
       "savePreferences": "",
       "success": "",
-      "username": {
-        "desc": "",
-        "timer": ""
-      }
+      "username": ""
     },
     "editProfile": ""
   },

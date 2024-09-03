@@ -63,9 +63,10 @@
   },
   "profile": {
     "edit": {
+      "bio": "个人简介",
       "bio_desc": "介绍你自己",
       "changeEmail": "修改邮件地址",
-      "email_desc": "",
+      "email_desc": "你注册时使用的邮箱，用于接受我们的账号安全信息，比如重置密码",
       "failedToSaveInformation": "保存信息失败",
       "information_saved": "信息已保存",
       "password": {
@@ -80,8 +81,10 @@
         "title": "密码"
       },
       "preference": {
+        "pronouns": "代词",
         "pronouns_desc": "你所用的人称代词",
         "showEmail": "展示邮件地址",
+        "showGithub": "展示 GitHub 账号",
         "showMinecraftAccount": "展示 Minecraft 账号",
         "showTimezone": "展示时区"
       },
@@ -90,6 +93,7 @@
       "save": "保存",
       "savePreferences": "保存偏好设置",
       "success": "操作成功",
+      "username": "用户名",
       "username_timer": "你可以在{0}小时后修改用户名"
     },
     "editProfile": "编辑个人资料"
