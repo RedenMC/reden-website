@@ -1,188 +1,223 @@
 {
-  "en": "English",
-  "zh_CN": "简体中文(中国大陆)",
-  "zh_TW": "繁體中文(中國台灣)",
   "$vuetify": {
     "close": "关闭",
-    "open": "打开",
-    "noDataText": "没有可用数据",
-    "dataIterator": {
-      "rowsPerPageText": "每页项目: ",
-      "rowsPerPageAll": "全部",
-      "pageText": "{0}-{1}, 共 {2} 项",
-      "noResultsText": "没有找到相关记录",
-      "nextPage": "下一页",
-      "prevPage": "上一页",
-      "loadingText": "正在加载项目..."
-    },
     "dataFooter": {
-      "itemsPerPageText": "每页项目: ",
-      "itemsPerPageAll": "全部",
-      "prevPage": "上一页",
-      "nextPage": "下一页",
       "firstPage": "第一页",
+      "itemsPerPageAll": "全部",
+      "itemsPerPageText": "每页项目: ",
       "lastPage": "最后一页",
-      "pageText": "{0}-{1}, 共 {2} 项"
+      "nextPage": "下一页",
+      "pageText": "{0}-{1}, 共 {2} 项",
+      "prevPage": "上一页"
     },
+    "dataIterator": {
+      "loadingText": "正在加载项目...",
+      "nextPage": "下一页",
+      "noResultsText": "没有找到相关记录",
+      "pageText": "{0}-{1}, 共 {2} 项",
+      "prevPage": "上一页",
+      "rowsPerPageAll": "全部",
+      "rowsPerPageText": "每页项目: "
+    },
+    "noDataText": "没有可用数据",
+    "open": "打开",
     "pagination": {
       "ariaLabel": {
         "root": "分页"
       }
     }
   },
-  "reden": {
-    "learn_more": "了解更多",
-    "footer": {
-      "reden_mod": {
-        "title": "Reden Mod",
-        "undo_redo": "撤销 & 重做",
-        "rvc": "Reden 版本控制 (RVC)",
-        "debugger": "Reden 调试器"
-      },
-      "reden_ecosystem": {
-        "title": "Reden 生态系统",
-        "wiki": "Reden 维基",
-        "sponsors": "赞助者",
-        "github_organization": "Github 组织"
-      },
-      "reden_community": {
-        "title": "Reden 社区",
-        "discord": "Discord 群组",
-        "community_guidelines": "社区指南",
-        "community_events": "社区活动"
-      },
-      "follow_us": {
-        "title": "关注我们",
-        "blog": "博客",
-        "youtube": "Youtube",
-        "bilibili": "哔哩哔哩"
-      }
-    },
-    "title": {
-      "home": "首页",
-      "download": "下载",
-      "my_account": "我的账号",
-      "edit_profile": "编辑个人资料",
-      "undo": "撤销",
-      "rvc": "RVC",
-      "debugger": "Reden 调试器"
-    },
-    "home": {
-      "feature_intro": {
-        "title": "功能介绍",
-        "undo": "不小心出了错？Reden 可以通过按下 Ctrl+Z 快速撤销您的操作。所有连锁反应都将被撤销。",
-        "rvc": "RVC（Reden 版本控制）是专为红石设计的版本控制系统。它可以让您轻松管理所有版本的红石项目。",
-        "debugger": "搞不清楚为什么您的红石装置不工作？Reden 调试器可以帮助您查看游戏如何处理您的红石装置。"
-      },
-      "community_intro": {
-        "title": "社区",
-        "open_source": "Reden 是一个开源项目，对所有人免费。我们欢迎所有人为 Reden 做出贡献，包括代码、文档、Wiki 等。",
-        "wiki": "Reden Wiki 包含了您需要了解的关于红石和 Reden 的几乎所有内容。这也是与社区分享您的知识的好地方。",
-        "discord": "加入我们的 Discord 服务器，与其他红石开发者聊天并从社区获得帮助。",
-        "sponsor": "Reden 得到了社区的赞助。我们感谢每一位支持我们的赞助者。"
-      }
-    },
-    "download": "下载",
-    "download_page": {
-      "sorry_constructing": "抱歉，我们的下载页面正在建设中，我们建议您前往此处下载："
-    },
-    "my_account": "我的账户",
-    "wiki": "维基",
-    "description": "为红石机器开发者提供一站式工作环境，成为最好的红石调试和教学工具。"
-  },
   "admin": {
     "title": {
       "users": "全部用户"
     }
   },
-  "user": {
-    "developer": "开发者",
-    "developer_hover": "此用户是本项目的活跃开发者",
-    "contributor": "贡献者",
-    "contributor_hover": "此用户参与过本项目的开发",
-    "sponsor": "赞助者",
-    "sponsor_hover": "此用户赞助过本项目",
-    "staff": "管理员",
-    "staff_hover": "此用户是本项目的管理员"
-  },
-  "sponsors": {
-    "title": "赞助者",
-    "description": "Reden 得到了你们的支持，我们在此由衷地感谢每一位赞助者。",
-    "alipay": "使用支付宝赞助",
-    "paypal": "使用 PayPal 支持我们",
-    "notice": "Reden 是一个开源项目，永远对所有人免费。我们没有从任何公司或组织获得资金。我们依靠您的支持来维持项目运行。当您支持我们时，您会在此页面被列出，因此请确保您在捐款时提供您的姓名和电子邮件地址。感谢您的支持！",
-    "badge": "你可以通过支持我们来获得此赞助者徽章，它将显示在你的个人资料上。"
-  },
-  "login": {
-    "title": "登录 Reden",
-    "oauth": "或使用以下方式登录",
-    "forgot_password": "忘记密码？",
-    "or": "或者",
-    "register": "去注册",
-    "button": {
-      "login": "登录",
-      "captcha": "请先完成验证码"
-    }
-  },
-  "register": {
-    "title": "注册 Reden",
-    "invalid": {
-      "email": "无效的邮箱地址",
-      "password": {
-        "strength": "密码需使用至少8个字符，并同时包含大写字母、小写字母和数字",
-        "mismatching": "密码不匹配"
-      },
-      "username": "无效用户名"
-    },
-    "existing": "已经有账号了？",
-    "login": "登录",
-    "email_verification": {
-      "title": "还差一步",
-      "message": "我们向 {email} 发送了一封包含注册链接的邮件，请点击链接已完成注册。如果没有收到此邮件，请检查其他它可能在的地方，如垃圾邮件文件夹。"
-    },
-    "toast": {
-      "successful": {
-        "title": "注册成功！",
-        "message": "请检查你的邮箱来完成注册"
-      },
-      "try": "请稍后再试",
-      "failed": "注册失败",
-      "error": {
-        "unknown": "未知错误"
-      }
-    },
-    "placeholder": {
-      "email": "电子邮箱",
-      "username": "用户名",
-      "password": "密码",
-      "confirm": "重复密码",
-      "invitation_code": "邀请码(可选)"
-    },
-    "button": {
-      "register": "注册",
-      "captcha": "请先完成验证码",
-      "done": "完成"
-    },
-    "oauth": "或使用以下方式注册: "
-  },
-  "search": {
-    "hover": "搜索 Reden 功能"
-  },
+  "en": "English",
   "litematica_generator": {
-    "title": "投影在线生成器",
-    "select": "今天你想生成什么？",
+    "contribute": "想要你的机器（例如世界吞噬者）被收录在这里？现在就为 Reden 做出贡献！发送邮件至 me@redenmc.com 联系我",
     "description": "在这里在线生成投影文件，例如世界吞噬者",
-    "not_logged_in": "游客用户每分钟只能生成 5 次，登录后解锁此限制",
     "download": "下载",
     "download_count": "{count} 次下载",
-    "contribute": "想要你的机器（例如世界吞噬者）被收录在这里？现在就为 Reden 做出贡献！发送邮件至 me@redenmc.com 联系我",
-    "size_min": "机器的最小尺寸为 {size}",
+    "not_logged_in": "游客用户每分钟只能生成 5 次，登录后解锁此限制",
+    "select": "今天你想生成什么？",
+    "size_description": "机器的 x, y, z 尺寸。对于世界吞噬者，z 尺寸是出发站和返回站之间的距离。",
     "size_max": "机器的最大尺寸为 {size}",
+    "size_min": "机器的最小尺寸为 {size}",
     "size_mod": "尺寸除以 {mod} 的余数必须为 {rem}",
     "size_x": "x 方向尺寸",
     "size_y": "y 方向尺寸",
     "size_z": "z 方向尺寸",
     "suggested_values": "建议选择：",
-    "size_description": "机器的 x, y, z 尺寸。对于世界吞噬者，z 尺寸是出发站和返回站之间的距离。"
-  }
+    "title": "投影在线生成器"
+  },
+  "login": {
+    "button": {
+      "captcha": "请先完成验证码",
+      "login": "登录"
+    },
+    "forgot_password": "忘记密码？",
+    "oauth": "或使用以下方式登录",
+    "or": "或者",
+    "register": "去注册",
+    "title": "登录 Reden"
+  },
+  "profile": {
+    "edit": {
+      "bio_desc": "介绍你自己",
+      "changeEmail": "修改邮件地址",
+      "email_desc": "This is the email you use to register and reset your password.",
+      "failedToSaveInformation": "保存信息失败",
+      "information_saved": "信息已保存",
+      "password": {
+        "changePassword": "修改密码",
+        "confirm": "确认新密码",
+        "desc": "你可以在此修改密码",
+        "first": "你还没有设置密码，为了账号安全请尽快设置密码。",
+        "mew": "新密码",
+        "old": "旧密码",
+        "passwordsDoNotMatch": "密码不一致",
+        "requirements": "密码必须包含至少8个字符，同时包含数字和字母",
+        "title": "密码"
+      },
+      "preference": {
+        "pronouns_desc": "你所用的人称代词",
+        "showEmail": "展示邮件地址",
+        "showGithub_desc": "Whether to show your GitHub to other users.",
+        "showMinecraftAccount": "展示 Minecraft 账号",
+        "showTimezone": "展示时区"
+      },
+      "preferences": "偏好设置",
+      "preferencesSaved": "偏好设置已保存",
+      "save": "保存",
+      "savePreferences": "保存偏好设置",
+      "success": "操作成功",
+      "username_desc": "This is the username you use to login. You can change it once every 48 hours.",
+      "username_timer": "你可以在{0}小时后修改用户名"
+    },
+    "editProfile": "编辑个人资料"
+  },
+  "reden": {
+    "description": "为红石机器开发者提供一站式工作环境，成为最好的红石调试和教学工具。",
+    "download": "下载",
+    "download_page": {
+      "sorry_constructing": "抱歉，我们的下载页面正在建设中，我们建议您前往此处下载："
+    },
+    "footer": {
+      "follow_us": {
+        "bilibili": "哔哩哔哩",
+        "blog": "博客",
+        "title": "关注我们",
+        "youtube": "Youtube"
+      },
+      "reden_community": {
+        "community_events": "社区活动",
+        "community_guidelines": "社区指南",
+        "discord": "Discord 群组",
+        "title": "Reden 社区"
+      },
+      "reden_ecosystem": {
+        "github_organization": "Github 组织",
+        "sponsors": "赞助者",
+        "title": "Reden 生态系统",
+        "wiki": "Reden 维基"
+      },
+      "reden_mod": {
+        "debugger": "Reden 调试器",
+        "rvc": "Reden 版本控制 (RVC)",
+        "title": "Reden Mod",
+        "undo_redo": "撤销 & 重做"
+      }
+    },
+    "home": {
+      "community_intro": {
+        "discord": "加入我们的 Discord 服务器，与其他红石开发者聊天并从社区获得帮助。",
+        "open_source": "Reden 是一个开源项目，对所有人免费。我们欢迎所有人为 Reden 做出贡献，包括代码、文档、Wiki 等。",
+        "sponsor": "Reden 得到了社区的赞助。我们感谢每一位支持我们的赞助者。",
+        "title": "社区",
+        "wiki": "Reden Wiki 包含了您需要了解的关于红石和 Reden 的几乎所有内容。这也是与社区分享您的知识的好地方。"
+      },
+      "feature_intro": {
+        "debugger": "搞不清楚为什么您的红石装置不工作？Reden 调试器可以帮助您查看游戏如何处理您的红石装置。",
+        "rvc": "RVC（Reden 版本控制）是专为红石设计的版本控制系统。它可以让您轻松管理所有版本的红石项目。",
+        "title": "功能介绍",
+        "undo": "不小心出了错？Reden 可以通过按下 Ctrl+Z 快速撤销您的操作。所有连锁反应都将被撤销。"
+      }
+    },
+    "learn_more": "了解更多",
+    "my_account": "我的账户",
+    "title": {
+      "debugger": "Reden 调试器",
+      "download": "下载",
+      "edit_profile": "编辑个人资料",
+      "home": "首页",
+      "my_account": "我的账号",
+      "rvc": "RVC",
+      "undo": "撤销"
+    },
+    "wiki": "维基"
+  },
+  "register": {
+    "button": {
+      "captcha": "请先完成验证码",
+      "done": "完成",
+      "register": "注册"
+    },
+    "email_verification": {
+      "message": "我们向 {email} 发送了一封包含注册链接的邮件，请点击链接已完成注册。如果没有收到此邮件，请检查其他它可能在的地方，如垃圾邮件文件夹。",
+      "title": "还差一步"
+    },
+    "existing": "已经有账号了？",
+    "invalid": {
+      "email": "无效的邮箱地址",
+      "password": {
+        "mismatching": "密码不匹配",
+        "strength": "密码需使用至少8个字符，并同时包含大写字母、小写字母和数字"
+      },
+      "username": "无效用户名"
+    },
+    "login": "登录",
+    "oauth": "或使用以下方式注册: ",
+    "placeholder": {
+      "confirm": "重复密码",
+      "email": "电子邮箱",
+      "invitation_code": "邀请码(可选)",
+      "password": "密码",
+      "username": "用户名"
+    },
+    "title": "注册 Reden",
+    "toast": {
+      "error": {
+        "unknown": "未知错误"
+      },
+      "failed": "注册失败",
+      "successful": {
+        "message": "请检查你的邮箱来完成注册",
+        "title": "注册成功！"
+      },
+      "try": "请稍后再试"
+    }
+  },
+  "search": {
+    "hover": "搜索 Reden 功能"
+  },
+  "sponsors": {
+    "alipay": "使用支付宝赞助",
+    "badge": "你可以通过支持我们来获得此赞助者徽章，它将显示在你的个人资料上。",
+    "description": "Reden 得到了你们的支持，我们在此由衷地感谢每一位赞助者。",
+    "notice": "Reden 是一个开源项目，永远对所有人免费。我们没有从任何公司或组织获得资金。我们依靠您的支持来维持项目运行。当您支持我们时，您会在此页面被列出，因此请确保您在捐款时提供您的姓名和电子邮件地址。感谢您的支持！",
+    "paypal": "使用 PayPal 支持我们",
+    "title": "赞助者"
+  },
+  "user": {
+    "contributor": "贡献者",
+    "contributor_hover": "此用户参与过本项目的开发",
+    "developer": "开发者",
+    "developer_hover": "此用户是本项目的活跃开发者",
+    "sponsor": "赞助者",
+    "sponsor_hover": "此用户赞助过本项目",
+    "staff": "管理员",
+    "staff_hover": "此用户是本项目的管理员"
+  },
+  "zh_CN": "简体中文(中国大陆)",
+  "zh_TW": "繁體中文(中國台灣)"
 }
