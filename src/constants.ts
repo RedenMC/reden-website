@@ -150,6 +150,7 @@ export async function toastError(
   e: Error | Response | ErrorResponse | any,
   message?: string,
 ) {
+  window.turnstile.reset();
   if (e instanceof Error) {
     console.log('error', e);
     toast(message || 'Error', {

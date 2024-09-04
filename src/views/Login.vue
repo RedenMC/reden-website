@@ -31,6 +31,7 @@ function login() {
     .then(async (response) => {
       if (!response.ok) {
         token.value = '';
+        window.turnstile.reset();
         return Promise.reject(response);
       }
       const data: LoginResponse = await response.json();

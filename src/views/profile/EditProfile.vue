@@ -39,6 +39,7 @@ function changePassword() {
     },
   };
   changingPassword.value = true;
+  window.turnstile.reset();
   captchaToken.value = '';
   doFetchPost('/api/account/security/change-password', body)
     .then((response) => {

@@ -50,6 +50,8 @@ function register(e: SubmitEventPromise) {
           });
           registerOk.value = true;
         } else {
+          window.turnstile.reset();
+          token.value = '';
           return Promise.reject(res);
         }
       })
