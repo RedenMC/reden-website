@@ -20,7 +20,7 @@ function state(): AppState {
     logined: false,
     username: undefined,
     uid: -1,
-    csrfToken: sessionStorage.getItem('csrfToken'),
+    csrfToken: null,
     userCache: undefined,
     theme: 'dark',
   };
@@ -35,6 +35,7 @@ export const useAppStore = defineStore('reden', {
         JSON.stringify({
           logined: this.logined,
           username: this.username,
+          csrfToken: this.csrfToken,
           uid: this.uid,
           userCache: this.userCache,
           theme: this.theme,
@@ -56,7 +57,7 @@ export const useAppStore = defineStore('reden', {
     },
     setCsrfToken(token: string) {
       this.csrfToken = token;
-      sessionStorage.setItem('csrfToken', token);
+      this.save();
     },
     setTheme(theme: 'light' | 'dark') {
       this.theme = theme;
