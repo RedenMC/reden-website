@@ -43,9 +43,15 @@ type Props = {
 
 const props = defineProps<Props>();
 
-const badges = ref(props.roles?.map((role: string) => defs[role] ?? {
-  translate: role,
-  color: randomColor()
+const badges = ref(props.roles?.map((role: string) => {
+  if (!defs[role]) {
+    defs[role] = {
+      icon: "",
+      translate: role,
+      color: randomColor()
+    };
+  }
+  return defs[role]!
 }));
 
 watch(
