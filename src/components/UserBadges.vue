@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
+import randomColor from 'randomcolor';
 
 type Def = {
   color: string;
@@ -42,7 +43,10 @@ type Props = {
 
 const props = defineProps<Props>();
 
-const badges = ref(props.roles?.map((role: string) => defs[role]));
+const badges = ref(props.roles?.map((role: string) => defs[role] ?? {
+  translate: role,
+  color: randomColor()
+}));
 
 watch(
   () => props.roles,
