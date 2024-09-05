@@ -8,14 +8,30 @@ import {
   resetCaptcha,
   toastError,
 } from '@/constants';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import OAuthAccountLine from '@/components/editProfilePage/OAuthAccountLine.vue';
 import { toast } from 'vuetify-sonner';
 import { useI18n } from 'vue-i18n';
+const router = useRouter();
 import CommonCaptcha from '@/components/CommonCaptcha.vue';
+import { useRouter } from 'vue-router';
 
 const userCopy = ref<Profile>();
 const user = ref<Profile>();
+const shouldChangePassword = ref(
+  router.currentRoute.value?.hash === '#change-password',
+);
+watch(shouldChangePassword, () => {
+  if (shouldChangePassword.value) {
+    router.replace({
+      hash: '#change-password',
+    });
+  } else {
+    router.replace({
+      hash: '',
+    });
+  }
+});
 fetchUser(user).then(() => {
   userCopy.value = JSON.parse(JSON.stringify(user.value));
 });
@@ -342,75 +358,83 @@ function savePreferences() {
 
     <v-row>
       <v-spacer />
-      <v-btn class="text-capitalize setting-button" color="primary">
+      <v-btn
+        class="text-capitalize setting-button"
+        color="primary"
+        @click="shouldChangePassword = true"
+      >
         {{ t('profile.edit.password.changePassword') }}
-        <v-dialog activator="parent" scroll-strategy="block" max-width="500">
-          <v-card>
-            <v-card-title>
-              {{ t('profile.edit.password.changePassword') }}
-            </v-card-title>
-            <v-card-text>
-              <v-form>
-                <input autocomplete="username" :value="user.username" hidden />
-                <v-text-field
-                  v-if="!user.passwordNotSet"
-                  v-model="oldPassword"
-                  class="setting-input"
-                  color="primary"
-                  type="password"
-                  autocomplete="current-password"
-                  :label="t('profile.edit.password.old')"
-                />
-                <p v-if="user.passwordNotSet">
-                  {{ t('profile.edit.password.first') }}
-                </p>
-                <v-text-field
-                  v-model="newPassword"
-                  class="setting-input"
-                  color="primary"
-                  type="password"
-                  autocomplete="new-password"
-                  :label="t('profile.edit.password.mew')"
-                  :rules="[
-                    (v: string) =>
-                      isStrongPassword(v) ||
-                      t('profile.edit.password.requirements'),
-                    (v: string) =>
-                      v !== oldPassword ||
-                      'New password must be different from old password',
-                  ]"
-                />
-                <v-text-field
-                  v-model="confirmNewPassword"
-                  class="setting-input"
-                  color="primary"
-                  type="password"
-                  autocomplete="new-password"
-                  :label="t('profile.edit.password.confirm')"
-                  :rules="[
-                    (v: string) =>
-                      v === newPassword ||
-                      t('profile.edit.password.passwordsDoNotMatch'),
-                  ]"
-                />
-              </v-form>
-              <common-captcha v-model="captcha" />
-            </v-card-text>
-            <v-card-actions>
-              <v-spacer />
-              <v-btn
-                class="text-capitalize setting-button"
-                color="primary"
-                variant="elevated"
-                :loading="changingPassword"
-                @click="changePassword"
-              >
-                {{ t('profile.edit.password.changePassword') }}
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
       </v-btn>
+      <v-dialog
+        v-model="shouldChangePassword"
+        scroll-strategy="block"
+        max-width="500"
+      >
+        <v-card>
+          <v-card-title>
+            {{ t('profile.edit.password.changePassword') }}
+          </v-card-title>
+          <v-card-text>
+            <v-form>
+              <input autocomplete="username" :value="user.username" hidden />
+              <v-text-field
+                v-if="!user.passwordNotSet"
+                v-model="oldPassword"
+                class="setting-input"
+                color="primary"
+                type="password"
+                autocomplete="current-password"
+                :label="t('profile.edit.password.old')"
+              />
+              <p v-if="user.passwordNotSet">
+                {{ t('profile.edit.password.first') }}
+              </p>
+              <v-text-field
+                v-model="newPassword"
+                class="setting-input"
+                color="primary"
+                type="password"
+                autocomplete="new-password"
+                :label="t('profile.edit.password.mew')"
+                :rules="[
+                  (v: string) =>
+                    isStrongPassword(v) ||
+                    t('profile.edit.password.requirements'),
+                  (v: string) =>
+                    v !== oldPassword ||
+                    'New password must be different from old password',
+                ]"
+              />
+              <v-text-field
+                v-model="confirmNewPassword"
+                class="setting-input"
+                color="primary"
+                type="password"
+                autocomplete="new-password"
+                :label="t('profile.edit.password.confirm')"
+                :rules="[
+                  (v: string) =>
+                    v === newPassword ||
+                    t('profile.edit.password.passwordsDoNotMatch'),
+                ]"
+              />
+            </v-form>
+            <common-captcha v-model="captcha" />
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer />
+            <v-btn
+              class="text-capitalize setting-button"
+              color="primary"
+              variant="elevated"
+              :loading="changingPassword"
+              @click="changePassword"
+            >
+              {{ t('profile.edit.password.changePassword') }}
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-row>
   </v-card>
   <v-card class="setting-section-card" rounded="lg" border>
