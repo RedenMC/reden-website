@@ -313,3 +313,39 @@ export const isInChina = () =>
         return false;
       },
     );
+
+export type BadgeDef = {
+  color: string;
+  translate: string;
+  hover_translate?: string;
+  icon: string;
+  url?: string;
+};
+
+export const badgeDefs: { [keys: string]: BadgeDef } = {
+  developer: {
+    color: 'green',
+    translate: 'user.developer',
+    hover_translate: 'user.developer_hover',
+    icon: 'mdi-code-tags',
+  },
+  contributor: {
+    color: 'orange',
+    translate: 'user.contributor',
+    hover_translate: 'user.contributor_hover',
+    icon: 'mdi-account-star',
+  },
+  staff: {
+    color: 'blue',
+    translate: 'user.staff',
+    hover_translate: 'user.staff_hover',
+    icon: 'mdi-account-tie',
+  },
+  sponsor: {
+    color: 'purple',
+    translate: 'user.sponsor',
+    hover_translate: 'user.sponsor_hover',
+    icon: 'mdi-account-heart',
+    url: '/sponsors',
+  },
+};

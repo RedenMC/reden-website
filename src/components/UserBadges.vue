@@ -1,63 +1,29 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import randomColor from 'randomcolor';
+import { badgeDefs } from '@/constants';
 
-type Def = {
-  color: string;
-  translate: string;
-  hover_translate?: string;
-  icon: string;
-  url?: string;
-};
-const defs: { [keys: string]: Def } = {
-  developer: {
-    color: 'green',
-    translate: 'user.developer',
-    hover_translate: 'user.developer_hover',
-    icon: 'mdi-code-tags',
-  },
-  contributor: {
-    color: 'orange',
-    translate: 'user.contributor',
-    hover_translate: 'user.contributor_hover',
-    icon: 'mdi-account-star',
-  },
-  staff: {
-    color: 'blue',
-    translate: 'user.staff',
-    hover_translate: 'user.staff_hover',
-    icon: 'mdi-account-tie',
-  },
-  sponsor: {
-    color: 'purple',
-    translate: 'user.sponsor',
-    hover_translate: 'user.sponsor_hover',
-    icon: 'mdi-account-heart',
-    url: '/sponsors',
-  },
-};
+const props = defineProps<{
+  roles?: string[];
+}>();
 
-type Props = {
-  roles: string[] | undefined;
-};
-
-const props = defineProps<Props>();
-
-const badges = ref(props.roles?.map((role: string) => {
-  if (!defs[role]) {
-    defs[role] = {
-      icon: "",
-      translate: role,
-      color: randomColor()
-    };
-  }
-  return defs[role]!
-}));
+const badges = ref(
+  props.roles?.map((role: string) => {
+    if (!badgeDefs[role]) {
+      badgeDefs[role] = {
+        icon: '',
+        translate: role,
+        color: randomColor(),
+      };
+    }
+    return badgeDefs[role]!;
+  }),
+);
 
 watch(
   () => props.roles,
   (newVal) => {
-    badges.value = newVal?.map((role: string) => defs[role]);
+    badges.value = newVal?.map((role: string) => badgeDefs[role]);
   },
 );
 </script>
