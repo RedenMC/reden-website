@@ -190,7 +190,6 @@ const selected = computed(() => generators.value[name.value]);
             />
             <v-row>
               <v-spacer />
-              <LitematicaUpload v-if="useAppStore().logined" class="ma-3" />
               <v-btn
                 :disabled="selected?.available === false"
                 :loading="loading"
@@ -203,6 +202,10 @@ const selected = computed(() => generators.value[name.value]);
             </v-row>
           </v-card-text>
         </v-card>
+        <v-row>
+          <v-spacer />
+          <LitematicaUpload v-if="useAppStore().logined" class="ma-3" />
+        </v-row>
       </v-col>
     </v-row>
     <v-row v-if="!useAppStore().logined" class="text-sm-body-1">

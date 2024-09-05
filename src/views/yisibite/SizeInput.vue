@@ -39,22 +39,24 @@ const props = defineProps<{
 }>();
 
 const model = defineModel<number | string>();
-const cond: ({
-  min?: number;
-  max?: number;
-} & ((v: number) => any))[] = props.def.conditions[props.xyz];
+const cond = computed<
+  ({
+    min?: number;
+    max?: number;
+  } & ((v: number) => any))[]
+>(() => props.def.conditions[props.xyz]);
 const toggle = (props.def as any)['has' + props.xyz.toUpperCase()] as boolean;
 
 const suggestedValues = computed(() => {
   const current = Number(model.value);
-  if (!current || !cond || cond.length === 0) {
-    if (debugMessages()) console.error('bad args!', current, cond);
+  if (!current || !cond.value || cond.value.length === 0) {
+    if (debugMessages()) console.error('bad args!', current, cond.value);
     return;
   }
   let start = current;
   const check = (value: number) => {
     let accepted = true;
-    for (let func of cond) {
+    for (let func of cond.value) {
       if (func(value) !== true) {
         accepted = false;
         if (func.min) {
