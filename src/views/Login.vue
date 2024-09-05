@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import VueTurnstile from 'vue-turnstile';
 import {
-  cloudflareCAPTCHAKey,
   doFetchPost,
-  LoginResponse,
+  LoginResponse, resetCaptcha,
   toastError,
 } from '@/constants';
 import { useAppStore } from '@/store/app';
@@ -11,27 +9,27 @@ import { toast } from 'vuetify-sonner';
 import { ref } from 'vue';
 import router from '@/router';
 import RedenRouter from '@/router/RedenRouter.vue';
+import CommonCaptcha from "@/components/CommonCaptcha.vue";
 
 const username = ref('');
 const password = ref('');
 const loading = ref(false);
-const token = ref('');
+const captcha = ref<{
+  provider?: string;
+  token?: string;
+}>({});
 function login() {
   loading.value = true;
   const req = {
     username: username.value,
     password: password.value,
     timestamp: new Date().getTime(),
-    captcha: {
-      token: token.value,
-      provider: 'cloudflare',
-    },
+    captcha: captcha.value,
   };
   doFetchPost('/api/account/login', req)
     .then(async (response) => {
       if (!response.ok) {
-        token.value = '';
-        window.turnstile.reset();
+        resetCaptcha();
         return Promise.reject(response);
       }
       const data: LoginResponse = await response.json();
@@ -88,18 +86,14 @@ function login() {
           <v-icon>mdi-lock</v-icon>
         </template>
       </v-text-field>
-      <vue-turnstile
-        :site-key="cloudflareCAPTCHAKey"
-        v-model="token"
-        v-show="!token"
-      />
+      <common-captcha v-model="captcha" />
       <v-btn
         :loading="loading"
-        :disabled="!token"
+        :disabled="!captcha.token"
         color="primary"
         @click="login"
       >
-        {{ token ? $t('login.button.login') : $t('login.button.captcha') }}
+        {{ captcha.token ? $t('login.button.login') : $t('login.button.captcha') }}
       </v-btn>
 
       <span class="text-center" style="padding: 4px">

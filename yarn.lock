@@ -1967,6 +1967,11 @@ vue-turnstile@^1.0.8:
   resolved "https://registry.yarnpkg.com/vue-turnstile/-/vue-turnstile-1.0.8.tgz#9115d541ee8f9258fdea66ef159ddd6a26314247"
   integrity sha512-YpxW3YOIQxYYSqmVFG0hKzKHNtLpVAFtZVDU9iCBNJ4nkzYwY8bcW7+q4gXMVchmq1r0E5832wnoEDTZiML3Bg==
 
+vue-vaptcha@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/vue-vaptcha/-/vue-vaptcha-1.0.1.tgz#f8e54f448eebf3188bd12cce25e0be3e3cbc6084"
+  integrity sha512-Tj+1spt3jQJA3XeIXbV1Y11B/286Arqmwj9uAon5QT4G7ejCnEkMpkeFEju+GzTHlyaDjNh2f0ClkSsUCyEO+g==
+
 vue@^3.2.0:
   version "3.4.27"
   resolved "https://registry.yarnpkg.com/vue/-/vue-3.4.27.tgz#40b7d929d3e53f427f7f5945386234d2854cc2a1"

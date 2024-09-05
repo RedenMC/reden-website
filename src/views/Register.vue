@@ -1,11 +1,10 @@
 <script lang="ts" setup>
 import { toast } from 'vuetify-sonner';
 import { ref } from 'vue';
-import VueTurnstile from 'vue-turnstile';
+import CommonCaptcha from '@/components/CommonCaptcha.vue'
 import {
-  cloudflareCAPTCHAKey,
   doFetchPost,
-  isStrongPassword,
+  isStrongPassword, resetCaptcha,
   toastError,
   usernameRegex,
 } from '@/constants';
@@ -20,7 +19,7 @@ const confirmPassword = ref('');
 const invitationCode = ref('');
 const loading = ref(false);
 const registerOk = ref(false);
-const token = ref('');
+const captcha = ref({});
 const { t } = useI18n();
 function register(e: SubmitEventPromise) {
   e.preventDefault();
@@ -33,10 +32,7 @@ function register(e: SubmitEventPromise) {
       password: password.value,
       invitationCode: invitationCode.value,
       timestamp: new Date().getTime(),
-      captcha: {
-        token: token.value,
-        provider: 'cloudflare',
-      },
+      captcha: captcha.value,
     };
     doFetchPost('/api/account/register/start', req)
       .then((res) => {
@@ -50,8 +46,7 @@ function register(e: SubmitEventPromise) {
           });
           registerOk.value = true;
         } else {
-          window.turnstile.reset();
-          token.value = '';
+          resetCaptcha();
           return Promise.reject(res);
         }
       })
@@ -127,11 +122,7 @@ function register(e: SubmitEventPromise) {
           <v-icon>mdi-lock</v-icon>
         </template>
       </v-text-field>
-      <vue-turnstile
-        :site-key="cloudflareCAPTCHAKey"
-        v-model="token"
-        v-show="!token"
-      />
+      <common-captcha v-model="captcha" />
       <v-text-field
         v-model="invitationCode"
         :label="t('register.placeholder.invitation_code')"

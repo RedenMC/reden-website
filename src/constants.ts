@@ -150,7 +150,6 @@ export async function toastError(
   e: Error | Response | ErrorResponse | any,
   message?: string,
 ) {
-  window.turnstile.reset();
   if (e instanceof Error) {
     console.log('error', e);
     toast(message || 'Error', {
@@ -290,8 +289,10 @@ export function isStrongPassword(password: string) {
 
 export const debugMessages = () => !useMeta().get().production;
 
-export const isInChina = () =>
-  doFetchGet('/api/ip')
+let _isInChina: boolean | undefined = undefined
+export function isInChina() {
+  if (_isInChina) return Promise.resolve(_isInChina);
+  return doFetchGet('/api/ip')
     .then((res) => {
       if (res.ok) {
         return res.json();
@@ -301,18 +302,42 @@ export const isInChina = () =>
     .then(
       (data: {
         ip: string;
-        mm?: {
-          country_code?: string;
-        };
+        mm?: { country_code?: string; };
       }) => {
         if (data.mm?.country_code === 'CN') {
-          // 判断中国ip只是用来防止有墙的网站，没别的意思
           console.log('ip', data.ip, 'is in china.');
+          _isInChina = true;
           return true;
         }
+        _isInChina = false;
         return false;
-      },
+      }
     );
+}
+
+export type VaptchaObj = {
+  getServerToken: () => {
+    server: string;
+    token: string;
+  };
+  listen: (event: 'pass' | 'close', fun: () => void) => void;
+  render: () => void;
+  reset: () => void;
+}
+
+declare global {
+  interface Window {
+    vaptcha: (config: any) => Promise<VaptchaObj>;
+    vaptchaObj: VaptchaObj
+  }
+}
+
+export function resetCaptcha() {
+  if (window.turnstile)
+    window.turnstile.reset();
+  if (window.vaptchaObj)
+    window.vaptchaObj.reset();
+}
 
 export type BadgeDef = {
   color: string;

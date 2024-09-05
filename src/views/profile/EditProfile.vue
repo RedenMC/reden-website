@@ -4,14 +4,14 @@ import {
   doFetchPost,
   fetchUser,
   isStrongPassword,
-  Profile,
+  Profile, resetCaptcha,
   toastError,
 } from '@/constants';
 import { ref } from 'vue';
 import OAuthAccountLine from '@/components/editProfilePage/OAuthAccountLine.vue';
 import { toast } from 'vuetify-sonner';
 import { useI18n } from 'vue-i18n';
-import VueTurnstile from 'vue-turnstile';
+import CommonCaptcha from "@/components/CommonCaptcha.vue";
 
 const userCopy = ref<Profile>();
 const user = ref<Profile>();
@@ -21,26 +21,22 @@ fetchUser(user).then(() => {
 
 const timezones = Intl.supportedValuesOf('timeZone');
 
-const captchaToken = ref('');
 const oldPassword = ref('');
 const newPassword = ref('');
 const confirmNewPassword = ref('');
 const changingPassword = ref(false);
+const captcha = ref({});
 function changePassword() {
-  // if (!isStrongPassword(newPassword.value)) return;
+  if (!isStrongPassword(newPassword.value)) return;
   if (newPassword.value !== confirmNewPassword.value) return;
   if (!captchaToken.value) return;
   const body = {
     oldPassword: oldPassword.value,
     newPassword: newPassword.value,
-    captcha: {
-      provider: 'cloudflare',
-      token: captchaToken.value,
-    },
+    captcha: captcha.value,
   };
   changingPassword.value = true;
-  window.turnstile.reset();
-  captchaToken.value = '';
+  resetCaptcha();
   doFetchPost('/api/account/security/change-password', body)
     .then((response) => {
       if (response.ok) {
@@ -57,6 +53,7 @@ function changePassword() {
           confirmNewPassword.value = '';
         });
       } else {
+        resetCaptcha();
         return Promise.reject(response);
       }
     })
@@ -114,6 +111,7 @@ function savePreferences() {
           JSON.stringify(user.value?.preference),
         );
       } else {
+        resetCaptcha();
         return Promise.reject(response);
       }
     })
@@ -389,10 +387,7 @@ function savePreferences() {
                     t('profile.edit.password.passwordsDoNotMatch'),
                 ]"
               />
-              <vue-turnstile
-                v-model="captchaToken"
-                :site-key="cloudflareCAPTCHAKey"
-              />
+              <common-captcha v-model="captcha" />
             </v-card-text>
             <v-card-actions>
               <v-spacer />
