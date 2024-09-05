@@ -74,6 +74,7 @@ function register(e: SubmitEventPromise) {
           () => /.+@.+\..+/i.test(email) || $t('register.invalid.email'),
         ]"
         required
+        autocomplete="email"
       >
         <template #prepend>
           <v-icon>mdi-email</v-icon>
@@ -87,6 +88,7 @@ function register(e: SubmitEventPromise) {
           () => usernameRegex.test(username) || $t('register.invalid.username'),
         ]"
         required
+        autocomplete="username"
       >
         <template #prepend>
           <v-icon>mdi-account</v-icon>
@@ -102,6 +104,7 @@ function register(e: SubmitEventPromise) {
             $t('register.invalid.password.strength'),
         ]"
         required
+        autocomplete="new-password"
         type="password"
       >
         <template #prepend>
@@ -118,6 +121,7 @@ function register(e: SubmitEventPromise) {
             $t('register.invalid.password.mismatching'),
         ]"
         required
+        autocomplete="new-password"
         type="password"
       >
         <template #prepend>
