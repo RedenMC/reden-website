@@ -356,6 +356,7 @@ function savePreferences() {
                 class="setting-input"
                 color="primary"
                 type="password"
+                autocomplete="current-password"
                 :label="t('profile.edit.password.old')"
               />
               <p v-if="user.passwordNotSet">
@@ -366,6 +367,7 @@ function savePreferences() {
                 class="setting-input"
                 color="primary"
                 type="password"
+                autocomplete="new-password"
                 :label="t('profile.edit.password.mew')"
                 :rules="[
                   (v: string) =>

@@ -12,6 +12,8 @@ import { ref } from 'vue';
 import router from '@/router';
 import RedenRouter from '@/router/RedenRouter.vue';
 import CommonCaptcha from '@/components/CommonCaptcha.vue';
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
 
 const username = ref('');
 const password = ref('');
@@ -80,13 +82,14 @@ function login() {
           :label="t('profile.password')"
           required
           type="password"
+          autocomplete="current-password"
         >
           <template #prepend>
             <v-icon>mdi-lock</v-icon>
           </template>
         </v-text-field>
       </v-form>
-      <common-captcha v-model="captcha" />
+      <common-captcha force-cn v-model="captcha" />
       <v-btn
         :disabled="!captcha?.token"
         :loading="loading"

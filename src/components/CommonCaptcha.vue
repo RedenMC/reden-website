@@ -24,19 +24,19 @@ function loadV3Script() {
 }
 
 const model = defineModel<Captcha>();
-model.value = {
-  provider: '',
-  token: '',
-  server: null,
-};
 const props = defineProps<{
   forceCn?: boolean;
 }>();
 
 const china = ref(props.forceCn || (await isInChina()));
-model.value!.provider = china.value ? 'vaptcha' : 'cloudflare';
-watch(china, () => {
-  model.value!.provider = china.value ? 'vaptcha' : 'cloudflare';
+onMounted(async () => {
+  model.value = {
+    provider: '',
+    token: '',
+    server: null,
+  };
+  console.log(china, model.value);
+  china.value = props.forceCn || (await isInChina());
 });
 if (china.value) {
   onMounted(() => {
@@ -56,12 +56,12 @@ if (china.value) {
         window.vaptchaObj = obj;
 
         obj.listen('pass', function () {
-          // this.token = obj.getToken();
-          // alert('pass');
           const serverToken = obj.getServerToken();
-          model.value!.token = serverToken.token;
-          model.value!.server = serverToken.server;
-          model.value!.provider = 'vaptcha';
+          model.value = {
+            server: serverToken.server,
+            provider: 'vaptcha',
+            token: serverToken.token,
+          };
         });
         obj.listen('close', function () {
           obj.reset();
@@ -75,12 +75,20 @@ if (china.value) {
 </script>
 
 <template>
-  <v-btn v-if="china" @click="china = false"> 使用 Cloudflare 验证码 </v-btn>
+  <v-btn v-if="china" @click="china = false" variant="outlined">
+    使用 Cloudflare 验证码
+  </v-btn>
   <template v-if="china">
     <div ref="vaptcha" />
   </template>
   <template v-else>
-    <vue-turnstile v-model="model!.token!" :site-key="cloudflareCAPTCHAKey" />
+    <vue-turnstile
+      model-value=""
+      @update:model-value="
+        (token) => (model = { provider: 'cloudflare', token, server: null })
+      "
+      :site-key="cloudflareCAPTCHAKey"
+    />
   </template>
 </template>
 
