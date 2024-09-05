@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { Captcha, cloudflareCAPTCHAKey, isInChina } from '@/constants';
 import VueTurnstile from 'vue-turnstile';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
 const vaptcha = ref();
 
@@ -35,6 +35,9 @@ const props = defineProps<{
 
 const china = ref(props.forceCn || (await isInChina()));
 model.value!.provider = china.value ? 'vaptcha' : 'cloudflare';
+watch(china, () => {
+  model.value!.provider = china.value ? 'vaptcha' : 'cloudflare';
+});
 if (china.value) {
   onMounted(() => {
     const config = {
