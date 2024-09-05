@@ -171,18 +171,21 @@ const selected = computed(() => generators.value[name.value]);
           </v-card-subtitle>
           <v-card-text>
             <SizeInput
+              :key="selected.name + 'x'"
               v-model="xSize"
               v-if="selected.hasX"
               :def="selected"
               xyz="x"
             />
             <SizeInput
+              :key="selected.name + 'y'"
               v-model="ySize"
               v-if="selected.hasY"
               :def="selected"
               xyz="y"
             />
             <SizeInput
+              :key="selected.name + 'z'"
               v-model="zSize"
               v-if="selected.hasZ"
               :def="selected"
