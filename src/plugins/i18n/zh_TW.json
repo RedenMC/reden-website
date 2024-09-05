@@ -98,7 +98,9 @@
       "username_desc": "This is the username you use to login. You can change it once every 48 hours.",
       "username_timer": "You can change your username again in {0} hours"
     },
-    "editProfile": "Edit Profile"
+    "editProfile": "Edit Profile",
+    "password": "Password",
+    "username": "Username"
   },
   "reden": {
     "description": "為紅石機器開發者提供一站式工作環境，成為最好的紅石調試和教學工具。",
