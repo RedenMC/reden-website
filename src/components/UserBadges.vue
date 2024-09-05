@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { computed } from 'vue';
 import randomColor from 'randomcolor';
 import { badgeDefs } from '@/constants';
 
@@ -7,7 +7,7 @@ const props = defineProps<{
   roles?: string[];
 }>();
 
-const badges = ref(
+const badges = computed(() =>
   props.roles?.map((role: string) => {
     if (!badgeDefs[role]) {
       badgeDefs[role] = {
@@ -18,13 +18,6 @@ const badges = ref(
     }
     return badgeDefs[role]!;
   }),
-);
-
-watch(
-  () => props.roles,
-  (newVal) => {
-    badges.value = newVal?.map((role: string) => badgeDefs[role]);
-  },
 );
 </script>
 
@@ -47,7 +40,7 @@ watch(
           :href="badge?.url"
           text-color="white"
         >
-          <v-icon>{{ badge.icon }}</v-icon>
+          <v-icon v-if="badge.icon">{{ badge.icon }}</v-icon>
           {{ $t(badge.translate) }}
         </v-chip>
       </template>
