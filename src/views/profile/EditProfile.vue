@@ -344,13 +344,14 @@ function savePreferences() {
       <v-spacer />
       <v-btn class="text-capitalize setting-button" color="primary">
         {{ t('profile.edit.password.changePassword') }}
-        <v-dialog activator="parent" scroll-strategy="block">
-          <v-card max-width="500">
+        <v-dialog activator="parent" scroll-strategy="block" max-width="500">
+          <v-card>
             <v-card-title>
               {{ t('profile.edit.password.changePassword') }}
             </v-card-title>
             <v-card-text>
               <v-form>
+                <input autocomplete="username" :value="user.username" hidden />
                 <v-text-field
                   v-if="!user.passwordNotSet"
                   v-model="oldPassword"

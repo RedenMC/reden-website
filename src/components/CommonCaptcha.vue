@@ -35,7 +35,6 @@ onMounted(async () => {
     token: '',
     server: null,
   };
-  console.log(china, model.value);
   china.value = props.forceCn || (await isInChina());
 });
 if (china.value) {
