@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import {
   Captcha,
   doFetchPost,
@@ -17,6 +17,7 @@ const username = ref('');
 const password = ref('');
 const loading = ref(false);
 const captcha = ref<Captcha>();
+
 function login() {
   loading.value = true;
   const req = {
@@ -64,31 +65,31 @@ function login() {
       <h1>
         {{ $t('login.title') }}
       </h1>
-      <v-text-field
-        v-model="username"
-        label="Username"
-        placeholder="Username"
-        required
-      >
-        <template #prepend>
-          <v-icon>mdi-account</v-icon>
-        </template>
-      </v-text-field>
-      <v-text-field
-        v-model="password"
-        label="Password"
-        placeholder="Password"
-        type="password"
-        required
-      >
-        <template #prepend>
-          <v-icon>mdi-lock</v-icon>
-        </template>
-      </v-text-field>
+      <v-form>
+        <v-text-field
+          v-model="username"
+          :label="t('profile.username')"
+          required
+        >
+          <template #prepend>
+            <v-icon>mdi-account</v-icon>
+          </template>
+        </v-text-field>
+        <v-text-field
+          v-model="password"
+          :label="t('profile.password')"
+          required
+          type="password"
+        >
+          <template #prepend>
+            <v-icon>mdi-lock</v-icon>
+          </template>
+        </v-text-field>
+      </v-form>
       <common-captcha v-model="captcha" />
       <v-btn
-        :loading="loading"
         :disabled="!captcha?.token"
+        :loading="loading"
         color="primary"
         @click="login"
       >
@@ -112,9 +113,9 @@ function login() {
       <v-row>
         <v-col>
           <v-btn
-            color="blue"
-            :href="'/api/oauth/github?redirect_url=' + encodeURI('/home')"
             :block="true"
+            :href="'/api/oauth/github?redirect_url=' + encodeURI('/home')"
+            color="blue"
           >
             <v-icon left>mdi-github</v-icon>
             Github
@@ -122,9 +123,9 @@ function login() {
         </v-col>
         <v-col>
           <v-btn
-            color="red"
-            :href="'/api/oauth/microsoft?redirect_url=' + encodeURI('/home')"
             :block="true"
+            :href="'/api/oauth/microsoft?redirect_url=' + encodeURI('/home')"
+            color="red"
           >
             <v-icon left>mdi-microsoft</v-icon>
             Microsoft
@@ -134,9 +135,9 @@ function login() {
       <v-row>
         <v-col>
           <v-btn
-            color="green"
-            :href="'/api/oauth/gitee?redirect_url=' + encodeURI('/home')"
             :block="true"
+            :href="'/api/oauth/gitee?redirect_url=' + encodeURI('/home')"
+            color="green"
           >
             <v-icon left>mdi-gitee</v-icon>
             Gitee

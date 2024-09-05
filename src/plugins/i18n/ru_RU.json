@@ -90,7 +90,9 @@
       "success": "",
       "username": ""
     },
-    "editProfile": ""
+    "editProfile": "",
+    "password": "",
+    "username": ""
   },
   "reden": {
     "description": "Provide a one-stop working environment for redstone developers and become the best redstone debugging and teaching tool.",
