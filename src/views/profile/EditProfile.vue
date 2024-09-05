@@ -383,6 +383,7 @@ function savePreferences() {
                 class="setting-input"
                 color="primary"
                 type="password"
+                autocomplete="new-password"
                 :label="t('profile.edit.password.confirm')"
                 :rules="[
                   (v: string) =>

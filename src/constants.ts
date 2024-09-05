@@ -63,8 +63,8 @@ export type LoginResponse = GeneralResponse & {
   csrf_token: string;
 };
 
-export function doFetchPost(url: string, data: any) {
-  return fetch(url, {
+export const doFetchPost = (url: string, data: any) =>
+  fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -73,8 +73,12 @@ export function doFetchPost(url: string, data: any) {
     },
     credentials: 'include',
     body: JSON.stringify(data),
+  }).then((res) => {
+    if (res.status === 401) {
+      useAppStore().logout();
+    }
+    return res;
   });
-}
 
 function getPayloadType(data: any): {
   isJson: boolean;

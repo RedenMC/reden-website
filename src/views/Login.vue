@@ -72,6 +72,7 @@ function login() {
           v-model="username"
           :label="t('profile.username')"
           required
+          autocomplete="username"
         >
           <template #prepend>
             <v-icon>mdi-account</v-icon>
