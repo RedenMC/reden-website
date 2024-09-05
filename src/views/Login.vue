@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import {
+  Captcha,
   doFetchPost,
-  LoginResponse, resetCaptcha,
+  LoginResponse,
+  resetCaptcha,
   toastError,
 } from '@/constants';
 import { useAppStore } from '@/store/app';
@@ -9,15 +11,12 @@ import { toast } from 'vuetify-sonner';
 import { ref } from 'vue';
 import router from '@/router';
 import RedenRouter from '@/router/RedenRouter.vue';
-import CommonCaptcha from "@/components/CommonCaptcha.vue";
+import CommonCaptcha from '@/components/CommonCaptcha.vue';
 
 const username = ref('');
 const password = ref('');
 const loading = ref(false);
-const captcha = ref<{
-  provider?: string;
-  token?: string;
-}>({});
+const captcha = ref<Captcha>();
 function login() {
   loading.value = true;
   const req = {
@@ -89,11 +88,13 @@ function login() {
       <common-captcha v-model="captcha" />
       <v-btn
         :loading="loading"
-        :disabled="!captcha.token"
+        :disabled="!captcha?.token"
         color="primary"
         @click="login"
       >
-        {{ captcha.token ? $t('login.button.login') : $t('login.button.captcha') }}
+        {{
+          captcha?.token ? $t('login.button.login') : $t('login.button.captcha')
+        }}
       </v-btn>
 
       <span class="text-center" style="padding: 4px">

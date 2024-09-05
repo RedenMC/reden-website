@@ -1,12 +1,11 @@
 <script lang="ts" setup>
-import {cloudflareCAPTCHAKey, isInChina, } from "@/constants";
+import { Captcha, cloudflareCAPTCHAKey, isInChina } from '@/constants';
 import VueTurnstile from 'vue-turnstile';
-import {onMounted, ref} from "vue";
+import { onMounted, ref } from 'vue';
 
 const vaptcha = ref();
 
-function
-loadV3Script() {
+function loadV3Script() {
   if (typeof window.vaptcha === 'function') {
     //如果已经加载就直接放回
     return Promise.resolve();
@@ -24,20 +23,17 @@ loadV3Script() {
   }
 }
 
-const model = defineModel<{
-  provider: string;
-  token: string;
-  server: string;
-}>()
+const model = defineModel<Captcha>();
 model.value = {
   provider: '',
   token: '',
+  server: null,
 };
 const props = defineProps<{
   forceCn?: boolean;
-}>()
+}>();
 
-const china = ref(props.forceCn || await isInChina());
+const china = ref(props.forceCn || (await isInChina()));
 model.value!.provider = china.value ? 'vaptcha' : 'cloudflare';
 if (china.value) {
   onMounted(() => {
@@ -71,26 +67,18 @@ if (china.value) {
         obj.render();
       });
     });
-  })
+  });
 }
-
 </script>
 
 <template>
-  <v-btn v-if="china" @click="china = false">
-    使用 Cloudflare 验证码
-  </v-btn>
+  <v-btn v-if="china" @click="china = false"> 使用 Cloudflare 验证码 </v-btn>
   <template v-if="china">
     <div ref="vaptcha" />
   </template>
   <template v-else>
-    <vue-turnstile
-      v-model="model!.token!"
-      :site-key="cloudflareCAPTCHAKey"
-    />
+    <vue-turnstile v-model="model!.token!" :site-key="cloudflareCAPTCHAKey" />
   </template>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

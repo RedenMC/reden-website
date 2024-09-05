@@ -1,10 +1,12 @@
 <script lang="ts" setup>
 import { toast } from 'vuetify-sonner';
 import { ref } from 'vue';
-import CommonCaptcha from '@/components/CommonCaptcha.vue'
+import CommonCaptcha from '@/components/CommonCaptcha.vue';
 import {
+  Captcha,
   doFetchPost,
-  isStrongPassword, resetCaptcha,
+  isStrongPassword,
+  resetCaptcha,
   toastError,
   usernameRegex,
 } from '@/constants';
@@ -19,7 +21,7 @@ const confirmPassword = ref('');
 const invitationCode = ref('');
 const loading = ref(false);
 const registerOk = ref(false);
-const captcha = ref({});
+const captcha = ref<Captcha>();
 const { t } = useI18n();
 function register(e: SubmitEventPromise) {
   e.preventDefault();
@@ -133,13 +135,15 @@ function register(e: SubmitEventPromise) {
         <reden-router to="/login">{{ $t('register.login') }}</reden-router>
       </span>
       <v-btn
-        :disabled="!token"
+        :disabled="!captcha?.token"
         :loading="loading"
         color="primary"
         type="submit"
       >
         {{
-          token ? $t('register.button.register') : $t('register.button.captcha')
+          captcha?.token
+            ? $t('register.button.register')
+            : $t('register.button.captcha')
         }}
       </v-btn>
 

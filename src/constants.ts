@@ -289,7 +289,7 @@ export function isStrongPassword(password: string) {
 
 export const debugMessages = () => !useMeta().get().production;
 
-let _isInChina: boolean | undefined = undefined
+let _isInChina: boolean | undefined = undefined;
 export function isInChina() {
   if (_isInChina) return Promise.resolve(_isInChina);
   return doFetchGet('/api/ip')
@@ -299,21 +299,22 @@ export function isInChina() {
       }
       return Promise.resolve({});
     })
-    .then(
-      (data: {
-        ip: string;
-        mm?: { country_code?: string; };
-      }) => {
-        if (data.mm?.country_code === 'CN') {
-          console.log('ip', data.ip, 'is in china.');
-          _isInChina = true;
-          return true;
-        }
-        _isInChina = false;
-        return false;
+    .then((data: { ip: string; mm?: { country_code?: string } }) => {
+      if (data.mm?.country_code === 'CN') {
+        console.log('ip', data.ip, 'is in china.');
+        _isInChina = true;
+        return true;
       }
-    );
+      _isInChina = false;
+      return false;
+    });
 }
+
+export type Captcha = {
+  provider: string;
+  token: string;
+  server: string | null;
+};
 
 export type VaptchaObj = {
   getServerToken: () => {
@@ -323,20 +324,18 @@ export type VaptchaObj = {
   listen: (event: 'pass' | 'close', fun: () => void) => void;
   render: () => void;
   reset: () => void;
-}
+};
 
 declare global {
   interface Window {
     vaptcha: (config: any) => Promise<VaptchaObj>;
-    vaptchaObj: VaptchaObj
+    vaptchaObj: VaptchaObj;
   }
 }
 
 export function resetCaptcha() {
-  if (window.turnstile)
-    window.turnstile.reset();
-  if (window.vaptchaObj)
-    window.vaptchaObj.reset();
+  if (window.turnstile) window.turnstile.reset();
+  if (window.vaptchaObj) window.vaptchaObj.reset();
 }
 
 export type BadgeDef = {

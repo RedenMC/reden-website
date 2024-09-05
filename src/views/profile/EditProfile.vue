@@ -1,17 +1,18 @@
 <script lang="ts" setup>
 import {
-  cloudflareCAPTCHAKey,
+  Captcha,
   doFetchPost,
   fetchUser,
   isStrongPassword,
-  Profile, resetCaptcha,
+  Profile,
+  resetCaptcha,
   toastError,
 } from '@/constants';
 import { ref } from 'vue';
 import OAuthAccountLine from '@/components/editProfilePage/OAuthAccountLine.vue';
 import { toast } from 'vuetify-sonner';
 import { useI18n } from 'vue-i18n';
-import CommonCaptcha from "@/components/CommonCaptcha.vue";
+import CommonCaptcha from '@/components/CommonCaptcha.vue';
 
 const userCopy = ref<Profile>();
 const user = ref<Profile>();
@@ -25,11 +26,11 @@ const oldPassword = ref('');
 const newPassword = ref('');
 const confirmNewPassword = ref('');
 const changingPassword = ref(false);
-const captcha = ref({});
+const captcha = ref<Captcha>();
 function changePassword() {
   if (!isStrongPassword(newPassword.value)) return;
   if (newPassword.value !== confirmNewPassword.value) return;
-  if (!captchaToken.value) return;
+  if (!captcha.value?.token) return;
   const body = {
     oldPassword: oldPassword.value,
     newPassword: newPassword.value,
