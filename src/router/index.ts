@@ -81,7 +81,7 @@ const routes = [
       {
         path: '/mc-services/download/yisibite',
         name: 'YisibiteDownload',
-        meta: { title: '投影在线生成在线下载' },
+        meta: { title: 'litematica_generator.title' },
         component: () => import('@/views/yisibite/Download.vue'),
       },
       {
