@@ -27,7 +27,6 @@ function changeLanguage(newLocale: Locale) {
             v-for="locale in $i18n.availableLocales"
             :key="`locale-${locale}`"
             @click="changeLanguage(locale)"
-            :to="`?lang=${locale}`"
             :active="false"
           >
             <v-list-item-title>{{ $t(locale) }}</v-list-item-title>

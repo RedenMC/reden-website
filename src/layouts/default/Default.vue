@@ -97,9 +97,9 @@ function changeLanguage(newLocale: Locale) {
             </b>
           </div>
           <div class="footer-list-item">
-            <reden-router :to="discordInvite">
+            <a :href="discordInvite">
               {{ $t('reden.footer.reden_community.discord') }}
-            </reden-router>
+            </a>
           </div>
           <div class="footer-list-item">
             <reden-router to="/community-guidelines">
@@ -178,7 +178,6 @@ function changeLanguage(newLocale: Locale) {
                 v-for="locale in $i18n.availableLocales"
                 :key="`locale-${locale}`"
                 @click="changeLanguage(locale)"
-                :to="`?lang=${locale}`"
                 :active="false"
               >
                 <v-list-item-title>{{ $t(locale) }}</v-list-item-title>
