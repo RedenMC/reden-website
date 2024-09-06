@@ -18,11 +18,11 @@ import { useRouter } from 'vue-router';
 
 const userCopy = ref<Profile>();
 const user = ref<Profile>();
-const shouldChangePassword = ref(
+const dialogChangePassword = ref(
   router.currentRoute.value?.hash === '#change-password',
 );
-watch(shouldChangePassword, () => {
-  if (shouldChangePassword.value) {
+watch(dialogChangePassword, () => {
+  if (dialogChangePassword.value) {
     router.replace({
       hash: '#change-password',
     });
@@ -361,12 +361,12 @@ function savePreferences() {
       <v-btn
         class="text-capitalize setting-button"
         color="primary"
-        @click="shouldChangePassword = true"
+        @click="dialogChangePassword = true"
       >
         {{ t('profile.edit.password.changePassword') }}
       </v-btn>
       <v-dialog
-        v-model="shouldChangePassword"
+        v-model="dialogChangePassword"
         scroll-strategy="block"
         max-width="500"
       >

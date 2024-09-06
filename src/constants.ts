@@ -2,6 +2,8 @@ import { useAppStore } from '@/store/app';
 import { ref, Ref } from 'vue';
 import { toast } from 'vuetify-sonner';
 import { useMeta } from '@/store/meta';
+import { useI18n } from 'vue-i18n';
+import { Locale } from '@intlify/core-base';
 
 export const reCAPTCHAKey = '6Lczc24pAAAAAAxzBZbRy8CZc_ba06Qn_3OJ_Vg-';
 export const cloudflareCAPTCHAKey = '0x4AAAAAAARtCTyyGc1nbVUm';
@@ -383,3 +385,9 @@ export const badgeDefs: { [keys: string]: BadgeDef } = {
     color: '#025669',
   },
 };
+
+const { locale } = useI18n();
+export function changeLanguage(newLocale: Locale) {
+  localStorage.setItem('locale', newLocale);
+  locale.value = newLocale;
+}

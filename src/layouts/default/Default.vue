@@ -2,12 +2,11 @@
 import DefaultView from './View.vue';
 import RedenAppBar from '@/appbar/RedenAppBar.vue';
 import { VSonner } from 'vuetify-sonner';
-import { discordInvite, githubLink, theme } from '@/constants';
+import { changeLanguage, discordInvite, githubLink, theme } from '@/constants';
 import { onMounted, ref } from 'vue';
 import vuetify from '@/plugins/vuetify';
 import RedenRouter from '@/router/RedenRouter.vue';
 import { useI18n } from 'vue-i18n';
-import { Locale } from '@intlify/core-base';
 
 onMounted(() => {
   // set body background color
@@ -17,11 +16,6 @@ onMounted(() => {
 
 const { locale } = useI18n();
 const dialogCookies = ref(false);
-
-function changeLanguage(newLocale: Locale) {
-  localStorage.setItem('locale', newLocale);
-  locale.value = newLocale;
-}
 </script>
 
 <template>
@@ -178,6 +172,8 @@ function changeLanguage(newLocale: Locale) {
                 v-for="locale in $i18n.availableLocales"
                 :key="`locale-${locale}`"
                 @click="changeLanguage(locale)"
+                :to="`?lang=${locale}`"
+                :active="false"
               >
                 <v-list-item-title>{{ $t(locale) }}</v-list-item-title>
               </v-list-item>

@@ -6,13 +6,19 @@ import zh_TW from '@/plugins/i18n/zh_TW.json';
 
 const messages = {
   en,
-  zh_CN,
-  zh_TW,
+  zh_cn: zh_CN,
+  zh_tw: zh_TW,
 };
+
+const lang = document.location.search
+  .substring(1)
+  .split('&')
+  .find((q) => q.startsWith('lang='))
+  ?.substring(5);
 
 export const i18n: I18n = createI18n({
   legacy: false, // Vuetify does not support the legacy mode of vue-i18n
-  locale: localStorage.getItem('locale') || 'en',
+  locale: lang || localStorage.getItem('locale') || 'en',
   fallbackLocale: 'en',
   fallbackWarn: false,
   messages,

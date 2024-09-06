@@ -98,7 +98,7 @@ const routes = [
       },
       {
         path: '/:any(.*)*',
-        meta: { title: '404 Not Found' },
+        meta: { title: 'reden.title.404', notFound: true },
         component: () => import('@/views/NotFound.vue'),
       },
     ],
@@ -114,8 +114,11 @@ const router = createRouter({
   },
 });
 
-router.beforeEach((to) => {
+router.beforeEach((to, from) => {
   console.log(to?.meta);
+  if (!from?.meta?.notFound) {
+    to.meta.prevPage = from;
+  }
   if (to?.meta?.admin) {
     if (!useAppStore().userCache?.isStaff) {
       console.log('preventing route to [admin check]', to);

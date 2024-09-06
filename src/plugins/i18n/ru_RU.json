@@ -60,6 +60,12 @@
     "register": "Register",
     "title": "Login to Reden"
   },
+  "page404": {
+    "back": "",
+    "evolving": "",
+    "help": "",
+    "title": ""
+  },
   "profile": {
     "edit": {
       "bio": "",
@@ -144,6 +150,7 @@
     "learn_more": "Learn More",
     "my_account": "My Account",
     "title": {
+      "404": "",
       "debugger": "Reden Debugger",
       "download": "Download",
       "edit_profile": "Edit Profile",
@@ -216,6 +223,6 @@
     "staff": "Staff",
     "staff_hover": "This user is a staff member of this project"
   },
-  "zh_CN": "Китайский (Упрощённый)",
-  "zh_TW": "Китайский (Традиционный)"
+  "zh_cn": "Китайский (Упрощённый)",
+  "zh_tw": "Китайский (Традиционный)"
 }
