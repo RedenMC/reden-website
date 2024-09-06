@@ -13,10 +13,10 @@ useRouter().afterEach((to) => {
 
 <template>
   <router-view />
-  <div style="visibility: hidden" title="search-engine-hint">
+  <div v-show="false" title="search-engine-hint">
     <a href="?lang=en">English</a>
     <a href="?lang=zh_CN">简体中文</a>
-    <a href="?lang=zh_TW"></a>
+    <a href="?lang=zh_TW">繁體中文</a>
   </div>
 </template>
 

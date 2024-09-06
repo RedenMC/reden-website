@@ -385,9 +385,3 @@ export const badgeDefs: { [keys: string]: BadgeDef } = {
     color: '#025669',
   },
 };
-
-const { locale } = useI18n();
-export function changeLanguage(newLocale: Locale) {
-  localStorage.setItem('locale', newLocale);
-  locale.value = newLocale;
-}
