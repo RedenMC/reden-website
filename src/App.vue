@@ -15,8 +15,8 @@ useRouter().afterEach((to) => {
   <router-view />
   <div v-show="false" title="search-engine-hint">
     <a href="?lang=en">English</a>
-    <a href="?lang=zh_CN">简体中文</a>
-    <a href="?lang=zh_TW">繁體中文</a>
+    <a href="?lang=zh_cn">简体中文</a>
+    <a href="?lang=zh_tw">繁體中文</a>
   </div>
 </template>
 
