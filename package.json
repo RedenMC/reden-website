@@ -22,6 +22,7 @@
     "roboto-fontface": "*",
     "vue": "^3.2.0",
     "vue-i18n": "^9.6.5",
+    "vue-meta": "^3.0",
     "vue-router": "^4.0.0",
     "vue-sonner": "^1.0.1",
     "vue-turnstile": "^1.0.8",

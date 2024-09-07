@@ -1,20 +1,5 @@
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n';
-import { Locale } from '@intlify/core-base';
-
-const { locale } = useI18n();
-
-if (localStorage && !localStorage.getItem('locale')) {
-  if (navigator && navigator.language) {
-    changeLanguage(navigator.language);
-    console.log('Set locale to', navigator.language);
-  }
-}
-
-function changeLanguage(newLocale: Locale) {
-  localStorage.setItem('locale', newLocale);
-  locale.value = newLocale;
-}
+import { changeLanguage } from '@/constants';
 </script>
 
 <template>

@@ -8,6 +8,7 @@ import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 import LitematicaUpload from '@/views/yisibite/LitematicaUpload.vue';
 import SizeInput from '@/views/yisibite/SizeInput.vue';
+import { useMeta } from 'vue-meta';
 
 const route = useRoute();
 const router = useRouter();
@@ -109,6 +110,21 @@ function submit(e: SubmitEventPromise) {
   });
 }
 const selected = computed(() => generators.value[name.value]);
+
+useMeta({
+  description: t('litematica_generator.description'),
+  keywords: [
+    'litematica',
+    '投影',
+    'generator',
+    '生成器',
+    'minecraft',
+    '世吞',
+    'world eater',
+    'redstone',
+    'slimestone',
+  ],
+});
 </script>
 
 <template>

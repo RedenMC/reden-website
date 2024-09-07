@@ -1,18 +1,10 @@
 <script setup lang="ts">
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import { useTitle } from '@vueuse/core';
 import { computed } from 'vue';
 
-const { t } = useI18n();
-const title = useTitle();
-
-useRouter().afterEach((to) => {
-  title.value = t(to.meta.title as string) + ' - Reden';
-});
-
-const route = useRoute();
 const { locale } = useI18n();
+const route = useRoute();
 let stripedUrl = computed(() => {
   let uel = route.path.trim();
   if (route.params.language) {
@@ -25,6 +17,7 @@ console.log('url', stripedUrl.value);
 </script>
 
 <template>
+  <metainfo> </metainfo>
   <router-view />
   <div v-show="false" title="search-engine-hint">
     <a :href="`/en${stripedUrl}`">English</a>

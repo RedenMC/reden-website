@@ -1,6 +1,7 @@
 // Composables
 import { createRouter, createWebHistory } from 'vue-router';
 import { useAppStore } from '@/store/app';
+import { i18n } from '@/plugins/i18n';
 
 const routes = [
   {
@@ -115,7 +116,6 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from) => {
-  console.log(to?.meta);
   if (!from?.meta?.notFound) {
     to.meta.prevPage = from;
   }
@@ -126,6 +126,10 @@ router.beforeEach((to, from) => {
     }
   }
   return true;
+});
+
+router.afterEach((to) => {
+  document.title = i18n.global.t(to.meta.title as string) + ' - Reden';
 });
 
 export default router;

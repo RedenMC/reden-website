@@ -1,9 +1,9 @@
 import { useAppStore } from '@/store/app';
 import { ref, Ref } from 'vue';
 import { toast } from 'vuetify-sonner';
-import { useMeta } from '@/store/meta';
-import { useI18n } from 'vue-i18n';
+import { useBackendMeta } from '@/store/meta';
 import { Locale } from '@intlify/core-base';
+import { i18n } from '@/plugins/i18n';
 
 export const reCAPTCHAKey = '6Lczc24pAAAAAAxzBZbRy8CZc_ba06Qn_3OJ_Vg-';
 export const cloudflareCAPTCHAKey = '0x4AAAAAAARtCTyyGc1nbVUm';
@@ -293,7 +293,7 @@ export function isStrongPassword(password: string) {
   );
 }
 
-export const debugMessages = () => !useMeta().get().production;
+export const debugMessages = () => !useBackendMeta().get().production;
 
 let _isInChina: boolean | undefined = undefined;
 export function isInChina() {
@@ -385,3 +385,8 @@ export const badgeDefs: { [keys: string]: BadgeDef } = {
     color: '#025669',
   },
 };
+
+export function changeLanguage(newLocale: Locale) {
+  localStorage.setItem('locale', newLocale);
+  i18n.global.locale.value = newLocale;
+}

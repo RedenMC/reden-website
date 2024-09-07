@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { Captcha, cloudflareCAPTCHAKey, isInChina } from '@/constants';
 import VueTurnstile from 'vue-turnstile';
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref } from 'vue';
 
 const vaptcha = ref();
 

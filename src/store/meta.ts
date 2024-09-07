@@ -25,7 +25,7 @@ function state(): Meta {
   };
 }
 
-export const useMeta = defineStore(name, {
+export const useBackendMeta = defineStore(name, {
   state,
   actions: {
     refresh() {
