@@ -35,7 +35,7 @@
   "en": "English",
   "litematica_generator": {
     "contribute": "Want your own machines such as world eaters to be collected here? Contribute to Reden now! Email me at me@redenmc.com for more information.",
-    "description": "Generate Litematica files online from Reden projects, e.g. World Eaters",
+    "description": "Generate Litematica files online for slimestone and technical minecraft machines, e.g. World Eaters, Tunnel bores, etc. This service is totally free.",
     "download": "Download",
     "download_count": "{count} downloads",
     "not_logged_in": "Guest users can only generate 5 times per minute, please log in to unlock this limit",
@@ -162,7 +162,7 @@
       "debugger": "Reden Debugger",
       "download": "Download",
       "edit_profile": "Edit Profile",
-      "home": "Home",
+      "home": "Homepage - Ultimate Technical Minecraft Mod",
       "my_account": "My Account",
       "rvc": "RVC",
       "undo": "Undo"
