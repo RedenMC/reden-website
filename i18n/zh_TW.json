@@ -1,0 +1,231 @@
+{
+  "$vuetify": {
+    "close": "關閉",
+    "dataFooter": {
+      "firstPage": "第一頁",
+      "itemsPerPageAll": "全部",
+      "itemsPerPageText": "每頁項目: ",
+      "lastPage": "最後一頁",
+      "nextPage": "下一頁",
+      "pageText": "{0}-{1}, 共 {2} 項",
+      "prevPage": "上一頁"
+    },
+    "dataIterator": {
+      "loadingText": "正在加載項目",
+      "nextPage": "下一頁",
+      "noResultsText": "沒有找到相關紀錄",
+      "pageText": "{0}-{1}, 共 {2} 項",
+      "prevPage": "上一頁",
+      "rowsPerPageAll": "全部",
+      "rowsPerPageText": "每頁項目: "
+    },
+    "noDataText": "沒有可用數據",
+    "open": "打開",
+    "pagination": {
+      "ariaLabel": {
+        "root": "分頁"
+      }
+    }
+  },
+  "admin": {
+    "title": {
+      "users": "All Users"
+    }
+  },
+  "en": "English",
+  "litematica_generator": {
+    "contribute": "想要你的機器（例如世界吞噬者）被收錄在這裡？現在就為 Reden 做出貢獻！傳送郵件至 me@redenmc.com 聯絡我",
+    "description": "在這裡線上生成投影檔案，例如世界吞噬者",
+    "download": "下載",
+    "download_count": "{count} 次下載",
+    "not_logged_in": "遊客使用者每分鐘只能生成 5 次，登入後解鎖此限制",
+    "select": "今天你想生成什麼？",
+    "size_description": "機器的 x, y, z 尺寸。對於世界吞噬者，z 尺寸是出發站和返回站之間的距離。",
+    "size_max": "機器的最大尺寸為 {size}",
+    "size_min": "機器的最小尺寸為 {size}",
+    "size_mod": "尺寸除以 {mod} 的餘數必須為 {rem}",
+    "size_x": "x 方向尺寸",
+    "size_y": "y 方向尺寸",
+    "size_z": "z 方向尺寸",
+    "title": "投影線上生成器"
+  },
+  "login": {
+    "button": {
+      "captcha": "請先完成驗證碼",
+      "login": "登入"
+    },
+    "forgot_password": "忘記密碼？",
+    "oauth": "或使用以下方式登入",
+    "or": "或者",
+    "register": "去註冊",
+    "title": "登入 Reden"
+  },
+  "page404": {
+    "back": "",
+    "evolving": "",
+    "help": "",
+    "title": ""
+  },
+  "profile": {
+    "edit": {
+      "bio": "",
+      "changeEmail": "",
+      "email": {
+        "desc": ""
+      },
+      "failedToSaveInformation": "",
+      "information_saved": "",
+      "password": {
+        "changePassword": "",
+        "confirm": "",
+        "desc": "",
+        "first": "",
+        "mew": "",
+        "old": "",
+        "passwordsDoNotMatch": "",
+        "requirements": ""
+      },
+      "preference": {
+        "pronouns": "",
+        "showEmail": "",
+        "showGithub": "",
+        "showMinecraftAccount": "",
+        "showTimezone": ""
+      },
+      "preferences": "",
+      "preferencesSaved": "",
+      "save": "",
+      "savePreferences": "",
+      "success": "",
+      "username": ""
+    },
+    "editProfile": "",
+    "password": "",
+    "username": ""
+  },
+  "reden": {
+    "description": "為紅石機器開發者提供一站式工作環境，成為最好的紅石調試和教學工具。",
+    "download": "下載",
+    "download_page": {
+      "sorry_constructing": "抱歉，我們的下載頁面正在建設中，我們建議您前往此處下載："
+    },
+    "footer": {
+      "follow_us": {
+        "bilibili": "Bilibili",
+        "blog": "部落格",
+        "title": "關注我們",
+        "youtube": "Youtube"
+      },
+      "reden_community": {
+        "community_events": "社區活動",
+        "community_guidelines": "社區指南",
+        "discord": "Discord",
+        "title": "Reden 社區"
+      },
+      "reden_ecosystem": {
+        "github_organization": "Github 組織",
+        "sponsors": "贊助者",
+        "title": "Reden 生態系統",
+        "wiki": "Reden Wiki"
+      },
+      "reden_mod": {
+        "debugger": "Reden 調試器",
+        "rvc": "Reden 版本控制 (RVC)",
+        "title": "Reden Mod",
+        "undo_redo": "撤銷 & 重作"
+      }
+    },
+    "home": {
+      "community_intro": {
+        "discord": "加入我們的 Discord 伺服器，與其他紅石開發者們聊天並從社區獲得幫助。",
+        "open_source": "Reden 是一個開源項目，對所有人免費。我們歡迎所有人為 Reden 做出貢獻，包括代碼、文檔、Wiki 等。",
+        "sponsor": "Reden 得到了社區的贊助。我們感謝每一位支持我們的贊助者。",
+        "title": "社區",
+        "wiki": "Reden Wiki 幾乎包含了您需要了解的關於紅石和 Reden 的所有內容。這也是與社區分享知識的好地方。"
+      },
+      "feature_intro": {
+        "debugger": "搞不清楚為什麼您的紅石裝置不工作？Reden 調試器可以幫助您查看遊戲如何處理您的紅石裝置。",
+        "rvc": "RVC（Reden 版本控制）是專為紅石設計的版本控制系統。它可以讓您輕鬆管理所有版本的紅石專案。",
+        "title": "功能介紹",
+        "undo": "不小心出錯了？Reden 可以通過按下 Ctrl+Z 快速撤銷您的操作。所有連鎖反應都將被撤銷。"
+      }
+    },
+    "learn_more": "了解更多",
+    "my_account": "我的帳號",
+    "title": {
+      "404": "",
+      "debugger": "Reden Debugger",
+      "download": "Download",
+      "edit_profile": "Edit Profile",
+      "home": "首頁",
+      "my_account": "My Account",
+      "rvc": "RVC",
+      "undo": "Undo"
+    },
+    "wiki": "Wiki"
+  },
+  "register": {
+    "button": {
+      "captcha": "請先完成驗證碼",
+      "done": "完成",
+      "register": "註冊"
+    },
+    "email_verification": {
+      "message": "我們向 {email} 傳送了一封包含註冊連結的郵件，請點選連結以完成註冊。如果沒有收到此郵件，請檢查其他它可能在的地方，比如垃圾郵件資料夾。",
+      "title": "最後一步"
+    },
+    "existing": "已經有帳號了？",
+    "invalid": {
+      "email": "無效的電子郵件",
+      "password": {
+        "mismatching": "密碼不符",
+        "strength": "密碼需使用至少8個字符（大寫、小寫以及數字）"
+      },
+      "username": "無效用戶名"
+    },
+    "login": "登入",
+    "oauth": "或使用以下方式註冊",
+    "placeholder": {
+      "confirm": "重複密碼",
+      "email": "電子郵件",
+      "invitation_code": "邀請碼（可選）",
+      "password": "密碼",
+      "username": "用戶名稱"
+    },
+    "title": "註冊 Reden",
+    "toast": {
+      "error": {
+        "unknown": "未知錯誤"
+      },
+      "failed": "註冊失敗",
+      "successful": {
+        "message": "請檢請檢查你的電子郵件來完成註冊",
+        "title": "註冊成功！"
+      },
+      "try": "請稍後再試"
+    }
+  },
+  "search": {
+    "hover": "搜尋 Reden 功能"
+  },
+  "sponsors": {
+    "alipay": "使用支付寶贊助",
+    "badge": "你可以透過支援我們來獲得此贊助者徽章，它將顯示在你的個人資料上。",
+    "description": "Reden 得到了你們的支持，我們在此由衷地感謝每一位贊助者。",
+    "notice": "Reden 是一個開源專案，永遠對所有人免費。我們沒有從任何公司或組織獲得資金。我們依靠您的支持來維持專案運行。當您支持我們時，您會在此頁面被列出，因此請確保在您捐款時提供您的姓名和電子郵件。感謝您的支持！",
+    "paypal": "使用 PayPal 支援我們",
+    "title": "贊助者"
+  },
+  "user": {
+    "contributor": "貢獻者",
+    "contributor_hover": "此用戶參與過本項目的開發",
+    "developer": "開發者",
+    "developer_hover": "此用戶是本項目的活躍開發者",
+    "sponsor": "贊助者",
+    "sponsor_hover": "此用戶贊助過本項目",
+    "staff": "管理員",
+    "staff_hover": "此用戶是本項目的管理員"
+  },
+  "zh_cn": "简体中文(中国大陆)",
+  "zh_tw": "繁體中文(中國台灣)"
+}
