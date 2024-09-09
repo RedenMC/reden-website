@@ -5,6 +5,7 @@ import RedstoneSectionTitle from '@/components/RedstoneSectionTitle.vue';
 import Feature from '@/pages/feature/index.vue';
 import { discordInvite, githubLink } from '@/utils/constants';
 import '@/assets/main.css';
+'Social'
 
 const introContent = ref<HTMLElement | null>(null);
 const localePath = useLocalePath();
@@ -72,7 +73,7 @@ const localePath = useLocalePath();
               {{ $t('litematica_generator.description') }}
             </v-card-text>
             <v-card-actions>
-              <NuxtLink :to="localePath('/minecraft/download/yisibite')">
+              <NuxtLink :to="localePath('/litematica')">
                 <v-btn color="White">Go</v-btn>
               </NuxtLink>
             </v-card-actions>

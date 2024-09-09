@@ -29,7 +29,7 @@
   </v-row>
 </template>
 <script lang="ts" setup>
-import { type Machine } from '@/pages/minecraft/download/yisibite.vue';
+import { type Machine } from '~/pages/litematica.vue';
 import { computed } from 'vue';
 import { debugMessages } from '@/utils/constants';
 

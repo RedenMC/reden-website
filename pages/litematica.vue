@@ -1,13 +1,13 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
-import { useAppStore } from '@/store/app';
+import { useAppStore } from '~/store/app';
 import { type SubmitEventPromise } from 'vuetify';
-import { doFetchGet } from '@/utils/constants';
+import { doFetchGet } from '~/utils/constants';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
-import LitematicaUpload from '@/components/yisibite/LitematicaUpload.vue';
-import SizeInput from '@/components/yisibite/SizeInput.vue';
-import '@/assets/main.css';
+import LitematicaUpload from '~/components/yisibite/LitematicaUpload.vue';
+import SizeInput from '~/components/yisibite/SizeInput.vue';
+import 'assets/main.css';
 
 const route = useRoute();
 const router = useRouter();

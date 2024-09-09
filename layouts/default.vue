@@ -238,9 +238,9 @@ console.log('<layout> setup()');
             </b>
           </div>
           <div class="footer-list-item">
-            <a :href="discordInvite">
-              {{ $t('reden.footer.reden_community.discord') }}
-            </a>
+            <NuxtLink :to="localePath('/litematica')">
+              {{ $t('litematica_generator.title') }}
+            </NuxtLink>
           </div>
           <div class="footer-list-item">
             <NuxtLink :to="localePath('/community-guidelines')">
@@ -256,14 +256,13 @@ console.log('<layout> setup()');
         <v-col>
           <div class="footer-list-title">
             <b>
-              {{ $t('reden.footer.follow_us.title') }}
+              {{ $t('reden.footer.social.title') }}
             </b>
           </div>
           <div class="footer-list-item">
-            <NuxtLink :to="localePath('/blog')">
-              <v-icon icon="mdi-rss" />
-              {{ $t('reden.footer.follow_us.blog') }}
-            </NuxtLink>
+            <a :href="discordInvite">
+              {{ $t('reden.footer.reden_community.discord') }}
+            </a>
           </div>
           <div class="footer-list-item">
             <NuxtLink external-icon to="https://youtube.com/@zly2006">

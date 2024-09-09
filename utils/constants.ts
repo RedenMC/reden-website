@@ -4,10 +4,6 @@ import { toast } from 'vuetify-sonner';
 import { useBackendMeta } from '@/store/meta';
 import 'vue-turnstile';
 
-const NuxtApp = useNuxtApp();
-
-// private, for SSR
-
 export const reCAPTCHAKey = '6Lczc24pAAAAAAxzBZbRy8CZc_ba06Qn_3OJ_Vg-';
 export const cloudflareCAPTCHAKey = '0x4AAAAAAARtCTyyGc1nbVUm';
 export const discordInvite = 'https://discord.gg/fCxmEyFgAd';
