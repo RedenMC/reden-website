@@ -47,9 +47,9 @@ console.log('prevPage', prevPage);
         </a>
       </template>
       <template #actions>
-        <v-btn color="primary" @click="router.push(prevPage)">{{
-            $t('page404.back')
-          }}</v-btn>
+        <v-btn color="primary" @click="router.push(prevPage)">
+          {{ $t('page404.back') }}
+        </v-btn>
       </template>
     </v-empty-state>
   </NuxtLayout>

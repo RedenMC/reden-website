@@ -1,6 +1,7 @@
 // Utilities
 import { defineStore } from 'pinia';
 import { type Profile } from '@/utils/constants';
+import { useLocalStorage } from '@vueuse/core';
 
 type AppState = {
   logined: boolean;
@@ -12,10 +13,11 @@ type AppState = {
 };
 
 function state(): AppState {
+  console.log('import.meta', import.meta);
   if (import.meta.client) {
     const data = localStorage.getItem('redenCache');
     if (data) {
-      console.log('loaded localStorage', data)
+      console.log('loaded localStorage', data);
       return JSON.parse(data);
     }
   }
@@ -29,21 +31,30 @@ function state(): AppState {
   };
 }
 
+const storage = useLocalStorage<AppState>('redenCache', {
+  logined: false,
+  username: undefined,
+  uid: -1,
+  csrfToken: null,
+  userCache: undefined,
+  theme: 'dark',
+});
+
 export const useAppStore = defineStore('reden', {
-  state,
+  state() {
+    return storage.value;
+  },
+  hydrate(storeState, initialState) {
+    storeState.logined = storage.value.logined;
+    storeState.username = storage.value.username;
+    storeState.uid = storage.value.uid;
+    storeState.csrfToken = storage.value.csrfToken;
+    storeState.userCache = storage.value.userCache;
+    storeState.theme = storage.value.theme;
+  },
   actions: {
     save() {
-      localStorage.setItem(
-        'redenCache',
-        JSON.stringify({
-          logined: this.logined,
-          username: this.username,
-          csrfToken: this.csrfToken,
-          uid: this.uid,
-          userCache: this.userCache,
-          theme: this.theme,
-        }),
-      );
+      storage.value = this;
     },
     login(username: string, uid: number) {
       this.logined = true;

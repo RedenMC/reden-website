@@ -160,7 +160,7 @@ console.log('<layout> setup()');
           </v-menu>
         </v-btn>
         <v-btn
-          :to="useAppStore().logined ? '/home' : '/login'"
+          :to="localePath(useAppStore().logined ? '/home' : '/login')"
           icon="mdi-account"
           title="Account"
         />
