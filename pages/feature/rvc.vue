@@ -1,4 +1,6 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const localePath = useLocalePath();
+</script>
 
 <template>
   <v-row>

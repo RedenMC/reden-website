@@ -5,7 +5,6 @@ import 'vuetify/styles';
 import { createVuetify } from 'vuetify';
 import { customSVGs } from '~/plugins/icons/customSvgs';
 import { mdi } from 'vuetify/iconsets/mdi';
-import { createVueI18nAdapter } from 'vuetify/locale/adapters/vue-i18n';
 
 export default defineNuxtPlugin((app) => {
   const vuetify = createVuetify({

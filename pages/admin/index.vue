@@ -1,4 +1,6 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+const localePath = useLocalePath();
+</script>
 
 <template>
   <v-container class="content-common">

@@ -9,8 +9,8 @@ export default defineNuxtConfig({
     transpile: ['vuetify'],
   },
   modules: [
-    '@nuxtjs/i18n',
     '@pinia/nuxt',
+    '@nuxtjs/i18n',
     (_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {
         // @ts-expect-error
@@ -30,7 +30,7 @@ export default defineNuxtConfig({
     detectBrowserLanguage: {
       useCookie: true,
       cookieKey: 'i18n_redirected',
-      onlyOnRoot: true,
+      redirectOn: 'root',
     },
   },
   vite: {

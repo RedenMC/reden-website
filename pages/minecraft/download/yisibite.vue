@@ -17,6 +17,7 @@ const zSize = ref(0);
 const loading = ref(false);
 const name = ref(route.query.m?.toString() || '');
 const { t } = useI18n();
+const localePath = useLocalePath();
 
 export type MachineDef = {
   name: string;

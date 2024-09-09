@@ -2,6 +2,8 @@
 import NetherPortalVideo from '@/assets/nether_protal.mp4';
 import RedStoneSection from '@/components/RedStoneSection.vue';
 import RedstoneSectionTitle from '@/components/RedstoneSectionTitle.vue';
+
+const localePath = useLocalePath();
 </script>
 
 <template>

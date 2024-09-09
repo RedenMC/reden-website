@@ -1,18 +1,18 @@
 import { useAppStore } from '@/store/app';
-import { ref, type Ref } from 'vue';
+import { type Ref } from 'vue';
 import { toast } from 'vuetify-sonner';
 import { useBackendMeta } from '@/store/meta';
 import 'vue-turnstile';
-import { createPinia } from 'pinia';
+
+const NuxtApp = useNuxtApp();
 
 // private, for SSR
-const pinia = createPinia();
 
 export const reCAPTCHAKey = '6Lczc24pAAAAAAxzBZbRy8CZc_ba06Qn_3OJ_Vg-';
 export const cloudflareCAPTCHAKey = '0x4AAAAAAARtCTyyGc1nbVUm';
 export const discordInvite = 'https://discord.gg/fCxmEyFgAd';
 export const githubLink = 'https://github.com/zly2006/reden-is-what-we-made';
-export const theme = ref(useAppStore(pinia).theme);
+// export const theme = ref(useAppStore(pinia).theme);
 export const usernameRegex =
   /^[a-zA-Z\-\u4e00-\u9fa5][\w\-\u4e00-\u9fa5]{3,19}$/;
 
@@ -74,13 +74,14 @@ export const doFetchPost = (url: string, data: any) =>
     headers: {
       'Content-Type': 'application/json',
       'X-Requested-With': 'Reden',
-      'X-CSRF-Token': useAppStore(pinia).csrfToken || '[Reden] no csrf token',
+      'X-CSRF-Token':
+        useAppStore(/*pinia*/).csrfToken || '[Reden] no csrf token',
     },
     credentials: 'include',
     body: JSON.stringify(data),
   }).then((res) => {
     if (res.status === 401) {
-      useAppStore(pinia).logout();
+      useAppStore(/*pinia*/).logout();
     }
     return res;
   });
@@ -105,7 +106,7 @@ export function doFetchPut(url: string, data: any) {
   const { fetchBody, isJson } = getPayloadType(data);
   const headers: { [key: string]: string } = {
     'X-Requested-With': 'Reden',
-    'X-CSRF-Token': useAppStore(pinia).csrfToken || '[Reden] no csrf token',
+    'X-CSRF-Token': useAppStore(/*pinia*/).csrfToken || '[Reden] no csrf token',
   };
   if (isJson) {
     headers['Content-Type'] = 'application/json';
@@ -138,7 +139,7 @@ export function doFetchGet(
     method: 'GET',
     headers: {
       'X-Requested-With': 'Reden',
-      'X-CSRF-Token': useAppStore(pinia).csrfToken || '<no csrf token>',
+      'X-CSRF-Token': useAppStore(/*pinia*/).csrfToken || '<no csrf token>',
     },
     credentials: 'include',
   });
@@ -149,7 +150,7 @@ export function doFetchDelete(url: string) {
     method: 'DELETE',
     headers: {
       'X-Requested-With': 'Reden',
-      'X-CSRF-Token': useAppStore(pinia).csrfToken || '<no csrf token>',
+      'X-CSRF-Token': useAppStore(/*pinia*/).csrfToken || '<no csrf token>',
     },
     credentials: 'include',
   });
@@ -230,7 +231,7 @@ export const fetchUser = (userRef: Ref<Profile | undefined>) =>
       if (response.ok) {
         const data: Profile = await response.json();
         userRef.value = data;
-        useAppStore(pinia).updateCache(data);
+        useAppStore(/*pinia*/).updateCache(data);
       } else {
         if (response.status === 401) {
           toast('Error', {
@@ -296,7 +297,7 @@ export function isStrongPassword(password: string) {
   );
 }
 
-export const debugMessages = () => !useBackendMeta(pinia).get().production;
+export const debugMessages = () => !useBackendMeta(/*pinia*/).get().production;
 
 let _isInChina: boolean | undefined = undefined;
 export function isInChina() {

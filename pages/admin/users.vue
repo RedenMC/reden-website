@@ -11,9 +11,9 @@ import AdminEditUserButton from '~/components/admin/AdminEditUserButton.vue';
 import AdminBanUserButton from '~/components/admin/AdminBanUserButton.vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import clientOnly from '#app/components/client-only';
 
 const router = useRouter();
+const localePath = useLocalePath();
 type Parameter = {
   search: string;
   pageSize: string;
@@ -49,7 +49,7 @@ async function loadItems(options: {
       sort: options.sortBy[0]?.key || '',
       order: options.sortBy[0]?.order || '',
     };
-    router.replace({ query: parameters });
+    await router.replace({ query: parameters });
     console.log(parameters);
     const response = await doFetchGet(`/api/admin/user/list`, parameters);
     if (response.ok) {
@@ -130,7 +130,7 @@ function isBanned(user: Profile) {
     <template #[`item.lastLoginIp`]="{ item, value }">
       <span title="">
         {{ value }}
-        <template v-if="locale === 'zh_CN'">
+        <template v-if="locale === 'zh_cn'">
           <br />
           {{ item.mmRecord?.country_zh ?? item.mmRecord?.country }}
           {{ item.mmRecord?.subdivision_zh ?? item.mmRecord?.subdivision }}
@@ -150,7 +150,7 @@ function isBanned(user: Profile) {
       <v-chip v-else color="success" text="Not Banned" />
     </template>
     <template #[`item.username`]="{ item }">
-      <router-link :to="`/@${item.username}`" class="username">
+      <router-link :to="localePath(`/@${item.username}`)" class="username">
         <v-avatar :image="item.avatarUrl" />
         {{ item.username }}
       </router-link>

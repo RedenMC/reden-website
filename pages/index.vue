@@ -7,6 +7,7 @@ import { discordInvite, githubLink } from '@/utils/constants';
 import '@/assets/main.css';
 
 const introContent = ref<HTMLElement | null>(null);
+const localePath = useLocalePath();
 </script>
 
 <template>

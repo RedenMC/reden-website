@@ -22,6 +22,7 @@ const loading = ref(false);
 const registerOk = ref(false);
 const captcha = ref<Captcha>();
 const { t } = useI18n();
+const localePath = useLocalePath();
 function register(e: SubmitEventPromise) {
   e.preventDefault();
   e.then((e) => {
