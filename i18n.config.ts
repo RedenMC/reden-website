@@ -7,10 +7,8 @@ const messages = {
   zh_cn,
   zh_tw,
 };
-const browserLanguage = navigator && navigator.language;
 export default defineI18nConfig(() => ({
   legacy: false, // Vuetify does not support the legacy mode of vue-i18n
-  locale: browserLanguage || 'en',
   fallbackLocale: 'en',
   fallbackWarn: false,
   messages,

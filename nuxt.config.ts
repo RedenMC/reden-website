@@ -27,6 +27,11 @@ export default defineNuxtConfig({
       { code: 'zh_cn', language: 'zh-CN' },
       { code: 'zh_tw', language: 'zh-TW' },
     ],
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: 'i18n_redirected',
+      onlyOnRoot: true,
+    },
   },
   vite: {
     vue: {

@@ -91,7 +91,7 @@ console.log('<app-bar> setup()');
         </v-btn>
       </template>
       <template v-else>
-        <v-btn stacked title="Home" :to="localePath('/')" :active="false">
+        <v-btn stacked title="Homepage" :to="localePath('/')" :active="false">
           <v-img src="/reden_256.png" width="36" />
         </v-btn>
         <v-btn
@@ -126,7 +126,7 @@ console.log('<app-bar> setup()');
         title="Toggle Theme"
         @click="toggleTheme"
       />
-      <v-btn icon="mdi-translate">
+      <v-btn icon="mdi-translate" title="Language">
         <v-icon icon="mdi-translate" />
         <v-menu :close-on-content-click="true" activator="parent">
           <v-list>
