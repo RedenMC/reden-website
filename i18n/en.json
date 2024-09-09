@@ -34,7 +34,7 @@
   },
   "en": "English",
   "litematica_generator": {
-    "contribute": "Want your own machines such as world eaters to be collected here? Contribute to Reden now! Email me at me@redenmc.com for more information.",
+    "contribute": "Want your own machines such as world eaters to be collected here? Contribute to Reden now! Email me at {'me@redenmc.com'} for more information.",
     "description": "Generate Litematica files online for slimestone and technical minecraft machines, e.g. World Eaters, Tunnel bores, etc. This service is totally free.",
     "download": "Download",
     "download_count": "{count} downloads",

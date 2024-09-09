@@ -45,6 +45,8 @@ export default defineNuxtConfig({
   },
   nitro: {
     prerender: {
+      // !!!!!
+      failOnError: false,
       routes: ['/'],
       ignore: ['/api'],
     },

@@ -34,7 +34,7 @@
   },
   "en": "English",
   "litematica_generator": {
-    "contribute": "想要你的機器（例如世界吞噬者）被收錄在這裡？現在就為 Reden 做出貢獻！傳送郵件至 me@redenmc.com 聯絡我",
+    "contribute": "想要你的機器（例如世界吞噬者）被收錄在這裡？現在就為 Reden 做出貢獻！傳送郵件至 {'me@redenmc.com'} 聯絡我",
     "description": "在這裡線上生成投影檔案，例如世界吞噬者",
     "download": "下載",
     "download_count": "{count} 次下載",

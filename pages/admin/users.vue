@@ -150,7 +150,7 @@ function isBanned(user: Profile) {
       <v-chip v-else color="success" text="Not Banned" />
     </template>
     <template #[`item.username`]="{ item }">
-      <router-link :to="`/user/${item.id}`" class="username">
+      <router-link :to="`/@${item.username}`" class="username">
         <v-avatar :image="item.avatarUrl" />
         {{ item.username }}
       </router-link>

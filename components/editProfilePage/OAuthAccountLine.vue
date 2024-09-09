@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { doFetchDelete, getOauth, OAuthAccount } from '@/constants';
+import { doFetchDelete, getOauth, type OAuthAccount } from '@/utils/constants';
 import { ref } from 'vue';
 import { toast } from 'vuetify-sonner';
 
@@ -11,9 +11,11 @@ const { type, icon } = defineProps<{
   icon?: string;
 }>();
 
-getOauth(type, `/api/account/${type}`, account).then(() => {
-  loading.value = false;
-});
+if (import.meta.client) {
+  getOauth(type, `/api/account/${type}`, account).then(() => {
+    loading.value = false;
+  });
+}
 function unlinkAccount(type: string) {
   doFetchDelete(`/api/account/${type}`).then((response) => {
     if (response.ok) {

@@ -6,6 +6,7 @@ import { useI18n } from 'vue-i18n';
 import { useDisplay, useTheme } from 'vuetify';
 import { useAppStore } from '~/store/app';
 import type { Locale } from '@intlify/core-base';
+import AppBar from '~/components/AppBar.vue';
 
 onMounted(() => {
   // set body background color
@@ -13,164 +14,14 @@ onMounted(() => {
     useTheme().current.value.colors['background']!;
 });
 
-const { mobile } = useDisplay({
-  mobileBreakpoint: 500,
-});
-
-function toggleTheme() {
-  theme.value = theme.value === 'light' ? 'dark' : 'light';
-  useAppStore().setTheme(theme.value);
-}
-
 const { locale } = useI18n();
 const dialogCookies = ref(false);
-
-function changeLanguage(newLocale: Locale) {
-  localStorage.setItem('locale', newLocale);
-  locale.value = newLocale;
-}
+console.log('<layout> setup()');
 </script>
 
 <template>
   <v-app>
-    <v-app-bar :elevation="2" class="reden-app-bar" color="transparent">
-      <template #prepend>
-        <template v-if="mobile">
-          <v-menu :close-on-content-click="true">
-            <template #activator="{ props }">
-              <v-btn
-                v-show="mobile"
-                icon="mdi-menu"
-                title="Menu"
-                v-bind="props"
-              />
-            </template>
-
-            <v-list class="w-100">
-              <v-list-item to="/">
-                <template #prepend>
-                  <v-icon>mdi-home</v-icon>
-                </template>
-                <v-list-item-title> Home </v-list-item-title>
-              </v-list-item>
-              <v-list-item to="/feature">
-                <template #prepend>
-                  <v-icon>mdi-view-dashboard</v-icon>
-                </template>
-                <v-list-item-title> Features </v-list-item-title>
-              </v-list-item>
-              <v-divider />
-              <template v-if="useAppStore().logined">
-                <NuxtLink to="/home">
-                  <v-list-item link>
-                    <template #prepend>
-                      <v-avatar
-                        v-if="useAppStore().userCache?.avatarUrl"
-                        :image="useAppStore().userCache?.avatarUrl"
-                        :size="40"
-                      />
-                      <v-icon v-else> mdi-account</v-icon>
-                    </template>
-                    <v-list-item-title> My Profile</v-list-item-title>
-                  </v-list-item>
-                </NuxtLink>
-                <v-list-item>
-                  <v-list-item-title> My Machines</v-list-item-title>
-                </v-list-item>
-                <v-list-item>
-                  <v-list-item-title> My Stars</v-list-item-title>
-                </v-list-item>
-              </template>
-              <template v-else>
-                <NuxtLink to="/login">
-                  <v-list-item link>
-                    <template #prepend>
-                      <v-icon>mdi-account</v-icon>
-                    </template>
-                    <v-list-item-title> Login</v-list-item-title>
-                  </v-list-item>
-                </NuxtLink>
-
-                <NuxtLink to="/register">
-                  <v-list-item link>
-                    <template #prepend>
-                      <v-icon>mdi-account-plus</v-icon>
-                    </template>
-                    <v-list-item-title> Register</v-list-item-title>
-                  </v-list-item>
-                </NuxtLink>
-              </template>
-              <template v-if="useAppStore().userCache?.isStaff">
-                <v-divider />
-                <NuxtLink to="/admin">
-                  <v-list-item link>
-                    <template #prepend>
-                      <v-icon>mdi-cog</v-icon>
-                    </template>
-                    <v-list-item-title>Admin</v-list-item-title>
-                  </v-list-item>
-                </NuxtLink>
-              </template>
-            </v-list>
-          </v-menu>
-        </template>
-        <template v-else>
-          <v-btn stacked title="Home" to="/">
-            <v-img src="/reden_256.png" width="36" />
-          </v-btn>
-          <v-btn
-            stacked
-            v-if="useAppStore().userCache?.isStaff"
-            prepend-icon="mdi-cog"
-            title="Admin"
-            to="/admin"
-          >
-            Admin
-          </v-btn>
-        </template>
-      </template>
-      <p class="text-h5"></p>
-      <template #append>
-        <v-btn
-          v-show="!mobile"
-          :href="githubLink"
-          icon="mdi-github"
-          title="Github"
-        />
-
-        <v-btn
-          v-show="!mobile"
-          :href="discordInvite"
-          icon="custom:DiscordIcon"
-          title="Discord"
-        />
-
-        <v-btn
-          :icon="theme === 'light' ? 'mdi-weather-night' : 'mdi-weather-sunny'"
-          title="Toggle Theme"
-          @click="toggleTheme"
-        />
-        <v-btn icon="mdi-translate">
-          <v-icon icon="mdi-translate" />
-          <v-menu :close-on-content-click="true" activator="parent">
-            <v-list>
-              <v-list-item
-                v-for="locale in $i18n.availableLocales"
-                :key="`locale-${locale}`"
-                :to="switchLocalePath(locale)"
-              >
-                <v-list-item-title>{{ $t(locale) }}</v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-        </v-btn>
-        <v-btn
-          :to="useAppStore().logined ? '/home' : '/login'"
-          icon="mdi-account"
-          title="Account"
-        />
-      </template>
-    </v-app-bar>
+    <app-bar />
     <VSonner :expand="true" :position="'top-right'" />
     <v-main>
       <slot />
