@@ -301,22 +301,25 @@ export const debugMessages = () => !useBackendMeta(pinia).get().production;
 let _isInChina: boolean | undefined = undefined;
 export function isInChina() {
   if (_isInChina) return Promise.resolve(_isInChina);
-  return doFetchGet('/api/ip')
-    .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.resolve({});
-    })
-    .then((data: { ip: string; mm?: { country_code?: string } }) => {
-      if (data.mm?.country_code === 'CN') {
-        console.log('ip', data.ip, 'is in china.');
-        _isInChina = true;
-        return true;
-      }
-      _isInChina = false;
-      return false;
-    });
+  if (!import.meta.client) return Promise.resolve(false);
+  else {
+    return doFetchGet('/api/ip')
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+        return Promise.resolve({});
+      })
+      .then((data: { ip: string; mm?: { country_code?: string } }) => {
+        if (data.mm?.country_code === 'CN') {
+          console.log('ip', data.ip, 'is in china.');
+          _isInChina = true;
+          return true;
+        }
+        _isInChina = false;
+        return false;
+      });
+  }
 }
 
 export type Captcha = {
