@@ -15,8 +15,7 @@ import '@mdi/font/css/materialdesignicons.css';
 import 'vuetify/styles';
 
 import { i18n } from '@/plugins/i18n';
-import { metaManager } from '@/plugins/meta';
 
 export function registerPlugins(app: App) {
-  app.use(vuetify).use(i18n).use(router).use(pinia).use(metaManager);
+  app.use(vuetify).use(i18n).use(router).use(pinia);
 }

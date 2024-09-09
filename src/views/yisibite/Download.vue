@@ -110,20 +110,6 @@ function submit(e: SubmitEventPromise) {
 }
 const selected = computed(() => generators.value[name.value]);
 
-useMeta({
-  description: t('litematica_generator.description'),
-  keywords: [
-    'litematica',
-    '投影',
-    'generator',
-    '生成器',
-    'minecraft',
-    '世吞',
-    'world eater',
-    'redstone',
-    'slimestone',
-  ],
-});
 </script>
 
 <template>

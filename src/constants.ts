@@ -388,5 +388,4 @@ export const badgeDefs: { [keys: string]: BadgeDef } = {
 
 export function changeLanguage(newLocale: Locale) {
   localStorage.setItem('locale', newLocale);
-  i18n.global.locale.value = newLocale;
 }
