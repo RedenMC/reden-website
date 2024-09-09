@@ -8,12 +8,12 @@ import { useTitle } from '@vueuse/core';
 const route = useRoute();
 const loading = ref(true);
 const user = ref<Profile>();
-const title = useTitle();
+const { t } = useI18n();
 const lookup = route.params.username;
 if (import.meta.client && lookup) {
   fetchOtherUser(lookup.toString(), user).then(() => {
     loading.value = false;
-    title.value = user.value?.username + ' - Reden';
+    useTitle((user.value?.username ?? t('reden.user_not_found')) + ' - Reden');
   });
 }
 </script>

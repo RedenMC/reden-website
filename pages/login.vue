@@ -21,6 +21,9 @@ const password = ref('');
 const loading = ref(false);
 const captcha = ref<Captcha>();
 const router = useRouter();
+definePageMeta({
+  title: 'login.title',
+});
 
 function login() {
   loading.value = true;

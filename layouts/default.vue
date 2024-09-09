@@ -5,6 +5,7 @@ import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useDisplay, useTheme } from 'vuetify';
 import { useAppStore } from '~/store/app';
+import '@/assets/main.css';
 const localePath = useLocalePath();
 const switchLocalePath = useSwitchLocalePath();
 
@@ -26,7 +27,6 @@ function toggleTheme() {
   appStore.theme = appStore.theme === 'light' ? 'dark' : 'light';
   appStore.save();
 }
-console.log('<layout> setup()');
 </script>
 
 <template>
@@ -168,11 +168,11 @@ console.log('<layout> setup()');
     </v-app-bar>
 
     <VSonner :expand="true" :position="'top-right'" />
-    <v-main>
+    <v-main class="router">
       <slot />
     </v-main>
 
-    <v-footer border class="flex-column">
+    <v-footer border class="flex-column router">
       <v-row class="text-center">
         <v-col>
           <div class="footer-list-title">
@@ -339,18 +339,6 @@ console.log('<layout> setup()');
 
 .footer-list-item {
   margin-bottom: 8px;
-}
-
-a {
-  color: inherit;
-  opacity: 0.8;
-  text-decoration: none;
-}
-
-a:hover {
-  opacity: 1;
-  transition: all 0.3s ease-in-out;
-  text-decoration: underline;
 }
 
 .last-line {

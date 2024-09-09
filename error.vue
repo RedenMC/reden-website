@@ -10,6 +10,12 @@ const props = defineProps({
 });
 console.log('error', props.error);
 console.log('prevPage', prevPage);
+definePageMeta({
+  title:
+    props.error?.statusCode === 4044
+      ? 'reden.title.404'
+      : `Error ${props.error?.statusCode}`,
+});
 </script>
 
 <template>

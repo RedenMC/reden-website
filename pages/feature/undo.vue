@@ -1,5 +1,8 @@
 <script setup lang="ts">
 const localePath = useLocalePath();
+definePageMeta({
+  title: 'reden.title.undo',
+});
 </script>
 
 <template>

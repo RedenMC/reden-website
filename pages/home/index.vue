@@ -14,6 +14,11 @@ import { useRouter } from 'vue-router';
 
 const router = useRouter();
 const localePath = useLocalePath();
+definePageMeta({
+  title: 'reden.title.my_account',
+  needLogin: true,
+});
+
 if (router.currentRoute.value.query?.csrf_token) {
   // oauth login csrf token is not passed by json, but by query string
   const csrf = router.currentRoute.value.query.csrf_token! as string;

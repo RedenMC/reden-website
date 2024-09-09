@@ -18,14 +18,16 @@
   margin-right: auto;
 }
 
-a.router {
+a.router,
+.router a {
   color: inherit;
   opacity: 0.8;
   text-decoration: none;
   transition: all 0.5s;
 }
 
-a.router:hover {
+a.router:hover,
+.router a:hover {
   color: inherit;
   opacity: 1;
   text-decoration: underline;

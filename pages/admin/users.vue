@@ -14,6 +14,9 @@ import { useI18n } from 'vue-i18n';
 
 const router = useRouter();
 const localePath = useLocalePath();
+definePageMeta({
+  title: 'admin.title.users',
+});
 type Parameter = {
   search: string;
   pageSize: string;

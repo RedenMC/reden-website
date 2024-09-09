@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import ModrinthFull from '@/plugins/icons/ModrinthFull.vue';
+definePageMeta({
+  title: 'reden.title.download',
+});
 </script>
 
 <template>

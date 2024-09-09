@@ -2,6 +2,9 @@
 import { doFetchGet } from '@/utils/constants';
 import { ref } from 'vue';
 import { toast } from 'vuetify-sonner';
+definePageMeta({
+  title: 'sponsors.title',
+});
 
 type Sponsor = {
   name: string;

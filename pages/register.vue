@@ -23,6 +23,10 @@ const registerOk = ref(false);
 const captcha = ref<Captcha>();
 const { t } = useI18n();
 const localePath = useLocalePath();
+definePageMeta({
+  title: 'register.title',
+});
+
 function register(e: SubmitEventPromise) {
   e.preventDefault();
   e.then((e) => {

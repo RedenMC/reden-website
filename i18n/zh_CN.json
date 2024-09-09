@@ -29,6 +29,7 @@
   },
   "admin": {
     "title": {
+      "admin": "管理面板",
       "users": "全部用户"
     }
   },
@@ -170,6 +171,7 @@
       "rvc": "RVC",
       "undo": "撤销"
     },
+    "user_not_found": "未找到用户",
     "wiki": "维基"
   },
   "register": {

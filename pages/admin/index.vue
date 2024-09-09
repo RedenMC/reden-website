@@ -1,5 +1,11 @@
 <script lang="ts" setup>
 const localePath = useLocalePath();
+
+definePageMeta({
+  needLogin: true,
+  needAdmin: true,
+  title: 'admin.title.admin',
+});
 </script>
 
 <template>

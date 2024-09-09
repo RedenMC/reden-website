@@ -29,6 +29,7 @@
   },
   "admin": {
     "title": {
+      "admin": "Admin Panel",
       "users": "All Users"
     }
   },
@@ -172,6 +173,7 @@
       "rvc": "RVC",
       "undo": "Undo"
     },
+    "user_not_found": "User Not Found",
     "wiki": "Wiki"
   },
   "register": {

@@ -22,6 +22,10 @@ const user = ref<Profile>();
 const dialogChangePassword = ref(
   router.currentRoute.value?.hash === '#change-password',
 );
+definePageMeta({
+  title: 'reden.title.edit_profile',
+});
+
 watch(dialogChangePassword, () => {
   if (dialogChangePassword.value) {
     router.replace({
@@ -458,6 +462,7 @@ function savePreferences() {
   </v-card>
 </template>
 
+<!--suppress CssUnusedSymbol -->
 <style scoped>
 .setting-label {
   font-size: 1.2rem;

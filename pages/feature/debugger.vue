@@ -1,4 +1,8 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+definePageMeta({
+  title: 'reden.title.debugger',
+});
+</script>
 
 <template></template>
 
