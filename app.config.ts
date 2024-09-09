@@ -3,7 +3,7 @@ export default defineAppConfig({
   theme: {
     dark: true,
     colors: {
-      primary: '#ff0000'
-    }
-  }
+      primary: '#ff0000',
+    },
+  },
 });

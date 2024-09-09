@@ -1,10 +1,10 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import vuetify from "vite-plugin-vuetify";
+import vuetify from 'vite-plugin-vuetify';
 import transformAssetUrls = vuetify.transformAssetUrls;
 
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
-  devtools: {enabled: true},
+  devtools: { enabled: true },
   build: {
     transpile: ['vuetify'],
   },
@@ -14,12 +14,19 @@ export default defineNuxtConfig({
     (_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {
         // @ts-expect-error
-        config.plugins.push(vuetify({autoImport: true}))
-      })
+        config.plugins.push(vuetify({ autoImport: true }));
+      });
     },
   ],
   i18n: {
-    vueI18n: './i18n.config.ts'
+    strategy: 'prefix_except_default',
+    vueI18n: './i18n.config.ts',
+    defaultLocale: 'en',
+    locales: [
+      { code: 'en', language: 'en' },
+      { code: 'zh_cn', language: 'zh-CN' },
+      { code: 'zh_tw', language: 'zh-TW' },
+    ],
   },
   vite: {
     vue: {
@@ -33,4 +40,13 @@ export default defineNuxtConfig({
       },
     },
   },
-})
+  features: {
+    inlineStyles: false,
+  },
+  nitro: {
+    prerender: {
+      routes: ['/'],
+      ignore: ['/api'],
+    },
+  },
+});

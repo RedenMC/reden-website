@@ -14,4 +14,4 @@ export default defineI18nConfig(() => ({
   fallbackLocale: 'en',
   fallbackWarn: false,
   messages,
-}))
+}));

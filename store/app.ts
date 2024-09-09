@@ -1,7 +1,7 @@
 // Utilities
 import { defineStore } from 'pinia';
 import { type Profile } from '@/utils/constants';
-import clientOnly from "#app/components/client-only";
+import clientOnly from '#app/components/client-only';
 
 type AppState = {
   logined: boolean;
