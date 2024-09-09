@@ -69,6 +69,7 @@
   },
   "profile": {
     "edit": {
+      "back": "返回个人资料页",
       "bio": "个人简介",
       "bio_desc": "介绍你自己",
       "changeEmail": "修改邮件地址",
@@ -136,6 +137,9 @@
         "rvc": "Reden 版本控制 (RVC)",
         "title": "Reden Mod",
         "undo_redo": "撤销 & 重做"
+      },
+      "social": {
+        "title": "社群媒体"
       }
     },
     "home": {

@@ -15,6 +15,7 @@ function state(): AppState {
   if (import.meta.client) {
     const data = localStorage.getItem('redenCache');
     if (data) {
+      console.log('loaded localStorage', data)
       return JSON.parse(data);
     }
   }

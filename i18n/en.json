@@ -69,6 +69,7 @@
   },
   "profile": {
     "edit": {
+      "back": "Back to Your Profile",
       "bio": "Bio",
       "bio_desc": "Introduction about yourself.",
       "changeEmail": "Change Email",
@@ -138,6 +139,9 @@
         "rvc": "Reden Version Control",
         "title": "Reden Mod",
         "undo_redo": "Undo & Redo"
+      },
+      "social": {
+        "title": "Social"
       }
     },
     "home": {

@@ -68,6 +68,7 @@
   },
   "profile": {
     "edit": {
+      "back": "",
       "bio": "",
       "changeEmail": "",
       "email": {
@@ -133,6 +134,9 @@
         "rvc": "Reden 版本控制 (RVC)",
         "title": "Reden Mod",
         "undo_redo": "撤銷 & 重作"
+      },
+      "social": {
+        "title": ""
       }
     },
     "home": {

@@ -5,7 +5,6 @@ import RedstoneSectionTitle from '@/components/RedstoneSectionTitle.vue';
 import Feature from '@/pages/feature/index.vue';
 import { discordInvite, githubLink } from '@/utils/constants';
 import '@/assets/main.css';
-'Social'
 
 const introContent = ref<HTMLElement | null>(null);
 const localePath = useLocalePath();

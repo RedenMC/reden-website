@@ -68,6 +68,7 @@
   },
   "profile": {
     "edit": {
+      "back": "",
       "bio": "",
       "changeEmail": "",
       "failedToSaveInformation": "",
@@ -130,6 +131,9 @@
         "rvc": "Reden Version Control",
         "title": "Reden Mod",
         "undo_redo": "Undo & Redo"
+      },
+      "social": {
+        "title": ""
       }
     },
     "home": {

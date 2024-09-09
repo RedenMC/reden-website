@@ -361,4 +361,8 @@ a:hover {
   opacity: 0.7;
   padding: 6px;
 }
+
+.reden-app-bar {
+  backdrop-filter: blur(10px);
+}
 </style>

@@ -13,6 +13,7 @@ import OAuthAccountLine from '@/components/editProfilePage/OAuthAccountLine.vue'
 import { toast } from 'vuetify-sonner';
 import { useI18n } from 'vue-i18n';
 const router = useRouter();
+const localePath = useLocalePath();
 import CommonCaptcha from '@/components/CommonCaptcha.vue';
 import { useRouter } from 'vue-router';
 
@@ -150,7 +151,18 @@ function savePreferences() {
 </script>
 
 <template>
-  <v-card v-if="user" class="setting-section-card" rounded="lg" border>
+  <div class="section">
+    <v-btn
+      :to="localePath('/home')"
+      variant="outlined"
+      class="text-capitalize"
+      color="primary"
+      prepend-icon="mdi-arrow-left"
+    >
+      {{ $t('profile.edit.back') }}
+    </v-btn>
+  </div>
+  <v-card v-if="user" class="setting-section-card section" rounded="lg" border>
     <h3 class="setting-section-title">Basic Information</h3>
     <v-row>
       <v-col>
@@ -225,7 +237,7 @@ function savePreferences() {
     </v-row>
   </v-card>
 
-  <v-card class="setting-section-card" rounded="lg" v-if="user" border>
+  <v-card class="setting-section-card section" rounded="lg" v-if="user" border>
     <h3 class="setting-section-title">{{ t('profile.edit.preferences') }}</h3>
     <v-row>
       <v-col cols="9">
@@ -352,7 +364,7 @@ function savePreferences() {
     </v-row>
   </v-card>
 
-  <v-card v-if="user" class="setting-section-card" rounded="lg" border>
+  <v-card v-if="user" class="setting-section-card section" rounded="lg" border>
     <h3 class="setting-section-title">
       {{ t('profile.edit.password.title') }}
     </h3>
@@ -439,7 +451,7 @@ function savePreferences() {
       </v-dialog>
     </v-row>
   </v-card>
-  <v-card class="setting-section-card" rounded="lg" border>
+  <v-card class="setting-section-card section" rounded="lg" border>
     <h3 class="setting-section-title">Third Party Accounts</h3>
     <OAuthAccountLine icon="mdi-microsoft" type="microsoft" />
     <OAuthAccountLine icon="mdi-github" type="github" />
@@ -462,10 +474,13 @@ function savePreferences() {
   margin: 12px;
 }
 
-.setting-section-card {
-  margin: 20px auto;
-  padding: 20px;
+.v-card {
+  margin: 20px auto !important;
+  padding: 20px !important;
+}
 
+.section {
+  margin: 5px auto;
   max-width: 900px;
 }
 
