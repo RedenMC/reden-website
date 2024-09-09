@@ -2,6 +2,7 @@
 import { useAppStore } from '~/store/app';
 import { discordInvite, githubLink, theme } from '~/utils/constants';
 import { useDisplay } from 'vuetify';
+
 const { mobile } = useDisplay({
   mobileBreakpoint: 500,
 });
@@ -21,13 +22,13 @@ console.log('<app-bar> setup()');
         <v-btn v-show="mobile" icon="mdi-menu" title="Menu">
           <v-menu :close-on-content-click="true" activator="parent">
             <v-list class="w-100">
-              <v-list-item to="/">
+              <v-list-item :to="localePath('/')">
                 <template #prepend>
                   <v-icon>mdi-home</v-icon>
                 </template>
                 <v-list-item-title> Home</v-list-item-title>
               </v-list-item>
-              <v-list-item to="/feature">
+              <v-list-item :to="localePath('/feature')">
                 <template #prepend>
                   <v-icon>mdi-view-dashboard</v-icon>
                 </template>
@@ -35,7 +36,7 @@ console.log('<app-bar> setup()');
               </v-list-item>
               <v-divider />
               <template v-if="useAppStore().logined">
-                <NuxtLink to="/home">
+                <NuxtLink :to="localePath('/home')">
                   <v-list-item link>
                     <template #prepend>
                       <v-avatar
@@ -56,7 +57,7 @@ console.log('<app-bar> setup()');
                 </v-list-item>
               </template>
               <template v-else>
-                <NuxtLink to="/login">
+                <NuxtLink :to="localePath('/login')">
                   <v-list-item link>
                     <template #prepend>
                       <v-icon>mdi-account</v-icon>
@@ -65,7 +66,7 @@ console.log('<app-bar> setup()');
                   </v-list-item>
                 </NuxtLink>
 
-                <NuxtLink to="/register">
+                <NuxtLink :to="localePath('/register')">
                   <v-list-item link>
                     <template #prepend>
                       <v-icon>mdi-account-plus</v-icon>
@@ -76,7 +77,7 @@ console.log('<app-bar> setup()');
               </template>
               <template v-if="useAppStore().userCache?.isStaff">
                 <v-divider />
-                <NuxtLink to="/admin">
+                <NuxtLink :to="localePath('/admin')">
                   <v-list-item link>
                     <template #prepend>
                       <v-icon>mdi-cog</v-icon>
@@ -90,7 +91,7 @@ console.log('<app-bar> setup()');
         </v-btn>
       </template>
       <template v-else>
-        <v-btn stacked title="Home" to="/" :active="false">
+        <v-btn stacked title="Home" :to="localePath('/')" :active="false">
           <v-img src="/reden_256.png" width="36" />
         </v-btn>
         <v-btn
@@ -98,7 +99,7 @@ console.log('<app-bar> setup()');
           prepend-icon="mdi-cog"
           stacked
           title="Admin"
-          to="/admin"
+          :to="localePath('/admin')"
         >
           Admin
         </v-btn>

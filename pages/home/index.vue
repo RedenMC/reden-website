@@ -126,7 +126,7 @@ function installWebhook() {
                 color="secondary"
                 href="/"
                 rounded="lg"
-                to="/home/edit"
+                :to="localePath('/home/edit')"
                 variant="outlined"
               >
                 {{ $t('profile.editProfile') }}

@@ -46,7 +46,7 @@ async function ban(e: SubmitEventPromise) {
       <v-card>
         <v-card-title>
           Ban
-          <reden-router :to="`/user/${item.id}`">{{
+          <reden-router :to="localePath(`/user/${item.id}`)">{{
             item.username
           }}</reden-router>
         </v-card-title>

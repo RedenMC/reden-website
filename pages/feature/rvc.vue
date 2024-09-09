@@ -51,7 +51,9 @@
     </v-row>
     <v-row class="text-center">
       <v-col>
-        <v-btn to="/download" color="primary" rounded> Download Reden </v-btn>
+        <v-btn :to="localePath('/download')" color="primary" rounded>
+          Download Reden
+        </v-btn>
       </v-col>
     </v-row>
   </div>

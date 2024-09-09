@@ -71,7 +71,7 @@ const introContent = ref<HTMLElement | null>(null);
               {{ $t('litematica_generator.description') }}
             </v-card-text>
             <v-card-actions>
-              <NuxtLink to="/minecraft/download/yisibite">
+              <NuxtLink :to="localePath('/minecraft/download/yisibite')">
                 <v-btn color="White">Go</v-btn>
               </NuxtLink>
             </v-card-actions>
@@ -84,7 +84,7 @@ const introContent = ref<HTMLElement | null>(null);
               绑定 GitHub Apps，同步机器、配置、你关注的仓库和创作者：你的世界！
             </v-card-text>
             <v-card-actions>
-              <NuxtLink to="/home">
+              <NuxtLink :to="localePath('/home')">
                 <v-btn color="White">点击前往</v-btn>
               </NuxtLink>
             </v-card-actions>
@@ -121,7 +121,7 @@ const introContent = ref<HTMLElement | null>(null);
         </template>
         <template #action>
           <v-btn
-            to="/sponsors"
+            :to="localePath('/sponsors')"
             color="primary"
             variant="outlined"
             rounded="rounded"

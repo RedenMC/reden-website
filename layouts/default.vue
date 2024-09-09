@@ -36,27 +36,27 @@ console.log('<layout> setup()');
             </b>
           </div>
           <div class="footer-list-item">
-            <NuxtLink to="/">
+            <NuxtLink :to="localePath('/')">
               {{ $t('reden.title.home') }}
             </NuxtLink>
           </div>
           <div class="footer-list-item">
-            <NuxtLink to="/download">
+            <NuxtLink :to="localePath('/download')">
               {{ $t('reden.download') }}
             </NuxtLink>
           </div>
           <div class="footer-list-item">
-            <NuxtLink to="/feature/undo">
+            <NuxtLink :to="localePath('/feature/undo')">
               {{ $t('reden.footer.reden_mod.undo_redo') }}
             </NuxtLink>
           </div>
           <div class="footer-list-item">
-            <NuxtLink to="/feature/rvc">
+            <NuxtLink :to="localePath('/feature/rvc')">
               {{ $t('reden.footer.reden_mod.rvc') }}
             </NuxtLink>
           </div>
           <div class="footer-list-item">
-            <NuxtLink to="/feature/debugger">
+            <NuxtLink :to="localePath('/feature/debugger')">
               {{ $t('reden.footer.reden_mod.debugger') }}
             </NuxtLink>
           </div>
@@ -68,22 +68,22 @@ console.log('<layout> setup()');
             </b>
           </div>
           <div class="footer-list-item">
-            <NuxtLink :to="githubLink"> Reden on Github</NuxtLink>
+            <a :href="githubLink"> Reden on Github</a>
           </div>
           <div class="footer-list-item">
-            <NuxtLink to="https://wiki.redenmc.com">
+            <a href="https://wiki.redenmc.com">
               {{ $t('reden.footer.reden_ecosystem.wiki') }}
-            </NuxtLink>
+            </a>
           </div>
           <div class="footer-list-item">
-            <NuxtLink to="/sponsors">
+            <NuxtLink :to="localePath('/sponsors')">
               {{ $t('reden.footer.reden_ecosystem.sponsors') }}
             </NuxtLink>
           </div>
           <div class="footer-list-item">
-            <NuxtLink to="https://github.com/RedenMC">
+            <a href="https://github.com/RedenMC">
               {{ $t('reden.footer.reden_ecosystem.github_organization') }}
-            </NuxtLink>
+            </a>
           </div>
         </v-col>
         <v-col>
@@ -98,12 +98,12 @@ console.log('<layout> setup()');
             </a>
           </div>
           <div class="footer-list-item">
-            <NuxtLink to="/community-guidelines">
+            <NuxtLink :to="localePath('/community-guidelines')">
               {{ $t('reden.footer.reden_community.community_guidelines') }}
             </NuxtLink>
           </div>
           <div class="footer-list-item">
-            <NuxtLink to="/community-events">
+            <NuxtLink :to="localePath('/community-events')">
               {{ $t('reden.footer.reden_community.community_events') }}
             </NuxtLink>
           </div>
@@ -115,7 +115,7 @@ console.log('<layout> setup()');
             </b>
           </div>
           <div class="footer-list-item">
-            <NuxtLink to="/blog">
+            <NuxtLink :to="localePath('/blog')">
               <v-icon icon="mdi-rss" />
               {{ $t('reden.footer.follow_us.blog') }}
             </NuxtLink>

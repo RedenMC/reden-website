@@ -56,7 +56,7 @@ function changed() {
         <v-card>
           <v-card-title>
             Edit user
-            <NuxtLink :to="`/user/${mutableCopy.id}`">{{
+            <NuxtLink :to="localePath(`/@${mutableCopy.username}`)">{{
               mutableCopy.username
             }}</NuxtLink>
           </v-card-title>

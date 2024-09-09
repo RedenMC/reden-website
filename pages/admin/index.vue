@@ -4,7 +4,7 @@
   <v-container class="content-common">
     <v-row>
       <v-col>
-        <v-card to="/admin/users" min-width="200">
+        <v-card :to="localePath('/admin/users')" min-width="200">
           <v-card-title> User List </v-card-title>
         </v-card>
       </v-col>

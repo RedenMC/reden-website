@@ -12,6 +12,7 @@ import { ref } from 'vue';
 import CommonCaptcha from '@/components/CommonCaptcha.vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
+
 const { t } = useI18n();
 
 const username = ref('');
@@ -103,11 +104,13 @@ function login() {
       </v-btn>
 
       <span class="text-center" style="padding: 4px">
-        <NuxtLink to="/forgot-password">{{
+        <NuxtLink :to="localePath('/forgot-password')">{{
           $t('login.forgot_password')
         }}</NuxtLink>
         {{ $t('login.or') }}
-        <NuxtLink to="/register">{{ $t('login.register') }}</NuxtLink>
+        <NuxtLink :to="localePath('/register')">{{
+          $t('login.register')
+        }}</NuxtLink>
       </span>
 
       <h1>

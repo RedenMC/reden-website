@@ -135,7 +135,9 @@ function register(e: SubmitEventPromise) {
       />
       <span>
         {{ $t('register.existing') }}
-        <NuxtLink to="/login">{{ $t('register.login') }}</NuxtLink>
+        <NuxtLink :to="localePath('/login')">{{
+          $t('register.login')
+        }}</NuxtLink>
       </span>
       <v-btn
         :disabled="!captcha?.token"
@@ -192,7 +194,7 @@ function register(e: SubmitEventPromise) {
           <v-btn
             class="text-none"
             color="success"
-            to="/"
+            :to="localePath('/')"
             rounded
             variant="flat"
             width="90"
