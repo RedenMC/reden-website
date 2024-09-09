@@ -8,7 +8,6 @@ import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 import LitematicaUpload from '@/views/yisibite/LitematicaUpload.vue';
 import SizeInput from '@/views/yisibite/SizeInput.vue';
-import { useMeta } from 'vue-meta';
 
 const route = useRoute();
 const router = useRouter();
