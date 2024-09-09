@@ -1,6 +1,7 @@
 import { useAppStore } from '~/store/app';
 
 export default defineNuxtRouteMiddleware((to, from) => {
+  if (import.meta.server) return;
   const localePath = useLocalePath();
   const appStore = useAppStore();
   if (import.meta.dev) {

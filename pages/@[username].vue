@@ -11,9 +11,12 @@ const user = ref<Profile>();
 const { t } = useI18n();
 const lookup = route.params.username;
 if (import.meta.client && lookup) {
+  // todo: SSR
   fetchOtherUser(lookup.toString(), user).then(() => {
     loading.value = false;
-    useTitle((user.value?.username ?? t('reden.user_not_found')) + ' - Reden');
+    useHead({
+      title: `${user.value?.username ?? t('reden.user_not_found')} - Reden`,
+    });
   });
 }
 </script>

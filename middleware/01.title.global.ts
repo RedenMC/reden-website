@@ -8,6 +8,8 @@ export default defineNuxtRouteMiddleware((to, from) => {
       console.log('title is', to.meta.title);
     }
     const title = t(to.meta.title as string) + ' - Reden';
-    useTitle(title);
+    useHead({
+      title,
+    });
   }
 });
