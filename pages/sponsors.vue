@@ -1,7 +1,4 @@
-<script setup lang="ts">
-import { doFetchGet } from '@/utils/constants';
-import { ref } from 'vue';
-import { toast } from 'vuetify-sonner';
+<script lang="ts" setup>
 definePageMeta({
   title: 'sponsors.title',
 });
@@ -27,32 +24,14 @@ const unitDisplay: Record<string, string> = {
   HKD: 'HK$',
 };
 
-const sponsors = ref<Sponsor[]>([]);
-if (true) {
-  doFetchGet('/api/sponsors')
-    .then((res) => {
-      if (res.ok) {
-        return res.json();
-      } else {
-        return Promise.reject('Failed to fetch sponsors');
-      }
-    })
-    .then((data) => {
-      sponsors.value = data.sort((a: Sponsor, b: Sponsor) => {
+const { data: sponsors } = await useFetch<Sponsor[]>(`${process.env.baseUrl}/api/sponsors`, {});
+const sorted = computed(() => {
+  return sponsors.value
+    ? sponsors.value.sort((a: Sponsor, b: Sponsor) => {
         return b.amount - a.amount;
-      });
-    })
-    .catch((e) => {
-      console.error(e);
-      toast('Failed to fetch sponsors', {
-        description: 'Please try again later',
-        duration: 5000,
-        cardProps: {
-          color: 'error',
-        },
-      });
-    });
-}
+      })
+    : [];
+});
 </script>
 
 <template>
@@ -62,22 +41,22 @@ if (true) {
   <p class="text-center">
     {{ $t('sponsors.description') }}
   </p>
-  <v-card class="content-common" border>
+  <v-card border class="content-common">
     <v-list
+      v-for="sponsor in sorted"
+      :key="sponsor.name"
+      link
       subheader
       three-line
-      link
-      v-for="sponsor in sponsors"
-      :key="sponsor.name"
     >
       <!--suppress VueUnrecognizedDirective -->
       <v-list-item :key="sponsor.name" v-ripple>
-        <v-list-item-title class="text-h6">{{
-          sponsor.name
-        }}</v-list-item-title>
-        <v-list-item-subtitle>{{
-          sponsor.detail || unitDisplay[sponsor.unit] + sponsor.amount
-        }}</v-list-item-subtitle>
+        <v-list-item-title class="text-h6"
+          >{{ sponsor.name }}
+        </v-list-item-title>
+        <v-list-item-subtitle
+          >{{ sponsor.detail || unitDisplay[sponsor.unit] + sponsor.amount }}
+        </v-list-item-subtitle>
         <v-list-item-action>
           <v-img :src="sponsor.avatar" />
         </v-list-item-action>
@@ -93,11 +72,12 @@ if (true) {
     <p class="text-md-h5">
       {{ $t('sponsors.alipay') }}
       <br />
-      <img src="@/assets/reden-alipay.png" alt="" :width="200" />
+      <img :width="200" alt="" src="@/assets/reden-alipay.png" />
     </p>
     <a class="text-md-h5" href="https://paypal.me/zly2006">
       {{ $t('sponsors.paypal') }}
     </a>
+    <v-btn @click="refreshNuxtData()" >Refresh</v-btn>
   </div>
 </template>
 

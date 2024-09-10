@@ -22,6 +22,7 @@ export default defineNuxtConfig({
     strategy: 'prefix_except_default',
     vueI18n: './i18n.config.ts',
     defaultLocale: 'en',
+    lazy: true,
     locales: [
       { code: 'en', language: 'en' },
       { code: 'zh_cn', language: 'zh-CN' },
@@ -47,6 +48,9 @@ export default defineNuxtConfig({
   },
   features: {
     inlineStyles: false,
+  },
+  env: {
+    baseUrl: process.env.BASE_URL || 'http://localhost:10005'
   },
   nitro: {
     prerender: {
