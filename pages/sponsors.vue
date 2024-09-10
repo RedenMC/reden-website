@@ -24,7 +24,6 @@ const unitDisplay: Record<string, string> = {
   HKD: 'HK$',
 };
 
-console.log('process.env', process.env);
 const { data: sponsors } = await useFetch<Sponsor[]>(`/api/sponsors`);
 const sorted = computed(
   () =>

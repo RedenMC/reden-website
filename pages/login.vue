@@ -95,7 +95,7 @@ function login() {
           </template>
         </v-text-field>
       </v-form>
-      <common-captcha force-cn v-model="captcha" />
+      <common-captcha v-model="captcha" />
       <v-btn
         :disabled="!captcha?.token"
         :loading="loading"

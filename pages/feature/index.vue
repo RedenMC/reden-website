@@ -5,7 +5,7 @@ import RedstoneSectionTitle from '@/components/RedstoneSectionTitle.vue';
 
 const localePath = useLocalePath();
 definePageMeta({
-  title: 'reden.title.feature',
+  title: 'reden.title.features',
 });
 </script>
 

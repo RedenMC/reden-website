@@ -1,15 +1,3 @@
-@media (max-width: 500px) {
-  .mobile-hide {
-    display: none;
-  }
-}
-
-@media (min-width: 500px) {
-  .mobile-show {
-    display: none;
-  }
-}
-
 .content-common {
   min-width: 320px;
   max-width: 800px;
@@ -32,4 +20,8 @@ a.router:hover,
   opacity: 1;
   text-decoration: underline;
   transition: all 0.5s;
+}
+
+a.v-btn:hover {
+  text-decoration: none;
 }
