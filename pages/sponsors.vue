@@ -24,7 +24,8 @@ const unitDisplay: Record<string, string> = {
   HKD: 'HK$',
 };
 
-const { data: sponsors } = await useFetch<Sponsor[]>(`${process.env.baseUrl}/api/sponsors`, {});
+console.log('process.env',process.env);
+const { data: sponsors } = await useFetch<Sponsor[]>(`${useRuntimeConfig().public.baseUrl}/api/sponsors`, {});
 const sorted = computed(() => {
   return sponsors.value
     ? sponsors.value.sort((a: Sponsor, b: Sponsor) => {
