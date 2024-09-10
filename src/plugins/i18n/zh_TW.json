@@ -35,7 +35,7 @@
   "en": "English",
   "litematica_generator": {
     "contribute": "想要你的機器（例如世界吞噬者）被收錄在這裡？現在就為 Reden 做出貢獻！傳送郵件至 me@redenmc.com 聯絡我",
-    "description": "Generate Litematica files online for slimestone and technical minecraft machines, e.g. World Eaters, Tunnel bores, etc. This service is totally free.",
+    "description": "在這裡線上生成投影檔案，例如世界吞噬者",
     "download": "下載",
     "download_count": "{count} 次下載",
     "not_logged_in": "遊客使用者每分鐘只能生成 5 次，登入後解鎖此限制",
@@ -162,7 +162,7 @@
       "debugger": "Reden Debugger",
       "download": "Download",
       "edit_profile": "Edit Profile",
-      "home": "Homepage - Ultimate Technical Minecraft Mod",
+      "home": "首頁",
       "my_account": "My Account",
       "rvc": "RVC",
       "undo": "Undo"
@@ -221,6 +221,7 @@
     "paypal": "使用 PayPal 支援我們",
     "title": "贊助者"
   },
+  "tryItOut": "Try it out!",
   "user": {
     "contributor": "貢獻者",
     "contributor_hover": "此用戶參與過本項目的開發",
@@ -231,6 +232,7 @@
     "staff": "管理員",
     "staff_hover": "此用戶是本項目的管理員"
   },
+  "weAreRefactoringOurSite": "We are refactoring our site.",
   "zh_cn": "简体中文(中国大陆)",
   "zh_tw": "繁體中文(中國台灣)"
 }
