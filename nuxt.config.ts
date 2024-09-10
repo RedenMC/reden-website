@@ -49,15 +49,15 @@ export default defineNuxtConfig({
   features: {
     inlineStyles: false,
   },
-  runtimeConfig: {
-    public: {
-      baseUrl: process.env.BASE_URL || 'http://localhost:10005',
-    },
-  },
   nitro: {
     prerender: {
       routes: ['/'],
       ignore: ['/api'],
+    },
+  },
+  routeRules: {
+    '/api/**': {
+      proxy: 'http://localhost:10005/api/**',
     },
   },
 });

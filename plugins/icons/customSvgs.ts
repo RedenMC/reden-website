@@ -3,13 +3,14 @@ import type { IconSet, IconProps } from 'vuetify';
 import DiscordIcon from '@/plugins/icons/DiscordIcon.vue';
 import ModrinthFull from '@/plugins/icons/ModrinthFull.vue';
 
-const customSvgNameToComponent = {
+const customSvgNameToComponent: Record<any, any> = {
   DiscordIcon,
   ModrinthFull,
 };
 
 const customSVGs: IconSet = {
-  component: (props: IconProps) => h(customSvgNameToComponent[props.icon]),
+  component: (props: IconProps) =>
+    h(customSvgNameToComponent[props.icon as string]),
 };
 
 export { customSVGs /* aliases */ };

@@ -25,17 +25,13 @@ const unitDisplay: Record<string, string> = {
 };
 
 console.log('process.env', process.env);
-const { data: sponsors } = await useFetch<Sponsor[]>(
-  `${useRuntimeConfig().public.baseUrl}/api/sponsors`,
-  {},
+const { data: sponsors } = await useFetch<Sponsor[]>(`/api/sponsors`);
+const sorted = computed(
+  () =>
+    sponsors.value?.sort((a: Sponsor, b: Sponsor) => {
+      return b.amount - a.amount;
+    }) ?? [],
 );
-const sorted = computed(() => {
-  return sponsors.value
-    ? sponsors.value.sort((a: Sponsor, b: Sponsor) => {
-        return b.amount - a.amount;
-      })
-    : [];
-});
 </script>
 
 <template>
