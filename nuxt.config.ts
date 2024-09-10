@@ -51,8 +51,8 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      baseUrl: process.env.BASE_URL || 'http://localhost:10005'
-    }
+      baseUrl: process.env.BASE_URL || 'http://localhost:10005',
+    },
   },
   nitro: {
     prerender: {

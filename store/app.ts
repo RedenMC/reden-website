@@ -54,7 +54,14 @@ export const useAppStore = defineStore('reden', {
   },
   actions: {
     save() {
-      storage.value = this;
+      storage.value = {
+        logined: this.logined,
+        username: this.username,
+        uid: this.uid,
+        csrfToken: this.csrfToken,
+        userCache: this.userCache,
+        theme: this.theme,
+      };
     },
     login(username: string, uid: number) {
       this.logined = true;

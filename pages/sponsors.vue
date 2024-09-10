@@ -24,8 +24,11 @@ const unitDisplay: Record<string, string> = {
   HKD: 'HK$',
 };
 
-console.log('process.env',process.env);
-const { data: sponsors } = await useFetch<Sponsor[]>(`${useRuntimeConfig().public.baseUrl}/api/sponsors`, {});
+console.log('process.env', process.env);
+const { data: sponsors } = await useFetch<Sponsor[]>(
+  `${useRuntimeConfig().public.baseUrl}/api/sponsors`,
+  {},
+);
 const sorted = computed(() => {
   return sponsors.value
     ? sponsors.value.sort((a: Sponsor, b: Sponsor) => {
@@ -78,7 +81,7 @@ const sorted = computed(() => {
     <a class="text-md-h5" href="https://paypal.me/zly2006">
       {{ $t('sponsors.paypal') }}
     </a>
-    <v-btn @click="refreshNuxtData()" >Refresh</v-btn>
+    <v-btn @click="refreshNuxtData()">Refresh</v-btn>
   </div>
 </template>
 
