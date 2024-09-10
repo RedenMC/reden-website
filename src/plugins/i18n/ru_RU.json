@@ -213,6 +213,7 @@
     "paypal": "Support us with PayPal",
     "title": "Sponsors"
   },
+  "tryItOut": "",
   "user": {
     "contributor": "Contributor",
     "contributor_hover": "This user has contributed to this project",
@@ -223,6 +224,7 @@
     "staff": "Staff",
     "staff_hover": "This user is a staff member of this project"
   },
+  "weAreRefactoringOurSite": "",
   "zh_cn": "Китайский (Упрощённый)",
   "zh_tw": "Китайский (Традиционный)"
 }

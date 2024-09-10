@@ -136,7 +136,7 @@ const dialogCookies = ref(false);
       </v-row>
       <v-row class="">
         <v-col :cols="12" class="text-center">
-          We are refactoring our site. <a href="https://new.redenmc.com">Try it out!</a>
+          {{ $t('weAreRefactoringOurSite') }} <v-btn color="primary" href="https://new.redenmc.com">{{ $t('tryItOut') }}</v-btn>
         </v-col>
         <v-col :cols="12" class="text-center">
           <reden-router :to="githubLink">Reden</reden-router>
