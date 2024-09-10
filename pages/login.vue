@@ -51,9 +51,9 @@ function login() {
       });
       setTimeout(() => {
         if (data.redirect !== undefined) {
-          router.push(data.redirect);
+          router.push(localePath('/home'));
         } else {
-          router.push('/');
+          router.push(localePath('/'));
         }
       }, 500);
     })

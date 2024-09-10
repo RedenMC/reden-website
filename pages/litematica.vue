@@ -18,16 +18,15 @@ const loading = ref(false);
 const name = ref(route.query.m?.toString() || '');
 const { t } = useI18n();
 const localePath = useLocalePath();
-definePageMeta({
-  title: 'litematica_generator.title',
-});
 useSeoMeta({
-  title: 'litematica_generator.title',
-  ogTitle: 'litematica_generator.title',
-  description: 'Generate amazing redstone / slimestone contraptions online, such as world easters or tunnel bores, in any chunks size!',
-  ogDescription: '[open-graph]Generate amazing redstone / slimestone contraptions online, such as world easters or tunnel bores, in any chunks size!',
+  title: t('litematica_generator.title'),
+  ogTitle: t('litematica_generator.title'),
+  description:
+    'Generate amazing redstone / slimestone contraptions online, such as world easters or tunnel bores, in any chunks size!',
+  ogDescription:
+    '[open-graph]Generate amazing redstone / slimestone contraptions online, such as world easters or tunnel bores, in any chunks size!',
   ogImage: 'https://redenmc.com/reden_256.png',
-})
+});
 
 export type MachineDef = {
   name: string;

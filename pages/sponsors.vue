@@ -28,7 +28,7 @@ const unitDisplay: Record<string, string> = {
 };
 
 const sponsors = ref<Sponsor[]>([]);
-if (import.meta.client) {
+if (true) {
   doFetchGet('/api/sponsors')
     .then((res) => {
       if (res.ok) {
