@@ -221,6 +221,7 @@
     "paypal": "使用 PayPal 支持我们",
     "title": "赞助者"
   },
+  "tryItOut": "现在来试试！",
   "user": {
     "contributor": "贡献者",
     "contributor_hover": "此用户参与过本项目的开发",
@@ -231,6 +232,7 @@
     "staff": "管理员",
     "staff_hover": "此用户是本项目的管理员"
   },
+  "weAreRefactoringOurSite": "我们正在重构此网站。",
   "zh_cn": "简体中文(中国大陆)",
   "zh_tw": "繁體中文(中國台灣)"
 }
