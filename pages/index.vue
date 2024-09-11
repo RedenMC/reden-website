@@ -35,7 +35,7 @@ definePageMeta({
           size="x-large"
           rounded="rounded"
           color="primary"
-          href="/download"
+          :to="localePath('/download')"
         >
           {{ $t('reden.download') }}
         </v-btn>
