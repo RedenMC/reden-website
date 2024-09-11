@@ -76,9 +76,7 @@ definePageMeta({
               {{ $t('litematica_generator.description') }}
             </v-card-text>
             <v-card-actions>
-              <NuxtLink :to="localePath('/litematica')">
-                <v-btn color="White">Go</v-btn>
-              </NuxtLink>
+              <v-btn :to="localePath('/litematica')" color="White">Go</v-btn>
             </v-card-actions>
           </v-card>
         </v-col>
@@ -89,9 +87,7 @@ definePageMeta({
               绑定 GitHub Apps，同步机器、配置、你关注的仓库和创作者：你的世界！
             </v-card-text>
             <v-card-actions>
-              <NuxtLink :to="localePath('/home')">
-                <v-btn color="White">点击前往</v-btn>
-              </NuxtLink>
+              <v-btn :to="localePath('/home')" color="White">点击前往</v-btn>
             </v-card-actions>
           </v-card>
         </v-col>

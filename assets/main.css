@@ -8,26 +8,29 @@
 
 a.router,
 .router a {
-  background-image: linear-gradient(-40deg, #6e45e2, #88d3ce);
+  background-image: linear-gradient(
+    -40deg,
+    rgb(var(--v-theme-primary)),
+    rgb(var(--v-theme-primary-darken-1))
+  );
   background-position-x: 0;
   background-position-y: 90%;
   background-repeat: no-repeat;
   background-size: 0 0.3em;
-  text-decoration: none;
+  text-decoration: underline rgb(var(--v-theme-primary));
 
   color: inherit;
   opacity: 0.8;
-  transition: all 0.5s ease-in-out;
+  transition: background-size 0.5s ease-in-out;
 }
 
 a.router:hover,
 .router a:hover {
   opacity: 1;
-  transition: all 0.5s;
-  text-decoration: underline;
-  text-shadow: 1px 1px 2px black;
+  text-decoration: none;
 
-  /*background-size: 100% 0.3em;*/
+  background-size: 100% 0.3em;
+  transition: background-size 0.5s ease-in-out;
 }
 
 a.router:hover .v-btn {
@@ -35,7 +38,9 @@ a.router:hover .v-btn {
   background-size: 0 0.3em !important;
 }
 
-.v-btn {
+.v-btn,
+.v-list-item--link,
+.v-card--link {
   text-decoration: none !important;
   background-size: 0 0.3em !important;
 }

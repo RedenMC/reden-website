@@ -6,18 +6,37 @@ import { useI18n } from 'vue-i18n';
 import { useDisplay, useTheme } from 'vuetify';
 import { useAppStore } from '~/store/app';
 import '@/assets/main.css';
+
 const localePath = useLocalePath();
 const switchLocalePath = useSwitchLocalePath();
 
+const theme = useTheme();
+const appStore = useAppStore();
 onMounted(() => {
   // set body background color
+  console.log(JSON.stringify(theme.themes.value[appStore.theme]!.colors));
   document.body.style.backgroundColor =
-    useTheme().current.value.colors['background']!;
+    theme.themes.value[appStore.theme]!.colors.background;
 });
+let a = {
+  background: '#121212',
+  surface: '#212121',
+  'surface-bright': '#ccbfd6',
+  'surface-light': '#424242',
+  'surface-variant': '#a3a3a3',
+  'on-surface-variant': '#424242',
+  primary: '#2196F3',
+  'primary-darken-1': '#277CC1',
+  secondary: '#54B6B2',
+  'secondary-darken-1': '#48A9A6',
+  error: '#CF6679',
+  info: '#2196F3',
+  success: '#4CAF50',
+  warning: '#FB8C00',
+};
 
 const { locale } = useI18n();
 const dialogCookies = ref(false);
-const appStore = useAppStore();
 
 const { mobile } = useDisplay({
   mobileBreakpoint: 500,
@@ -30,13 +49,19 @@ function toggleTheme() {
 </script>
 
 <template>
+  <body
+    :style="{
+      backgroundColor: theme.themes.value[appStore.theme]?.colors.background,
+    }"
+  />
   <v-app :theme="appStore.theme">
     <v-app-bar :elevation="2" class="reden-app-bar" color="transparent">
       <template #prepend>
         <template v-if="mobile">
           <v-btn v-show="mobile" icon="mdi-menu" title="Menu">
+            <v-icon>mdi-menu</v-icon>
             <v-menu :close-on-content-click="true" activator="parent">
-              <v-list class="w-100">
+              <v-list class="w-100 router">
                 <v-list-item :to="localePath('/')">
                   <template #prepend>
                     <v-icon>mdi-home</v-icon>
@@ -106,15 +131,15 @@ function toggleTheme() {
           </v-btn>
         </template>
         <template v-else>
-          <v-btn stacked title="Homepage" :to="localePath('/')" :active="false">
+          <v-btn :active="false" :to="localePath('/')" stacked title="Homepage">
             <v-img src="/reden_256.png" width="36" />
           </v-btn>
           <v-btn
             v-if="useAppStore().userCache?.isStaff"
+            :to="localePath('/admin')"
             prepend-icon="mdi-cog"
             stacked
             title="Admin"
-            :to="localePath('/admin')"
           >
             Admin
           </v-btn>
@@ -342,6 +367,7 @@ function toggleTheme() {
 }
 
 .last-line {
+  width: 100%;
 }
 
 .bottom-right {
