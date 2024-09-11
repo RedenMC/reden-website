@@ -40,6 +40,7 @@
     "download": "下载",
     "download_count": "{count} 次下载",
     "not_logged_in": "游客用户每分钟只能生成 5 次，登录后解锁此限制",
+    "og_description": "生成我的世界红石机器投影，包括世吞、盾构等，支持任意大小，完全免费！",
     "select": "今天你想生成什么？",
     "size_description": "机器的 x, y, z 尺寸。对于世界吞噬者，z 尺寸是出发站和返回站之间的距离。",
     "size_max": "机器的最大尺寸为 {size}",

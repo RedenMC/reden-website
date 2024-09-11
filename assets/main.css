@@ -33,11 +33,6 @@ a.router:hover,
   transition: background-size 0.5s ease-in-out;
 }
 
-a.router:hover .v-btn {
-  text-decoration: none;
-  background-size: 0 0.3em !important;
-}
-
 .v-btn,
 .v-list-item--link,
 .v-card--link {

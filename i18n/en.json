@@ -40,6 +40,7 @@
     "download": "Download",
     "download_count": "{count} downloads",
     "not_logged_in": "Guest users can only generate 5 times per minute, please log in to unlock this limit",
+    "og_description": "Generate amazing redstone / slimestone contraptions online, such as world easters or tunnel bores, in any chunks size!",
     "select": "What do you want to generate today?",
     "size_description": "The size of the machine in x, y, z. for world eaters, the z size is the distance between the starting side and the returning side.",
     "size_max": "The maximum size of the machine is {size}",

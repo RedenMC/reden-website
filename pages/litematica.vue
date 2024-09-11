@@ -21,10 +21,8 @@ const localePath = useLocalePath();
 useSeoMeta({
   title: t('litematica_generator.title'),
   ogTitle: t('litematica_generator.title'),
-  description:
-    'Generate amazing redstone / slimestone contraptions online, such as world easters or tunnel bores, in any chunks size!',
-  ogDescription:
-    '[open-graph]Generate amazing redstone / slimestone contraptions online, such as world easters or tunnel bores, in any chunks size!',
+  description: t('litematica_generator.og_description'),
+  ogDescription: t('litematica_generator.og_description'),
   ogImage: 'https://redenmc.com/reden_256.png',
 });
 

@@ -40,6 +40,7 @@
     "download": "下載",
     "download_count": "{count} 次下載",
     "not_logged_in": "遊客使用者每分鐘只能生成 5 次，登入後解鎖此限制",
+    "og_description": "",
     "select": "今天你想生成什麼？",
     "size_description": "機器的 x, y, z 尺寸。對於世界吞噬者，z 尺寸是出發站和返回站之間的距離。",
     "size_max": "機器的最大尺寸為 {size}",
