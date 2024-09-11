@@ -76,7 +76,7 @@ function toggleTheme() {
                 </v-list-item>
                 <v-divider />
                 <template v-if="useAppStore().logined">
-                  <NuxtLink :to="localePath('/home')">
+                  <reden-router :to="localePath('/home')">
                     <v-list-item link>
                       <template #prepend>
                         <v-avatar
@@ -88,7 +88,7 @@ function toggleTheme() {
                       </template>
                       <v-list-item-title> My Profile</v-list-item-title>
                     </v-list-item>
-                  </NuxtLink>
+                  </reden-router>
                   <v-list-item>
                     <v-list-item-title> My Machines</v-list-item-title>
                   </v-list-item>
@@ -97,34 +97,34 @@ function toggleTheme() {
                   </v-list-item>
                 </template>
                 <template v-else>
-                  <NuxtLink :to="localePath('/login')">
+                  <reden-router :to="localePath('/login')">
                     <v-list-item link>
                       <template #prepend>
                         <v-icon>mdi-account</v-icon>
                       </template>
                       <v-list-item-title> Login</v-list-item-title>
                     </v-list-item>
-                  </NuxtLink>
+                  </reden-router>
 
-                  <NuxtLink :to="localePath('/register')">
+                  <reden-router :to="localePath('/register')">
                     <v-list-item link>
                       <template #prepend>
                         <v-icon>mdi-account-plus</v-icon>
                       </template>
                       <v-list-item-title> Register</v-list-item-title>
                     </v-list-item>
-                  </NuxtLink>
+                  </reden-router>
                 </template>
                 <template v-if="useAppStore().userCache?.isStaff">
                   <v-divider />
-                  <NuxtLink :to="localePath('/admin')">
+                  <reden-router :to="localePath('/admin')">
                     <v-list-item link>
                       <template #prepend>
                         <v-icon>mdi-cog</v-icon>
                       </template>
                       <v-list-item-title>Admin</v-list-item-title>
                     </v-list-item>
-                  </NuxtLink>
+                  </reden-router>
                 </template>
               </v-list>
             </v-menu>
@@ -206,29 +206,29 @@ function toggleTheme() {
             </b>
           </div>
           <div class="footer-list-item">
-            <NuxtLink :to="localePath('/')">
+            <reden-router :to="localePath('/')">
               {{ $t('reden.title.home') }}
-            </NuxtLink>
+            </reden-router>
           </div>
           <div class="footer-list-item">
-            <NuxtLink :to="localePath('/download')">
+            <reden-router :to="localePath('/download')">
               {{ $t('reden.download') }}
-            </NuxtLink>
+            </reden-router>
           </div>
           <div class="footer-list-item">
-            <NuxtLink :to="localePath('/feature/undo')">
+            <reden-router :to="localePath('/feature/undo')">
               {{ $t('reden.footer.reden_mod.undo_redo') }}
-            </NuxtLink>
+            </reden-router>
           </div>
           <div class="footer-list-item">
-            <NuxtLink :to="localePath('/feature/rvc')">
+            <reden-router :to="localePath('/feature/rvc')">
               {{ $t('reden.footer.reden_mod.rvc') }}
-            </NuxtLink>
+            </reden-router>
           </div>
           <div class="footer-list-item">
-            <NuxtLink :to="localePath('/feature/debugger')">
+            <reden-router :to="localePath('/feature/debugger')">
               {{ $t('reden.footer.reden_mod.debugger') }}
-            </NuxtLink>
+            </reden-router>
           </div>
         </v-col>
         <v-col>
@@ -238,7 +238,7 @@ function toggleTheme() {
             </b>
           </div>
           <div class="footer-list-item">
-            <a :href="githubLink"> Reden on Github</a>
+            <reden-router :to="githubLink"> Reden on Github</reden-router>
           </div>
           <div class="footer-list-item">
             <a href="https://wiki.redenmc.com">
@@ -246,14 +246,14 @@ function toggleTheme() {
             </a>
           </div>
           <div class="footer-list-item">
-            <NuxtLink :to="localePath('/sponsors')">
+            <reden-router :to="localePath('/sponsors')">
               {{ $t('reden.footer.reden_ecosystem.sponsors') }}
-            </NuxtLink>
+            </reden-router>
           </div>
           <div class="footer-list-item">
-            <a href="https://github.com/RedenMC">
+            <reden-router href="https://github.com/RedenMC">
               {{ $t('reden.footer.reden_ecosystem.github_organization') }}
-            </a>
+            </reden-router>
           </div>
         </v-col>
         <v-col>
@@ -263,19 +263,19 @@ function toggleTheme() {
             </b>
           </div>
           <div class="footer-list-item">
-            <NuxtLink :to="localePath('/litematica')">
+            <reden-router :to="localePath('/litematica')">
               {{ $t('litematica_generator.title') }}
-            </NuxtLink>
+            </reden-router>
           </div>
           <div class="footer-list-item">
-            <NuxtLink :to="localePath('/community-guidelines')">
+            <reden-router :to="localePath('/community-guidelines')">
               {{ $t('reden.footer.reden_community.community_guidelines') }}
-            </NuxtLink>
+            </reden-router>
           </div>
           <div class="footer-list-item">
-            <NuxtLink :to="localePath('/community-events')">
+            <reden-router :to="localePath('/community-events')">
               {{ $t('reden.footer.reden_community.community_events') }}
-            </NuxtLink>
+            </reden-router>
           </div>
         </v-col>
         <v-col>
@@ -285,30 +285,33 @@ function toggleTheme() {
             </b>
           </div>
           <div class="footer-list-item">
-            <a :href="discordInvite">
+            <reden-router :href="discordInvite">
               {{ $t('reden.footer.reden_community.discord') }}
-            </a>
+            </reden-router>
           </div>
           <div class="footer-list-item">
-            <NuxtLink external-icon to="https://youtube.com/@zly2006">
+            <reden-router external-icon to="https://youtube.com/@zly2006">
               <v-icon icon="mdi-youtube" />
               {{ $t('reden.footer.follow_us.youtube') }}
-            </NuxtLink>
+            </reden-router>
           </div>
           <div class="footer-list-item">
-            <NuxtLink external-icon to="https://space.bilibili.com/1545239761">
+            <reden-router
+              external-icon
+              to="https://space.bilibili.com/1545239761"
+            >
               {{ $t('reden.footer.follow_us.bilibili') }}
-            </NuxtLink>
+            </reden-router>
           </div>
         </v-col>
       </v-row>
       <v-row class="">
         <v-col :cols="12" class="text-center">
-          <NuxtLink :to="githubLink">Reden</NuxtLink>
+          <reden-router :to="githubLink">Reden</reden-router>
           and
-          <NuxtLink to="https://github.com/RedenMC/reden-website"
+          <reden-router to="https://github.com/RedenMC/reden-website"
             >this website
-          </NuxtLink>
+          </reden-router>
           are both free software.
           <br />
           {{ new Date().getFullYear() }} — <b>RedenMC</b>

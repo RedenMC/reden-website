@@ -12,8 +12,12 @@ import { ref } from 'vue';
 import CommonCaptcha from '@/components/CommonCaptcha.vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
+import { useDisplay } from 'vuetify';
 
 const { t } = useI18n();
+const { mobile } = useDisplay({
+  mobileBreakpoint: 500,
+});
 const localePath = useLocalePath();
 
 const username = ref('');
@@ -79,7 +83,7 @@ function login() {
           required
           autocomplete="username"
         >
-          <template #prepend>
+          <template #prepend v-if="!mobile">
             <v-icon>mdi-account</v-icon>
           </template>
         </v-text-field>
@@ -90,7 +94,7 @@ function login() {
           type="password"
           autocomplete="current-password"
         >
-          <template #prepend>
+          <template #prepend v-if="!mobile">
             <v-icon>mdi-lock</v-icon>
           </template>
         </v-text-field>
@@ -108,13 +112,13 @@ function login() {
       </v-btn>
 
       <span class="text-center" style="padding: 4px">
-        <NuxtLink :to="localePath('/forgot-password')">{{
+        <reden-router :to="localePath('/forgot-password')">{{
           $t('login.forgot_password')
-        }}</NuxtLink>
+        }}</reden-router>
         {{ $t('login.or') }}
-        <NuxtLink :to="localePath('/register')">{{
+        <reden-router :to="localePath('/register')">{{
           $t('login.register')
-        }}</NuxtLink>
+        }}</reden-router>
       </span>
 
       <h1>
@@ -164,7 +168,7 @@ function login() {
   display: flex;
   flex-direction: column;
 
-  width: 400px;
+  width: min(90%, 400px);
   left: 50%;
 
   padding-top: 80px;

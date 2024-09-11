@@ -140,9 +140,9 @@ function register(e: SubmitEventPromise) {
       />
       <span>
         {{ $t('register.existing') }}
-        <NuxtLink :to="localePath('/login')">{{
+        <reden-router :to="localePath('/login')">{{
           $t('register.login')
-        }}</NuxtLink>
+        }}</reden-router>
       </span>
       <v-btn
         :disabled="!captcha?.token"

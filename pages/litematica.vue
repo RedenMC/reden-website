@@ -238,9 +238,9 @@ const meta = {
     </v-row>
     <v-row v-if="!useAppStore().logined" class="text-sm-body-1">
       <v-col>
-        <NuxtLink :to="localePath('/login')">
+        <reden-router :to="localePath('/login')">
           {{ $t('litematica_generator.not_logged_in') }}
-        </NuxtLink>
+        </reden-router>
       </v-col>
     </v-row>
     <v-row>
