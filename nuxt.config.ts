@@ -11,6 +11,7 @@ export default defineNuxtConfig({
   modules: [
     '@pinia/nuxt',
     '@nuxtjs/i18n',
+    '@nuxtjs/sitemap',
     (_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {
         // @ts-expect-error
@@ -49,6 +50,9 @@ export default defineNuxtConfig({
   features: {
     inlineStyles: false,
   },
+  experimental: {
+    inlineRouteRules: true,
+  },
   nitro: {
     prerender: {
       routes: ['/'],
@@ -59,5 +63,8 @@ export default defineNuxtConfig({
     '/api/**': {
       proxy: 'http://localhost:10005/api/**',
     },
+  },
+  sitemap: {
+    exclude: ['/secret/**', '/admin/**', '/api/**'],
   },
 });

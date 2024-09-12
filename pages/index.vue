@@ -11,7 +11,7 @@ const localePath = useLocalePath();
 
 const { t } = useI18n();
 useSeoMeta({
-  title: t('reden.title.home_full'),
+  title: t('reden.title.home_full') + ' - Reden',
   description: t('reden.description'),
 });
 </script>

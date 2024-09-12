@@ -1,4 +1,8 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+defineRouteRules({
+  robots: false,
+});
+</script>
 
 <template></template>
 
