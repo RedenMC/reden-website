@@ -2,13 +2,15 @@
 import { computed, ref } from 'vue';
 import { useAppStore } from '~/store/app';
 import { type SubmitEventPromise } from 'vuetify';
-import { doFetchGet } from '~/utils/constants';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 import LitematicaUpload from '~/components/yisibite/LitematicaUpload.vue';
 import SizeInput from '~/components/yisibite/SizeInput.vue';
 import 'assets/main.css';
+import { useFetch } from 'nuxt/app';
 
+const isServer = import.meta.server;
+const selectComponent = useTemplateRef('selectComponent');
 const route = useRoute();
 const router = useRouter();
 const xSize = ref(0);
@@ -25,6 +27,9 @@ useSeoMeta({
   ogDescription: t('litematica_generator.og_description'),
   ogImage: 'https://redenmc.com/reden_256.png',
 });
+if (isServer) {
+  selectComponent.value?.click();
+}
 
 export type MachineDef = {
   name: string;
@@ -42,67 +47,65 @@ export type Machine = MachineDef & {
   conditions: { [key: string]: ((v: number) => any)[] };
 };
 
-const generators = ref<{ [key: string]: Machine }>({});
+const { data: total } = await useFetch('/api/mc-services/yisibite/total');
 
-const updateDownloads = () =>
-  doFetchGet('/api/mc-services/yisibite/')
-    .then(async (res) => {
-      if (res.ok) {
-        let data: {
-          [key: string]: MachineDef & {
-            conditions?: {
-              x: string[];
-              y: string[];
-              z: string[];
-            };
-          };
-        } = await res.json();
-        let machines: { [key: string]: Machine } = {};
-        for (let key in data) {
-          const min = (size: number) => {
-            const f = (v: number) =>
-              v >= size || t('litematica_generator.size_min', { size });
-            f.min = size;
-            return f;
-          };
-          const max = (size: number) => {
-            const f = (v: number) =>
-              v <= size || t('litematica_generator.size_max', { size });
-            f.max = size;
-            return f;
-          };
-          const mod = (mod: number, rem: number) => {
-            const f = (v: number) =>
-              v % mod === rem ||
-              t('litematica_generator.size_mod', { mod, rem });
-            f.mod = mod;
-            f.rem = rem;
-            return f;
-          };
-          const defaultChecker = [min(0), max(1000), mod(1, 0)];
-          machines[key] = {
-            ...data[key],
-            conditions: {
-              x: data[key].conditions?.x?.map((s) => eval(s)) ?? defaultChecker,
-              y: data[key].conditions?.y?.map((s) => eval(s)) ?? defaultChecker,
-              z: data[key].conditions?.z?.map((s) => eval(s)) ?? defaultChecker,
-            },
-          };
-        }
-        generators.value = Object.keys(machines)
-          .sort()
-          .reduce((obj: typeof machines, key) => {
-            obj[key] = machines[key];
-            return obj;
-          }, {});
-
-        if (name.value === '') name.value = Object.keys(generators.value)[0];
-      }
-    })
-    .catch((e) => console.error(e));
-if (import.meta.client) {
-  updateDownloads();
-}
+const { data: serverResponse, refresh } = await useFetch<{
+  [key: string]: MachineDef & {
+    conditions?: {
+      x: string[];
+      y: string[];
+      z: string[];
+    };
+  };
+}>('/api/mc-services/yisibite/');
+const generators = computed(() => {
+  if (serverResponse.value) {
+    let machines: { [key: string]: Machine } = {};
+    for (let key in serverResponse.value) {
+      const min = (size: number) => {
+        const f = (v: number) =>
+          v >= size || t('litematica_generator.size_min', { size });
+        f.min = size;
+        return f;
+      };
+      const max = (size: number) => {
+        const f = (v: number) =>
+          v <= size || t('litematica_generator.size_max', { size });
+        f.max = size;
+        return f;
+      };
+      const mod = (mod: number, rem: number) => {
+        const f = (v: number) =>
+          v % mod === rem || t('litematica_generator.size_mod', { mod, rem });
+        f.mod = mod;
+        f.rem = rem;
+        return f;
+      };
+      const defaultChecker = [min(0), max(1000), mod(1, 0)];
+      machines[key] = {
+        ...serverResponse.value[key],
+        conditions: {
+          x:
+            serverResponse.value[key].conditions?.x?.map((s) => eval(s)) ??
+            defaultChecker,
+          y:
+            serverResponse.value[key].conditions?.y?.map((s) => eval(s)) ??
+            defaultChecker,
+          z:
+            serverResponse.value[key].conditions?.z?.map((s) => eval(s)) ??
+            defaultChecker,
+        },
+      };
+    }
+    return Object.keys(machines)
+      .sort()
+      .reduce((obj: Record<string, Machine>, key) => {
+        obj[key] = machines[key];
+        return obj;
+      }, {});
+  }
+});
+console.log(serverResponse.value, generators.value, typeof total.value);
 
 function submit(e: SubmitEventPromise) {
   e.preventDefault();
@@ -113,21 +116,24 @@ function submit(e: SubmitEventPromise) {
         `/api/mc-services/yisibite/${name.value}?xSize=${xSize.value}&ySize=${ySize.value}&zSize=${zSize.value}`,
       );
       setTimeout(() => {
-        updateDownloads();
+        refresh();
       }, 1000);
     }
   });
 }
-const selected = computed(() => generators.value[name.value]);
+
+if (generators.value && !generators.value[name.value])
+  name.value = Object.keys(generators.value)[0];
+const selected = computed(() => (generators.value ?? {})[name.value]);
 
 const meta = {
   description: t('litematica_generator.description'),
   keywords: [
+    'minecraft',
     'litematica',
     '投影',
     'generator',
     '生成器',
-    'minecraft',
     '世吞',
     'world eater',
     'redstone',
@@ -154,13 +160,14 @@ const meta = {
         {{ $t('litematica_generator.select') }}
       </v-col>
       <v-select
+        ref="selectComponent"
         v-model="name"
-        :item-title="(item) => generators[item]?.name"
+        :item-title="(item) => (generators ?? {})[item]?.name"
         :item-value="(item) => item"
-        :items="Object.keys(generators)"
-        autofocus
+        :items="Object.keys(generators ?? {})"
         density="comfortable"
         hide-details
+        active
         @update:model-value="router.replace({ query: { m: name } })"
       >
         <template #selection="{ item }">
@@ -196,23 +203,23 @@ const meta = {
           </v-card-subtitle>
           <v-card-text>
             <SizeInput
+              v-if="selected.hasX"
               :key="selected.name + 'x'"
               v-model="xSize"
-              v-if="selected.hasX"
               :def="selected"
               xyz="x"
             />
             <SizeInput
+              v-if="selected.hasY"
               :key="selected.name + 'y'"
               v-model="ySize"
-              v-if="selected.hasY"
               :def="selected"
               xyz="y"
             />
             <SizeInput
+              v-if="selected.hasZ"
               :key="selected.name + 'z'"
               v-model="zSize"
-              v-if="selected.hasZ"
               :def="selected"
               xyz="z"
             />
@@ -232,7 +239,7 @@ const meta = {
         </v-card>
         <v-row>
           <v-spacer />
-          <LitematicaUpload v-if="useAppStore().logined" class="ma-3" />
+          <LitematicaUpload v-if="useAppStore().logined" class="ma-4" />
         </v-row>
       </v-col>
     </v-row>
@@ -246,6 +253,11 @@ const meta = {
     <v-row>
       <v-col>
         {{ $t('litematica_generator.contribute') }}
+        <a class="router" href="mailto:me@redenmc.com">me@redenmc.com</a>
+        <br />
+        <div class="text-center v-card-subtitle w-100">
+          {{ $t('litematica_generator.total_downloads', [total]) }}
+        </div>
       </v-col>
     </v-row>
   </v-form>

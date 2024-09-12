@@ -36,7 +36,7 @@
   "also_try_our_other_online_services:": "快来试试我们的其他在线服务：",
   "en": "English",
   "litematica_generator": {
-    "contribute": "想要你的机器（例如世界吞噬者）被收录在这里？现在就为 Reden 做出贡献！发送邮件至 {'me@redenmc.com'} 联系我",
+    "contribute": "想要你的机器（例如世界吞噬者）被收录在这里？现在就为 Reden 做出贡献！联系我请发送邮件至",
     "description": "在这里在线生成《我的世界》投影文件，不管是世界吞噬者、破基岩机还是盾构机，这里都可以生成。任意形状大小。生成全部免费！",
     "download": "下载",
     "download_count": "{count} 次下载",
@@ -51,7 +51,8 @@
     "size_y": "y 方向尺寸",
     "size_z": "z 方向尺寸",
     "suggested_values": "建议选择：",
-    "title": "投影在线生成器"
+    "title": "投影在线生成器",
+    "total_downloads": "我们已累计提供 {0} 次下载服务。"
   },
   "login": {
     "button": {

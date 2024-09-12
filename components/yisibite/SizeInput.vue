@@ -48,7 +48,7 @@ const toggle = (props.def as any)['has' + props.xyz.toUpperCase()] as boolean;
 const suggestedValues = computed(() => {
   const current = Number(model.value);
   if (!current || !cond || cond.length === 0) {
-    if (debugMessages()) console.error('bad args!', current, cond);
+    if (import.meta.dev) console.info('bad args!', current, cond);
     return;
   }
   let start = current;

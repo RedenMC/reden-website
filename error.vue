@@ -24,7 +24,7 @@ definePageMeta({
       v-if="error?.statusCode === 404"
       headline="Whoops, 404"
       :title="$t('page404.title')"
-      height="500px"
+      :max-width="1000"
     >
       <template #text>
         {{ $t('page404.evolving') }}
@@ -60,3 +60,9 @@ definePageMeta({
     </v-empty-state>
   </NuxtLayout>
 </template>
+
+<style scoped>
+.v-empty-state__text {
+  text-align: left;
+}
+</style>

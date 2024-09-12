@@ -20,9 +20,10 @@ function state(): Meta {
       return JSON.parse(data);
     }
   }
+  let url = useRequestURL();
   return {
     developmentMode: import.meta.dev,
-    baseUrl: location.host,
+    baseUrl: url.host,
     production: !import.meta.dev,
   };
 }

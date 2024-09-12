@@ -36,7 +36,7 @@
   "also_try_our_other_online_services:": "",
   "en": "Английский",
   "litematica_generator": {
-    "contribute": "Want your own machines such as world eaters to be collected here? Contribute to Reden now! Email me at me@redenmc.com for more information.",
+    "contribute": "",
     "description": "Generate Litematica files online from Reden projects, e.g. World Eaters",
     "download": "Download",
     "download_count": "{count} downloads",
@@ -50,7 +50,8 @@
     "size_x": "Size in x",
     "size_y": "Size in y",
     "size_z": "Size in z",
-    "title": "Litematica Online Generator"
+    "title": "Litematica Online Generator",
+    "total_downloads": ""
   },
   "login": {
     "button": {
