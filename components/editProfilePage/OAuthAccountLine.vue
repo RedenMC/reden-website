@@ -57,18 +57,20 @@ function unlinkAccount(type: string) {
         :href="`/api/oauth/${type}?redirect_url=/home`"
         class="text-capitalize setting-button"
         color="primary"
+        block
         :loading="loading"
       >
-        Link Account
+        {{ $t('profile.oauth.link_account') }}
       </v-btn>
       <v-btn
         v-if="account"
         class="text-capitalize setting-button"
         color="error"
         @click="unlinkAccount(type)"
+        block
         :loading="loading"
       >
-        Unlink Account
+        {{ $t('profile.oauth.unlink_account') }}
       </v-btn>
     </v-col>
   </v-row>

@@ -28,6 +28,9 @@ const router = useRouter();
 definePageMeta({
   title: 'login.title',
 });
+useSeoMeta({
+  description: 'Login your Reden account.',
+});
 
 function login() {
   loading.value = true;

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import NetherPortalVideo from '@/assets/nether_protal.mp4';
 import RedStoneSection from '@/components/RedStoneSection.vue';
 import RedstoneSectionTitle from '@/components/RedstoneSectionTitle.vue';
 
@@ -12,7 +11,7 @@ definePageMeta({
 <template>
   <div class="features-intro content-common">
     <RedstoneSectionTitle :title="$t('reden.home.feature_intro.title')" />
-    <RedStoneSection :video="NetherPortalVideo" :size="3">
+    <RedStoneSection video="/video/nether_protal.mp4" :size="3">
       <template #title> Undo </template>
       <template #text>
         <p>

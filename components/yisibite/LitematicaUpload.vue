@@ -4,7 +4,7 @@
     <v-dialog activator="parent" max-width="600">
       <v-card>
         <v-card-title>Upload Machine</v-card-title>
-        <v-form @submit="submit">
+        <v-form @submit.prevent="submit">
           <v-col>
             <v-text-field
               label="path"
@@ -77,30 +77,28 @@ const uploadCache = (name: string) => {
     .catch((e) => toastError(e));
 };
 
-function submit(e: SubmitEventPromise) {
+async function submit(e: SubmitEventPromise) {
   console.log(file.value);
-  e.preventDefault();
-  e.then((a) => {
-    if (a.valid) {
-      loading.value = true;
-      doFetchPut(
-        `/api/mc-services/yisibite/${path.value}?name=${name.value}`,
-        file.value!,
-      )
-        .then((res) => {
-          if (!res.ok) return Promise.reject(res);
-          toast('OK', {
-            cardProps: {
-              color: 'green',
-            },
-          });
-        })
-        .catch((e) => toastError(e))
-        .finally(() => (loading.value = false));
-    } else {
-      toastError(a.errors[0].errorMessages.join(' '));
-    }
-  });
+  const a = await e;
+  if (a.valid) {
+    loading.value = true;
+    doFetchPut(
+      `/api/mc-services/yisibite/${path.value}?name=${name.value}`,
+      file.value!,
+    )
+      .then((res) => {
+        if (!res.ok) return Promise.reject(res);
+        toast('OK', {
+          cardProps: {
+            color: 'green',
+          },
+        });
+      })
+      .catch((e) => toastError(e))
+      .finally(() => (loading.value = false));
+  } else {
+    await toastError(a.errors[0].errorMessages.join(' '));
+  }
 }
 </script>
 <style scoped>

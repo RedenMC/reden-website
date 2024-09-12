@@ -33,6 +33,7 @@
       "users": "All Users"
     }
   },
+  "also_try_our_other_online_services:": "",
   "en": "English",
   "litematica_generator": {
     "contribute": "想要你的機器（例如世界吞噬者）被收錄在這裡？現在就為 Reden 做出貢獻！傳送郵件至 {'me@redenmc.com'} 聯絡我",
@@ -71,12 +72,13 @@
   "profile": {
     "edit": {
       "back": "",
+      "basic_information": "",
       "bio": "",
       "changeEmail": "",
       "email": {
         "desc": ""
       },
-      "failedToSaveInformation": "",
+      "failed_to_save_information": "",
       "information_saved": "",
       "password": {
         "changePassword": "",
@@ -91,18 +93,30 @@
       "preference": {
         "pronouns": "",
         "showEmail": "",
-        "showGithub": "",
-        "showMinecraftAccount": "",
-        "showTimezone": ""
+        "show_email_desc": "",
+        "show_github": "",
+        "show_github_desc": "",
+        "show_minecraft_uuid": "",
+        "show_minecraft_uuid_desc": "",
+        "show_timezone": "",
+        "show_timezone_desc": "",
+        "timezone": "",
+        "timezone_desc": ""
       },
       "preferences": "",
       "preferencesSaved": "",
       "save": "",
-      "savePreferences": "",
+      "save_preferences": "",
       "success": "",
-      "username": ""
+      "third_party_accounts": "",
+      "username": "",
+      "username_desc": ""
     },
     "editProfile": "",
+    "oauth": {
+      "link_account": "",
+      "unlink_account": ""
+    },
     "password": "",
     "username": ""
   },
@@ -165,6 +179,7 @@
       "edit_profile": "Edit Profile",
       "features": "",
       "home": "首頁",
+      "home_full": "",
       "my_account": "My Account",
       "rvc": "RVC",
       "undo": "Undo"

@@ -33,6 +33,7 @@
       "users": "全部用户"
     }
   },
+  "also_try_our_other_online_services:": "快来试试我们的其他在线服务：",
   "en": "English",
   "litematica_generator": {
     "contribute": "想要你的机器（例如世界吞噬者）被收录在这里？现在就为 Reden 做出贡献！发送邮件至 {'me@redenmc.com'} 联系我",
@@ -72,11 +73,12 @@
   "profile": {
     "edit": {
       "back": "返回个人资料页",
+      "basic_information": "基本信息",
       "bio": "个人简介",
       "bio_desc": "介绍你自己",
       "changeEmail": "修改邮件地址",
       "email_desc": "你注册时使用的邮箱，用于接受我们的账号安全信息，比如重置密码",
-      "failedToSaveInformation": "保存信息失败",
+      "failed_to_save_information": "保存信息失败",
       "information_saved": "信息已保存",
       "password": {
         "changePassword": "修改密码",
@@ -93,19 +95,31 @@
         "pronouns": "代词",
         "pronouns_desc": "你所用的人称代词",
         "showEmail": "展示邮件地址",
-        "showGithub": "展示 GitHub 账号",
-        "showMinecraftAccount": "展示 Minecraft 账号",
-        "showTimezone": "展示时区"
+        "show_email_desc": "是否像其他人展示你的电子邮件。",
+        "show_github": "展示 GitHub 账号",
+        "show_github_desc": "是否像其他人显示你的GitHub账号",
+        "show_minecraft_uuid": "展示 Minecraft 账号",
+        "show_minecraft_uuid_desc": "是否像其他人展示你的Minecraft UUID。",
+        "show_timezone": "展示时区",
+        "show_timezone_desc": "是否向其他人显示你的时区。",
+        "timezone": "时区",
+        "timezone_desc": "你的时区。"
       },
       "preferences": "偏好设置",
       "preferencesSaved": "偏好设置已保存",
       "save": "保存",
-      "savePreferences": "保存偏好设置",
+      "save_preferences": "保存偏好设置",
       "success": "操作成功",
+      "third_party_accounts": "第三方账号",
       "username": "用户名",
+      "username_desc": "这是你用来登录的用户名，你每48小时只可以修改一次。",
       "username_timer": "你可以在{0}小时后修改用户名"
     },
     "editProfile": "编辑个人资料",
+    "oauth": {
+      "link_account": "连接账户",
+      "unlink_account": "取消连接"
+    },
     "password": "密码",
     "username": "用户名"
   },
@@ -168,7 +182,7 @@
       "edit_profile": "编辑个人资料",
       "features": "功能",
       "home": "首页",
-      "home_full": "首页 - 超级我的世界生电轮椅",
+      "home_full": "首页 - 超级我的世界生电辅助mod",
       "my_account": "我的账号",
       "rvc": "RVC",
       "undo": "撤销"

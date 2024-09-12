@@ -17,8 +17,28 @@ const localePath = useLocalePath();
 import CommonCaptcha from '@/components/CommonCaptcha.vue';
 import { useRouter } from 'vue-router';
 
-const userCopy = ref<Profile>();
-const user = ref<Profile>();
+const { locale } = useI18n();
+const mockUser: Profile = {
+  avatarUrl: '',
+  email: '',
+  id: 0,
+  passwordNotSet: false,
+  preference: {
+    showQQ: false,
+    showEmail: false,
+    showMC: false,
+    showGithub: false,
+    showTimezone: false,
+    timezone: 'GMT',
+  },
+  roles: [],
+  username: '',
+};
+/**
+ * use instance before modification.
+ */
+const userCopy = ref<Profile>(mockUser);
+const user = ref<Profile>(mockUser);
 const dialogChangePassword = ref(
   router.currentRoute.value?.hash === '#change-password',
 );
@@ -109,7 +129,7 @@ function saveInfo() {
         return Promise.reject(response);
       }
     })
-    .catch((e) => toastError(e, t('profile.edit.failedToSaveInformation')))
+    .catch((e) => toastError(e, t('profile.edit.failed_to_save_information')))
     .finally(() => {
       savingInfo.value = false;
     });
@@ -165,9 +185,14 @@ function savePreferences() {
     >
       {{ $t('profile.edit.back') }}
     </v-btn>
+    <h1>
+      {{ $t('reden.title.edit_profile') }}
+    </h1>
   </div>
   <v-card v-if="user" class="setting-section-card section" rounded="lg" border>
-    <h3 class="setting-section-title">Basic Information</h3>
+    <h3 class="setting-section-title">
+      {{ $t('profile.edit.basic_information') }}
+    </h3>
     <v-row>
       <v-col>
         <p class="setting-label">Email</p>
@@ -241,7 +266,7 @@ function savePreferences() {
     </v-row>
   </v-card>
 
-  <v-card class="setting-section-card section" rounded="lg" v-if="user" border>
+  <v-card class="setting-section-card section" rounded="lg" border>
     <h3 class="setting-section-title">{{ t('profile.edit.preferences') }}</h3>
     <v-row>
       <v-col cols="9">
@@ -249,7 +274,7 @@ function savePreferences() {
           {{ t('profile.edit.preference.showEmail') }}
         </p>
         <p class="setting-description">
-          Whether to show your email to other users.
+          {{ $t('profile.edit.preference.show_email_desc') }}
         </p>
       </v-col>
       <v-spacer />
@@ -263,10 +288,10 @@ function savePreferences() {
     <v-row>
       <v-col cols="9">
         <p class="setting-label">
-          {{ t('profile.edit.preference.showMinecraftAccount') }}
+          {{ t('profile.edit.preference.show_minecraft_uuid') }}
         </p>
         <p class="setting-description">
-          Whether to show your Minecraft UUID to other users.
+          {{ $t('profile.edit.preference.show_minecraft_uuid_desc') }}
         </p>
       </v-col>
       <v-spacer />
@@ -280,10 +305,10 @@ function savePreferences() {
     <v-row>
       <v-col cols="9">
         <p class="setting-label">
-          {{ t('profile.edit.preference.showGithub') }}
+          {{ t('profile.edit.preference.show_github') }}
         </p>
         <p class="setting-description">
-          {{ t('profile.edit.preference.showGithub_desc') }}
+          {{ t('profile.edit.preference.show_github_desc') }}
         </p>
       </v-col>
       <v-spacer />
@@ -297,10 +322,10 @@ function savePreferences() {
     <v-row>
       <v-col cols="9">
         <p class="setting-label">
-          {{ t('profile.edit.preference.showTimezone') }}
+          {{ t('profile.edit.preference.show_timezone') }}
         </p>
         <p class="setting-description">
-          Whether to show your timezone to other users.
+          {{ $t('profile.edit.preference.show_timezone_desc') }}
         </p>
       </v-col>
       <v-spacer />
@@ -311,12 +336,10 @@ function savePreferences() {
         hide-details
       />
     </v-row>
-    <v-row>
+    <v-row v-if="locale == 'zh_cn'">
       <v-col cols="9">
-        <p class="setting-label">Show QQ</p>
-        <p class="setting-description">
-          Whether to show your QQ to other users.
-        </p>
+        <p class="setting-label">显示 QQ</p>
+        <p class="setting-description">向其他人显示你的QQ号码。</p>
       </v-col>
       <v-spacer />
       <v-switch
@@ -343,8 +366,12 @@ function savePreferences() {
     </v-row>
     <v-row>
       <v-col>
-        <p class="setting-label">Timezone</p>
-        <p class="setting-description">Your timezone.</p>
+        <p class="setting-label">
+          {{ $t('profile.edit.preference.timezone') }}
+        </p>
+        <p class="setting-description">
+          {{ $t('profile.edit.preference.timezone_desc') }}
+        </p>
       </v-col>
       <v-col>
         <v-select
@@ -361,9 +388,11 @@ function savePreferences() {
         class="text-capitalize setting-button"
         color="primary"
         @click="savePreferences"
-        :disabled="userCopy && !changed(user.preference, userCopy!.preference)"
+        :disabled="
+          userCopy && user && !changed(user.preference, userCopy.preference)
+        "
       >
-        {{ t('profile.edit.savePreferences') }}
+        {{ t('profile.edit.save_preferences') }}
       </v-btn>
     </v-row>
   </v-card>
@@ -456,7 +485,9 @@ function savePreferences() {
     </v-row>
   </v-card>
   <v-card class="setting-section-card section" rounded="lg" border>
-    <h3 class="setting-section-title">Third Party Accounts</h3>
+    <h3 class="setting-section-title">
+      {{ $t('profile.edit.third_party_accounts') }}
+    </h3>
     <OAuthAccountLine icon="mdi-microsoft" type="microsoft" />
     <OAuthAccountLine icon="mdi-github" type="github" />
   </v-card>

@@ -33,6 +33,7 @@
       "users": "All Users"
     }
   },
+  "also_try_our_other_online_services:": "Also try our other online services:",
   "en": "English",
   "litematica_generator": {
     "contribute": "Want your own machines such as world eaters to be collected here? Contribute to Reden now! Email me at {'me@redenmc.com'} for more information.",
@@ -72,11 +73,12 @@
   "profile": {
     "edit": {
       "back": "Back to Your Profile",
+      "basic_information": "Basic Information",
       "bio": "Bio",
       "bio_desc": "Introduction about yourself.",
       "changeEmail": "Change Email",
       "email_desc": "This is the email you used to register, and to receive our security notifications, such as reset your password.",
-      "failedToSaveInformation": "Failed to save information",
+      "failed_to_save_information": "Failed to save information",
       "information_saved": "Information saved",
       "password": {
         "changePassword": "Change Password",
@@ -93,21 +95,31 @@
         "pronouns": "Pronouns",
         "pronouns_desc": "Your pronouns.",
         "showEmail": "Show Email",
-        "showGithub": "Show Github",
-        "showGithub_desc": "Whether to show your GitHub to other users.",
-        "showMinecraftAccount": "Show Minecraft Account",
-        "showTimezone": "Show Timezone"
+        "show_email_desc": "Whether to show your email to other users.",
+        "show_github": "Show Github",
+        "show_github_desc": "Whether to show your GitHub to other users.",
+        "show_minecraft_uuid": "Show Minecraft Account",
+        "show_minecraft_uuid_desc": "Whether to show your Minecraft UUID to other users.",
+        "show_timezone": "Show Timezone",
+        "show_timezone_desc": "Whether to show your timezone to other users.",
+        "timezone": "Timezone",
+        "timezone_desc": "Your timezone."
       },
       "preferences": "Preferences",
       "preferencesSaved": "Preferences saved",
       "save": "Save",
-      "savePreferences": "Save Preferences",
+      "save_preferences": "Save Preferences",
       "success": "Success",
+      "third_party_accounts": "Third Party Accounts",
       "username": "Username",
       "username_desc": "This is the username you use to login. You can change it once every 48 hours.",
       "username_timer": "You can change your username again in {0} hours"
     },
     "editProfile": "Edit Profile",
+    "oauth": {
+      "link_account": "Link Account",
+      "unlink_account": "Unlink Account"
+    },
     "password": "Password",
     "username": "Username"
   },

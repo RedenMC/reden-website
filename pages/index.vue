@@ -9,8 +9,10 @@ import '@/assets/main.css';
 const introContent = ref<HTMLElement | null>(null);
 const localePath = useLocalePath();
 
-definePageMeta({
-  title: 'reden.title.home',
+const { t } = useI18n();
+useSeoMeta({
+  title: t('reden.title.home_full'),
+  description: t('reden.description'),
 });
 </script>
 

@@ -76,7 +76,6 @@ const sorted = computed(
     <a class="text-md-h5" href="https://paypal.me/zly2006">
       {{ $t('sponsors.paypal') }}
     </a>
-    <v-btn @click="refreshNuxtData()">Refresh</v-btn>
   </div>
 </template>
 

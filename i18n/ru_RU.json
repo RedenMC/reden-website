@@ -33,6 +33,7 @@
       "users": "All Users"
     }
   },
+  "also_try_our_other_online_services:": "",
   "en": "Английский",
   "litematica_generator": {
     "contribute": "Want your own machines such as world eaters to be collected here? Contribute to Reden now! Email me at me@redenmc.com for more information.",
@@ -71,9 +72,10 @@
   "profile": {
     "edit": {
       "back": "",
+      "basic_information": "",
       "bio": "",
       "changeEmail": "",
-      "failedToSaveInformation": "",
+      "failed_to_save_information": "",
       "information_saved": "",
       "password": {
         "changePassword": "",
@@ -88,18 +90,30 @@
       "preference": {
         "pronouns": "",
         "showEmail": "",
-        "showGithub": "",
-        "showMinecraftAccount": "",
-        "showTimezone": ""
+        "show_email_desc": "",
+        "show_github": "",
+        "show_github_desc": "",
+        "show_minecraft_uuid": "",
+        "show_minecraft_uuid_desc": "",
+        "show_timezone": "",
+        "show_timezone_desc": "",
+        "timezone": "",
+        "timezone_desc": ""
       },
       "preferences": "",
       "preferencesSaved": "",
       "save": "",
-      "savePreferences": "",
+      "save_preferences": "",
       "success": "",
-      "username": ""
+      "third_party_accounts": "",
+      "username": "",
+      "username_desc": ""
     },
     "editProfile": "",
+    "oauth": {
+      "link_account": "",
+      "unlink_account": ""
+    },
     "password": "",
     "username": ""
   },
@@ -162,6 +176,7 @@
       "edit_profile": "Edit Profile",
       "features": "",
       "home": "Home",
+      "home_full": "",
       "my_account": "My Account",
       "rvc": "RVC",
       "undo": "Undo"
