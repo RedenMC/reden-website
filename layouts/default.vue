@@ -285,7 +285,7 @@ function toggleTheme() {
             </b>
           </div>
           <div class="footer-list-item">
-            <reden-router :href="discordInvite">
+            <reden-router :to="discordInvite">
               {{ $t('reden.footer.reden_community.discord') }}
             </reden-router>
           </div>

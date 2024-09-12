@@ -4,8 +4,6 @@ import type { RouteLocationRaw, RouterLinkProps } from '#vue-router';
 
 interface NuxtLinkProps extends /* @vue-ignore */ Omit<RouterLinkProps, 'to'> {
   to?: RouteLocationRaw;
-  href?: NuxtLinkProps['to'];
-  external?: boolean;
   target?: '_blank' | '_parent' | '_self' | '_top' | (string & {}) | null;
   rel?:
     | 'noopener'
