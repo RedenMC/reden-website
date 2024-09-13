@@ -49,7 +49,7 @@ export type Machine = MachineDef & {
 
 const { data: total } = await useFetch('/api/mc-services/yisibite/total');
 
-const { data: serverResponse, refresh } = await useFetch<{
+const { data: serverResponse } = await useFetch<{
   [key: string]: MachineDef & {
     conditions?: {
       x: string[];
@@ -116,7 +116,7 @@ function submit(e: SubmitEventPromise) {
         `/api/mc-services/yisibite/${name.value}?xSize=${xSize.value}&ySize=${ySize.value}&zSize=${zSize.value}`,
       );
       setTimeout(() => {
-        refresh();
+        refreshNuxtData();
       }, 1000);
     }
   });
