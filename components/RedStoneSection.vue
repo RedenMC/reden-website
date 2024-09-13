@@ -126,19 +126,19 @@ const autoPlay = ref(true);
 
 <style scoped>
 .pistonBase {
-  background: url('@/assets/piston_base.png') no-repeat;
+  background: url('/image/homepage/section/piston_base.png') no-repeat;
   background-size: 100px 100px;
 }
 
 .pistonHead {
   position: absolute;
-  background: url('@/assets/piston_head.png') no-repeat;
+  background: url('/image/homepage/section/piston_head.png') no-repeat;
   background-size: 100px 100px;
 }
 
 .pistonSide {
   position: absolute;
-  background: url('@/assets/piston_side.png') no-repeat;
+  background: url('/image/homepage/section/piston_side.png') no-repeat;
   background-size: 100px 100px;
 }
 
@@ -148,13 +148,13 @@ const autoPlay = ref(true);
 }
 
 .r0 {
-  background: url('@/assets/redstone_dust_0.png') no-repeat;
+  background: url('/image/homepage/section/redstone_dust_0.png') no-repeat;
   background-size: 100px 100px;
   background-position-x: -30px;
 }
 
 .r15 {
-  background: url('@/assets/redstone_dust_15.png') no-repeat;
+  background: url('/image/homepage/section/redstone_dust_15.png') no-repeat;
   background-size: 100px 100px;
   background-position-x: -30px;
 }

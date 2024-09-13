@@ -18,24 +18,24 @@ definePageMeta({
       <v-row class="text-center content-common">
         <v-col>
           <img
-            src="@/assets/homepage/undo/grass_block.webp"
+            src="/image/homepage/undo/grass_block.webp"
             alt="Undo for blocks"
           />
           <p>Blocks</p>
         </v-col>
         <v-col class="">
           <img
-            src="@/assets/homepage/undo/villager.webp"
+            src="/image/homepage/undo/villager.webp"
             alt="Undo for entities"
           />
           <p>Entities</p>
         </v-col>
         <v-col>
-          <img src="@/assets/homepage/undo/chest.png" alt="Undo for items" />
+          <img src="/image/homepage/undo/chest.png" alt="Undo for items" />
           <p>Items</p>
         </v-col>
         <v-col>
-          <img src="@/assets/homepage/undo/TNT.webp" alt="Undo for tnt" />
+          <img src="/image/homepage/undo/TNT.webp" alt="Undo for tnt" />
           <p>TNTs</p>
         </v-col>
       </v-row>

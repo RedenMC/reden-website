@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import Lever from '@/assets/lever.png';
-import LeverBase from '@/assets/lever_base.png';
-import LampOff from '@/assets/redstone_lamp.png';
-import LampOn from '@/assets/redstone_lamp_on.png';
+import Lever from 'public/image/homepage/section/lever.png';
+import LeverBase from 'public/image/homepage/section/lever_base.png';
+import LampOff from 'public/image/homepage/section/redstone_lamp.png';
+import LampOn from 'public/image/homepage/section/redstone_lamp_on.png';
 
 const { title } = defineProps({
   title: String,

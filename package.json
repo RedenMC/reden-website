@@ -10,11 +10,9 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@mdi/font": "7.0.96",
     "@nuxtjs/i18n": "^8.5.2",
     "@pinia/nuxt": "^0.5.4",
     "@vueuse/core": "^10.9.0",
-    "axios": "^1.7.2",
     "blockly": "^10.2.2",
     "core-js": "^3.29.0",
     "countries-and-timezones": "^3.6.0",

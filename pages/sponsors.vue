@@ -71,7 +71,7 @@ const sorted = computed(
     <p class="text-md-h5">
       {{ $t('sponsors.alipay') }}
       <br />
-      <img :width="200" alt="" src="@/assets/reden-alipay.png" />
+      <img :width="200" alt="" src="/image/reden-alipay.png" />
     </p>
     <a class="text-md-h5" href="https://paypal.me/zly2006">
       {{ $t('sponsors.paypal') }}
