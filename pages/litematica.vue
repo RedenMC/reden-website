@@ -9,8 +9,6 @@ import SizeInput from '~/components/yisibite/SizeInput.vue';
 import 'assets/main.css';
 import { useFetch } from 'nuxt/app';
 
-const isServer = import.meta.server;
-const selectComponent = useTemplateRef('selectComponent');
 const route = useRoute();
 const router = useRouter();
 const xSize = ref(0);
@@ -27,10 +25,8 @@ useSeoMeta({
   ogDescription: t('litematica_generator.og_description'),
   ogImage: 'https://redenmc.com/reden_256.png',
 });
-if (isServer) {
-  selectComponent.value?.click();
-}
 
+const selecting = ref(true);
 export type MachineDef = {
   name: string;
   downloads?: number;
@@ -122,6 +118,10 @@ function submit(e: SubmitEventPromise) {
   });
 }
 
+if (import.meta.client) {
+  refreshNuxtData();
+}
+
 if (generators.value && !generators.value[name.value])
   name.value = Object.keys(generators.value)[0];
 const selected = computed(() => (generators.value ?? {})[name.value]);
@@ -160,7 +160,6 @@ const meta = {
         {{ $t('litematica_generator.select') }}
       </v-col>
       <v-select
-        ref="selectComponent"
         v-model="name"
         :item-title="(item) => (generators ?? {})[item]?.name"
         :item-value="(item) => item"
@@ -183,6 +182,41 @@ const meta = {
           </v-chip>
         </template>
       </v-select>
+      <v-col cols="12" v-if="false">
+        <v-card border>
+          <v-card-actions>
+            {{ selected.name }}
+            <v-spacer />
+            <v-btn
+              :icon="selecting ? 'mdi-chevron-up' : 'mdi-chevron-down'"
+              @click="selecting = !selecting"
+            ></v-btn>
+          </v-card-actions>
+        </v-card>
+        <v-expand-transition v-show="selecting">
+          <v-radio-group
+            v-model="name"
+            @update:model-value="router.replace({ query: { m: name } })"
+          >
+            <v-radio
+              v-for="key in Object.keys(generators ?? {})"
+              :key="key"
+              :value="key"
+            >
+              <template #label>
+                {{ (generators ?? {})[key]?.name }}
+                <v-chip>
+                  {{
+                    $t('litematica_generator.download_count', {
+                      count: (generators ?? {})[key]?.downloads ?? '查询失败',
+                    })
+                  }}
+                </v-chip>
+              </template>
+            </v-radio>
+          </v-radio-group>
+        </v-expand-transition>
+      </v-col>
       <v-col v-if="selected?.link" cols="12">
         <a :href="selected.link" class="router">
           <v-icon>mdi-link</v-icon>
