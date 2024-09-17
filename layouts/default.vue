@@ -318,6 +318,13 @@ function toggleTheme() {
         </v-col>
       </v-row>
       <div class="text-right last-line">
+        <a
+          v-if="locale == 'zh_cn'"
+          class="bottom-right"
+          href="https://beian.miit.gov.cn/"
+        >
+          备案号： 京ICP备2021010288号-6
+        </a>
         <span class="bottom-right"> Privacy </span>
         <span class="router bottom-right">
           <v-dialog v-model="dialogCookies" max-width="500">

@@ -19,8 +19,8 @@ const name = ref(route.query.m?.toString() || '');
 const { t } = useI18n();
 const localePath = useLocalePath();
 useSeoMeta({
-  title: t('litematica_generator.title'),
-  ogTitle: t('litematica_generator.title'),
+  title: t('litematica_generator.title') + ' - Reden',
+  ogTitle: t('litematica_generator.title') + ' - Reden',
   description: t('litematica_generator.og_description'),
   ogDescription: t('litematica_generator.og_description'),
   ogImage: 'https://redenmc.com/reden_256.png',
