@@ -1,3 +1,5 @@
+// noinspection JSUnusedGlobalSymbols
+
 import { useAppStore } from '@/store/app';
 import { type Ref } from 'vue';
 import { toast } from 'vuetify-sonner';
@@ -11,6 +13,7 @@ export const githubLink = 'https://github.com/zly2006/reden-is-what-we-made';
 // export const theme = ref(useAppStore(pinia).theme);
 export const usernameRegex =
   /^[a-zA-Z\-\u4e00-\u9fa5][\w\-\u4e00-\u9fa5]{3,19}$/;
+export const zh_cn = 'zh_cn';
 
 export type Profile = {
   id: number;
@@ -282,26 +285,23 @@ export function isStrongPassword(password: string) {
 export const debugMessages = () => !useBackendMeta(/*pinia*/).get().production;
 
 let _isInChina: boolean | undefined = undefined;
-export function isInChina() {
-  if (_isInChina) return Promise.resolve(_isInChina);
-  if (!import.meta.client) return Promise.resolve(false);
+
+export async function isInChina() {
+  if (_isInChina) return _isInChina;
+  if (!import.meta.client) return false;
   else {
-    return doFetchGet('/api/ip')
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.resolve({});
-      })
-      .then((data: { ip: string; mm?: { country_code?: string } }) => {
-        if (data.mm?.country_code === 'CN') {
-          console.log('ip', data.ip, 'is in china.');
-          _isInChina = true;
-          return true;
-        }
+    let res = await doFetchGet('/api/ip');
+    if (res.ok) {
+      let data = await res.json();
+      if (data.mm?.country_code === 'CN') {
+        console.log('ip', data.ip, 'is in china.');
+        _isInChina = true;
+        return true;
+      } else {
         _isInChina = false;
         return false;
-      });
+      }
+    }
   }
 }
 

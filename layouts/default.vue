@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { VSonner } from 'vuetify-sonner';
-import { discordInvite, githubLink } from '@/utils/constants';
+import { discordInvite, githubLink, zh_cn } from '@/utils/constants';
 import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useDisplay, useTheme } from 'vuetify';
@@ -319,7 +319,7 @@ function toggleTheme() {
       </v-row>
       <div class="text-right last-line">
         <a
-          v-if="locale == 'zh_cn'"
+          v-if="locale == zh_cn"
           class="bottom-right"
           href="https://beian.miit.gov.cn/"
         >

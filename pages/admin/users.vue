@@ -5,6 +5,7 @@ import {
   type ErrorResponse,
   type Profile,
   toastError,
+  zh_cn,
 } from '~/utils/constants';
 import UserBadges from '~/components/UserBadges.vue';
 import AdminEditUserButton from '~/components/admin/AdminEditUserButton.vue';
@@ -133,7 +134,7 @@ function isBanned(user: Profile) {
     <template #[`item.lastLoginIp`]="{ item, value }">
       <span title="">
         {{ value }}
-        <template v-if="locale === 'zh_cn'">
+        <template v-if="locale === zh_cn">
           <br />
           {{ item.mmRecord?.country_zh ?? item.mmRecord?.country }}
           {{ item.mmRecord?.subdivision_zh ?? item.mmRecord?.subdivision }}

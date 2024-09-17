@@ -7,6 +7,7 @@ import {
   type Profile,
   resetCaptcha,
   toastError,
+  zh_cn,
 } from '@/utils/constants';
 import { ref, watch } from 'vue';
 import OAuthAccountLine from '@/components/editProfilePage/OAuthAccountLine.vue';
@@ -336,7 +337,7 @@ function savePreferences() {
         hide-details
       />
     </v-row>
-    <v-row v-if="locale == 'zh_cn'">
+    <v-row v-if="locale == zh_cn">
       <v-col cols="9">
         <p class="setting-label">显示 QQ</p>
         <p class="setting-description">向其他人显示你的QQ号码。</p>
