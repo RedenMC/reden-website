@@ -61,8 +61,4 @@ definePageMeta({
   </NuxtLayout>
 </template>
 
-<style scoped>
-.v-empty-state__text {
-  text-align: left;
-}
-</style>
+<style scoped></style>

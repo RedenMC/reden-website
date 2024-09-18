@@ -24,7 +24,7 @@
     "vue-router": "latest",
     "vue-sonner": "^1.0.1",
     "vue-turnstile": "^1.0.8",
-    "vuetify": "^3.7.1",
+    "vuetify": "^3.7.2",
     "vuetify-nuxt-module": "^0.18.2",
     "vuetify-sonner": "^0.3.2"
   },
