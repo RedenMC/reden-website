@@ -15,26 +15,6 @@ async function startGame() {
   ffa.value = true;
   wsToken.value = token;
 }
-
-function test() {
-  const ws = new WebSocket('ws://localhost:10005/ws/test')
-
-  ws.onopen = (event) => {
-    console.log('ws: open');
-    setInterval(() => {
-      ws.send('ws: client send test')
-    }, 100)
-    ws.onmessage = (event) => {
-      console.log('ws:', event.data);
-      const packet = JSON.parse(event.data);
-      switch (packet.type) {
-      }
-    };
-    ws.onclose = (event) => {
-      console.log('ws: close', event);
-    };
-  };
-}
 </script>
 
 <template>
@@ -43,10 +23,6 @@ function test() {
   </template>
   <v-sheet v-else>
     <v-btn @click="startGame" color="info"> 8 人混战模式 </v-btn>
-    <v-btn
-      color="green"
-      text="测试"
-      @click="test"/>
   </v-sheet>
 </template>
 

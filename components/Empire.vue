@@ -13,7 +13,7 @@ const state = ref<GameState>('wait');
 const room = ref({
   id: 0,
   created: 0,
-  started: 0
+  started: 0,
 });
 
 const address = // fuck you nuxt
@@ -79,12 +79,16 @@ function handleScroll(e: WheelEvent) {
 onMounted(() => {
   ws = new WebSocket(address);
   ws.onopen = (event) => {
-    console.log('ws: open');
+    if (import.meta.dev) {
+      console.log('ws: open');
+    }
     // setInterval(() => {
     //   ws.send('发送测试')
     // }, 100)
     ws.onmessage = (event) => {
-      console.log('ws:', event.data);
+      if (import.meta.dev) {
+        console.log('ws:', event.data);
+      }
       const packet = JSON.parse(event.data);
       switch (packet.type) {
         case 'w':
@@ -101,13 +105,15 @@ onMounted(() => {
           state.value = 'prepare';
           break;
         case 'm':
-          map.value = []
+          map.value = [];
           for (let i = 0; i < packet.w; i++) {
             map.value[i] = [];
             for (let j = 0; j < packet.h; j++) {
               map.value[i][j] = {
-                t: 0, a: 0, o: -1
-              }
+                t: 0,
+                a: 0,
+                o: -1,
+              };
               if ((packet.o as number[]).indexOf(packet.w * i + j) !== -1) {
                 map.value[i][j].t = -1;
               }
@@ -117,14 +123,14 @@ onMounted(() => {
           break;
         case 'u':
           // todo: packet.d
-          const units: (UnitData & { p: number })[] = packet.s
+          const units: (UnitData & { p: number })[] = packet.s;
           for (let item of units) {
             const i = Math.floor(item.p / map.value[0].length);
             const j = item.p % map.value[0].length;
             // console.log(item, 'mapSize', map.value.length, map.value[0].length, 'pos', i, j)
             map.value[i][j] = item;
           }
-          const discard: number[] = packet.d
+          const discard: number[] = packet.d;
           for (let pos of discard) {
             const i = Math.floor(pos / map.value[0].length);
             const j = pos % map.value[0].length;
@@ -133,7 +139,7 @@ onMounted(() => {
               ...map.value[i][j],
               a: 0,
               o: -1,
-            }
+            };
           }
           break;
       }
@@ -219,7 +225,7 @@ function clickSlot(x: number, y: number, ev?: MouseEvent | KeyboardEvent) {
         t: [x, y],
       };
       ws.send(JSON.stringify(move));
-      console.log(JSON.stringify(move))
+      console.log(JSON.stringify(move));
       cursorX.value = x;
       cursorY.value = y;
     } else {
@@ -258,7 +264,7 @@ function keyDown(ev: KeyboardEvent) {
       );
     }
   } else if (ev.key == 'q') {
-    ws.send(JSON.stringify({ type: 'cm' }))
+    ws.send(JSON.stringify({ type: 'cm' }));
   } else if (ev.key == 'z') {
   }
 }
@@ -273,7 +279,7 @@ function toggleForceStart() {
   );
 }
 
-const timer = useInterval(500)
+const timer = useInterval(500);
 
 onMounted(() => {
   window.addEventListener('keydown', keyDown);
@@ -292,7 +298,11 @@ onUnmounted(() => {
       <template #headline> 等待游戏开始 </template>
       <template #title> {{ playersWaiting.total }} / 8 </template>
       <template #text>
-        还剩 {{ (void timer) || Math.ceil((room.created + 90000 - Date.now()) / 1000) }} 秒
+        还剩
+        {{
+          void timer || Math.ceil((room.created + 90000 - Date.now()) / 1000)
+        }}
+        秒
       </template>
       <template #actions>
         <v-btn
