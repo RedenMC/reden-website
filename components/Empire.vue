@@ -19,7 +19,7 @@ const room = ref({
 const address = // fuck you nuxt
   import.meta.dev
     ? 'ws://localhost:10005/ws/generals/play?auth=' + props.token
-    : '/ws/generals/play?auth=' + props.token;
+    : 'ws://ws.redenmc.com:10005/ws/generals/play?auth=' + props.token;
 const playersWaiting = ref({
   total: 0,
   forceStart: 0,
