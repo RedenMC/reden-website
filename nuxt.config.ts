@@ -1,6 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import vuetify from 'vite-plugin-vuetify';
 import transformAssetUrls = vuetify.transformAssetUrls;
+import { createProxyServer } from 'httpxy';
 
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
@@ -44,6 +45,11 @@ export default defineNuxtConfig({
     server: {
       proxy: {
         '/api': 'http://localhost:10005',
+        '/ws': {
+          target: 'ws://localhost:10005',
+          ws: true,
+          rewriteWsOrigin: true,
+        },
       },
     },
   },
