@@ -78,17 +78,19 @@ function handleScroll(e: WheelEvent) {
 
 onMounted(() => {
   ws = new WebSocket(address);
-  ws.onopen = (event) => {
+  ws.onopen = () => {
     if (import.meta.dev) {
       console.log('ws: open');
     }
     // setInterval(() => {
     //   ws.send('发送测试')
     // }, 100)
+    let updateTime = 0;
     ws.onmessage = (event) => {
       if (import.meta.dev) {
-        console.log('ws:', event.data);
+        // console.log('ws:', event.data);
       }
+      const time = Date.now();
       const packet = JSON.parse(event.data);
       switch (packet.type) {
         case 'w':
@@ -123,6 +125,10 @@ onMounted(() => {
           break;
         case 'u':
           // todo: packet.d
+          if (import.meta.dev) {
+            console.log('更新间隔:', Date.now() - updateTime);
+            updateTime = Date.now();
+          }
           const units: (UnitData & { p: number })[] = packet.s;
           for (let item of units) {
             const i = Math.floor(item.p / map.value[0].length);
@@ -142,6 +148,9 @@ onMounted(() => {
             };
           }
           break;
+      }
+      if (import.meta.dev) {
+        console.log('网络耗时:', Date.now() - time);
       }
     };
     ws.onclose = (event) => {
