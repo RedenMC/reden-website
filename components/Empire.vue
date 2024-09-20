@@ -427,10 +427,7 @@ onUnmounted(() => {
 
       <div title="top-right" class="position-absolute top-0 right-0">
         <v-sheet elevation="4">
-          TOP RIGHT
-          <br />
-          排行榜绝赞制作中
-          <table>
+          <table class="leaderboard">
             <tr>
               <td></td>
               <td>兵</td>
@@ -479,6 +476,11 @@ table.map td {
   overflow: hidden;
   padding: 0;
   cursor: default;
+}
+
+table.leaderboard {
+  border-spacing: 10px 0;
+  text-align: center;
 }
 
 table.map {
