@@ -39,6 +39,7 @@ type Move = {
 };
 
 const colorMap = ref<string[]>([randomColor(), randomColor()]);
+const nameMap = ref<string[]>([]);
 type UnitData = {
   /**
    * 3=mount
@@ -133,6 +134,7 @@ onMounted(() => {
         case 'p':
           room.value.started = packet.t;
           colorMap.value = packet.c;
+          nameMap.value = packet.p;
           myIndex.value = packet.i;
           state.value = 'prepare';
           break;
@@ -194,6 +196,7 @@ onMounted(() => {
               };
             }
             list[i].color = colorMap.value[i];
+            list[i].name = nameMap.value[i];
           }
           list.sort((a, b) => a.a - b.a);
           leaderboard.value = list;
@@ -385,7 +388,7 @@ onUnmounted(() => {
       "
       @mouseup.prevent="mouseDown = false"
     >
-      <table ref="table" class="position-relative">
+      <table ref="table" class="position-relative map">
         <tr v-for="(row, x) in map" :key="x">
           <td
             v-for="(unit, y) in row"
@@ -429,7 +432,7 @@ onUnmounted(() => {
           排行榜绝赞制作中
           <table>
             <tr>
-              <td>色</td>
+              <td></td>
               <td>兵</td>
               <td>城</td>
               <td>地</td>
@@ -439,7 +442,9 @@ onUnmounted(() => {
                 :style="{
                   backgroundColor: item.color,
                 }"
-              />
+              >
+                {{ item.name }}
+              </td>
               <td>{{ item.a }}</td>
               <td>{{ item.c }}</td>
               <td>{{ item.l }}</td>
@@ -460,7 +465,7 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-td {
+table.map td {
   width: v-bind(cellSizeStr);
   height: v-bind(cellSizeStr);
   min-width: v-bind(cellSizeStr);
@@ -476,7 +481,7 @@ td {
   cursor: default;
 }
 
-table {
+table.map {
   border-spacing: 0;
 }
 
