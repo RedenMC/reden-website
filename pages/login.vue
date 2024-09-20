@@ -11,7 +11,7 @@ import { toast } from 'vuetify-sonner';
 import { ref } from 'vue';
 import CommonCaptcha from '@/components/CommonCaptcha.vue';
 import { useI18n } from 'vue-i18n';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useDisplay } from 'vuetify';
 
 const { t } = useI18n();
@@ -19,12 +19,20 @@ const { mobile } = useDisplay({
   mobileBreakpoint: 500,
 });
 const localePath = useLocalePath();
+const route = useRoute();
+const router = useRouter();
+
+if (route.query?.csrf_token) {
+  // oauth login csrf token is not passed by json, but by query string
+  const csrf = route.query.csrf_token as string;
+  useAppStore().setCsrfToken(csrf);
+  router.replace('/home');
+}
 
 const username = ref('');
 const password = ref('');
 const loading = ref(false);
 const captcha = ref<Captcha>();
-const router = useRouter();
 definePageMeta({
   title: 'login.title',
 });
@@ -132,7 +140,7 @@ function login() {
         <v-col>
           <v-btn
             :block="true"
-            :href="'/api/oauth/github?redirect_url=' + encodeURI('/home')"
+            :href="'/api/oauth/github?redirect_url=' + encodeURI('/login')"
             color="blue"
           >
             <v-icon left>mdi-github</v-icon>
@@ -142,7 +150,7 @@ function login() {
         <v-col>
           <v-btn
             :block="true"
-            :href="'/api/oauth/microsoft?redirect_url=' + encodeURI('/home')"
+            :href="'/api/oauth/microsoft?redirect_url=' + encodeURI('/login')"
             color="red"
           >
             <v-icon left>mdi-microsoft</v-icon>
@@ -154,7 +162,7 @@ function login() {
         <v-col>
           <v-btn
             :block="true"
-            :href="'/api/oauth/gitee?redirect_url=' + encodeURI('/home')"
+            :href="'/api/oauth/gitee?redirect_url=' + encodeURI('/login')"
             color="green"
           >
             <v-icon left>mdi-gitee</v-icon>

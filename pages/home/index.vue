@@ -19,18 +19,6 @@ definePageMeta({
   needLogin: true,
 });
 
-if (router.currentRoute.value.query?.csrf_token) {
-  // oauth login csrf token is not passed by json, but by query string
-  const csrf = router.currentRoute.value.query.csrf_token! as string;
-  useAppStore().setCsrfToken(csrf);
-  history.replaceState(
-    {},
-    document.title,
-    window.location.pathname + window.location.hash,
-  );
-  console.log('csrf', csrf);
-}
-
 let user = ref<Profile>();
 const loading = ref(true);
 // webhook

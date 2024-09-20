@@ -175,7 +175,7 @@ function deleteAvatar() {
             </a>
           </span>
           <template v-else>
-            <a v-if="canEdit" href="/api/oauth/github?redirect_url=/home"
+            <a v-if="canEdit" href="/api/oauth/github?redirect_url=/login"
               >Account not linked, Link Now!</a
             >
             <span v-else>Account not linked</span>

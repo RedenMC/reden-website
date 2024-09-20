@@ -54,7 +54,7 @@ function unlinkAccount(type: string) {
     <v-col>
       <v-btn
         v-if="!account"
-        :href="`/api/oauth/${type}?redirect_url=/home`"
+        :href="`/api/oauth/${type}`"
         class="text-capitalize setting-button"
         color="primary"
         block

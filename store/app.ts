@@ -77,6 +77,7 @@ export const useAppStore = defineStore('reden', {
       this.save();
     },
     setCsrfToken(token: string) {
+      this.logined = true;
       this.csrfToken = token;
       this.save();
     },
