@@ -5,16 +5,18 @@ const router = useRouter();
 
 const props = defineProps<{
   token: string;
+  state?: GameState;
 }>();
 
 const fatalError = ref('');
 type GameState = 'wait' | 'prepare' | 'play' | 'finish';
-const state = ref<GameState>('wait');
+const state = ref<GameState>(props.state ?? 'wait');
 const room = ref({
   id: 0,
   created: 0,
   started: 0,
 });
+const turn = ref(0);
 
 const address = // fuck you nuxt
   import.meta.dev
@@ -48,6 +50,29 @@ type UnitData = {
 };
 
 const map = ref<UnitData[][]>([]);
+const myIndex = ref(-210);
+const visible = computed<boolean[][]>(() => {
+  const temp: boolean[][] = [];
+  console.log('check visible, myIndex', myIndex.value);
+  for (let i in map.value) {
+    const a: boolean[] = [];
+    for (let j in map.value[i]) {
+      a[Number(j)] = false;
+      for (let dx = -1; dx <= 1; dx++)
+        for (let dy = -1; dy <= 1; dy++) {
+          const x = Number(i) + dx;
+          const y = Number(j) + dy;
+          // console.log('unit@',x,y,'=', (map.value[x] || [])[y])
+          if ((map.value[x] || [])[y]?.o === myIndex.value) {
+            a[j] = true;
+            break;
+          }
+        }
+    }
+    temp.push(a);
+  }
+  return temp;
+});
 function canMoveTo(x: number, y: number) {
   const unit: UnitData | undefined = (map.value[x] || [])[y];
   return unit && unit.t !== 3;
@@ -82,9 +107,6 @@ onMounted(() => {
     if (import.meta.dev) {
       console.log('ws: open');
     }
-    // setInterval(() => {
-    //   ws.send('发送测试')
-    // }, 100)
     let updateTime = 0;
     ws.onmessage = (event) => {
       if (import.meta.dev) {
@@ -104,6 +126,7 @@ onMounted(() => {
         case 'p':
           room.value.started = packet.t;
           colorMap.value = packet.c;
+          myIndex.value = packet.i;
           state.value = 'prepare';
           break;
         case 'm':
@@ -124,11 +147,11 @@ onMounted(() => {
           state.value = 'play';
           break;
         case 'u':
-          // todo: packet.d
           if (import.meta.dev) {
-            console.log('更新间隔:', Date.now() - updateTime);
+            // console.log('更新间隔:', Date.now() - updateTime);
             updateTime = Date.now();
           }
+          turn.value = Math.ceil(packet.t / 2);
           const units: (UnitData & { p: number })[] = packet.s;
           for (let item of units) {
             const i = Math.floor(item.p / map.value[0].length);
@@ -155,7 +178,7 @@ onMounted(() => {
     };
     ws.onclose = (event) => {
       console.log('ws: close', event);
-      fatalError.value = event.code + ' ' + event.reason;
+      fatalError.value = '连接断开 ' + event.code + ' ' + event.reason;
       if (event.code == 401) {
         toastError(
           {
@@ -171,17 +194,17 @@ onMounted(() => {
 const container = templateRef('container');
 const table = templateRef('table');
 
-const tableHeightStr = computed(
-  () => (table.value as HTMLElement)?.clientHeight + 'px',
-);
-const isDragging = ref(false);
+const mouseDown = ref(false);
 let dragged = false;
 const xOffset = ref(0);
 const yOffset = ref(0);
+let mouseMovement: [number, number] = [0, 0];
 
 function drag(e: MouseEvent) {
-  if (!isDragging.value) return;
-  if (!dragged && e.movementX < 1 && e.movementY < 1) return;
+  if (!mouseDown.value) return;
+  mouseMovement[0] += e.movementX;
+  mouseMovement[1] += e.movementY;
+  if (!dragged && Math.hypot(...mouseMovement) < 0.3) return;
   dragged = true;
   cursorX.value = -1;
   cursorY.value = -1;
@@ -256,9 +279,13 @@ function clickSlot(x: number, y: number, ev?: MouseEvent | KeyboardEvent) {
 function keyDown(ev: KeyboardEvent) {
   const map: Record<string, number[]> = {
     ArrowUp: [-1, 0],
+    w: [-1, 0],
     ArrowDown: [1, 0],
+    s: [1, 0],
     ArrowLeft: [0, -1],
+    a: [0, -1],
     ArrowRight: [0, 1],
+    d: [0, 1],
   };
   console.log(ev.key in map, ev.key);
   if (ev.key in map) {
@@ -299,10 +326,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <v-alert v-if="fatalError" type="error" dismissible>
-    Fatal Error: {{ fatalError }}
-  </v-alert>
-  <div v-else>
+  <div class="position-relative">
     <v-empty-state v-if="state === 'wait'">
       <template #headline> 等待游戏开始 </template>
       <template #title> {{ playersWaiting.total }} / 8 </template>
@@ -328,11 +352,14 @@ onUnmounted(() => {
     <div
       v-if="state === 'play' || state === 'finish'"
       ref="container"
-      class="w-100 d-flex justify-center container"
+      class="w-100 d-flex justify-center container position-relative"
       @wheel.prevent.stop="handleScroll"
       @mousemove.prevent="drag"
-      @mousedown.prevent="isDragging = true"
-      @mouseup.prevent="isDragging = false"
+      @mousedown.prevent="
+        mouseDown = true;
+        mouseMovement = [0, 0];
+      "
+      @mouseup.prevent="mouseDown = false"
     >
       <table ref="table" class="position-relative">
         <tr v-for="(row, x) in map" :key="x">
@@ -352,7 +379,8 @@ onUnmounted(() => {
               'bg-swamp': unit.t === 4,
             }"
             :style="{
-              backgroundColor: colorMap[unit.o],
+              backgroundColor:
+                colorMap[unit.o] ?? (visible[x][y] ? '#cccccc' : undefined),
             }"
             class="border"
             @click="clickSlot(x, y, $event)"
@@ -363,7 +391,29 @@ onUnmounted(() => {
           </td>
         </tr>
       </table>
+
+      <div title="top-left" class="position-absolute top-0 left-0">
+        <v-sheet elevation="4" border>
+          <div class="pa-2 text-h6">回合数:{{ turn }}</div>
+        </v-sheet>
+      </div>
+
+      <div title="top-right" class="position-absolute top-0 right-0">
+        <v-sheet elevation="4">
+          TOP RIGHT
+          <br />
+          排行榜绝赞制作中
+        </v-sheet>
+      </div>
     </div>
+    <v-alert
+      v-if="fatalError"
+      type="error"
+      dismissible
+      class="position-absolute top-0 left-0"
+    >
+      致命错误: {{ fatalError }}
+    </v-alert>
   </div>
 </template>
 
