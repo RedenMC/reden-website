@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import randomColor from 'randomcolor';
 import { templateRef, useInterval } from '@vueuse/core';
-const router = useRouter();
 
 const props = defineProps<{
   token: string;
@@ -51,6 +50,14 @@ type UnitData = {
 
 const map = ref<UnitData[][]>([]);
 const myIndex = ref(-210);
+const leaderboard = ref<
+  {
+    a: number;
+    c: number;
+    l: number;
+    color: string;
+  }[]
+>([]);
 const visible = computed<boolean[][]>(() => {
   const temp: boolean[][] = [];
   console.log('check visible, myIndex', myIndex.value);
@@ -171,6 +178,26 @@ onMounted(() => {
             };
           }
           break;
+        case 'l':
+          console.log('leaderboard', packet);
+          const list: {
+            a: number;
+            c: number;
+            l: number;
+          }[] = packet.d;
+          for (let i in list) {
+            if (!list[i]) {
+              list[i] = {
+                a: 0,
+                c: 0,
+                l: 0,
+              };
+            }
+            list[i].color = colorMap.value[i];
+          }
+          list.sort((a, b) => a.a - b.a);
+          leaderboard.value = list;
+          break;
       }
       if (import.meta.dev) {
         console.log('网络耗时:', Date.now() - time);
@@ -260,17 +287,14 @@ function clickSlot(x: number, y: number, ev?: MouseEvent | KeyboardEvent) {
       console.log(JSON.stringify(move));
       cursorX.value = x;
       cursorY.value = y;
+    } else if (map.value[x][y].o == myIndex.value) {
+      cursorX.value = x;
+      cursorY.value = y;
     } else {
-      if (import.meta.dev) {
-        console.log('reset');
-      }
       cursorX.value = -1;
       cursorY.value = -1;
     }
   } else {
-    if (import.meta.dev) {
-      console.log('set', x, y);
-    }
     cursorX.value = x;
     cursorY.value = y;
   }
@@ -403,6 +427,24 @@ onUnmounted(() => {
           TOP RIGHT
           <br />
           排行榜绝赞制作中
+          <table>
+            <tr>
+              <td>色</td>
+              <td>兵</td>
+              <td>城</td>
+              <td>地</td>
+            </tr>
+            <tr v-for="item in leaderboard" :key="item.color">
+              <td
+                :style="{
+                  backgroundColor: item.color,
+                }"
+              />
+              <td>{{ item.a }}</td>
+              <td>{{ item.c }}</td>
+              <td>{{ item.l }}</td>
+            </tr>
+          </table>
         </v-sheet>
       </div>
     </div>
