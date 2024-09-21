@@ -25,9 +25,6 @@ useSeoMeta({
   ogDescription: t('litematica_generator.og_description'),
   ogImage: 'https://redenmc.com/reden_256.png',
 });
-if (import.meta.client) {
-  name.value = route.query.m?.toString() || '';
-}
 
 const selecting = ref(true);
 export type MachineDef = {
@@ -96,6 +93,9 @@ const generators = computed(() => {
         },
       };
     }
+    name.value = route.query.m?.toString() || '';
+    if (!machines[name.value])
+      name.value = Object.keys(machines)[0];
     return Object.keys(machines)
       .sort()
       .reduce((obj: Record<string, Machine>, key) => {
@@ -125,8 +125,6 @@ if (import.meta.client) {
   refreshNuxtData();
 }
 
-if (generators.value && !generators.value[name.value])
-  name.value = Object.keys(generators.value)[0];
 const selected = computed(() => (generators.value ?? {})[name.value]);
 </script>
 
