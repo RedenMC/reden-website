@@ -26,7 +26,7 @@ useSeoMeta({
   ogImage: 'https://redenmc.com/reden_256.png',
 });
 if (import.meta.client) {
-  name.value = route.query.m?.toString();
+  name.value = route.query.m?.toString() || '';
 }
 
 const selecting = ref(true);

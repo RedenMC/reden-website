@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref } from 'vue';
 import { type Profile } from '@/utils/constants';
 import UserProfileCard from '@/components/UserProfileCard.vue';
 import { useRoute } from 'vue-router';
@@ -9,6 +8,12 @@ const { t } = useI18n();
 const { data: user } = useFetch<Profile>(`/api/users/${route.params.username}`);
 useHead({
   title: `${user?.value?.username ?? t('reden.user_not_found')} - Reden`,
+});
+
+watch(user, () => {
+  useHead({
+    title: `${user?.value?.username ?? t('reden.user_not_found')} - Reden`,
+  });
 });
 </script>
 
