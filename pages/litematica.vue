@@ -15,7 +15,7 @@ const xSize = ref(0);
 const ySize = ref(0);
 const zSize = ref(0);
 const loading = ref(false);
-const name = ref(route.query.m?.toString() || '');
+const name = ref('');
 const { t } = useI18n();
 const localePath = useLocalePath();
 useSeoMeta({
@@ -25,6 +25,9 @@ useSeoMeta({
   ogDescription: t('litematica_generator.og_description'),
   ogImage: 'https://redenmc.com/reden_256.png',
 });
+if (import.meta.client) {
+  name.value = route.query.m?.toString();
+}
 
 const selecting = ref(true);
 export type MachineDef = {
@@ -125,21 +128,6 @@ if (import.meta.client) {
 if (generators.value && !generators.value[name.value])
   name.value = Object.keys(generators.value)[0];
 const selected = computed(() => (generators.value ?? {})[name.value]);
-
-const meta = {
-  description: t('litematica_generator.description'),
-  keywords: [
-    'minecraft',
-    'litematica',
-    '投影',
-    'generator',
-    '生成器',
-    '世吞',
-    'world eater',
-    'redstone',
-    'slimestone',
-  ],
-};
 </script>
 
 <template>
