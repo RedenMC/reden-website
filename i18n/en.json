@@ -36,6 +36,7 @@
   "also_try_our_other_online_services:": "Also try our other online services:",
   "en": "English",
   "litematica_generator": {
+    "chunks": "chunks",
     "contribute": "Want your own machines such as world eaters to be collected here? Contribute to Reden now! For more information please email me at",
     "description": "Generate Litematica files online for slimestone and technical minecraft machines, e.g. World Eaters, Tunnel bores, etc. This service is totally free.",
     "download": "Download",
@@ -51,6 +52,7 @@
     "size_y": "Size in y",
     "size_z": "Size in z",
     "suggested_values": "Suggested Values: ",
+    "suggestion_notice": "These suggested values are for your reference only",
     "title": "Litematica Online Generator",
     "total_downloads": "We have provided {0} downloads in total."
   },

@@ -36,6 +36,7 @@
   "also_try_our_other_online_services:": "",
   "en": "English",
   "litematica_generator": {
+    "chunks": "",
     "contribute": "想要你的機器（例如世界吞噬者）被收錄在這裡？現在就為 Reden 做出貢獻！聯絡我傳送郵件至",
     "description": "在這裡線上生成投影檔案，例如世界吞噬者",
     "download": "下載",
@@ -50,6 +51,7 @@
     "size_x": "x 方向尺寸",
     "size_y": "y 方向尺寸",
     "size_z": "z 方向尺寸",
+    "suggestion_notice": "",
     "title": "投影線上生成器",
     "total_downloads": ""
   },

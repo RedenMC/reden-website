@@ -37,7 +37,28 @@ type Move = {
   t: [number, number];
   h: boolean;
 };
+type Direction = 'up' | 'down' | 'left' | 'right';
+type QueueItem = {
+  from: [number, number];
+  d: Direction;
+};
 
+const moveQueue = ref<QueueItem[]>([
+  {
+    from: [0, 0],
+    d: 'down',
+  },
+  {
+    from: [0, 0],
+    d: 'right',
+  },
+]);
+if (import.meta.client) {
+  console.log('moveQueue init', [...moveQueue.value]);
+  watch(moveQueue, (val) => {
+    console.log('moveQueue', [...val]);
+  });
+}
 const colorMap = ref<string[]>([randomColor(), randomColor()]);
 const nameMap = ref<string[]>([]);
 type UnitData = {
@@ -56,6 +77,7 @@ const leaderboard = ref<
     a: number;
     c: number;
     l: number;
+    name: string;
     color: string;
   }[]
 >([]);
@@ -181,11 +203,12 @@ onMounted(() => {
           }
           break;
         case 'l':
-          console.log('leaderboard', packet);
           const list: {
             a: number;
             c: number;
             l: number;
+            color: string;
+            name: string;
           }[] = packet.d;
           for (let i in list) {
             if (!list[i]) {
@@ -193,6 +216,8 @@ onMounted(() => {
                 a: 0,
                 c: 0,
                 l: 0,
+                color: '',
+                name: '',
               };
             }
             list[i].color = colorMap.value[i];
@@ -200,6 +225,9 @@ onMounted(() => {
           }
           list.sort((a, b) => a.a - b.a);
           leaderboard.value = list;
+          break;
+        case 'q':
+          // moveQueue.value = moveQueue.value.slice(-packet.s as number);
           break;
       }
       if (import.meta.dev) {
@@ -269,16 +297,18 @@ function clickSlot(x: number, y: number, ev?: MouseEvent | KeyboardEvent) {
   }
   if (cursorX.value !== -1 && cursorX.value !== -1) {
     if (Math.abs(x - cursorX.value) + Math.abs(y - cursorY.value) === 1) {
+      let d: Direction;
+      if (x === cursorX.value - 1) {
+        d = 'up';
+      } else if (x === cursorX.value + 1) {
+        d = 'down';
+      } else if (y === cursorY.value - 1) {
+        d = 'left';
+      } else if (y === cursorY.value + 1) {
+        d = 'right';
+      }
       if (import.meta.dev) {
-        if (x === cursorX.value - 1) {
-          console.log('up');
-        } else if (x === cursorX.value + 1) {
-          console.log('down');
-        } else if (y === cursorY.value - 1) {
-          console.log('left');
-        } else if (y === cursorY.value + 1) {
-          console.log('right');
-        }
+        console.log(d);
       }
       const move: Move = {
         type: 'mv',
@@ -286,8 +316,14 @@ function clickSlot(x: number, y: number, ev?: MouseEvent | KeyboardEvent) {
         f: [cursorX.value, cursorY.value],
         t: [x, y],
       };
+      moveQueue.value = [
+        ...moveQueue.value,
+        {
+          from: [cursorX.value, cursorY.value],
+          d,
+        },
+      ];
       ws.send(JSON.stringify(move));
-      console.log(JSON.stringify(move));
       cursorX.value = x;
       cursorY.value = y;
     } else if (map.value[x][y].o == myIndex.value) {
@@ -415,6 +451,12 @@ onUnmounted(() => {
             <template v-if="unit.a">
               {{ unit.a }}
             </template>
+            <template v-for="step in moveQueue" :key="`${x}_${y}_${step?.d}`">
+              <div
+                v-if="step?.from[0] == x && step?.from[1] == y"
+                :class="`arrow-${step?.d}`"
+              ></div>
+            </template>
           </td>
         </tr>
       </table>
@@ -526,5 +568,18 @@ td.cursor {
 
 .bg-swamp {
   background-image: url('/image/generals/swamp.png');
+}
+
+.arrow-left {
+  content: 'left';
+}
+.arrow-right {
+  content: 'right';
+}
+.arrow-up {
+  content: 'up';
+}
+.arrow-down {
+  content: 'down';
 }
 </style>

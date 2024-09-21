@@ -36,6 +36,7 @@
   "also_try_our_other_online_services:": "",
   "en": "Английский",
   "litematica_generator": {
+    "chunks": "",
     "contribute": "",
     "description": "Generate Litematica files online from Reden projects, e.g. World Eaters",
     "download": "Download",
@@ -50,6 +51,7 @@
     "size_x": "Size in x",
     "size_y": "Size in y",
     "size_z": "Size in z",
+    "suggestion_notice": "",
     "title": "Litematica Online Generator",
     "total_downloads": ""
   },

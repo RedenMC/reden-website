@@ -10,6 +10,10 @@
       type="number"
       variant="underlined"
     >
+      <template #details>
+        {{ Math.ceil(Number(model) / 16) }}
+        {{ $t('litematica_generator.chunks') }}
+      </template>
     </v-text-field>
 
     <v-expand-transition>
@@ -24,6 +28,9 @@
         >
           {{ i }}
         </v-btn>
+        <div class="opacity-60">
+          {{ $t('litematica_generator.suggestion_notice') }}
+        </div>
       </div>
     </v-expand-transition>
   </v-row>
