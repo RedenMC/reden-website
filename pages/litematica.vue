@@ -156,7 +156,7 @@ const meta = {
     </v-row>
 
     <v-row>
-      <v-col style="min-width: 200px">
+      <v-col style="min-width: 200px" cols="12">
         {{ $t('litematica_generator.select') }}
       </v-col>
       <v-select

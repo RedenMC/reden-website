@@ -28,7 +28,7 @@
         >
           {{ i }}
         </v-btn>
-        <div class="opacity-60">
+        <div class="opacity-60 text-body-2">
           {{ $t('litematica_generator.suggestion_notice') }}
         </div>
       </div>
@@ -114,7 +114,7 @@ const suggestedValues = computed(() => {
 }
 
 .suggested-values {
-  height: 40px;
+  height: 60px;
   width: 100%;
   padding-left: 12px;
   padding-right: 12px;
