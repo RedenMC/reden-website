@@ -81,28 +81,7 @@ const leaderboard = ref<
     color: string;
   }[]
 >([]);
-const visible = computed<boolean[][]>(() => {
-  const temp: boolean[][] = [];
-  console.log('check visible, myIndex', myIndex.value);
-  for (let i in map.value) {
-    const a: boolean[] = [];
-    for (let j in map.value[i]) {
-      a[Number(j)] = false;
-      for (let dx = -1; dx <= 1; dx++)
-        for (let dy = -1; dy <= 1; dy++) {
-          const x = Number(i) + dx;
-          const y = Number(j) + dy;
-          // console.log('unit@',x,y,'=', (map.value[x] || [])[y])
-          if ((map.value[x] || [])[y]?.o === myIndex.value) {
-            a[j] = true;
-            break;
-          }
-        }
-    }
-    temp.push(a);
-  }
-  return temp;
-});
+const visible = ref<boolean[][]>([]);
 function canMoveTo(x: number, y: number) {
   const unit: UnitData | undefined = (map.value[x] || [])[y];
   return unit && unit.t !== 3;
@@ -161,10 +140,14 @@ onMounted(() => {
           state.value = 'prepare';
           break;
         case 'm':
+          visible.value = []
           map.value = [];
+
           for (let i = 0; i < packet.w; i++) {
             map.value[i] = [];
+            visible.value[i] = [];
             for (let j = 0; j < packet.h; j++) {
+              visible.value[i][j] = false;
               map.value[i][j] = {
                 t: 0,
                 a: 0,
@@ -189,6 +172,17 @@ onMounted(() => {
             const j = item.p % map.value[0].length;
             // console.log(item, 'mapSize', map.value.length, map.value[0].length, 'pos', i, j)
             map.value[i][j] = item;
+            if (item.o == myIndex.value) {
+              for (let dx = -1; dx <= 1; dx++) {
+                for (let dy = -1; dy <= 1; dy++) {
+                  const x = i + dx;
+                  const y = j + dy;
+                  if (visible.value[x][y] === false) {
+                    visible.value[x][y] = true;
+                  }
+                }
+              }
+            }
           }
           const discard: number[] = packet.d;
           for (let pos of discard) {
@@ -200,6 +194,25 @@ onMounted(() => {
               a: 0,
               o: -1,
             };
+
+            // todo
+            // for (let i in map.value) {
+            //   const a: boolean[] = [];
+            //   for (let j in map.value[i]) {
+            //     a[Number(j)] = false;
+            //     for (let dx = -1; dx <= 1; dx++)
+            //       for (let dy = -1; dy <= 1; dy++) {
+            //         const x = Number(i) + dx;
+            //         const y = Number(j) + dy;
+            //         // console.log('unit@',x,y,'=', (map.value[x] || [])[y])
+            //         if ((map.value[x] || [])[y]?.o === myIndex.value) {
+            //           a[j] = true;
+            //           break;
+            //         }
+            //       }
+            //   }
+            //   temp.push(a);
+            // }
           }
           break;
         case 'l':
