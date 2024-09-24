@@ -18,7 +18,7 @@ async function startGame() {
 </script>
 
 <template>
-  <empire token="" state="play" />
+<!--  <empire token="" state="play" />-->
   <template v-if="ffa && wsToken">
     <empire :token="wsToken" />
   </template>
