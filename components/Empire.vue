@@ -140,7 +140,7 @@ onMounted(() => {
           state.value = 'prepare';
           break;
         case 'm':
-          visible.value = []
+          visible.value = [];
           map.value = [];
 
           for (let i = 0; i < packet.w; i++) {

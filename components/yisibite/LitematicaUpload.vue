@@ -29,6 +29,21 @@
             <v-file-input
               label="file"
               v-model="file"
+              @update:modelValue="
+                (files) => {
+                  const file = (
+                    files instanceof Array ? files[0] : files
+                  ) as File;
+                  if (name == '') {
+                    name = file.name.replace('.litematic', '');
+                  }
+                  if (path == '') {
+                    path = file.name
+                      .replace('.litematic', '')
+                      .replaceAll(/[^\w\-.+]/g, '');
+                  }
+                }
+              "
               :rules="[
                 () =>
                   (file?.name?.endsWith('.litematic') ?? false) ||

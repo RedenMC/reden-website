@@ -175,10 +175,10 @@ function deleteAvatar() {
             </a>
           </span>
           <template v-else>
-            <a v-if="canEdit" href="/api/oauth/github?redirect_url=/login"
-              >Account not linked, Link Now!</a
+            Account not linked
+            <a v-if="canEdit" class="router" href="/api/oauth/github"
+              >Link Now!</a
             >
-            <span v-else>Account not linked</span>
           </template>
         </p>
         <p v-if="user.preference.timezone" class="user-timezone">

@@ -32,7 +32,7 @@ function verifyMinecraft() {
               });
               status.value =
                 'Minecraft account verified, please refresh the page';
-              window.location.reload();
+              setTimeout(() => window.location.reload(), 1000);
               verifyingMinecraft.value = false;
             } else if (response.status == 409) {
               status.value =
@@ -48,8 +48,7 @@ function verifyMinecraft() {
         mustLinkMicrosoft.value = true;
         status.value =
           'You must link your microsoft account to verify minecraft account. ' +
-          'We must be given permission to check your microsoft and minecraft account, if you do not trust this, ' +
-          'please check out <a href="/minecraft/verify/in-game"> In-Game Verification</a> for more information';
+          'We must be given permission to check your microsoft and minecraft account. ';
         verifyingMinecraft.value = false;
       } else {
         return Promise.reject(response);
@@ -74,23 +73,16 @@ function verifyMinecraft() {
       </template>
     </v-tooltip>
   </span>
-  <span v-else
-    >No verified minecraft account linked<v-dialog width="500">
-      <template #activator="{ props }">
-        <v-btn
-          v-if="showActions"
-          class="text-capitalize"
-          color="primary"
-          size="sm"
-          v-bind="props"
-          variant="plain"
-          @click="verifyMinecraft"
-        >
-          Verify Now
-        </v-btn>
-      </template>
-
-      <template #default>
+  <span v-else>
+    No verified minecraft account linked
+    <a
+      v-if="showActions"
+      class="router"
+      href="javascript:void(0)"
+      @click="verifyMinecraft"
+    >
+      Verify Now!
+      <v-dialog width="500" activator="parent">
         <v-card :loading="verifyingMinecraft" title="Verify Minecraft">
           <v-card-text>{{ status }}</v-card-text>
 
@@ -105,9 +97,9 @@ function verifyMinecraft() {
             </v-btn>
           </v-card-actions>
         </v-card>
-      </template>
-    </v-dialog></span
-  >
+      </v-dialog>
+    </a>
+  </span>
 </template>
 
 <style scoped></style>

@@ -158,7 +158,7 @@ function login() {
           </v-btn>
         </v-col>
       </v-row>
-      <v-row>
+      <v-row v-if="false">
         <v-col>
           <v-btn
             :block="true"

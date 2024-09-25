@@ -94,8 +94,7 @@ const generators = computed(() => {
       };
     }
     name.value = route.query.m?.toString() || '';
-    if (!machines[name.value])
-      name.value = Object.keys(machines)[0];
+    if (!machines[name.value]) name.value = Object.keys(machines)[0];
     return Object.keys(machines)
       .sort()
       .reduce((obj: Record<string, Machine>, key) => {
