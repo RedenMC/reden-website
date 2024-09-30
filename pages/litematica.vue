@@ -97,7 +97,9 @@ const generators = computed<Record<string, Machine>>(() => {
       };
     }
     name.value = route.query.m?.toString() || '';
-    if (!machines[name.value]) name.value = Object.keys(machines)[0];
+    if (import.meta.client) {
+      if (!machines[name.value]) name.value = Object.keys(machines)[0];
+    }
     return Object.keys(machines)
       .sort()
       .reduce((obj: Record<string, Machine>, key) => {
@@ -107,7 +109,6 @@ const generators = computed<Record<string, Machine>>(() => {
   }
   return {};
 });
-console.log(serverResponse.value, generators.value, typeof total.value);
 
 function submit(e: SubmitEventPromise) {
   e.preventDefault();
