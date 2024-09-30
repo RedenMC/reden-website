@@ -1,4 +1,3 @@
-import { useTitle } from '@vueuse/core';
 import { useNuxtApp } from '#app';
 
 export default defineNuxtRouteMiddleware((to, from) => {

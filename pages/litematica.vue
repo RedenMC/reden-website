@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
 import { useAppStore } from '~/store/app';
-import { type SubmitEventPromise } from 'vuetify';
+import { type SubmitEventPromise, useDisplay } from 'vuetify';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 import LitematicaUpload from '~/components/yisibite/LitematicaUpload.vue';
@@ -43,6 +43,9 @@ export type Machine = MachineDef & {
   conditions: { [key: string]: ((v: number) => any)[] };
 };
 
+const { mobile } = useDisplay({
+  mobileBreakpoint: 600,
+});
 const { data: total } = await useFetch('/api/mc-services/yisibite/total');
 
 const { data: serverResponse } = await useFetch<{
@@ -54,7 +57,7 @@ const { data: serverResponse } = await useFetch<{
     };
   };
 }>('/api/mc-services/yisibite/');
-const generators = computed(() => {
+const generators = computed<Record<string, Machine>>(() => {
   if (serverResponse.value) {
     let machines: { [key: string]: Machine } = {};
     for (let key in serverResponse.value) {
@@ -102,6 +105,7 @@ const generators = computed(() => {
         return obj;
       }, {});
   }
+  return {};
 });
 console.log(serverResponse.value, generators.value, typeof total.value);
 
@@ -124,7 +128,7 @@ if (import.meta.client) {
   refreshNuxtData();
 }
 
-const selected = computed(() => (generators.value ?? {})[name.value]);
+const selected = computed(() => generators.value[name.value]);
 </script>
 
 <template>
@@ -146,16 +150,29 @@ const selected = computed(() => (generators.value ?? {})[name.value]);
       </v-col>
       <v-select
         v-model="name"
-        :item-title="(item) => (generators ?? {})[item]?.name"
+        :item-title="(item) => generators[item]?.name"
         :item-value="(item) => item"
-        :items="Object.keys(generators ?? {})"
+        :items="Object.keys(generators)"
         density="comfortable"
         hide-details
         active
         @update:model-value="router.replace({ query: { m: name } })"
       >
-        <template #selection="{ item }">
-          {{ item.title }}
+        <template #item="{ item, props }">
+          <v-list-item v-bind="props" :subtitle="item.value">
+            <template #append>
+              <v-chip v-if="!mobile && generators[item.value]">
+                {{
+                  $t('litematica_generator.download_count', {
+                    count: generators[item.value]?.downloads,
+                  })
+                }}
+              </v-chip>
+            </template>
+            <template #title class="text-break">
+              {{ item.title }}
+            </template>
+          </v-list-item>
         </template>
         <template #append-inner>
           <v-chip>
@@ -184,16 +201,16 @@ const selected = computed(() => (generators.value ?? {})[name.value]);
             @update:model-value="router.replace({ query: { m: name } })"
           >
             <v-radio
-              v-for="key in Object.keys(generators ?? {})"
+              v-for="key in Object.keys(generators)"
               :key="key"
               :value="key"
             >
               <template #label>
-                {{ (generators ?? {})[key]?.name }}
+                {{ generators[key]?.name }}
                 <v-chip>
                   {{
                     $t('litematica_generator.download_count', {
-                      count: (generators ?? {})[key]?.downloads ?? '查询失败',
+                      count: generators[key]?.downloads ?? '查询失败',
                     })
                   }}
                 </v-chip>
