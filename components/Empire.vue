@@ -53,6 +53,20 @@ const moveQueue = ref<QueueItem[]>([
     d: 'right',
   },
 ]);
+const moveQueueDisplay = computed<Record<number, Record<number, Direction[]>>>(
+  (oldValue) => {
+    let ret: Record<number, Record<number, Direction[]>> = {};
+    for (let move of moveQueue.value) {
+      if (!ret[move.from[0]]) ret[move.from[0]] = {};
+      if (!ret[move.from[0]][move.from[1]])
+        ret[move.from[0]][move.from[1]] = [];
+      if (!ret[move.from[0]][move.from[1]].includes(move.d)) {
+        ret[move.from[0]][move.from[1]].push(move.d);
+      }
+    }
+    return ret;
+  },
+);
 if (import.meta.client) {
   console.log('moveQueue init', [...moveQueue.value]);
   watch(moveQueue, (val) => {
@@ -82,10 +96,12 @@ const leaderboard = ref<
   }[]
 >([]);
 const visible = ref<boolean[][]>([]);
+
 function canMoveTo(x: number, y: number) {
   const unit: UnitData | undefined = (map.value[x] || [])[y];
   return unit && unit.t !== 3;
 }
+
 const cellSize = ref(40);
 const cellSizeStr = computed(() => cellSize.value + 'px');
 for (let i = 0; i < 10; i++) {
@@ -240,7 +256,10 @@ onMounted(() => {
           leaderboard.value = list;
           break;
         case 'q':
-          // moveQueue.value = moveQueue.value.slice(-packet.s as number);
+          moveQueue.value = moveQueue.value.slice(-packet.s as number);
+          if (packet.s === 0) {
+            moveQueue.value = [];
+          }
           break;
       }
       if (import.meta.dev) {
@@ -310,7 +329,7 @@ function clickSlot(x: number, y: number, ev?: MouseEvent | KeyboardEvent) {
   }
   if (cursorX.value !== -1 && cursorX.value !== -1) {
     if (Math.abs(x - cursorX.value) + Math.abs(y - cursorY.value) === 1) {
-      let d: Direction;
+      let d: Direction = 'up';
       if (x === cursorX.value - 1) {
         d = 'up';
       } else if (x === cursorX.value + 1) {
@@ -329,13 +348,10 @@ function clickSlot(x: number, y: number, ev?: MouseEvent | KeyboardEvent) {
         f: [cursorX.value, cursorY.value],
         t: [x, y],
       };
-      moveQueue.value = [
-        ...moveQueue.value,
-        {
-          from: [cursorX.value, cursorY.value],
-          d,
-        },
-      ];
+      moveQueue.value.push({
+        from: [cursorX.value, cursorY.value],
+        d,
+      });
       ws.send(JSON.stringify(move));
       cursorX.value = x;
       cursorY.value = y;
@@ -404,8 +420,8 @@ onUnmounted(() => {
 <template>
   <div class="position-relative">
     <v-empty-state v-if="state === 'wait'">
-      <template #headline> 等待游戏开始 </template>
-      <template #title> {{ playersWaiting.total }} / 8 </template>
+      <template #headline> 等待游戏开始</template>
+      <template #title> {{ playersWaiting.total }} / 8</template>
       <template #text>
         还剩
         {{
@@ -418,7 +434,7 @@ onUnmounted(() => {
           :color="forceStartMe ? 'error' : 'primary'"
           @click="toggleForceStart"
         >
-          <template v-if="forceStartMe"> 取消 </template>
+          <template v-if="forceStartMe"> 取消</template>
           强制开始
           {{ playersWaiting.forceStart }} /
           {{ Math.max(2, Math.ceil((playersWaiting.total * 3) / 4)) }}
@@ -464,23 +480,35 @@ onUnmounted(() => {
             <template v-if="unit.a">
               {{ unit.a }}
             </template>
-            <template v-for="step in moveQueue" :key="`${x}_${y}_${step?.d}`">
-              <div
-                v-if="step?.from[0] == x && step?.from[1] == y"
-                :class="`arrow-${step?.d}`"
-              ></div>
+            <template
+              v-if="
+                moveQueueDisplay[Number(x)] &&
+                moveQueueDisplay[Number(x)][Number(y)]
+              "
+            >
+              <template
+                v-for="step in moveQueueDisplay[Number(x)][Number(y)]"
+                :key="step"
+              >
+                <div v-if="step == 'up'" :class="`arrow-${step}`">↑</div>
+                <div v-else-if="step == 'down'" :class="`arrow-${step}`">↓</div>
+                <div v-else-if="step == 'left'" :class="`arrow-${step}`">←</div>
+                <div v-else-if="step == 'right'" :class="`arrow-${step}`">
+                  →
+                </div>
+              </template>
             </template>
           </td>
         </tr>
       </table>
 
-      <div title="top-left" class="position-absolute top-0 left-0">
-        <v-sheet elevation="4" border>
+      <div class="position-absolute top-0 left-0" title="top-left">
+        <v-sheet border elevation="4">
           <div class="pa-2 text-h6">回合数:{{ turn }}</div>
         </v-sheet>
       </div>
 
-      <div title="top-right" class="position-absolute top-0 right-0">
+      <div class="position-absolute top-0 right-0" title="top-right">
         <v-sheet elevation="4">
           <table class="leaderboard">
             <tr>
@@ -507,9 +535,9 @@ onUnmounted(() => {
     </div>
     <v-alert
       v-if="fatalError"
-      type="error"
-      dismissible
       class="position-absolute top-0 left-0"
+      dismissible
+      type="error"
     >
       致命错误: {{ fatalError }}
     </v-alert>
@@ -526,11 +554,14 @@ table.map td {
   max-height: v-bind(cellSizeStr);
   background-size: cover;
   background-color: dimgray;
+  text-shadow: 0 0 2px black;
   box-sizing: border-box;
   text-align: center;
   overflow: hidden;
   padding: 0;
+  position: relative;
   cursor: default;
+  user-select: none;
 }
 
 table.leaderboard {
@@ -584,15 +615,30 @@ td.cursor {
 }
 
 .arrow-left {
-  content: 'left';
+  left: 0;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
 }
+
 .arrow-right {
-  content: 'right';
+  right: 0;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
 }
+
 .arrow-up {
-  content: 'up';
+  top: 0;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
+
 .arrow-down {
-  content: 'down';
+  bottom: 0;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 </style>
