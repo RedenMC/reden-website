@@ -261,7 +261,15 @@ onMounted(() => {
             moveQueue.value = [];
           }
           break;
+        case '1':
+          alert('您赢了！');
+          break;
+        case '0':
+          const name = nameMap.value[packet.k];
+          alert(`你被${name}杀死了`);
+          break;
       }
+      /0/.exec('zh_cn').shift();
       if (import.meta.dev) {
         console.log('网络耗时:', Date.now() - time);
       }
