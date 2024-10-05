@@ -210,25 +210,7 @@ onMounted(() => {
               a: 0,
               o: -1,
             };
-
-            // todo
-            // for (let i in map.value) {
-            //   const a: boolean[] = [];
-            //   for (let j in map.value[i]) {
-            //     a[Number(j)] = false;
-            //     for (let dx = -1; dx <= 1; dx++)
-            //       for (let dy = -1; dy <= 1; dy++) {
-            //         const x = Number(i) + dx;
-            //         const y = Number(j) + dy;
-            //         // console.log('unit@',x,y,'=', (map.value[x] || [])[y])
-            //         if ((map.value[x] || [])[y]?.o === myIndex.value) {
-            //           a[j] = true;
-            //           break;
-            //         }
-            //       }
-            //   }
-            //   temp.push(a);
-            // }
+            visible.value[i][j] = false;
           }
           break;
         case 'l':
