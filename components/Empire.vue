@@ -135,7 +135,7 @@ onMounted(() => {
     let updateTime = 0;
     ws.onmessage = (event) => {
       if (import.meta.dev) {
-        // console.log('ws:', event.data);
+        console.log('ws:', event.data);
       }
       const time = Date.now();
       const packet = JSON.parse(event.data);
@@ -193,7 +193,7 @@ onMounted(() => {
                 for (let dy = -1; dy <= 1; dy++) {
                   const x = i + dx;
                   const y = j + dy;
-                  if (visible.value[x][y] === false) {
+                  if (visible.value[x] && visible.value[x][y] === false) {
                     visible.value[x][y] = true;
                   }
                 }
@@ -256,9 +256,22 @@ onMounted(() => {
           leaderboard.value = list;
           break;
         case 'q':
-          moveQueue.value = moveQueue.value.slice(-packet.s as number);
           if (packet.s === 0) {
             moveQueue.value = [];
+          } else {
+            // moveQueue.value = moveQueue.value.slice(-packet.s as number);
+            let left = moveQueue.value.length - packet.s;
+            while (left >= 0) {
+              if (
+                moveQueue.value[left].from[0] != packet.x ||
+                moveQueue.value[left].from[1] != packet.y
+              ) {
+                left--;
+              } else {
+                break;
+              }
+            }
+            moveQueue.value = moveQueue.value.slice(left);
           }
           break;
         case '1':
@@ -269,7 +282,6 @@ onMounted(() => {
           alert(`你被${name}杀死了`);
           break;
       }
-      /0/.exec('zh_cn').shift();
       if (import.meta.dev) {
         console.log('网络耗时:', Date.now() - time);
       }
