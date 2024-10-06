@@ -152,10 +152,10 @@ onMounted(() => {
           visible.value = [];
           map.value = [];
 
-          for (let i = 0; i < packet.w; i++) {
+          for (let i = 0; i < packet.h; i++) {
             map.value[i] = [];
             visible.value[i] = [];
-            for (let j = 0; j < packet.h; j++) {
+            for (let j = 0; j < packet.w; j++) {
               visible.value[i][j] = false;
               map.value[i][j] = {
                 t: 0,
