@@ -21,6 +21,7 @@ const { mobile } = useDisplay({
 const localePath = useLocalePath();
 const route = useRoute();
 const router = useRouter();
+const dev = import.meta.dev;
 
 if (route.query?.csrf_token) {
   // oauth login csrf token is not passed by json, but by query string
@@ -112,7 +113,7 @@ function login() {
       </v-form>
       <common-captcha v-model="captcha" />
       <v-btn
-        :disabled="!captcha?.token"
+        :disabled="!dev && !captcha?.token"
         :loading="loading"
         color="primary"
         @click="login"

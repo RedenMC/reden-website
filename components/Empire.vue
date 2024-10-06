@@ -1,3 +1,4 @@
+<!--suppress CssUnusedSymbol -->
 <script lang="ts" setup>
 import randomColor from 'randomcolor';
 import { templateRef, useInterval } from '@vueuse/core';
@@ -19,7 +20,7 @@ const turn = ref(0);
 
 const address = // fuck you nuxt
   import.meta.dev
-    ? 'ws://localhost:10005/ws/generals/play?auth=' + props.token
+    ? `ws://${location.hostname}:10005/ws/generals/play?auth=${props.token}`
     : 'wss://ws.redenmc.com:20443/ws/generals/play?auth=' + props.token;
 const playersWaiting = ref({
   total: 0,
@@ -43,16 +44,7 @@ type QueueItem = {
   d: Direction;
 };
 
-const moveQueue = ref<QueueItem[]>([
-  {
-    from: [0, 0],
-    d: 'down',
-  },
-  {
-    from: [0, 0],
-    d: 'right',
-  },
-]);
+const moveQueue = ref<QueueItem[]>([]);
 const moveQueueDisplay = computed<Record<number, Record<number, Direction[]>>>(
   (oldValue) => {
     let ret: Record<number, Record<number, Direction[]>> = {};
@@ -103,7 +95,8 @@ function canMoveTo(x: number, y: number) {
 }
 
 const cellSize = ref(40);
-const cellSizeStr = computed(() => cellSize.value + 'px');
+const cellSizeStr = computed(() => `${cellSize.value}px`);
+const textSizeStr = computed(() => `${cellSize.value / 3}px`);
 for (let i = 0; i < 10; i++) {
   map.value[i] = [];
   for (let j = 0; j < 10; j++) {
@@ -287,21 +280,35 @@ const container = templateRef('container');
 const table = templateRef('table');
 
 const mouseDown = ref(false);
+const half = ref(false);
 let dragged = false;
 const xOffset = ref(0);
 const yOffset = ref(0);
-let mouseMovement: [number, number] = [0, 0];
+/**
+ * based on {@link MouseEvent.clientX} and {@link MouseEvent.clientY}
+ * @type {[number, number]}
+ */
+let mousePrevPosition: [number, number] = [0, 0];
+/**
+ * mobile only, for scaling
+ */
+let touchPointPrevDistance = 1;
 
-function drag(e: MouseEvent) {
+function drag(clientX: number, clientY: number) {
   if (!mouseDown.value) return;
-  mouseMovement[0] += e.movementX;
-  mouseMovement[1] += e.movementY;
-  if (!dragged && Math.hypot(...mouseMovement) < 0.3) return;
+  if (
+    !dragged &&
+    Math.hypot(clientX - mousePrevPosition[0], clientY - mousePrevPosition[1]) <
+      0.3
+  )
+    return;
   dragged = true;
   cursorX.value = -1;
   cursorY.value = -1;
-  xOffset.value += e.movementX;
-  yOffset.value += e.movementY;
+  xOffset.value += clientX - mousePrevPosition[0];
+  yOffset.value += clientY - mousePrevPosition[1];
+  mousePrevPosition[0] = clientX;
+  mousePrevPosition[1] = clientY;
   (table.value as HTMLElement).style.left = xOffset.value + 'px';
   (table.value as HTMLElement).style.top = yOffset.value + 'px';
 }
@@ -330,7 +337,12 @@ function clickSlot(x: number, y: number, ev?: MouseEvent | KeyboardEvent) {
     return;
   }
   if (cursorX.value !== -1 && cursorX.value !== -1) {
-    if (Math.abs(x - cursorX.value) + Math.abs(y - cursorY.value) === 1) {
+    if (x == cursorX.value && y == cursorY.value) {
+      half.value = !half.value;
+    } else if (
+      Math.abs(x - cursorX.value) + Math.abs(y - cursorY.value) ===
+      1
+    ) {
       let d: Direction = 'up';
       if (x === cursorX.value - 1) {
         d = 'up';
@@ -346,10 +358,11 @@ function clickSlot(x: number, y: number, ev?: MouseEvent | KeyboardEvent) {
       }
       const move: Move = {
         type: 'mv',
-        h: false,
+        h: half.value,
         f: [cursorX.value, cursorY.value],
         t: [x, y],
       };
+      half.value = false;
       moveQueue.value.push({
         from: [cursorX.value, cursorY.value],
         d,
@@ -394,8 +407,15 @@ function keyDown(ev: KeyboardEvent) {
       );
     }
   } else if (ev.key == 'q') {
+    ev.preventDefault();
     ws.send(JSON.stringify({ type: 'cm' }));
   } else if (ev.key == 'z') {
+    ev.preventDefault();
+    half.value = !half.value;
+  } else if (ev.key == ' ') {
+    ev.preventDefault();
+    cursorX.value = -1;
+    cursorY.value = -1;
   }
 }
 
@@ -448,12 +468,45 @@ onUnmounted(() => {
       ref="container"
       class="w-100 d-flex justify-center container position-relative"
       @wheel.prevent.stop="handleScroll"
-      @mousemove.prevent="drag"
       @mousedown.prevent="
-        mouseDown = true;
-        mouseMovement = [0, 0];
+        (e) => {
+          mouseDown = true;
+          mousePrevPosition = [e.clientX, e.clientY];
+        }
+      "
+      @touchstart="
+        (e) => {
+          if (e.touches.length == 1) {
+            mouseDown = true;
+            mousePrevPosition = [e.touches[0].clientX, e.touches[0].clientY];
+          } else if (e.touches.length == 2) {
+            touchPointPrevDistance = Math.hypot(
+              e.touches[0].clientX - e.touches[1].clientX,
+              e.touches[0].clientY - e.touches[1].clientY,
+            );
+          }
+        }
       "
       @mouseup.prevent="mouseDown = false"
+      @mousemove.prevent="(e) => drag(e.clientX, e.clientY)"
+      @touchmove.prevent="
+        (e) => {
+          if (e.touches.length == 1) {
+            drag(e.touches[0].clientX, e.touches[0].clientY);
+          } else if (e.touches.length == 2) {
+            const distance = Math.hypot(
+              e.touches[0].clientX - e.touches[1].clientX,
+              e.touches[0].clientY - e.touches[1].clientY,
+            );
+            cellSize = Math.max(
+              30,
+              cellSize * (distance / touchPointPrevDistance),
+            );
+            touchPointPrevDistance = distance;
+          }
+        }
+      "
+      @touchend="mouseDown = false"
     >
       <table ref="table" class="position-relative map">
         <tr v-for="(row, x) in map" :key="x">
@@ -479,9 +532,13 @@ onUnmounted(() => {
             class="border"
             @click="clickSlot(x, y, $event)"
           >
-            <template v-if="unit.a">
+            <template v-if="x == cursorX && y == cursorY && half">
+              50%
+            </template>
+            <template v-else-if="unit.a">
               {{ unit.a }}
             </template>
+
             <template
               v-if="
                 moveQueueDisplay[Number(x)] &&
@@ -513,24 +570,28 @@ onUnmounted(() => {
       <div class="position-absolute top-0 right-0" title="top-right">
         <v-sheet elevation="4">
           <table class="leaderboard">
-            <tr>
-              <td></td>
-              <td>兵</td>
-              <td>城</td>
-              <td>地</td>
-            </tr>
-            <tr v-for="item in leaderboard" :key="item.color">
-              <td
-                :style="{
-                  backgroundColor: item.color,
-                }"
-              >
-                {{ item.name }}
-              </td>
-              <td>{{ item.a }}</td>
-              <td>{{ item.c }}</td>
-              <td>{{ item.l }}</td>
-            </tr>
+            <thead>
+              <tr>
+                <td></td>
+                <td>兵</td>
+                <td>城</td>
+                <td>地</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in leaderboard" :key="item.color">
+                <td
+                  :style="{
+                    backgroundColor: item.color,
+                  }"
+                >
+                  {{ item.name }}
+                </td>
+                <td>{{ item.a }}</td>
+                <td>{{ item.c }}</td>
+                <td>{{ item.l }}</td>
+              </tr>
+            </tbody>
           </table>
         </v-sheet>
       </div>
@@ -554,6 +615,7 @@ table.map td {
   min-height: v-bind(cellSizeStr);
   max-width: v-bind(cellSizeStr);
   max-height: v-bind(cellSizeStr);
+  font-size: v-bind(textSizeStr);
   background-size: cover;
   background-color: dimgray;
   text-shadow: 0 0 2px black;
@@ -564,6 +626,7 @@ table.map td {
   position: relative;
   cursor: default;
   user-select: none;
+  text-overflow: ellipsis;
 }
 
 table.leaderboard {
@@ -578,6 +641,7 @@ table.map {
 .container {
   touch-action: pan-y;
   max-height: 90vh;
+  overflow: clip;
 }
 
 html,

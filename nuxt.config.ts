@@ -73,6 +73,9 @@ export default defineNuxtConfig({
   sitemap: {
     exclude: ['/secret/**', '/admin/**', '/api/**'],
   },
+  devServer: {
+    host: '0.0.0.0',
+  },
   site: {
     url: 'redenmc.com',
   },
