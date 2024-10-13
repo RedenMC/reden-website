@@ -9,7 +9,7 @@ const props = defineProps<{
 }>();
 
 const fatalError = ref('');
-type GameState = 'wait' | 'prepare' | 'play' | 'finish';
+type GameState = 'wait' | 'prepare' | 'play' | 'finish' | 'spectate';
 const state = ref<GameState>(props.state ?? 'wait');
 const room = ref({
   id: 0,
@@ -227,7 +227,7 @@ onMounted(() => {
             list[i].color = colorMap.value[i];
             list[i].name = nameMap.value[i];
           }
-          list.sort((a, b) => a.a - b.a);
+          list.sort((a, b) => b.a - a.a);
           leaderboard.value = list;
           break;
         case 'q':
@@ -251,9 +251,11 @@ onMounted(() => {
           break;
         case '1':
           alert('您赢了！');
+          state.value = 'finish';
           break;
         case '0':
           const name = nameMap.value[packet.k];
+          state.value = 'finish';
           alert(`你被${name}杀死了`);
           break;
       }
