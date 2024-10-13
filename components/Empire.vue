@@ -532,7 +532,8 @@ onUnmounted(() => {
             }"
             :style="{
               backgroundColor:
-                colorMap[unit.o] ?? (visible[x][y] ? '#cccccc' : undefined),
+                colorMap[unit.o] ??
+                (state == 'play' && !visible[x][y] ? undefined : '#cccccc'),
             }"
             class="border"
             @click="clickSlot(x, y, $event)"
