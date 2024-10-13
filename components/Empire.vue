@@ -251,10 +251,12 @@ onMounted(() => {
           break;
         case '1':
           alert('您赢了！');
+          moveQueue.value = [];
           state.value = 'finish';
           break;
         case '0':
           const name = nameMap.value[packet.k];
+          moveQueue.value = [];
           state.value = 'finish';
           alert(`你被${name}杀死了`);
           break;
@@ -319,6 +321,7 @@ let cursorX = ref(-1);
 let cursorY = ref(-1);
 
 function clickSlot(x: number, y: number, ev?: MouseEvent | KeyboardEvent) {
+  if (state.value != 'play') return;
   ev?.preventDefault();
   x = Number(x);
   y = Number(y);
