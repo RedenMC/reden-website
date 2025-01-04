@@ -91,7 +91,7 @@
         "pronouns_desc": "你所用的人称代词",
         "showEmail": "展示邮件地址",
         "showGithub": "展示 GitHub 账号",
-        "showGithub_desc": "Whether to show your GitHub to other users.",
+        "showGithub_desc": "是否向其他用户展示您的GitHub",
         "showMinecraftAccount": "展示 Minecraft 账号",
         "showTimezone": "展示时区"
       },
