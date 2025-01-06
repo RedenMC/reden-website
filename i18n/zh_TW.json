@@ -29,16 +29,29 @@
   },
   "admin": {
     "title": {
-      "users": "All Users"
+      "admin": "管理面板",
+      "users": "全部用戶"
     }
+  },
+  "also_try_our_other_online_services:": "快來試試我們的其他線上服務：",
+  "common": {
+    "back": "返回",
+    "description": "介紹",
+    "name": "名稱",
+    "next": "下一步",
+    "save": "儲存",
+    "summary": "簡介"
   },
   "en": "English",
   "litematica_generator": {
+    "chunks": "區塊",
     "contribute": "想要你的機器（例如世界吞噬者）被收錄在這裡？現在就為 Reden 做出貢獻！聯絡我傳送郵件至",
-    "description": "在這裡線上生成投影檔案，例如世界吞噬者",
+    "description": "在這裡線上生成《我的世界》投影檔案，不管是世界吞噬者、破基岩機還是盾構機，這裡都可以生成。任意形狀大小。生成全部免費！",
     "download": "下載",
     "download_count": "{count} 次下載",
+    "not_found": "未找到投影 {name}！",
     "not_logged_in": "遊客使用者每分鐘只能生成 5 次，登入後解鎖此限制",
+    "og_description": "生成我的世界紅石機器投影，包括世吞、盾構等，支援任意大小，完全免費！",
     "select": "今天你想生成什麼？",
     "size_description": "機器的 x, y, z 尺寸。對於世界吞噬者，z 尺寸是出發站和返回站之間的距離。",
     "size_max": "機器的最大尺寸為 {size}",
@@ -47,7 +60,16 @@
     "size_x": "x 方向尺寸",
     "size_y": "y 方向尺寸",
     "size_z": "z 方向尺寸",
-    "title": "投影藍圖線上生成器"
+    "suggested_values": "建議選擇：",
+    "suggestion_notice": "建議值僅供參考，可能無法正確生成有效投影",
+    "title": "投影藍圖線上生成器",
+    "total_downloads": "我們已累計提供 {0} 次下載服務。",
+    "upload": {
+      "button_msg": "上傳你的機器",
+      "edit_or_improve_translation": "編輯此機器或改進其翻譯"
+    },
+    "view_all_designs": "查看所有可生成的機器",
+    "web_title": "在線生成{name} - Reden投影藍圖線上生成器"
   },
   "login": {
     "button": {
@@ -59,6 +81,66 @@
     "or": "或者",
     "register": "去註冊",
     "title": "登入 Reden"
+  },
+  "page404": {
+    "back": "返回上一頁",
+    "evolving": "你要找的頁面並不存在，我們的網站正在進化中……",
+    "help": "幫助建設我們的網站！",
+    "title": "頁面沒有找到"
+  },
+  "profile": {
+    "edit": {
+      "back": "返回個人資料頁",
+      "basic_information": "基本資訊",
+      "bio": "個人簡介",
+      "bio_desc": "介紹你自己",
+      "changeEmail": "修改郵件地址",
+      "email_desc": "你註冊時使用的信箱，用於接收我們的帳號安全資訊，比如重置密碼",
+      "failed_to_save_information": "儲存資訊失敗",
+      "information_saved": "資訊已儲存",
+      "password": {
+        "changePassword": "修改密碼",
+        "confirm": "確認新密碼",
+        "desc": "你可以在此修改密碼",
+        "first": "你還沒有設定密碼，為了帳號安全請儘快設定密碼。",
+        "mew": "新密碼",
+        "old": "舊密碼",
+        "passwordsDoNotMatch": "密碼不一致",
+        "requirements": "密碼必須包含至少8個字元，同時包含數字和字母",
+        "title": "密碼"
+      },
+      "preference": {
+        "pronouns": "代詞",
+        "pronouns_desc": "你所用的人稱代詞",
+        "showEmail": "展示郵件地址",
+        "show_email_desc": "是否像其他人展示你的電子郵件。",
+        "show_github": "展示 GitHub 帳號",
+        "show_github_desc": "是否像其他人顯示你的GitHub帳號",
+        "show_minecraft_uuid": "展示 Minecraft 帳號",
+        "show_minecraft_uuid_desc": "是否像其他人展示你的Minecraft UUID。",
+        "show_timezone": "展示時區",
+        "show_timezone_desc": "是否向其他人顯示你的時區。",
+        "timezone": "時區",
+        "timezone_desc": "你的時區。"
+      },
+      "preferences": "偏好設定",
+      "preferencesSaved": "偏好設定已儲存",
+      "save": "儲存",
+      "save_preferences": "儲存偏好設定",
+      "success": "操作成功",
+      "third_party_accounts": "第三方帳號",
+      "username": "使用者名稱",
+      "username_desc": "這是你用來登入的使用者名稱，你每48小時只可以修改一次。",
+      "username_timer": "你可以在{0}小時後修改使用者名稱"
+    },
+    "editProfile": "編輯個人資料",
+    "my_backup": "我的雲備份",
+    "oauth": {
+      "link_account": "連接帳戶",
+      "unlink_account": "取消連接"
+    },
+    "password": "密碼",
+    "username": "使用者名稱"
   },
   "reden": {
     "description": "為紅石機器開發者提供一站式工作環境，成為最好的紅石調試和教學工具。",
@@ -74,8 +156,8 @@
         "youtube": "Youtube"
       },
       "reden_community": {
-        "community_events": "社區活動",
-        "community_guidelines": "社區指南",
+        "community_events": "社群活動",
+        "community_guidelines": "社群指南",
         "discord": "Discord",
         "title": "Reden 社區"
       },
@@ -90,15 +172,18 @@
         "rvc": "Reden 版本控制 (RVC)",
         "title": "Reden Mod",
         "undo_redo": "撤銷 & 重作"
+      },
+      "social": {
+        "title": "社群媒體"
       }
     },
     "home": {
       "community_intro": {
-        "discord": "加入我們的 Discord 伺服器，與其他紅石開發者們聊天並從社區獲得幫助。",
-        "open_source": "Reden 是一個開源項目，對所有人免費。我們歡迎所有人為 Reden 做出貢獻，包括代碼、文檔、Wiki 等。",
-        "sponsor": "Reden 得到了社區的贊助。我們感謝每一位支持我們的贊助者。",
-        "title": "社區",
-        "wiki": "Reden Wiki 幾乎包含了您需要了解的關於紅石和 Reden 的所有內容。這也是與社區分享知識的好地方。"
+        "discord": "加入我們的 Discord 伺服器，與其他紅石開發者們聊天並從社群獲得幫助。",
+        "open_source": "Reden 是一個開源專案，對所有人免費。我們歡迎所有人為 Reden 做出貢獻，包括代碼、文檔、Wiki 等。",
+        "sponsor": "Reden 得到了社群的贊助。我們感謝每一位支持我們的贊助者。",
+        "title": "社群",
+        "wiki": "Reden Wiki 幾乎包含了您需要了解的關於紅石和 Reden 的所有內容。這也是與社群分享知識的好地方。"
       },
       "feature_intro": {
         "debugger": "搞不清楚為什麼您的紅石裝置不工作？Reden 調試器可以幫助您查看遊戲如何處理您的紅石裝置。",
@@ -110,14 +195,18 @@
     "learn_more": "了解更多",
     "my_account": "我的帳號",
     "title": {
+      "404": "404 找不到頁面",
       "debugger": "Reden Debugger",
       "download": "Download",
-      "edit_profile": "Edit Profile",
+      "edit_profile": "編輯個人資料",
+      "features": "功能",
       "home": "首頁",
+      "home_full": "首頁 - 超級我的世界生電輔助mod",
       "my_account": "My Account",
       "rvc": "RVC",
       "undo": "Undo"
     },
+    "user_not_found": "未找到用戶",
     "wiki": "Wiki"
   },
   "register": {
@@ -135,7 +224,7 @@
       "email": "無效的電子郵件",
       "password": {
         "mismatching": "密碼不符",
-        "strength": "密碼需使用至少8個字符（大寫、小寫以及數字）"
+        "strength": "密碼需使用至少8個字元（大寫、小寫以及數字）"
       },
       "username": "無效用戶名"
     },
@@ -171,6 +260,38 @@
     "notice": "Reden 是一個開源專案，永遠對所有人免費。我們沒有從任何公司或組織獲得資金。我們依靠您的支持來維持專案運行。當您支持我們時，您會在此頁面被列出，因此請確保在您捐款時提供您的姓名和電子郵件。感謝您的支持！",
     "paypal": "使用 PayPal 支援我們",
     "title": "贊助者"
+  },
+  "upload": {
+    "btn": {
+      "finish_editing": "完成編輯",
+      "select_files": "選擇檔案",
+      "start_uploading": "完成並上傳",
+      "upload_design": "上傳機器設計"
+    },
+    "desc": {
+      "design_maximal_file_size": "最大檔案大小：100MB",
+      "design_supports_file_formats": "支援的檔案格式：.litematica .schem .zip 等",
+      "existing_machine_design": "你正在編輯一個已有的機器設計。上傳新檔案將覆蓋現有檔案。",
+      "id_can_only_contain": "ID 只能包含 a-z, 0-9, - and _",
+      "id_is_taken": "此 ID 已被佔用",
+      "litematica_generator_only_support_uploading_1_litematica_file": "投影生成器模式只支援上傳單個投影檔案",
+      "maximum_size_per_image": "單張圖片最大 2MB",
+      "name_cannot_contain_special_characters": "名稱不能包含特殊字元",
+      "please_contact_us_if_you_have_any_questions": "如有任何疑問，請聯絡我們：",
+      "please_select_which_language_to_edit": "請選擇要編輯哪種語言的資訊",
+      "review_usually_takes_one_to_two_days": "審核通常需要一到二天時間。",
+      "selected_count_files": "已選擇 {count} 個檔案",
+      "upload_images": "上傳圖片 (最多3張)",
+      "upload_schematic_or_world_save": "上傳藍圖或存檔",
+      "you_will_receive_an_email_notification_when_approved": "當審核通過後，您將收到郵件通知。",
+      "your_machine_design_is_under_review_please_wait_with_patience": "您的機器設計正在審核中，請耐心等待。"
+    },
+    "step": {
+      "image": "上傳圖像",
+      "translation": "基本資訊",
+      "under-review": "等待審核",
+      "upload": "上傳"
+    }
   },
   "user": {
     "contributor": "貢獻者",

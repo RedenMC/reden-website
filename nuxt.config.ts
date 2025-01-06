@@ -8,6 +8,7 @@ export default defineNuxtConfig({
   build: {
     transpile: ['vuetify'],
   },
+  extends: '@nuxt-themes/docus',
   modules: [
     '@pinia/nuxt',
     '@nuxtjs/i18n',
@@ -28,6 +29,12 @@ export default defineNuxtConfig({
     },
     api: {
       baseURL: '/_my_content',
+    },
+    markdown: {
+      toc: {
+        depth: 3,
+        searchDepth: 2,
+      },
     },
   },
   i18n: {
@@ -53,16 +60,6 @@ export default defineNuxtConfig({
         transformAssetUrls,
       },
     },
-    // server: {
-    //   proxy: {
-    //     '/api': 'https://api.redenmc.com/api/**',
-    //     '/ws': {
-    //       target: 'ws://localhost:10005',
-    //       ws: true,
-    //       rewriteWsOrigin: true,
-    //     },
-    //   },
-    // },
   },
   features: {
     inlineStyles: false,

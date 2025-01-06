@@ -34,6 +34,7 @@ const props = defineProps<
   NuxtLinkProps & {
     noExternalIcon?: boolean;
     inactiveClass?: string;
+    noClass?: boolean;
   }
 >();
 
@@ -58,7 +59,7 @@ const isExternalLink = computed(
     v-bind="$props"
     :to="props.to"
     custom
-    class="router"
+    :class="{ router: !noClass }"
     v-slot="{ isActive, href, navigate }"
   >
     <a
