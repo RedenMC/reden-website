@@ -196,13 +196,13 @@
     "my_account": "我的帳號",
     "title": {
       "404": "404 找不到頁面",
-      "debugger": "Reden Debugger",
-      "download": "Download",
+      "debugger": "Reden 調試器",
+      "download": "下載",
       "edit_profile": "編輯個人資料",
       "features": "功能",
       "home": "首頁",
       "home_full": "首頁 - 超級我的世界生電輔助mod",
-      "my_account": "My Account",
+      "my_account": "我的帳號",
       "rvc": "RVC",
       "undo": "Undo"
     },
@@ -274,7 +274,6 @@
       "existing_machine_design": "你正在編輯一個已有的機器設計。上傳新檔案將覆蓋現有檔案。",
       "id_can_only_contain": "ID 只能包含 a-z, 0-9, - and _",
       "id_is_taken": "此 ID 已被佔用",
-      "litematica_generator_only_support_uploading_1_litematica_file": "投影生成器模式只支援上傳單個投影檔案",
       "maximum_size_per_image": "單張圖片最大 2MB",
       "name_cannot_contain_special_characters": "名稱不能包含特殊字元",
       "please_contact_us_if_you_have_any_questions": "如有任何疑問，請聯絡我們：",
@@ -303,6 +302,6 @@
     "staff": "管理員",
     "staff_hover": "此用戶是本項目的管理員"
   },
-  "zh_cn": "简体中文(中国大陆)",
-  "zh_tw": "繁體中文(中國台灣)"
+  "zh_cn": "简体中文",
+  "zh_tw": "繁體中文"
 }

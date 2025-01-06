@@ -1,6 +1,9 @@
 <script lang="ts" setup>
 import type { I18nHeadMetaInfo } from '@nuxtjs/i18n';
+import { useTheme } from 'vuetify';
 
+const theme = useTheme();
+const currentTheme = computed(() => theme.current.value);
 const i18nHead: Ref<I18nHeadMetaInfo> = useLocaleHead({
   seo: { canonicalQueries: [''] },
 });
