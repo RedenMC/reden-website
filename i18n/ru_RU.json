@@ -109,6 +109,7 @@
     "learn_more": "Learn More",
     "my_account": "My Account",
     "title": {
+      "404": "",
       "debugger": "Reden Debugger",
       "download": "Download",
       "edit_profile": "Edit Profile",

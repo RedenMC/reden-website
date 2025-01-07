@@ -22,11 +22,7 @@ export default defineNuxtConfig({
     },
   ],
   content: {
-    experimental: {
-      search: {
-        indexed: true,
-      },
-    },
+    documentDriven: true,
     api: {
       baseURL: '/_my_content',
     },

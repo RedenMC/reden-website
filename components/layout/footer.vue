@@ -3,6 +3,7 @@ import { discordInvite, githubLink, zh_cn } from '~/utils/constants';
 
 const localePath = useLocalePath();
 const switchLocalePath = useSwitchLocalePath();
+const { locale } = useI18n();
 </script>
 
 <template>

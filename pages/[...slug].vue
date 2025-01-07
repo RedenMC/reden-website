@@ -15,44 +15,46 @@ const goToDocs = async (id: string) => {
   });
   drawer.value = !mdAndDown.value;
 };
+
+const { navigation, page, toc } = useContent();
 definePageMeta({
-  layout: false,
+  layout: 'page',
 });
 </script>
 
 <template>
-  <ContentDoc v-slot="{ doc }">
-    <NuxtLayout name="default">
-      <template #sidebars>
-        <v-navigation-drawer
-          v-model="drawer"
-          :temporary="mdAndDown"
-          mobile-breakpoint="md"
-        >
-          Table of Contents
-          <ul>
-            <li v-for="link of doc?.body?.toc?.links" :key="link.id">
-              <a :href="`#${link.id}`" @click.prevent="goToDocs(link.id)">{{
-                link.text
-              }}</a>
-              <ul>
-                <li v-for="link1 of link.children" :key="link1.id">
-                  <a
-                    :href="`#${link1.id}`"
-                    @click.prevent="goToDocs(link.id)"
-                    >{{ link1.text }}</a
-                  >
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </v-navigation-drawer>
-      </template>
-      <template #default>
-        <ContentRenderer id="passage-container" :value="doc" />
-      </template>
-    </NuxtLayout>
-  </ContentDoc>
+  <v-layout>
+    <ContentDoc v-slot="{ doc }">
+      <!--    <NuxtLayout name="default">-->
+      <!--      <template #sidebars>-->
+      <v-navigation-drawer
+        v-model="drawer"
+        :temporary="mdAndDown"
+        mobile-breakpoint="md"
+      >
+        Table of Contents
+        <ul>
+          <li v-for="link of doc?.body?.toc?.links" :key="link.id">
+            <a :href="`#${link.id}`" @click.prevent="goToDocs(link.id)">{{
+              link.text
+            }}</a>
+            <ul>
+              <li v-for="link1 of link.children" :key="link1.id">
+                <a :href="`#${link1.id}`" @click.prevent="goToDocs(link.id)">{{
+                  link1.text
+                }}</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </v-navigation-drawer>
+      <!--      </template>-->
+      <!--      <template #default>-->
+      <ContentRenderer id="passage-container" :value="doc" />
+      <!--      </template>-->
+      <!--    </NuxtLayout>-->
+    </ContentDoc>
+  </v-layout>
 </template>
 
 <style scoped>
