@@ -35,8 +35,10 @@
   },
   "also_try_our_other_online_services:": "快來試試我們的其他線上服務：",
   "common": {
+    "and": "and",
     "back": "返回",
     "description": "介紹",
+    "link": "Link",
     "name": "名稱",
     "next": "下一步",
     "save": "儲存",
@@ -44,6 +46,16 @@
   },
   "en": "English",
   "litematica_generator": {
+    "by": {
+      "author": "By",
+      "complaint": "If you are the original author and want to claim this design, please",
+      "reason_uploaded": "This design is uploaded",
+      "reason_uploaded_a": "a) because it has been published in public domain or",
+      "reason_uploaded_b": "b) imported from an archive discord or",
+      "reason_uploaded_c": "c) permitted by the original author.",
+      "uploader": "Posted by",
+      "uploader_not_original_author": "The uploader of this design is not the original author."
+    },
     "chunks": "區塊",
     "contribute": "想要你的機器（例如世界吞噬者）被收錄在這裡？現在就為 Reden 做出貢獻！聯絡我傳送郵件至",
     "description": "在這裡線上生成《我的世界》投影檔案，不管是世界吞噬者、破基岩機還是潛盾機，這裡都可以生成。任意形狀大小。生成全部免費！",
@@ -143,12 +155,13 @@
     "username": "使用者名稱"
   },
   "reden": {
-    "description": "為紅石機器開發者提供一站式工作環境，成為最好的紅石調試和教學工具。",
+    "description": "Your one-stop destination for sharing Minecraft builds, exploring creative designs, and enhancing gameplay with cutting-edge redstone mods.",
     "download": "下載",
     "download_page": {
       "sorry_constructing": "抱歉，我們的下載頁面正在建設中，我們建議您前往此處下載："
     },
     "footer": {
+      "are_both_free_software": "are both free software.",
       "follow_us": {
         "bilibili": "Bilibili",
         "blog": "部落格",
@@ -158,6 +171,7 @@
       "reden_community": {
         "community_events": "社群活動",
         "community_guidelines": "社群指南",
+        "copyright_complaint": "Copyright Complaint",
         "discord": "Discord",
         "title": "Reden 社區"
       },
@@ -175,7 +189,18 @@
       },
       "social": {
         "title": "社群媒體"
-      }
+      },
+      "this_website": "this website"
+    },
+    "header": {
+      "explore": "Explore",
+      "home": "Home",
+      "mod": "Features",
+      "my_machines": "My Machines",
+      "my_profile": "My Profile",
+      "my_stars": "My Stars",
+      "search": "Search",
+      "upload": "upload"
     },
     "home": {
       "community_intro": {
@@ -190,12 +215,14 @@
         "rvc": "RVC（Reden 版本控制）是專為紅石設計的版本控制系統。它可以讓您輕鬆管理所有版本的紅石專案。",
         "title": "功能介紹",
         "undo": "不小心出錯了？Reden 可以通過按下 Ctrl+Z 快速撤銷您的操作。所有連鎖反應都將被撤銷。"
-      }
+      },
+      "go_litematica": "MC Builds"
     },
     "learn_more": "了解更多",
     "my_account": "我的帳號",
     "title": {
       "404": "404 找不到頁面",
+      "copyright_complaint": "Copyright Complaint",
       "debugger": "Reden 調試器",
       "download": "下載",
       "edit_profile": "編輯個人資料",
@@ -273,8 +300,12 @@
       "design_maximal_file_size": "最大檔案大小：100MB",
       "design_supports_file_formats": "支援的檔案格式：.litematica .schem .zip 等",
       "existing_machine_design": "你正在編輯一個已有的機器設計。上傳新檔案將覆蓋現有檔案。",
+      "i_am_not_the_author": "This machine has been published in public domain or I have the right to publish it",
+      "i_am_the_author": "I am the author",
       "id_can_only_contain": "ID 只能包含 a-z, 0-9, - and _",
       "id_is_taken": "此 ID 已被佔用",
+      "litematica_generator": "Litematica Generator",
+      "litematica_generator_only_support_uploading_1_litematica_file": "Litematica generator mode only support uploading 1 litematica file",
       "maximum_size_per_image": "單張圖片最大 2MB",
       "name_cannot_contain_special_characters": "名稱不能包含特殊字元",
       "please_contact_us_if_you_have_any_questions": "如有任何疑問，請聯絡我們：",
@@ -294,6 +325,8 @@
     }
   },
   "user": {
+    "archiver": "Archiver",
+    "archiver_hover": "This user is an archiver who have rights to upload posts without review",
     "contributor": "貢獻者",
     "contributor_hover": "此用戶參與過本項目的開發",
     "developer": "開發者",

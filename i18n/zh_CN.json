@@ -38,7 +38,7 @@
     "and": "和",
     "back": "返回",
     "description": "介绍",
-    "link": "链接",
+    "link": "Link",
     "name": "名称",
     "next": "下一步",
     "save": "保存",
@@ -155,7 +155,7 @@
     "username": "用户名"
   },
   "reden": {
-    "description": "为红石机器开发者提供一站式工作环境，探索各种创意设计和前沿红石科技。",
+    "description": "Your one-stop destination for sharing Minecraft builds, exploring creative designs, and enhancing gameplay with cutting-edge redstone mods.",
     "download": "下载",
     "download_page": {
       "sorry_constructing": "抱歉，我们的下载页面正在建设中，我们建议您前往此处下载："
@@ -193,14 +193,14 @@
       "this_website": "这个网站"
     },
     "header": {
-      "explore": "下载投影",
-      "home": "首页",
-      "mod": "模组",
-      "my_machines": "我的机器",
-      "my_profile": "我的账号",
-      "my_stars": "我的收藏",
-      "search": "搜索",
-      "upload": "投稿"
+      "explore": "Explore",
+      "home": "Home",
+      "mod": "Features",
+      "my_machines": "My Machines",
+      "my_profile": "My Profile",
+      "my_stars": "My Stars",
+      "search": "Search",
+      "upload": "upload"
     },
     "home": {
       "community_intro": {
@@ -216,7 +216,7 @@
         "title": "功能介绍",
         "undo": "不小心出了错？Reden 可以通过按下 Ctrl+Z 快速撤销您的操作。所有连锁反应都将被撤销。"
       },
-      "go_litematica": "下载投影"
+      "go_litematica": "MC Builds"
     },
     "learn_more": "了解更多",
     "my_account": "我的账户",
@@ -300,13 +300,12 @@
       "design_maximal_file_size": "最大文件大小：100MB",
       "design_supports_file_formats": "支持的文件格式：.litematica .schem .zip 等",
       "existing_machine_design": "你正在编辑一个已有的机器设计。上传新文件将覆盖现有文件。",
-      "i_am_not_the_author": "此机器属于公共领域，或我有权发布",
-      "i_am_the_author": "我是作者",
+      "i_am_not_the_author": "This machine has been published in public domain or I have the right to publish it",
+      "i_am_the_author": "I am the author",
       "id_can_only_contain": "ID 只能包含 a-z, 0-9, - and _",
       "id_is_taken": "此 ID 已被占用",
-      "litematica_generator": "投影生成器",
+      "litematica_generator": "Litematica Generator",
       "litematica_generator_only_support_uploading_1_litematica_file": "投影生成器模式只支持上传单个投影文件",
-      "manual_upload": "普通机器投稿",
       "maximum_size_per_image": "单张图片最大 2MB",
       "name_cannot_contain_special_characters": "名称不能包含特殊字符",
       "please_contact_us_if_you_have_any_questions": "如有任何疑问，请联系我们：",
@@ -326,8 +325,8 @@
     }
   },
   "user": {
-    "archiver": "归档员",
-    "archiver_hover": "此用户是归档员，可以免审核上传稿件",
+    "archiver": "Archiver",
+    "archiver_hover": "This user is an archiver who have rights to upload posts without review",
     "contributor": "贡献者",
     "contributor_hover": "此用户参与过本项目的开发",
     "developer": "开发者",

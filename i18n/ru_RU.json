@@ -35,8 +35,10 @@
   },
   "also_try_our_other_online_services:": "Также попробуйте другие наши онлайн-сервисы:",
   "common": {
+    "and": "and",
     "back": "Назад",
     "description": "Описание",
+    "link": "Link",
     "name": "Имя",
     "next": "Далее",
     "save": "Сохранить",
@@ -44,6 +46,16 @@
   },
   "en": "English",
   "litematica_generator": {
+    "by": {
+      "author": "By",
+      "complaint": "If you are the original author and want to claim this design, please",
+      "reason_uploaded": "This design is uploaded",
+      "reason_uploaded_a": "a) because it has been published in public domain or",
+      "reason_uploaded_b": "b) imported from an archive discord or",
+      "reason_uploaded_c": "c) permitted by the original author.",
+      "uploader": "Posted by",
+      "uploader_not_original_author": "The uploader of this design is not the original author."
+    },
     "chunks": "чанки",
     "contribute": "Хотите, чтобы ваши собственные механизмы, такие как ворлд итеры, были представлены на сайте? Присоединяйтесь к Reden сейчас! Для дополнительной информации, пожалуйста, напишите мне на почту",
     "description": "Генерируйте схемы онлайн для механизмов из слизи, таких как ворлд итеры или туннельные буры. Это совершенно бесплатно",
@@ -143,12 +155,13 @@
     "username": "Имя пользователя"
   },
   "reden": {
-    "description": "Предоставьте универсальную рабочую среду для разработчиков редстоуна и станьте лучшим инструментом для отладки и обучения редстоуну.",
+    "description": "Your one-stop destination for sharing Minecraft builds, exploring creative designs, and enhancing gameplay with cutting-edge redstone mods.",
     "download": "Скачать",
     "download_page": {
       "sorry_constructing": "Извините, наша страница загрузки находится в разработке, мы предлагаем вам скачать по адресу"
     },
     "footer": {
+      "are_both_free_software": "are both free software.",
       "follow_us": {
         "bilibili": "Bilibili",
         "blog": "Блог",
@@ -158,6 +171,7 @@
       "reden_community": {
         "community_events": "События сообщества",
         "community_guidelines": "Руководство сообщества",
+        "copyright_complaint": "Copyright Complaint",
         "discord": "Дискорд",
         "title": "Сообщество Reden"
       },
@@ -175,7 +189,18 @@
       },
       "social": {
         "title": "Социальные сети"
-      }
+      },
+      "this_website": "this website"
+    },
+    "header": {
+      "explore": "Explore",
+      "home": "Home",
+      "mod": "Features",
+      "my_machines": "My Machines",
+      "my_profile": "My Profile",
+      "my_stars": "My Stars",
+      "search": "Search",
+      "upload": "upload"
     },
     "home": {
       "community_intro": {
@@ -190,12 +215,14 @@
         "rvc": "RVC (Система контроля версий Reden) - это система контроля версий, разработанная для редстоуна. Она позволяет вам с легкостью управлять своими редстоун-проектами во всех версиях.",
         "title": "Функции",
         "undo": "Совершили ошибку? Reden может быстро отменить ваши действия, просто нажав Ctrl+Z. Все цепные реакции будут отменены."
-      }
+      },
+      "go_litematica": "MC Builds"
     },
     "learn_more": "Узнать больше",
     "my_account": "Мой аккаунт",
     "title": {
       "404": "404 Не найдено",
+      "copyright_complaint": "Copyright Complaint",
       "debugger": "Отладчик Reden",
       "download": "Скачать",
       "edit_profile": "Редактировать профиль",
@@ -273,8 +300,12 @@
       "design_maximal_file_size": "Максимальный размер файла: 100 МБ",
       "design_supports_file_formats": "Поддерживаемые форматы файлов: .litematica .schem .zip и т. д.",
       "existing_machine_design": "Вы редактируете существующий дизайн машины.\n Загрузка нового файла перезапишет существующий.",
+      "i_am_not_the_author": "This machine has been published in public domain or I have the right to publish it",
+      "i_am_the_author": "I am the author",
       "id_can_only_contain": "ID может содержать только a-z, 0-9, - и _",
       "id_is_taken": "ID занят, пожалуйста, выберите другой",
+      "litematica_generator": "Litematica Generator",
+      "litematica_generator_only_support_uploading_1_litematica_file": "Litematica generator mode only support uploading 1 litematica file",
       "maximum_size_per_image": "Максимум 2 МБ на изображение",
       "name_cannot_contain_special_characters": "Имя не может содержать специальные символы",
       "please_contact_us_if_you_have_any_questions": "Пожалуйста, свяжитесь с нами, если у вас есть какие-либо вопросы:",
@@ -294,6 +325,8 @@
     }
   },
   "user": {
+    "archiver": "Archiver",
+    "archiver_hover": "This user is an archiver who have rights to upload posts without review",
     "contributor": "Участник",
     "contributor_hover": "Этот пользователь внес вклад в этот проект",
     "developer": "Разработчик",
