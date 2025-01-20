@@ -8,6 +8,7 @@ const currentRoute = useRoute();
 const props = defineProps<{
   item: Partial<MachineDef>;
   maxWidth?: number;
+  hideAuthorInfo?: boolean;
 }>();
 const { mobile: _mobile } = useDisplay({
   mobileBreakpoint: 1,
@@ -43,7 +44,7 @@ const tags = computed(
   >
     <v-img v-if="!mobile" :src="item.thumbnailUrl" class="thumbnail-img" />
     <v-card-title class="card-title text-3lines">{{ item.name }}</v-card-title>
-    <v-card-subtitle class="opacity-100">
+    <v-card-subtitle v-if="!hideAuthorInfo" class="opacity-100">
       <div class="d-flex flex-row author-line" style="line-height: 24px">
         <span class="mr-1">
           {{

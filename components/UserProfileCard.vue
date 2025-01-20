@@ -217,8 +217,8 @@ function deleteAvatar() {
 </template>
 <style scoped>
 .profile-card {
-  margin: 20px;
   width: 300px;
+  min-width: 300px;
 }
 
 .user-name {

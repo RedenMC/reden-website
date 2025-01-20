@@ -14,7 +14,7 @@ const displayedMachines = computed(() => {
 </script>
 
 <template>
-  <v-card :elevation="10" class="user-content-panel">
+  <v-card :elevation="10" variant="flat" class="flex-1-1-0">
     <div class="profile-card-content">
       <v-card-title>
         <h2>{{ t('profile.user_content') }}</h2>
@@ -24,8 +24,8 @@ const displayedMachines = computed(() => {
           <v-list-item
             v-for="machine in displayedMachines"
             :key="machine.key"
-            :title="machine.name"
             :subtitle="machine.summary"
+            :title="machine.name"
           >
             <template #prepend>
               <v-icon>mdi-redstone</v-icon>
@@ -45,15 +45,6 @@ const displayedMachines = computed(() => {
 </template>
 
 <style scoped>
-.user-content-panel {
-  margin: 20px;
-  width: 100%;
-  max-width: 800px;
-  background: rgb(var(--v-theme-surface));
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
 .profile-card-content {
   padding: 16px;
 }
