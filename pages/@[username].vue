@@ -1,13 +1,17 @@
 <script lang="ts" setup>
 import UserProfileCard from '@/components/UserProfileCard.vue';
+import UserContentPanel from '@/components/profile/UserContentPanel.vue';
 import { useRoute } from 'vue-router';
-import type { ListLitematicaResponse } from '~/pages/litematica/index.vue';
+import { useI18n } from 'vue-i18n';
+import { ref, watch } from 'vue';
 
 const route = useRoute();
 const { t } = useI18n();
+
 const { data: user, error } = await useFetchUserGet(
-  route.params.username as string,
+  route.params.username as string
 );
+
 useHead({
   title: `${user?.value?.username ?? t('reden.user_not_found')} - Reden`,
 });
@@ -18,15 +22,31 @@ watch(user, () => {
   });
 });
 
-const { data: machines } = await useFetch<ListLitematicaResponse>(
-  `/api/mc-services/litematica/by-author`,
-  {
-    query: {
-      author: user.value?.username ?? '',
-      pageSize: 10,
-    },
-  },
-);
+const machines = ref<any[]>([]);
+
+const loadMachines = async () => {
+  if (!user.value?.username) return;
+
+  try {
+    const response = await fetch(
+      `/api/mc-services/litematica/by-author?author=${user.value.username}`
+    );
+    const data = await response.json();
+
+    if (data.hits) {
+      machines.value = Object.values(data.hits).map((machine: any) => ({
+        key: machine.key,
+        name: machine.name,
+        summary: machine.summary,
+        downloads: machine.downloads,
+      }));
+    }
+  } catch (error) {
+    console.error('Failed to load machines:', error);
+  }
+};
+
+loadMachines();
 </script>
 
 <template>
@@ -48,8 +68,27 @@ const { data: machines } = await useFetch<ListLitematicaResponse>(
     <v-alert v-show="!user" dismissible type="error">
       Cannot find user
     </v-alert>
-    <UserProfileCard v-show="user" :can-edit="false" :user="user" />
+    <div class="user-profile-container">
+      <UserProfileCard v-show="user" :can-edit="false" :user="user" />
+      <UserContentPanel :machines="machines" />
+    </div>
   </v-card>
 </template>
 
-<style scoped></style>
+<style scoped>
+.user-profile-container {
+  display: flex;
+  gap: 4%;
+  padding: 20px;
+}
+
+.user-profile-container > .profile-card {
+  flex: 1;
+  max-width: 20%;
+}
+
+.user-profile-container > .user-content-panel {
+  flex: 4;
+  max-width: 76%;
+}
+</style>
