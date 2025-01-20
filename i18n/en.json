@@ -148,6 +148,7 @@
       "username_timer": "You can change your username again in {0} hours"
     },
     "editProfile": "Edit Profile",
+    "microsoft_checked_verifying_minecraft": "Microsoft account checked, verifying Minecraft ownership...",
     "my_backup": "My Cloud Backups",
     "oauth": {
       "link_account": "Link Account",

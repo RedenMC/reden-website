@@ -10,6 +10,7 @@ const { user, showActions } = defineProps<{
 const status = ref('');
 const verifyingMinecraft = ref(false);
 const mustLinkMicrosoft = ref(false);
+const { t } = useI18n();
 
 function verifyMinecraft() {
   verifyingMinecraft.value = true;
@@ -18,8 +19,7 @@ function verifyMinecraft() {
   doFetchGet('/api/account/microsoft')
     .then((response) => {
       if (response.ok) {
-        status.value =
-          'Microsoft account checked, verifying Minecraft ownership...';
+        status.value = t('profile.microsoft_checked_verifying_minecraft');
         doFetchGet('/api/account/minecraft/verify')
           .then((response) => {
             if (response.ok) {
