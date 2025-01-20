@@ -1,3 +1,4 @@
+
 <script lang="ts" setup>
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -38,20 +39,20 @@ const itemDisplayCols = computed<Column[]>(() => {
   return cols;
 });
 </script>
-
 <template>
-  <v-card :elevation="10" variant="flat" class="flex-1-1-0">
+  <v-card :elevation="10" class="user-content-panel">
     <div class="profile-card-content">
       <v-card-title>
-        <h2>{{ t('我的投影') }}</h2>
+        <h2>{{ t('用户内容') }}</h2>
       </v-card-title>
       <v-card-text>
-        <v-list v-if="displayedMachines.length">
-          <v-list-item
-            v-for="machine in displayedMachines"
-            :key="machine.key"
-            :title="machine.name"
-            :subtitle="machine.summary"
+        <v-row v-if="displayedMachines.length" class="ma-n2">
+          <v-col
+            v-for="col in itemDisplayCols"
+            :key="col.key"
+            :cols="12 / itemsPerRow"
+            align="start"
+            justify="center"
           >
             <MinecraftFarmCard
               v-for="machine in col.def"
@@ -79,44 +80,9 @@ const itemDisplayCols = computed<Column[]>(() => {
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
-
-.profile-card-content {
-  padding: 16px;
-}
-
-.v-card-title h2 {
-  font-size: 1.5em;
-  font-weight: bold;
-  margin-bottom: 16px;
-  color: rgb(var(--v-theme-on-surface));
-}
-
-.v-list {
-  background: transparent;
-}
-
-.v-list-item {
-  margin-bottom: 8px;
-  border-radius: 4px;
-  background: rgb(var(--v-theme-surface-lighten-1));
-  transition: background 0.3s ease;
-}
-
-.v-list-item:hover {
-  background: rgb(var(--v-theme-surface-lighten-2));
-}
-
-.v-icon {
-  margin-right: 8px;
-  color: rgb(var(--v-theme-primary));
-}
-
-.v-chip {
-  background: rgb(var(--v-theme-primary));
-  color: rgb(var(--v-theme-on-primary));
-}
-
-.v-alert {
-  margin-top: 16px;
+@media (max-width: 600px) {
+  .v-col {
+    padding: 3px !important;
+  }
 }
 </style>
