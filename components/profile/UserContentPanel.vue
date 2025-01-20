@@ -1,4 +1,3 @@
-
 <script lang="ts" setup>
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -40,7 +39,7 @@ const itemDisplayCols = computed<Column[]>(() => {
 });
 </script>
 <template>
-  <v-card :elevation="10" class="user-content-panel">
+  <v-card :elevation="10" class="user-content-panel flex-1-1-0">
     <div class="profile-card-content">
       <v-card-title>
         <h2>{{ t('用户内容') }}</h2>
@@ -59,6 +58,7 @@ const itemDisplayCols = computed<Column[]>(() => {
               :key="machine.key"
               :item="machine"
               class="mt-4"
+              hide-author-info
             />
           </v-col>
         </v-row>
@@ -70,19 +70,3 @@ const itemDisplayCols = computed<Column[]>(() => {
     </div>
   </v-card>
 </template>
-
-<style scoped>
-.user-content-panel {
-  margin: 20px;
-  width: 100%;
-  max-width: 800px;
-  background: rgb(var(--v-theme-surface));
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-@media (max-width: 600px) {
-  .v-col {
-    padding: 3px !important;
-  }
-}
-</style>
