@@ -9,7 +9,7 @@ type AppState = {
   uid: number;
   csrfToken: string | null;
   userCache?: Profile;
-  theme: 'light' | 'dark';
+  theme: 'light' | 'dark' | null;
 };
 
 const storage = useLocalStorage<AppState>('redenCache', {

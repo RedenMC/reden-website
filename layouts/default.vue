@@ -17,7 +17,14 @@ const themeCookie = useCookie<'light' | 'dark'>('theme', {
 const theme = useTheme();
 const appStore = useAppStore();
 appStore.theme = themeCookie.value;
+onBeforeMount(() => {
+  if (appStore.theme === 'dark') {
+    appStore.theme = null;
+    console.log('hack: reset appStore.theme = null');
+  }
+});
 onMounted(() => {
+  appStore.theme = themeCookie.value;
   const colors: Record<string, string> =
     theme.themes.value[appStore.theme]!.colors;
   const css: string[] = [];

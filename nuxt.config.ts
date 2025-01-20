@@ -17,6 +17,7 @@ export default defineNuxtConfig({
     '@nuxtjs/i18n',
     '@nuxtjs/sitemap',
     '@nuxt/content',
+    '@nuxtjs/mdc',
     '@nuxtjs/color-mode',
     '@vite-pwa/nuxt',
     // cause OOM
@@ -156,7 +157,8 @@ export default defineNuxtConfig({
   pwa: {
     registerType: 'autoUpdate',
     devOptions: {
-      enabled: true,
+      // https://github.com/vite-pwa/nuxt/issues/77
+      enabled: false,
     },
     manifest: {
       name: 'Reden',
