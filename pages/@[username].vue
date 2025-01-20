@@ -3,50 +3,33 @@ import UserProfileCard from '@/components/UserProfileCard.vue';
 import UserContentPanel from '@/components/profile/UserContentPanel.vue';
 import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import { ref, watch } from 'vue';
+import type { ListLitematicaResponse } from '~/pages/litematica/index.vue';
 
 const route = useRoute();
 const { t } = useI18n();
 
 const { data: user, error } = await useFetchUserGet(
-  route.params.username as string
+  route.params.username as string,
 );
 
 useHead({
   title: `${user?.value?.username ?? t('reden.user_not_found')} - Reden`,
 });
 
-watch(user, () => {
-  useHead({
-    title: `${user?.value?.username ?? t('reden.user_not_found')} - Reden`,
-  });
-});
+// watch(user, () => {
+//   useHead({
+//     title: `${user?.value?.username ?? t('reden.user_not_found')} - Reden`,
+//   });
+// });
 
-const machines = ref<any[]>([]);
-
-const loadMachines = async () => {
-  if (!user.value?.username) return;
-
-  try {
-    const response = await fetch(
-      `/api/mc-services/litematica/by-author?author=${user.value.username}`
-    );
-    const data = await response.json();
-
-    if (data.hits) {
-      machines.value = Object.values(data.hits).map((machine: any) => ({
-        key: machine.key,
-        name: machine.name,
-        summary: machine.summary,
-        downloads: machine.downloads,
-      }));
-    }
-  } catch (error) {
-    console.error('Failed to load machines:', error);
-  }
-};
-
-loadMachines();
+const { data: machines } = useFetch(
+  () => `/api/mc-services/litematica/by-author?author=${user.value?.username}`,
+  {
+    transform: (data: ListLitematicaResponse) => {
+      return Object.values(data.d);
+    },
+  },
+);
 </script>
 
 <template>
@@ -70,7 +53,7 @@ loadMachines();
     </v-alert>
     <div class="user-profile-container">
       <UserProfileCard v-show="user" :can-edit="false" :user="user" />
-      <UserContentPanel :machines="machines" />
+      <UserContentPanel v-if="machines" :machines="machines" />
     </div>
   </v-card>
 </template>
