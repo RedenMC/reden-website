@@ -68,8 +68,8 @@
     "og_description": "生成我的世界红石机器投影，包括世吞、盾构等，支持任意大小，完全免费！",
     "select": "今天你想生成什么？",
     "size_description": "机器的 x, y, z 尺寸。对于世界吞噬者，z 尺寸是出发站和返回站之间的距离。",
-    "size_max": "机器的最大尺寸为 {size}",
-    "size_min": "机器的最小尺寸为 {size}",
+    "size_max": "机器的尺寸必须小于 {size}",
+    "size_min": "机器的尺寸必须大于 {size}",
     "size_mod": "尺寸除以 {mod} 的余数必须为 {rem}",
     "size_x": "x 方向尺寸",
     "size_y": "y 方向尺寸",
@@ -148,6 +148,7 @@
       "username_timer": "你可以在{0}小时后修改用户名"
     },
     "editProfile": "编辑个人资料",
+    "microsoft_checked_verifying_minecraft": "微软账号已绑定，正在检查 Minecraft 所有权...",
     "my_backup": "我的云备份",
     "oauth": {
       "link_account": "连接账户",

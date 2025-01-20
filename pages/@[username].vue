@@ -61,17 +61,7 @@ const { data: machines } = useFetch(
 <style scoped>
 .user-profile-container {
   display: flex;
-  gap: 4%;
+  gap: 20px;
   padding: 20px;
-}
-
-.user-profile-container > .profile-card {
-  flex: 1;
-  max-width: 20%;
-}
-
-.user-profile-container > .user-content-panel {
-  flex: 4;
-  max-width: 76%;
 }
 </style>

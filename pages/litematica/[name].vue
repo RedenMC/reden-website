@@ -275,10 +275,9 @@ async function cancelApproval() {
           ? $t('litematica_generator.by.author')
           : $t('litematica_generator.by.uploader')
       }}
-      <!--suppress HtmlUnknownTarget -->
       <router-link
         v-if="selected.author"
-        :to="`/@${selected.author.username}`"
+        :to="localePath(`/@${selected.author.username}`)"
         class="d-flex flex-row router"
       >
         <v-avatar v-if="selected.author.avatarUrl" size="32">
@@ -338,17 +337,18 @@ async function cancelApproval() {
         </v-card>
       </v-col>
       <v-col v-if="selected?.link" class="overflow-hidden" cols="12">
-        <a v-if="!bvid" :href="selected.link" class="router nowrap">
+        <a v-if="!bvid" :href="selected.link" class="router text-no-wrap">
           <v-icon>mdi-link</v-icon>
           {{ selected.link }}
         </a>
       </v-col>
       <v-col
         v-if="selected?.description"
-        class="overflow-hidden description"
+        class="overflow-hidden text-pre-wrap pa-5"
         cols="12"
-        v-html="selected.description"
-      />
+      >
+        <MDC class="description" :value="selected.description" />
+      </v-col>
     </v-row>
 
     <template v-if="selected.type === 'LitematicaGen'">
@@ -444,7 +444,7 @@ async function cancelApproval() {
             </p>
             <a
               :href="`/api/mc-services/yisibite/${machineId}/download/${index + 1}`"
-              class="router nowrap"
+              class="router text-no-wrap"
             >
               <v-icon>mdi-download</v-icon>
               {{ attachment.name }}
@@ -494,10 +494,6 @@ p {
   font-size: 1em;
 }
 
-.nowrap {
-  white-space: nowrap;
-}
-
 .bili-player-wrapper {
   position: relative;
   padding-bottom: 56.25%; /* 16:9 aspect ratio */
@@ -514,6 +510,9 @@ p {
 }
 
 .description {
-  white-space: pre-wrap;
+}
+
+.description :deep(li) {
+  margin-left: 1em;
 }
 </style>
