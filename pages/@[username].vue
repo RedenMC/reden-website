@@ -52,7 +52,12 @@ const { data: machines } = useFetch(
       Cannot find user
     </v-alert>
     <div class="user-profile-container">
-      <UserProfileCard v-show="user" :can-edit="false" :user="user" />
+      <UserProfileCard
+        class="user-profile-card"
+        v-show="user"
+        :can-edit="false"
+        :user="user"
+      />
       <UserContentPanel v-if="machines" :machines="machines" />
     </div>
   </v-card>
@@ -63,30 +68,22 @@ const { data: machines } = useFetch(
   display: flex;
   gap: 20px;
   padding: 20px;
-  width: 100%;
-  max-width: 100%;
   overflow: visible;
 }
 
-@media (max-width: 768px) {
+.user-profile-card {
+  max-width: 360px;
+  flex-grow: 0;
+}
+
+@media (max-width: 968px) {
   .user-profile-container {
     flex-direction: column;
-    gap: 0;
   }
 
-  .user-profile-container > * {
-    width: 100%;
-    margin-bottom: 20px;
-  }
-
-  .user-profile-container > *:last-child {
-    margin-bottom: 0;
-  }
-
-  .user-content-panel {
-    width: 100% !important;
-    max-width: 100% !important;
-    overflow: visible !important;
+  .user-profile-card {
+    max-width: 100%;
+    flex-grow: 1;
   }
 }
 </style>

@@ -39,7 +39,7 @@ const itemDisplayCols = computed<Column[]>(() => {
 });
 </script>
 <template>
-  <v-card :elevation="10" class="user-content-panel flex-1-1-0">
+  <v-card :elevation="10" class="">
     <div class="profile-card-content">
       <v-card-title>
         <h2>{{ t('用户内容') }}</h2>
