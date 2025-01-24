@@ -4,6 +4,9 @@
       class="background-image"
       :style="{ backgroundImage: `url(${submission.image})` }"
     >
+      <div class="inner-img-container">
+        <v-img :aspect-ratio="16 / 9" :src="submission.image" />
+      </div>
     </div>
     <div class="card-content">
       <v-card-title class="submission-card__title">{{ submission.name }}</v-card-title>
@@ -64,6 +67,16 @@ function goToSubmissionPage() {
   height: 200px;
   background-size: cover;
   background-position: center;
+}
+
+.inner-img-container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
 }
 
 .enlarged-image {

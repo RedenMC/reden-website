@@ -206,7 +206,7 @@ function viewAuthor(path: any) {
             </v-card-title>
             <v-container class="authors-list inner-container" fluid>
               <v-expansion-panels class="my-4" variant="accordion">
-                <v-expansion-panel
+                <v-expansion-panel class="author-panel"
                   v-for="(item, index) in topAuthors" :key="index"
                 >
                   <v-expansion-panel-title class="author-item-title">
@@ -471,6 +471,10 @@ body {
 
   ::v-deep .v-window__controls {
     display: none !important;
+  }
+
+  .author-panel:last-child {
+    display: none;
   }
 }
 .v-window {
