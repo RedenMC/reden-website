@@ -191,7 +191,7 @@ function viewAuthor(path: any) {
             <v-container class="submissions-list inner-container" fluid>
               <v-carousel hide-delimiters cycle>
                 <v-carousel-item v-for="(submission, index) in topRedstoneSubmissions" :key="index"
-                                 style="height: auto !important;">
+                                 style="height: 100% !important;">
                   <RedstoneSubmissionCard :submission="submission"/>
                 </v-carousel-item>
               </v-carousel>
@@ -210,22 +210,22 @@ function viewAuthor(path: any) {
                   v-for="(item, index) in topAuthors" :key="index"
                 >
                   <v-expansion-panel-title class="author-item-title">
-                    <span @click.stop="viewAuthor(item.url)">
+                    <span @click.stop="viewAuthor(item.url)" class="author-item-flex-col">
                       <v-avatar :image="item.avatar" size="small"></v-avatar>
-                      <span class="ml-4">{{ item.name }}</span>
+                      <span class="author-subItem author-name">{{ item.name }}</span>
                     </span>
 
-                    <span class="ml-4">
+                    <span class="ml-4 author-item-flex-col">
                       <v-icon color="warning" icon="mdi-file-document" size="small"/>
-                      <span class="ml-1">{{ item.totalSubmissions }}</span>
+                      <span class="author-subItem">{{ item.totalSubmissions }}</span>
                     </span>
-                    <span class="ml-4">
+                    <span class="ml-4 author-item-flex-col">
                       <v-icon color="error" icon="mdi-heart" size="small"/>
-                      <span class="ml-1">{{ item.totalFavorites }}</span>
+                      <span class="author-subItem">{{ item.totalFavorites }}</span>
                     </span>
-                    <span class="ml-4">
+                    <span class="ml-4 author-item-flex-col">
                       <v-icon color="info" icon="mdi-download" size="small"/>
-                      <span class="ml-1">{{ item.totalDownloads }}</span>
+                      <span class="author-subItem">{{ item.totalDownloads }}</span>
                     </span>
                   </v-expansion-panel-title>
                   <v-expansion-panel-text>
@@ -440,22 +440,44 @@ body {
   justify-content: space-between;
 }
 
+.author-subItem {
+  margin-left: 12px;
+}
+
 /* 确保在移动设备上有良好的响应性 */
 @media (max-width: 768px) {
   .card-row {
     flex-direction: column;
   }
-}
 
+  .author-item-flex-col {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 48px;
+  }
+
+  .author-subItem {
+    margin-top: 4px;
+    margin-left: 0;
+  }
+
+  .author-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  ::v-deep .v-window__controls {
+    display: none !important;
+  }
+}
 .v-window {
-  height: auto !important;
-  border-radius: 10px;
+  height: 100% !important;
   overflow: hidden;
 }
 
-.card-column {
-  height: 500px;
-}
 
 .author-item-title {
   display: flex;
@@ -464,5 +486,12 @@ body {
 
 .inner-container {
   height: 360px;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.v-expansion-panel {
+  border-radius: 0;
 }
 </style>

@@ -265,4 +265,5 @@ const autoPlay = ref(true);
     filter 0.5s,
     opacity 0.5s;
 }
+
 </style>

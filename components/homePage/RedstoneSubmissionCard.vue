@@ -45,11 +45,12 @@ function goToSubmissionPage() {
 <style scoped>
 .submission-card {
   transition: transform 0.3s, box-shadow 0.3s;
-  background: #fff;
-  border-radius: 10px;
+  background: rgb(var(--v-theme-background));
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   position: relative;
+  border-radius: 0;
+
 }
 
 .submission-card:hover {
@@ -83,19 +84,19 @@ function goToSubmissionPage() {
 }
 
 .card-content {
-  padding: 16px;
+  padding: 8px;
 }
 
 .submission-card__title {
   font-size: 1.2rem;
   font-weight: 600;
-  color: #333;
+  color: rgb(var(--v-theme-on-background));
   margin-bottom: 8px;
 }
 
 .submission-card__subtitle {
   font-size: 0.9rem;
-  color: #170606;
+  color: rgb(var(--v-theme-on-background));
   font-weight: bold;
 }
 
