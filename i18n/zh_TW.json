@@ -207,7 +207,13 @@
       "undo": "Undo"
     },
     "user_not_found": "未找到用戶",
-    "wiki": "Wiki"
+    "wiki": "Wiki",
+    "card" : {
+      "author" : "作者",
+      "downloads" : "下載次數",
+      "redStoneTitle" : "探索紅石機器",
+      "subscribeTitle" : "關注最愛的作者"
+    }
   },
   "register": {
     "button": {

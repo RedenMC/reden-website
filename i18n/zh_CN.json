@@ -234,7 +234,13 @@
       "undo": "撤销"
     },
     "user_not_found": "未找到用户",
-    "wiki": "维基"
+    "wiki": "维基",
+    "card" : {
+      "author" : "作者",
+      "downloads" : "下载量",
+      "redStoneTitle" : "探索红石机器",
+      "subscribeTitle" : "关注最爱的作者"
+    }
   },
   "register": {
     "button": {

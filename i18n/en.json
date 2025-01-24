@@ -234,7 +234,13 @@
       "undo": "Undo"
     },
     "user_not_found": "User Not Found",
-    "wiki": "Wiki"
+    "wiki": "Wiki",
+    "card" : {
+      "author" : "author",
+      "downloads" : "downloads",
+      "redStoneTitle" : "Explore the Red Rock Machine",
+      "subscribeTitle" : "Follow Your Favorite Authors"
+    }
   },
   "register": {
     "button": {

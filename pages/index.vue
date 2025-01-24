@@ -1,8 +1,10 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import {ref} from 'vue';
 import RedStoneSection from '@/components/RedStoneSection.vue';
 import RedstoneSectionTitle from '@/components/RedstoneSectionTitle.vue';
 import Feature from '@/pages/feature/index.vue';
+import RedstoneSubmissionCard from '@/components/homePage/RedstoneSubmissionCard.vue';
+
 import {
   discordInvite,
   doFetchGet,
@@ -10,21 +12,104 @@ import {
   toastError,
 } from '@/utils/constants';
 import '@/assets/main.css';
-import { useBackendMeta } from '~/store/meta';
-import { toast } from 'vuetify-sonner';
-import { useAppStore } from '~/store/app';
+import {useBackendMeta} from '~/store/meta';
+import {toast} from 'vuetify-sonner';
+import {useAppStore} from '~/store/app';
+import {useRouter} from "vue-router";
 
 const appStore = useAppStore();
 const introContent = ref<HTMLElement | null>(null);
 const localePath = useLocalePath();
 
-const { t } = useI18n();
+const {t} = useI18n();
 useSeoMeta({
   title: t('reden.title.home_full') + ' - Reden',
   description: t('reden.description'),
 });
 
 const backendInfo = useBackendMeta();
+
+const topRedstoneSubmissions = [
+  {
+    image: 'https://static.redenmc.com/kook/_attachments_2023-04_21_O58XUxTuEr15s0q3.jpg',
+    name: '简洁的12gt全树种树场',
+    author: 'zly2006',
+    authorAvatar: 'https://avatars.githubusercontent.com/u/88337896?v=4',
+    downloads: 134,
+    url: '/litematica/45c8cf98-cddf-4fb5-b87e-a71da736e12b?backUrl=%2Flitematica'
+  },
+  {
+    image: 'https://static.redenmc.com/kook/_attachments_2023-03_25_VIWFyCJlLj0sg0sg.jpg',
+    name: 'Chronos苔藓骨粉机',
+    author: 'zly2006',
+    authorAvatar: 'https://avatars.githubusercontent.com/u/88337896?v=4',
+    downloads: 198,
+    url: '/litematica/10e32a32-aea5-4a2f-a43c-6484fc659442?backUrl=%2Flitematica%3Fpage%3D1'
+  },
+  {
+    image: 'https://static.redenmc.com/kook/_attachments_2023-03_28_Yw2IV8scSf1hc0s9.jpg',
+    name: '[1.13+] 172万6gt刷石机',
+    authorAvatar: 'https://avatars.githubusercontent.com/u/88337896?v=4',
+    author: '金合欢酱',
+    downloads: 40,
+    url: '/litematica/1a4bd283-4682-46f1-bb73-ebf82613449e?page=1'
+  }
+];
+
+const topAuthors = [
+  // 同样，这里应该是从数据库或API获取的数据
+  {
+    avatar: 'https://avatars.githubusercontent.com/u/88337896?v=4',
+    name: '咕咕咕',
+    totalSubmissions: 462,
+    totalFavorites: 50,
+    totalDownloads: 1992,
+    desc: "作者描述作者描述",
+    url: '/@金合欢酱'
+  },
+  {
+    avatar: 'https://avatars.githubusercontent.com/u/88337896?v=4',
+    name: '咯咯哒',
+    totalSubmissions: 78,
+    totalFavorites: 50,
+    totalDownloads: '12k',
+    desc: "作者描述作者描述",
+    url: '/@金合欢酱'
+  },
+  {
+    avatar: 'https://avatars.githubusercontent.com/u/88337896?v=4',
+    name: '哥哥哥哥',
+    totalSubmissions: 45,
+    totalFavorites: 50,
+    totalDownloads: '27k',
+    desc: "作者描述作者描述",
+    url: '/@金合欢酱'
+  },
+  {
+    avatar: 'https://avatars.githubusercontent.com/u/88337896?v=4',
+    name: 'kemoji',
+    totalSubmissions: 62,
+    totalFavorites: 50,
+    totalDownloads: '996',
+    desc: "作者描述作者描述",
+    url: '/@金合欢酱'
+  },
+  {
+    avatar: 'https://avatars.githubusercontent.com/u/88337896?v=4',
+    name: 'kemoji',
+    totalSubmissions: 62,
+    totalFavorites: 50,
+    totalDownloads: '996',
+    desc: "作者描述作者描述",
+    url: '/@金合欢酱'
+  },
+]
+const router = useRouter();
+
+function viewAuthor(path: any) {
+  console.log(path)
+  router.push({path: path});
+}
 </script>
 
 <template>
@@ -58,7 +143,7 @@ const backendInfo = useBackendMeta();
           </p>
         </v-col>
         <v-col class="icon" cols="3">
-          <v-img class="d-none d-sm-block" src="/reden_256.png" width="148" />
+          <v-img class="d-none d-sm-block" src="/reden_256.png" width="148"/>
         </v-col>
       </v-row>
       <div class="d-flex buttons">
@@ -96,34 +181,67 @@ const backendInfo = useBackendMeta();
     </div>
   </div>
   <div class="d-flex flex-wrap">
-    <v-col cols="12" md="6">
-      <v-card
-        style="
-          background: linear-gradient(135deg, #dd8833, #ffbb33);
-          height: 400px;
-        "
-      >
-        <v-card-title class="text-h3 text-sm-h2 font-weight-bold">
-          探索红石机器
-        </v-card-title>
-      </v-card>
-    </v-col>
-    <v-col cols="12" md="6">
-      <v-card
-        style="
-          background: linear-gradient(135deg, #33b5e5, #0099cc);
-          height: 400px;
-        "
-      >
-        <v-card-title class="text-h3 text-sm-h2 font-weight-bold">
-          关注最爱的作者
-        </v-card-title>
-      </v-card>
-    </v-col>
+    <v-container class="parent-container">
+      <v-row class="card-row" no-gutters>
+        <v-col cols="12" md="6" class="card-column">
+          <v-card class="redstone-machine-card ma-4 ">
+            <v-card-title class="text-h5 text-sm-h4 font-weight-semibold card-title">
+              {{ $t('reden.card.redStoneTitle') }}
+            </v-card-title>
+            <v-container class="submissions-list inner-container" fluid>
+              <v-carousel hide-delimiters cycle>
+                <v-carousel-item v-for="(submission, index) in topRedstoneSubmissions" :key="index"
+                                 style="height: auto !important;">
+                  <RedstoneSubmissionCard :submission="submission"/>
+                </v-carousel-item>
+              </v-carousel>
+            </v-container>
+          </v-card>
+        </v-col>
+
+        <v-col cols="12" md="6" class="card-column">
+          <v-card class="redstone-machine-card ma-4 ">
+            <v-card-title class="text-h5 text-sm-h4 font-weight-semibold card-title">
+              {{ $t('reden.card.subscribeTitle') }}
+            </v-card-title>
+            <v-container class="authors-list inner-container" fluid>
+              <v-expansion-panels class="my-4" variant="accordion">
+                <v-expansion-panel
+                  v-for="(item, index) in topAuthors" :key="index"
+                >
+                  <v-expansion-panel-title class="author-item-title">
+                    <span @click.stop="viewAuthor(item.url)">
+                      <v-avatar :image="item.avatar" size="small"></v-avatar>
+                      <span class="ml-4">{{ item.name }}</span>
+                    </span>
+
+                    <span class="ml-4">
+                      <v-icon color="warning" icon="mdi-file-document" size="small"/>
+                      <span class="ml-1">{{ item.totalSubmissions }}</span>
+                    </span>
+                    <span class="ml-4">
+                      <v-icon color="error" icon="mdi-heart" size="small"/>
+                      <span class="ml-1">{{ item.totalFavorites }}</span>
+                    </span>
+                    <span class="ml-4">
+                      <v-icon color="info" icon="mdi-download" size="small"/>
+                      <span class="ml-1">{{ item.totalDownloads }}</span>
+                    </span>
+                  </v-expansion-panel-title>
+                  <v-expansion-panel-text>
+                    {{ item.desc }}
+                  </v-expansion-panel-text>
+                </v-expansion-panel>
+              </v-expansion-panels>
+            </v-container>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 
   <div ref="introContent" class="intro-content">
-    <Feature />
+    <Feature/>
     <div class="content-common">
       <v-row class="community-intro">
         <v-col>
@@ -275,5 +393,76 @@ body {
 
 .min-w-380 {
   min-width: 380px;
+}
+
+.parent-container {
+}
+
+.card-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.redstone-machine-card,
+.favorite-authors-card {
+  background-size: cover;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.redstone-machine-card:hover,
+.favorite-authors-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.redstone-machine-card {
+  background: linear-gradient(135deg, #4c9eff, #a3c7ff); /* 蓝白渐变 */
+}
+
+
+.favorite-authors-card {
+  background: linear-gradient(135deg, #33b5e5, #0099cc);
+}
+
+.card-title {
+  color: white;
+  padding: 1rem;
+  text-align: center;
+}
+
+.submissions-list,
+.authors-list {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* 确保在移动设备上有良好的响应性 */
+@media (max-width: 768px) {
+  .card-row {
+    flex-direction: column;
+  }
+}
+
+.v-window {
+  height: auto !important;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.card-column {
+  height: 500px;
+}
+
+.author-item-title {
+  display: flex;
+  align-items: center;
+}
+
+.inner-container {
+  height: 360px;
 }
 </style>
