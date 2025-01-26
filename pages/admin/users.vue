@@ -15,8 +15,10 @@ import { useI18n } from 'vue-i18n';
 
 const router = useRouter();
 const localePath = useLocalePath();
-definePageMeta({
-  title: 'admin.title.users',
+const { t } = useI18n();
+useHead({
+  title: t('admin.title.users'),
+  titleTemplate: '%s - Reden',
 });
 type Parameter = {
   search: string;

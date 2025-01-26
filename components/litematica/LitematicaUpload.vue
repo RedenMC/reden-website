@@ -54,6 +54,7 @@ const refreshProps = () => {
           fileType: 'uploaded',
         }) as MyFile,
     ) ?? [];
+  selectedVersions.value = machine?.versions ?? [];
 };
 const availableSteps = ref<State[]>(
   props.editMode ? ['upload', 'translation', 'image'] : ['upload'],
@@ -144,6 +145,7 @@ async function doUploadAll() {
           description: data.description,
           link: data.link,
           isOriginal: isOriginal.value,
+          versions: selectedVersions.value,
         },
       );
       if (response.ok) {
@@ -284,6 +286,28 @@ const formatFileSize = (bytes: number): string => {
 
 const { t, availableLocales, locale } = useI18n();
 const language = ref<string>(locale.value);
+const selectedVersions = ref<string[]>([]);
+const selectableVersions = computed(() => {
+  const ret: (
+    | string
+    | {
+        value: string;
+        title: string;
+      }
+  )[] = [];
+  for (const version of Object.keys(versionGrouped).toReversed()) {
+    ret.push(version + '.x');
+    if (!selectedVersions.value.includes(version + '.x')) {
+      for (const child of versionGrouped[version]) {
+        ret.push({
+          value: child,
+          title: '↳ ' + child,
+        });
+      }
+    }
+  }
+  return ret;
+});
 
 function getLocalizedData(language: string) {
   if (!localizedData.value[language]) {
@@ -324,25 +348,27 @@ watch(props, refreshProps);
     </v-tab>
   </v-tabs>
 
-  <v-card-text>
-    <v-tabs-window v-model="state">
-      <v-tabs-window-item value="upload">
-        <v-card
-          :elevation="0"
-          :max-height="maxHeight"
-          :min-height="minHeight"
-          border
-          class="rounded-xl overflow-y-auto"
-        >
-          <v-card-title> {{ $t('upload.btn.upload_design') }}</v-card-title>
+  <v-card-text class="pb-0">
+    <v-card
+      :elevation="0"
+      :max-height="maxHeight"
+      :min-height="minHeight"
+      border
+      class="rounded-xl overflow-y-auto"
+    >
+      <v-tabs-window v-model="state">
+        <v-tabs-window-item value="upload">
+          <v-card-title class="text-h5">
+            {{ t('upload.btn.upload_design') }}
+          </v-card-title>
           <v-card-text class="text-center">
             <v-icon class="my-15" color="primary" size="100"
               >mdi-cloud-upload
             </v-icon>
             <div class="mt-4 opacity-60">
-              <p>{{ $t('upload.desc.upload_schematic_or_world_save') }}</p>
-              <p>{{ $t('upload.desc.design_supports_file_formats') }}</p>
-              <p>{{ $t('upload.desc.design_maximal_file_size') }}</p>
+              <p>{{ t('upload.desc.upload_schematic_or_world_save') }}</p>
+              <p>{{ t('upload.desc.design_supports_file_formats') }}</p>
+              <p>{{ t('upload.desc.design_maximal_file_size') }}</p>
             </div>
             <input
               ref="fileInput"
@@ -356,7 +382,7 @@ watch(props, refreshProps);
               color="primary"
               @click="fileInput?.click()"
             >
-              {{ $t('upload.btn.select_files') }}
+              {{ t('upload.btn.select_files') }}
             </v-btn>
             <p v-if="selectedFiles.length > 0" class="line-h-24">
               <span v-if="selectedFiles.length == 1">
@@ -365,7 +391,7 @@ watch(props, refreshProps);
               </span>
               <span v-else-if="selectedFiles.length > 1">
                 {{
-                  $t('upload.desc.selected_count_files', {
+                  t('upload.desc.selected_count_files', {
                     count: selectedFiles.length,
                   })
                 }}
@@ -384,7 +410,7 @@ watch(props, refreshProps);
               style="max-width: 400px"
             >
               <v-icon>mdi-alert-circle</v-icon>
-              {{ $t('upload.desc.existing_machine_design') }}
+              {{ t('upload.desc.existing_machine_design') }}
             </div>
             <v-radio-group
               v-if="selectedFiles.length === 1"
@@ -395,33 +421,25 @@ watch(props, refreshProps);
               @update:model-value="() => (state = 'translation')"
             >
               <v-radio
-                :label="$t('upload.desc.litematica_generator')"
-                :value="true"
+                :label="t('upload.desc.manual_upload')"
+                :value="false"
                 density="compact"
               />
               <v-radio
-                :label="$t('upload.desc.manual_upload')"
-                :value="false"
+                :label="t('upload.desc.litematica_generator')"
+                :value="true"
                 density="compact"
               />
             </v-radio-group>
           </v-card-text>
-          <v-card-actions></v-card-actions>
-        </v-card>
-      </v-tabs-window-item>
+        </v-tabs-window-item>
 
-      <v-tabs-window-item value="translation">
-        <v-form fast-fail>
-          <v-card
-            :max-height="maxHeight"
-            :min-height="minHeight"
-            border
-            class="rounded-xl overflow-y-scroll"
-          >
+        <v-tabs-window-item value="translation">
+          <v-form fast-fail>
             <v-card-title>
               <v-row class="justify-space-between">
                 <v-col class="mb-1 mb-md-3" cols="12" sm="6">
-                  <span class="text-h5">
+                  <span class="text-h5 v-card-title pa-0">
                     {{ t('upload.step.translation') }}
                   </span>
                 </v-col>
@@ -496,7 +514,9 @@ watch(props, refreshProps);
                 variant="underlined"
                 @update:model-value="console.log(localizedData)"
               />
+              <!-- 禁用summary -->
               <v-text-field
+                v-if="false"
                 v-model="getLocalizedData(language).summary"
                 :label="$t('common.summary')"
                 color="primary"
@@ -504,6 +524,22 @@ watch(props, refreshProps);
                 outlined
                 variant="underlined"
               />
+              <v-select
+                v-model="selectedVersions"
+                :items="selectableVersions"
+                chips
+                variant="underlined"
+                color="primary"
+                density="comfortable"
+                label="Supported Versions"
+                multiple
+              >
+                <template #chip="{ item }">
+                  <v-chip color="px-2" size="sm">
+                    {{ item.value }}
+                  </v-chip>
+                </template>
+              </v-select>
               <v-textarea
                 v-model="getLocalizedData(language).description"
                 :label="$t('common.description')"
@@ -548,18 +584,13 @@ watch(props, refreshProps);
                 {{ $t('common.save') }}
               </v-btn>
             </v-card-actions>
-          </v-card>
-        </v-form>
-      </v-tabs-window-item>
+          </v-form>
+        </v-tabs-window-item>
 
-      <v-tabs-window-item value="image">
-        <v-card
-          :max-height="maxHeight"
-          :min-height="minHeight"
-          border
-          class="rounded-xl"
-        >
-          <v-card-title>{{ $t('upload.step.image') }}</v-card-title>
+        <v-tabs-window-item value="image">
+          <v-card-title class="text-h5"
+            >{{ $t('upload.step.image') }}
+          </v-card-title>
           <v-card-text class="text-center">
             <v-alert
               v-if="pictureStepError"
@@ -590,25 +621,12 @@ watch(props, refreshProps);
             >
               {{ $t('upload.btn.select_files') }}
             </v-btn>
-            <br />
-            <v-btn
-              :loading="uploading"
-              class="mt-4 mx-4 text-none"
-              variant="outlined"
-              @click="doUploadAll"
-            >
-              {{
-                editMode
-                  ? $t('upload.btn.finish_editing')
-                  : $t('upload.btn.start_uploading')
-              }}
-            </v-btn>
 
             <div v-if="selectedPictures.length > 0" class="mt-4">
               <div
                 v-for="(picture, index) in selectedPictures"
                 :key="index"
-                class="d-inline-block mr-4"
+                class="d-inline-block mr-4 position-relative"
               >
                 <v-img
                   :src="picture.url"
@@ -633,30 +651,21 @@ watch(props, refreshProps);
                   </template>
                 </v-img>
                 <v-btn
-                  absolute
+                  class="position-absolute right-0 top-0"
                   color="error"
                   icon="mdi-close"
-                  right
                   size="xs"
-                  top
                   variant="outlined"
                   @click="removePicture(index)"
                 />
               </div>
             </div>
           </v-card-text>
-        </v-card>
-      </v-tabs-window-item>
+        </v-tabs-window-item>
 
-      <v-tabs-window-item value="under-review">
-        <v-card
-          :max-height="maxHeight"
-          :min-height="minHeight"
-          border
-          class="rounded-xl"
-        >
-          <v-card-title>
-            {{ $t('upload.step.under-review') }}
+        <v-tabs-window-item value="under-review">
+          <v-card-title class="text-h5">
+            {{ t('upload.step.under-review') }}
           </v-card-title>
           <v-card-text class="text-center">
             <v-icon class="my-8" color="green" size="100">
@@ -703,10 +712,27 @@ watch(props, refreshProps);
               {{ $t('common.back') }}
             </v-btn>
           </v-card-text>
-        </v-card>
-      </v-tabs-window-item>
-    </v-tabs-window>
+        </v-tabs-window-item>
+      </v-tabs-window>
+    </v-card>
   </v-card-text>
+  <v-card-actions class="px-6">
+    <v-btn
+      :disabled="!availableSteps.includes('image')"
+      :loading="uploading"
+      class="text-none"
+      color="primary"
+      rounded="lg"
+      variant="flat"
+      @click="doUploadAll"
+    >
+      {{
+        editMode
+          ? $t('upload.btn.finish_editing')
+          : $t('upload.btn.start_uploading')
+      }}
+    </v-btn>
+  </v-card-actions>
 </template>
 
 <style scoped>

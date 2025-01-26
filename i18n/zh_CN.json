@@ -38,7 +38,12 @@
     "and": "和",
     "back": "返回",
     "description": "介绍",
+    "details": "详细信息",
+    "followers": "粉丝",
+    "following": "关注中",
+    "following_projects": "关注中项目",
     "link": "链接",
+    "loading___": "加载中...",
     "name": "名称",
     "next": "下一步",
     "save": "保存",
@@ -61,13 +66,14 @@
     "description": "在这里在线生成《我的世界》投影文件，不管是世界吞噬者、破基岩机还是盾构机，这里都可以生成。任意形状大小。生成全部免费！",
     "download": "下载",
     "download_count": "{count} 次下载",
+    "failed_preview_load": "加载投影预览失败",
     "not_found": "未找到投影 {name}！",
     "not_logged_in": "游客用户每分钟只能生成 5 次，登录后解锁此限制",
     "og_description": "生成我的世界红石机器投影，包括世吞、盾构等，支持任意大小，完全免费！",
     "select": "今天你想生成什么？",
     "size_description": "机器的 x, y, z 尺寸。对于世界吞噬者，z 尺寸是出发站和返回站之间的距离。",
-    "size_max": "机器的最大尺寸为 {size}",
-    "size_min": "机器的最小尺寸为 {size}",
+    "size_max": "机器的尺寸必须小于 {size}",
+    "size_min": "机器的尺寸必须大于 {size}",
     "size_mod": "尺寸除以 {mod} 的余数必须为 {rem}",
     "size_x": "x 方向尺寸",
     "size_y": "y 方向尺寸",
@@ -100,7 +106,11 @@
     "help": "帮助建设我们的网站！",
     "title": "页面没有找到"
   },
+  "post": {
+    "preview": "预览"
+  },
   "profile": {
+    "account_not_linked": "未链接账号",
     "edit": {
       "back": "返回个人资料页",
       "basic_information": "基本信息",
@@ -146,13 +156,23 @@
       "username_timer": "你可以在{0}小时后修改用户名"
     },
     "editProfile": "编辑个人资料",
+    "link_now": "点击链接",
+    "microsoft_checked_verifying_minecraft": "微软账号已绑定，正在检查 Minecraft 所有权...",
     "my_backup": "我的云备份",
+    "no_machines": "此用户还没有投稿。",
+    "no_minecraft": "没有链接 Minecraft 账号",
     "oauth": {
       "link_account": "连接账户",
       "unlink_account": "取消连接"
     },
     "password": "密码",
-    "username": "用户名"
+    "posts": "投稿列表",
+    "username": "用户名",
+    "verified_minecraft": "已认证的 Minecraft 账号",
+    "your_timezone": "（相同时区）"
+  },
+  "profle": {
+    "logout": "退出登录"
   },
   "reden": {
     "description": "为红石机器开发者提供一站式工作环境，探索各种创意设计和前沿红石科技。",
@@ -231,7 +251,8 @@
       "home_full": "首页 - 超级我的世界生电辅助mod",
       "my_account": "我的账号",
       "rvc": "RVC",
-      "undo": "撤销"
+      "undo": "撤销",
+      "user_profile_seo": "{0} - {0} 的红石机器设计 - 下载我的世界机器设计"
     },
     "user_not_found": "未找到用户",
     "wiki": "维基",
@@ -306,7 +327,7 @@
       "design_maximal_file_size": "最大文件大小：100MB",
       "design_supports_file_formats": "支持的文件格式：.litematica .schem .zip 等",
       "existing_machine_design": "你正在编辑一个已有的机器设计。上传新文件将覆盖现有文件。",
-      "i_am_not_the_author": "此机器属于公共领域，或我有权发布",
+      "i_am_not_the_author": "此机器属于公共领域，或我被授权可以发布",
       "i_am_the_author": "我是作者",
       "id_can_only_contain": "ID 只能包含 a-z, 0-9, - and _",
       "id_is_taken": "此 ID 已被占用",

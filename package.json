@@ -15,7 +15,9 @@
     "@nuxtjs/i18n": "^8.5.2",
     "@nuxtjs/mdc": "^0.12.1",
     "@pinia/nuxt": "^0.5.4",
+    "@vite-pwa/nuxt": "^0.10.6",
     "@vueuse/core": "^10.9.0",
+    "ant-design-vue": "4.x",
     "core-js": "^3.29.0",
     "countries-and-timezones": "^3.6.0",
     "deepslate": "^0.23.4",
@@ -23,9 +25,9 @@
     "randomcolor": "^0.6.2",
     "roboto-fontface": "*",
     "ua-parser-js": "^2.0.0",
-    "vue": "latest",
+    "vue": "^3.5.13",
     "vue-i18n": "^9.6.5",
-    "vue-router": "latest",
+    "vue-router": "^4.5.0",
     "vue-sonner": "^1.0.1",
     "vue-turnstile": "^1.0.8",
     "vue3-touch-events": "^4.2.0",
@@ -34,10 +36,13 @@
     "vuetify-sonner": "^0.3.2"
   },
   "devDependencies": {
+    "@ant-design-vue/nuxt": "^1.4.6",
     "@mdi/font": "^7.4.47",
+    "@nuxt/kit": "^3.1.50",
     "@nuxtjs/sitemap": "^6.0.0",
     "@types/randomcolor": "^0.5.9",
     "prettier": "3.2.5",
     "vite-plugin-vuetify": "^2.0.4"
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

@@ -1,7 +1,10 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import ModrinthFull from '@/plugins/icons/ModrinthFull.vue';
-definePageMeta({
-  title: 'reden.title.download',
+
+const { t } = useI18n();
+useHead({
+  title: t('reden.title.download'),
+  titleTemplate: '%s - Reden',
 });
 </script>
 

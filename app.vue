@@ -1,4 +1,6 @@
 <template>
+  <VitePwaManifest />
+  <Link href="/reden_256.png" rel="apple-touch-icon" />
   <div>
     <NuxtRouteAnnouncer />
     <nuxt-layout>

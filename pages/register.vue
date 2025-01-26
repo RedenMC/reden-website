@@ -24,8 +24,9 @@ const registerOk = ref(false);
 const captcha = ref<Captcha>();
 const { t } = useI18n();
 const localePath = useLocalePath();
-definePageMeta({
-  title: 'register.title',
+useHead({
+  title: t('register.title'),
+  titleTemplate: '%s - Reden',
 });
 
 function register(e: SubmitEventPromise) {

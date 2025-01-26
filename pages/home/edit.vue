@@ -13,10 +13,11 @@ import { ref, watch } from 'vue';
 import OAuthAccountLine from '@/components/editProfilePage/OAuthAccountLine.vue';
 import { toast } from 'vuetify-sonner';
 import { useI18n } from 'vue-i18n';
-const router = useRouter();
-const localePath = useLocalePath();
 import CommonCaptcha from '@/components/CommonCaptcha.vue';
 import { useRouter } from 'vue-router';
+
+const router = useRouter();
+const localePath = useLocalePath();
 
 const { locale } = useI18n();
 const mockUser: Profile = {
@@ -43,8 +44,13 @@ const user = ref<Profile>(mockUser);
 const dialogChangePassword = ref(
   router.currentRoute.value?.hash === '#change-password',
 );
+const { t } = useI18n();
+useHead({
+  title: t('reden.title.edit_profile'),
+  titleTemplate: '%s - Reden',
+});
 definePageMeta({
-  title: 'reden.title.edit_profile',
+  needLogin: true,
 });
 
 watch(dialogChangePassword, () => {
@@ -71,6 +77,7 @@ const newPassword = ref('');
 const confirmNewPassword = ref('');
 const changingPassword = ref(false);
 const captcha = ref<Captcha>();
+
 function changePassword() {
   if (!isStrongPassword(newPassword.value)) return;
   if (newPassword.value !== confirmNewPassword.value) return;
@@ -105,9 +112,9 @@ function changePassword() {
     });
 }
 
-const { t } = useI18n();
 const savingInfo = ref(false);
 const savingPreferences = ref(false);
+
 function saveInfo() {
   savingInfo.value = true;
   doFetchPost('/api/account/update', user.value)
@@ -129,9 +136,11 @@ function saveInfo() {
       savingInfo.value = false;
     });
 }
+
 function changed(a: Record<string, unknown>, b: Record<string, unknown>) {
   return Object.keys(a).some((key: string) => a[key] !== b[key]);
 }
+
 function savePreferences() {
   savingPreferences.value = true;
   if (!user.value?.preference) return;
@@ -169,10 +178,10 @@ function savePreferences() {
   <div class="section">
     <v-btn
       :to="localePath('/home')"
-      variant="outlined"
       class="text-capitalize"
       color="primary"
       prepend-icon="mdi-arrow-left"
+      variant="outlined"
     >
       {{ $t('profile.edit.back') }}
     </v-btn>
@@ -180,7 +189,7 @@ function savePreferences() {
       {{ $t('reden.title.edit_profile') }}
     </h1>
   </div>
-  <v-card v-if="user" class="setting-section-card section" rounded="lg" border>
+  <v-card v-if="user" border class="setting-section-card section" rounded="lg">
     <h3 class="setting-section-title">
       {{ $t('profile.edit.basic_information') }}
     </h3>
@@ -210,14 +219,14 @@ function savePreferences() {
       <v-col>
         <v-text-field
           v-model="user.username"
+          :disabled="(user.canChangeNameUntil || 0) > Date.now()"
           class="setting-input"
           color="primary"
-          :disabled="(user.canChangeNameUntil || 0) > Date.now()"
         >
           <template #prepend>
             <v-icon>mdi-account</v-icon>
           </template>
-          <template #details v-if="(user.canChangeNameUntil || 0) > Date.now()">
+          <template v-if="(user.canChangeNameUntil || 0) > Date.now()" #details>
             {{
               t('profile.edit.username_timer', [
                 Math.round(
@@ -243,21 +252,21 @@ function savePreferences() {
     <v-row>
       <v-spacer />
       <v-btn
-        class="text-capitalize setting-button"
-        color="primary"
-        :loading="savingInfo"
-        @click="saveInfo"
         :disabled="
           userCopy?.username == user.username &&
           (userCopy?.bio || '') == user.bio
         "
+        :loading="savingInfo"
+        class="text-capitalize setting-button"
+        color="primary"
+        @click="saveInfo"
       >
         {{ t('profile.edit.save') }}
       </v-btn>
     </v-row>
   </v-card>
 
-  <v-card class="setting-section-card section" rounded="lg" border>
+  <v-card border class="setting-section-card section" rounded="lg">
     <h3 class="setting-section-title">{{ t('profile.edit.preferences') }}</h3>
     <v-row>
       <v-col cols="9">
@@ -270,10 +279,10 @@ function savePreferences() {
       </v-col>
       <v-spacer />
       <v-switch
-        class="setting-button"
-        color="primary"
         v-model="user.preference.showEmail"
         :hide-details="true"
+        class="setting-button"
+        color="primary"
       />
     </v-row>
     <v-row>
@@ -287,10 +296,10 @@ function savePreferences() {
       </v-col>
       <v-spacer />
       <v-switch
-        class="setting-button"
-        color="primary"
         v-model="user.preference.showMC"
         :hide-details="true"
+        class="setting-button"
+        color="primary"
       />
     </v-row>
     <v-row>
@@ -304,9 +313,9 @@ function savePreferences() {
       </v-col>
       <v-spacer />
       <v-switch
+        v-model="user.preference.showGithub"
         class="setting-button"
         color="primary"
-        v-model="user.preference.showGithub"
         hide-details
       />
     </v-row>
@@ -321,9 +330,9 @@ function savePreferences() {
       </v-col>
       <v-spacer />
       <v-switch
+        v-model="user.preference.showTimezone"
         class="setting-button"
         color="primary"
-        v-model="user.preference.showTimezone"
         hide-details
       />
     </v-row>
@@ -334,9 +343,9 @@ function savePreferences() {
       </v-col>
       <v-spacer />
       <v-switch
+        v-model="user.preference.showQQ"
         class="setting-button"
         color="primary"
-        v-model="user.preference.showQQ"
         hide-details
       />
     </v-row>
@@ -366,29 +375,29 @@ function savePreferences() {
       </v-col>
       <v-col>
         <v-select
-          class="setting-input"
           v-model="user.preference.timezone"
           :items="timezones"
+          class="setting-input"
         />
       </v-col>
     </v-row>
     <v-row>
       <v-spacer />
       <v-btn
+        :disabled="
+          userCopy && user && !changed(user.preference, userCopy.preference)
+        "
         :loading="savingPreferences"
         class="text-capitalize setting-button"
         color="primary"
         @click="savePreferences"
-        :disabled="
-          userCopy && user && !changed(user.preference, userCopy.preference)
-        "
       >
         {{ t('profile.edit.save_preferences') }}
       </v-btn>
     </v-row>
   </v-card>
 
-  <v-card v-if="user" class="setting-section-card section" rounded="lg" border>
+  <v-card v-if="user" border class="setting-section-card section" rounded="lg">
     <h3 class="setting-section-title">
       {{ t('profile.edit.password.title') }}
     </h3>
@@ -405,8 +414,8 @@ function savePreferences() {
       </v-btn>
       <v-dialog
         v-model="dialogChangePassword"
-        scroll-strategy="block"
         max-width="500"
+        scroll-strategy="block"
       >
         <v-card>
           <v-card-title>
@@ -414,25 +423,21 @@ function savePreferences() {
           </v-card-title>
           <v-card-text>
             <v-form>
-              <input autocomplete="username" :value="user.username" hidden />
+              <input :value="user.username" autocomplete="username" hidden />
               <v-text-field
                 v-if="!user.passwordNotSet"
                 v-model="oldPassword"
+                :label="t('profile.edit.password.old')"
+                autocomplete="current-password"
                 class="setting-input"
                 color="primary"
                 type="password"
-                autocomplete="current-password"
-                :label="t('profile.edit.password.old')"
               />
               <p v-if="user.passwordNotSet">
                 {{ t('profile.edit.password.first') }}
               </p>
               <v-text-field
                 v-model="newPassword"
-                class="setting-input"
-                color="primary"
-                type="password"
-                autocomplete="new-password"
                 :label="t('profile.edit.password.mew')"
                 :rules="[
                   (v: string) =>
@@ -442,19 +447,23 @@ function savePreferences() {
                     v !== oldPassword ||
                     'New password must be different from old password',
                 ]"
-              />
-              <v-text-field
-                v-model="confirmNewPassword"
+                autocomplete="new-password"
                 class="setting-input"
                 color="primary"
                 type="password"
-                autocomplete="new-password"
+              />
+              <v-text-field
+                v-model="confirmNewPassword"
                 :label="t('profile.edit.password.confirm')"
                 :rules="[
                   (v: string) =>
                     v === newPassword ||
                     t('profile.edit.password.passwordsDoNotMatch'),
                 ]"
+                autocomplete="new-password"
+                class="setting-input"
+                color="primary"
+                type="password"
               />
             </v-form>
             <common-captcha v-model="captcha" />
@@ -462,10 +471,10 @@ function savePreferences() {
           <v-card-actions>
             <v-spacer />
             <v-btn
+              :loading="changingPassword"
               class="text-capitalize setting-button"
               color="primary"
               variant="elevated"
-              :loading="changingPassword"
               @click="changePassword"
             >
               {{ t('profile.edit.password.changePassword') }}
@@ -475,7 +484,7 @@ function savePreferences() {
       </v-dialog>
     </v-row>
   </v-card>
-  <v-card class="setting-section-card section" rounded="lg" border>
+  <v-card border class="setting-section-card section" rounded="lg">
     <h3 class="setting-section-title">
       {{ $t('profile.edit.third_party_accounts') }}
     </h3>

@@ -66,8 +66,8 @@
                   </v-list-item-title>
                 </v-list-item>
               </template>
+              <v-divider />
               <template v-if="useAppStore().userCache?.isStaff">
-                <v-divider />
                 <v-list-item :to="localePath('/admin')">
                   <template #prepend>
                     <v-icon>mdi-cog</v-icon>
@@ -77,6 +77,7 @@
                   </v-list-item-title>
                 </v-list-item>
               </template>
+              <slot name="mobile-menu-append" />
             </v-list>
           </v-menu>
         </v-btn>
@@ -132,6 +133,7 @@
           icon="custom:DiscordIcon"
           title="Discord"
         />
+        <slot name="desktop-append" />
       </template>
       <slot name="common-append" />
       <v-btn icon="mdi-translate" title="Language">
@@ -180,13 +182,15 @@ const { mobile } = useDisplay({
   mobileBreakpoint: 640,
 });
 
-defineSlots<{
+const slots = defineSlots<{
   'common-append': void;
+  'desktop-append': void;
+  'mobile-menu-append': void;
 }>();
 
-const search = ref((router.currentRoute.value.query.search as string) ?? '');
+const search = ref((router.currentRoute.value.query.q as string) ?? '');
 watch(router.currentRoute, (value) => {
-  search.value = (value.query.search as string) ?? '';
+  search.value = (value.query.q as string) ?? '';
 });
 </script>
 <style scoped>

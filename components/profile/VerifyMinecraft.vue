@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { doFetchGet, type Profile, toastError } from '@/utils/constants';
+import { doFetchGet, type Profile, toastError } from '~/utils/constants';
 import { toast } from 'vuetify-sonner';
 
 const { user, showActions } = defineProps<{
@@ -10,6 +10,7 @@ const { user, showActions } = defineProps<{
 const status = ref('');
 const verifyingMinecraft = ref(false);
 const mustLinkMicrosoft = ref(false);
+const { t } = useI18n();
 
 function verifyMinecraft() {
   verifyingMinecraft.value = true;
@@ -18,8 +19,7 @@ function verifyMinecraft() {
   doFetchGet('/api/account/microsoft')
     .then((response) => {
       if (response.ok) {
-        status.value =
-          'Microsoft account checked, verifying Minecraft ownership...';
+        status.value = t('profile.microsoft_checked_verifying_minecraft');
         doFetchGet('/api/account/minecraft/verify')
           .then((response) => {
             if (response.ok) {
@@ -65,13 +65,13 @@ function verifyMinecraft() {
       <template #activator="{ props }">
         <span v-bind="props">
           <v-icon style="color: green">mdi-check-decagram</v-icon>
-          Verified minecraft account
+          {{ $t('profile.verified_minecraft') }}
         </span>
       </template>
     </v-tooltip>
   </span>
   <span v-else
-    >No verified minecraft account linked
+    >{{ $t('profile.no_minecraft') }}
     <a
       v-if="showActions"
       class="router"
@@ -90,7 +90,7 @@ function verifyMinecraft() {
               color="primary"
               href="/api/oauth/microsoft"
             >
-              Link Now
+              {{ $t('profile.link_now') }}
             </v-btn>
           </v-card-actions>
         </v-card>

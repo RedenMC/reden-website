@@ -35,10 +35,12 @@ const username = ref('');
 const password = ref('');
 const loading = ref(false);
 const captcha = ref<Captcha>();
-definePageMeta({
-  title: 'login.title',
+useHead({
+  title: t('login.title'),
+  titleTemplate: '%s - Reden',
 });
 useSeoMeta({
+  ogTitle: t('login.title'),
   description: 'Login your Reden account.',
 });
 
@@ -90,21 +92,21 @@ function login() {
         <v-text-field
           v-model="username"
           :label="t('profile.username')"
-          required
           autocomplete="username"
+          required
         >
-          <template #prepend v-if="!mobile">
+          <template v-if="!mobile" #prepend>
             <v-icon>mdi-account</v-icon>
           </template>
         </v-text-field>
         <v-text-field
           v-model="password"
           :label="t('profile.password')"
+          autocomplete="current-password"
           required
           type="password"
-          autocomplete="current-password"
         >
-          <template #prepend v-if="!mobile">
+          <template v-if="!mobile" #prepend>
             <v-icon>mdi-lock</v-icon>
           </template>
         </v-text-field>

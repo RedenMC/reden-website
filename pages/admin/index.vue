@@ -1,10 +1,16 @@
 <script lang="ts" setup>
+import { useI18n } from 'vue-i18n';
+
 const localePath = useLocalePath();
 
+const { t } = useI18n();
+useHead({
+  title: t('admin.title.admin'),
+  titleTemplate: '%s - Reden',
+});
 definePageMeta({
   needLogin: true,
   needAdmin: true,
-  title: 'admin.title.admin',
 });
 </script>
 

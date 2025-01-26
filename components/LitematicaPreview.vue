@@ -1,5 +1,10 @@
 <script lang="ts" setup>
 import { assets } from '~/utils/litematica/assets';
+import {
+  NON_SELF_CULLING,
+  OPAQUE_BLOCKS,
+  TRANSPARENT_BLOCKS,
+} from '~/utils/litematica/opaque';
 
 import {
   BlockDefinition,
@@ -13,9 +18,16 @@ import {
 } from 'deepslate';
 import { mat4, vec3 } from 'gl-matrix';
 import { Litematic, readLitematicFromNBTData } from '~/utils/litematic-utils';
+import { toast } from 'vuetify-sonner';
+import { useAppStore } from '~/store/app';
 
+const { t } = useI18n();
+const props = defineProps<{
+  blob: Blob;
+}>();
 const canvas = useTemplateRef<HTMLCanvasElement>('canvas');
 let deepslateResources: Resources;
+const appStore = useAppStore();
 
 function upperPowerOfTwo(x: number) {
   x -= 1;
@@ -91,7 +103,11 @@ function loadResources(textureImage: HTMLImageElement) {
       return textureAtlas.getTextureAtlas();
     },
     getBlockFlags(id) {
-      return { opaque: false };
+      return {
+        opaque: OPAQUE_BLOCKS.has(id.toString()),
+        self_culling: !NON_SELF_CULLING.has(id.toString()),
+        semi_transparent: TRANSPARENT_BLOCKS.has(id.toString()),
+      };
     },
     getBlockProperties(id) {
       return null;
@@ -101,6 +117,9 @@ function loadResources(textureImage: HTMLImageElement) {
     },
   };
 }
+
+let keyDownListener: (evt: KeyboardEvent) => any;
+let keyUpListener: (evt: KeyboardEvent) => any;
 
 function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
   // Create canvas and size it appropriately
@@ -177,13 +196,14 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
 
   function pan(direction: [number, number], sensitivity = 1) {
     // seems backwards but is correct
-    yRotation += (direction[0] / 200) * sensitivity;
-    xRotation += (direction[1] / 200) * sensitivity;
+    const multiplier = appStore.invertPreview ? 1 : -1;
+    yRotation += multiplier * (direction[0] / 200) * sensitivity;
+    xRotation += multiplier * (direction[1] / 200) * sensitivity;
   }
 
   function move(offset: [number, number], sensitivity: number) {
-    xOffset = ((offset[0] * viewDist) / 500) * sensitivity;
-    yOffset = ((offset[1] * viewDist) / 500) * sensitivity;
+    xOffset = ((offset[0] * viewDist) / 300) * sensitivity;
+    yOffset = ((offset[1] * viewDist) / 300) * sensitivity;
     let offset_vector = vec3.create();
     vec3.set(offset_vector, xOffset, -yOffset, 0);
     vec3.rotateX(offset_vector, offset_vector, [0, 0, 0], -xRotation);
@@ -233,7 +253,7 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
         evt.clientX - middleClickPos[0],
         evt.clientY - middleClickPos[1],
       ];
-      runMovementFunction('middle-click-drag', args, { move, pan }, 'pan');
+      runMovementFunction('middle-click-drag', args, { move, pan }, 'move');
       middleClickPos = [evt.clientX, evt.clientY];
       requestAnimationFrame(render);
     } else if (leftPos) {
@@ -241,7 +261,7 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
         evt.clientX - leftPos[0],
         evt.clientY - leftPos[1],
       ];
-      runMovementFunction('click-drag', args, { move, pan }, 'move');
+      runMovementFunction('click-drag', args, { move, pan }, 'pan');
       leftPos = [evt.clientX, evt.clientY];
       requestAnimationFrame(render);
     }
@@ -280,16 +300,20 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
   };
   let pressedKeys = new Set<string>();
 
-  document.addEventListener('keydown', (evt) => {
+  keyDownListener = (evt) => {
     if (evt.code in keyMoves) {
       evt.preventDefault();
       pressedKeys.add(evt.code);
     }
-  });
-
-  document.addEventListener('keyup', (evt) => {
-    pressedKeys.delete(evt.code);
-  });
+  };
+  keyUpListener = (evt) => {
+    if (evt.code in keyMoves) {
+      evt.preventDefault();
+      pressedKeys.delete(evt.code);
+    }
+  };
+  document.addEventListener('keydown', keyDownListener);
+  document.addEventListener('keyup', keyUpListener);
 
   window.addEventListener('blur', () => pressedKeys.clear());
 
@@ -448,55 +472,87 @@ function readFile(file: Blob) {
   reader.readAsArrayBuffer(file);
   console.log(reader.result);
 
-  reader.onload = function (evt) {
-    var buff = new Uint8Array(reader.result as ArrayBuffer);
-    console.log(buff);
+  reader.onload = (evt) => {
+    try {
+      const buff = new Uint8Array(reader.result as ArrayBuffer);
+      console.log('buffer[before un-gzip]', buff);
 
-    const nbtdata = NbtFile.read(buff, {
-      compression: 'gzip',
-    }).toJson(); //.result; // Don't care about .compressed
-    console.log('Loaded litematic with NBT data:');
-    console.log(nbtdata);
-    var litematic = readLitematicFromNBTData(nbtdata);
+      const nbtdata = NbtFile.read(buff, {
+        compression: 'gzip',
+      }).toJson(); //.result; // Don't care about .compressed
+      console.log('Loaded litematic with NBT data:', nbtdata);
+      const litematic = readLitematicFromNBTData(nbtdata);
 
-    createRenderer(structureFromLitematic(litematic), canvas.value!);
+      createRenderer(structureFromLitematic(litematic), canvas.value!);
+    } catch (e) {
+      console.error(e);
+      toast.error(t('litematica_generator.failed_preview_load'), {
+        duration: 5000,
+      });
+    }
   };
 
   reader.onerror = function () {
+    toast.error(t('litematica_generator.failed_preview_load'), {
+      duration: 5000,
+    });
     console.log(reader.error);
   };
 }
 
 onMounted(async () => {
-  const response = await fetch('/9宽沟世吞 普通版 (2).litematic');
-  const blob = await response.blob();
-
   const image = document.getElementById('atlas') as HTMLImageElement;
-  if (image.complete) {
-    loadResources(image);
-    readFile(blob);
-  } else {
-    console.log('Image not loaded', image);
-    image.addEventListener('load', () => {
-      console.log('Image loaded', image);
-      loadResources(image);
-      readFile(blob);
+  if (!props.blob) {
+    console.error('[LitematicaPreview] No blob provided');
+    return;
+  }
+  if (props.blob.size === 0) {
+    toast.error('失败：文件为空', {
+      duration: 5000,
     });
   }
+  try {
+    if (image.complete) {
+      loadResources(image);
+      readFile(props.blob);
+    } else {
+      console.log('Image not loaded', image);
+      image.addEventListener('load', () => {
+        console.log('Image loaded', image);
+        loadResources(image);
+        readFile(props.blob);
+      });
+    }
+  } catch (e) {
+    toast.error(t('litematica_generator.failed_preview_load'), {
+      duration: 5000,
+    });
+    console.error(e);
+  }
+});
+onUnmounted(() => {
+  // const oldContent = document.getElementById('main-content');
+  // oldContent.style.display = 'block';
+  console.log('Unmounting');
+
+  document.removeEventListener('keydown', keyDownListener);
+  document.removeEventListener('keyup', keyUpListener);
 });
 </script>
 
 <template>
-  <!-- Texture atlas -->
-  <img
-    id="atlas"
-    alt="Texture atlas"
-    crossorigin="anonymous"
-    hidden
-    src="/litematica/atlas.png"
-  />
+  <div style="background: #333">
+    <!-- Texture atlas -->
+    <img
+      id="atlas"
+      alt="Texture atlas"
+      crossorigin="anonymous"
+      hidden
+      src="/litematica/atlas.png"
+    />
 
-  <canvas ref="canvas"></canvas>
+    <canvas ref="canvas" class="w-100 h-100"></canvas>
+  </div>
 </template>
 
 <style scoped></style>

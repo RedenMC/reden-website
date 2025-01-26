@@ -16,18 +16,40 @@ const themeCookie = useCookie<'light' | 'dark'>('theme', {
 
 const theme = useTheme();
 const appStore = useAppStore();
-appStore.theme = themeCookie.value;
 onMounted(() => {
   const colors: Record<string, string> =
-    theme.themes.value[appStore.theme]!.colors;
+    theme.themes.value[themeCookie.value]!.colors;
   const css: string[] = [];
-  let themeText = `theme: ${theme.name.value} app: ${appStore.theme} cookie: ${themeCookie.value}\n`;
+  let themeText = `theme: ${theme.name.value} cookie: ${themeCookie.value}\n`;
   for (const key in colors) {
     themeText += `%c ${key} %c${colors[key]}`;
     css.push('color:unset;');
     css.push(`background:${colors[key]}`);
   }
   console.log(themeText, ...css);
+  // hack
+  const fix = (ele: Element) => {
+    if (themeCookie.value === 'dark') {
+      if (ele.classList.contains('v-theme--light')) {
+        console.log('hack: remove light', ele);
+        ele.classList.remove('v-theme--light');
+        ele.classList.add('v-theme--dark');
+      }
+    } else if (themeCookie.value === 'light') {
+      if (ele.classList.contains('v-theme--dark')) {
+        console.log('hack: remove dark', ele);
+        ele.classList.remove('v-theme--dark');
+        ele.classList.add('v-theme--light');
+      }
+    }
+  };
+  // fix hydration error
+  for (const ele of document.getElementsByClassName('v-theme--light')) {
+    fix(ele);
+  }
+  for (const ele of document.getElementsByClassName('v-theme--dark')) {
+    fix(ele);
+  }
 });
 onPrehydrate(() => {
   const background: Record<string, string> = {
@@ -46,11 +68,10 @@ onPrehydrate(() => {
 });
 
 function toggleTheme() {
-  appStore.theme = appStore.theme === 'light' ? 'dark' : 'light';
-  themeCookie.value = appStore.theme;
+  themeCookie.value = themeCookie.value === 'light' ? 'dark' : 'light';
   if (import.meta.client) {
     document.body.style.backgroundColor =
-      theme.themes.value[appStore.theme]!.colors.background;
+      theme.themes.value[themeCookie.value]!.colors.background;
   }
   appStore.save();
 }
@@ -82,18 +103,28 @@ const localeHead = useLocaleHead({
       </template>
     </Head>
   </Html>
-  <v-app :theme="appStore.theme">
+  <v-app :theme="themeCookie">
     <layout-header>
-      <template #common-append>
+      <template #desktop-append>
         <v-btn
           :icon="
-            appStore.theme === 'light'
-              ? 'mdi-weather-night'
-              : 'mdi-weather-sunny'
+            themeCookie === 'light' ? 'mdi-weather-night' : 'mdi-weather-sunny'
           "
           title="Toggle Theme"
           @click="toggleTheme"
         />
+      </template>
+      <template #mobile-menu-append>
+        <v-list-item
+          :prepend-icon="
+            themeCookie === 'light' ? 'mdi-weather-night' : 'mdi-weather-sunny'
+          "
+          @click="toggleTheme"
+        >
+          <v-list-item-title>
+            {{ themeCookie === 'light' ? 'Light Mode' : 'Dark Mode' }}
+          </v-list-item-title>
+        </v-list-item>
       </template>
     </layout-header>
 

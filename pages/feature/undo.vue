@@ -1,7 +1,11 @@
-<script setup lang="ts">
+<script lang="ts" setup>
+import { useI18n } from 'vue-i18n';
+
 const localePath = useLocalePath();
-definePageMeta({
-  title: 'reden.title.undo',
+const { t } = useI18n();
+useHead({
+  title: t('reden.title.undo'),
+  titleTemplate: '%s - Reden',
 });
 </script>
 
@@ -18,24 +22,24 @@ definePageMeta({
       <v-row class="text-center content-common">
         <v-col>
           <img
-            src="/image/homepage/undo/grass_block.webp"
             alt="Undo for blocks"
+            src="/image/homepage/undo/grass_block.webp"
           />
           <p>Blocks</p>
         </v-col>
         <v-col class="">
           <img
-            src="/image/homepage/undo/villager.webp"
             alt="Undo for entities"
+            src="/image/homepage/undo/villager.webp"
           />
           <p>Entities</p>
         </v-col>
         <v-col>
-          <img src="/image/homepage/undo/chest.png" alt="Undo for items" />
+          <img alt="Undo for items" src="/image/homepage/undo/chest.png" />
           <p>Items</p>
         </v-col>
         <v-col>
-          <img src="/image/homepage/undo/TNT.webp" alt="Undo for tnt" />
+          <img alt="Undo for tnt" src="/image/homepage/undo/TNT.webp" />
           <p>TNTs</p>
         </v-col>
       </v-row>

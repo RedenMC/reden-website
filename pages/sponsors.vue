@@ -1,6 +1,10 @@
 <script lang="ts" setup>
-definePageMeta({
-  title: 'sponsors.title',
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
+useHead({
+  title: t('sponsors.title'),
+  titleTemplate: '%s - Reden',
 });
 
 type Sponsor = {

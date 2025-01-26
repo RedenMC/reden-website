@@ -4,20 +4,17 @@ export default defineNuxtRouteMiddleware((to, from) => {
   if (import.meta.server) return;
   const localePath = useLocalePath();
   const appStore = useAppStore();
+  const meta: Record<string, any> = { ...to.meta };
   if (import.meta.dev) {
-    const meta: Record<string, any> = {};
-    for (const key of Object.keys(to.meta)) {
-      meta[key] = to.meta[key];
-    }
-    console.log('[login-route-guard]', meta);
+    console.log('[login-route-guard] page meta=', meta);
   }
-  if (to.meta.needLogin === true && !appStore.logined) {
+  if (meta.needLogin === true && !appStore.logined) {
     if (import.meta.dev) {
       console.log('[login-route-guard] need login!');
     }
     return navigateTo(localePath('/login'));
   }
-  if (to.meta.needAdmin === true && appStore.userCache?.isStaff !== true) {
+  if (meta.needAdmin === true && appStore.userCache?.isStaff !== true) {
     if (import.meta.dev) {
       console.log('[login-route-guard] need admin!');
     }

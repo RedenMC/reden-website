@@ -1,0 +1,11 @@
+.user-card-wrap {
+  min-width: 330px;
+  height: min-content;
+}
+
+@media (min-width: 960px) {
+  .user-card-wrap {
+    position: sticky;
+    top: 64px;
+  }
+}

@@ -15,8 +15,11 @@ type ViolationType =
   | 'Video'
   | 'Other';
 const violationType = ref<ViolationType>('Trademark');
-definePageMeta({
-  title: 'reden.title.copyright_complaint',
+
+const { t } = useI18n();
+useHead({
+  title: t('reden.title.copyright_complaint'),
+  titleTemplate: '%s - Reden',
 });
 </script>
 

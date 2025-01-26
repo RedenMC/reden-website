@@ -1,10 +1,13 @@
 <script lang="ts" setup>
 import RedStoneSection from '@/components/RedStoneSection.vue';
 import RedstoneSectionTitle from '@/components/RedstoneSectionTitle.vue';
+import { useI18n } from 'vue-i18n';
 
 const localePath = useLocalePath();
-definePageMeta({
-  title: 'reden.title.features',
+const { t } = useI18n();
+useHead({
+  // title: t('reden.title.features'),
+  titleTemplate: '%s - Reden',
 });
 </script>
 

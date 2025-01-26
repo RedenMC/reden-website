@@ -4,6 +4,7 @@ import { useDisplay, useGoTo } from 'vuetify';
 import SidebarAd from '~/components/ads/SidebarAd.vue';
 import BottomBarAd from '~/components/ads/BottomBarAd.vue';
 import { useElementHover } from '@vueuse/core';
+import { useAppStore } from '~/store/app';
 
 export type Tag = {
   tag: string;
@@ -11,8 +12,21 @@ export type Tag = {
   description: string;
 };
 
+enum PostType {
+  LitematicaGen = 'LitematicaGen',
+  LitematicaShare = 'LitematicaShare',
+}
+
+enum PostStatus {
+  Pending = 'Pending',
+  Approved = 'Approved',
+  Rejected = 'Rejected',
+  Deleted = 'Deleted',
+  TakenDown = 'TakenDown',
+}
+
 export type MachineDef = {
-  type: 'LitematicaGen' | 'LitematicaShare';
+  type: PostType;
   name: string;
   key: string;
   downloads?: number;
@@ -32,10 +46,30 @@ export type MachineDef = {
   attachments?: {
     name: string;
     size: number;
+    url: string;
   }[];
   original?: boolean;
+  status?: PostStatus;
+  upVotes?: number;
+  /**
+   * User-oriented data
+   */
+  ud?: {
+    owner: boolean;
+    /**
+     * upvote | down-vote | not voted yet
+     */
+    vote?: boolean;
+    /**
+     * @deprecated
+     */
+    bookmark: boolean;
+    favorite: boolean;
+  };
+  versions?: string[];
 };
 
+const appStore = useAppStore();
 const { t } = useI18n();
 useSeoMeta({
   title: t('litematica_generator.title') + ' - Reden',
@@ -77,16 +111,13 @@ export type Machine = MachineDef & {
   conditions: { [key: string]: ((v: number) => any)[] };
 };
 export type ListLitematicaResponse = {
-  readonly d: Record<
-    string,
-    MachineDef & {
-      conditions?: {
-        x: string[];
-        y: string[];
-        z: string[];
-      };
-    }
-  >;
+  d: (MachineDef & {
+    conditions?: {
+      x: string[];
+      y: string[];
+      z: string[];
+    };
+  })[];
   readonly downloads: number;
   readonly count: number;
 };
@@ -122,18 +153,8 @@ const { data: serverResponse } = await useFetch<ListLitematicaResponse>(
   },
 );
 
-const items = computed<MachineDef[]>(() => {
-  const items = [];
-  for (const [, def] of Object.entries(serverResponse.value?.d ?? {}).sort(
-    ([, a], [, b]) => (b.downloads ?? 0) - (a.downloads ?? 0),
-  )) {
-    items.push(def);
-  }
-  return items;
-});
-
 const isClient = import.meta.client;
-const notification = ref(false);
+const notification = ref<boolean>(false);
 const maintaining = false;
 const { mdAndUp, xs, sm, md, width } = useDisplay({
   mobileBreakpoint: 600,
@@ -145,29 +166,13 @@ const cardMaxWidth = computed(() => {
   const referenceWidth = mdAndUp.value ? width.value - 340 : width.value;
   return referenceWidth / itemsPerRow.value - 30;
 });
-const itemDisplay = computed(() => {
-  const rows: { def?: MachineDef[]; ad?: 'ad' }[] = [];
-  const rowCount = Math.ceil(items.value.length / itemsPerRow.value);
-  for (let i = 0; i < rowCount; i++) {
-    rows.push({
-      def: items.value.slice(
-        i * itemsPerRow.value,
-        (i + 1) * itemsPerRow.value,
-      ),
-    });
-    if (i % (6 / itemsPerRow.value) === 1) {
-      rows.push({ ad: 'ad' });
-    }
-  }
-  return rows;
-});
 const itemDisplayCols = computed(() => {
   const cols: { def?: MachineDef[]; ad?: 'ad' }[] = [];
   for (let i = 0; i < itemsPerRow.value; i++) {
     cols[i] = { def: [] };
   }
   let i = 0;
-  for (const [, def] of Object.entries(serverResponse.value?.d ?? {})) {
+  for (const def of serverResponse.value?.d ?? []) {
     cols[i % itemsPerRow.value].def?.push(def);
     i++;
   }
@@ -182,6 +187,10 @@ const isHovering = useElementHover(ad);
       广告位招租！<br />
       如果您想借助本站的流量推广您的服务器、VPS出租或任何其他服务，请在微信
       Scanmenge 或 QQ 1284588550 联系我，注明来意。
+      <p style="font-weight: bold">为什么我要在这里放广告？</p>
+      所有广告收入将用于支付服务器费用，剩余利润将会对半分给网站协作开发者，以及机器设计者。<br />
+      投影生成器和夸克网盘下载是因为我和机器作者有另外的合作和分成关系(这是我个人从此网站获利的主要方式)。<br />
+      所以希望你禁用自己的广告屏蔽器！
     </template>
     <template v-else>广告位招租！</template>
   </p>
@@ -267,7 +276,7 @@ const isHovering = useElementHover(ad);
     </template>
   </v-alert>
   <div class="w-100 d-flex flex-row justify-center">
-    <div v-if="mdAndUp" style="width: 150px">
+    <div v-if="mdAndUp" class="my-ads">
       <div data-some-item="aaa" />
       <sidebar-ad style="position: sticky; top: 80px; right: 10px" />
     </div>
@@ -290,7 +299,7 @@ const isHovering = useElementHover(ad);
         rounded="lg"
         variant="outlined"
       >
-        {{ $t('litematica_generator.upload.button_msg') }}
+        {{ t('litematica_generator.upload.button_msg') }}
         <v-dialog
           v-model="uploadDialog"
           activator="parent"
@@ -310,6 +319,13 @@ const isHovering = useElementHover(ad);
           </v-card>
         </v-dialog>
       </v-btn>
+      <v-btn
+        v-if="appStore.userCache?.roles?.includes('archiver')"
+        :to="localePath('/litematica/review')"
+      >
+        Archiver Review Panel
+      </v-btn>
+
       <v-row justify="center">
         <v-pagination
           v-model="page"
@@ -353,7 +369,7 @@ const isHovering = useElementHover(ad);
         }}
       </div>
     </v-container>
-    <div v-if="mdAndUp" style="width: 150px">
+    <div v-if="mdAndUp" class="my-ads">
       <div data-some-item="aaa" />
       <sidebar-ad style="position: sticky; top: 80px; right: 10px" />
     </div>
@@ -366,5 +382,10 @@ const isHovering = useElementHover(ad);
   .v-col {
     padding: 3px !important;
   }
+}
+
+.my-ads {
+  width: 150px;
+  max-width: 8% !important;
 }
 </style>

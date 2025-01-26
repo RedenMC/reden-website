@@ -1,11 +1,13 @@
 <script lang="ts" setup>
 import { discordInvite, githubLink, zh_cn } from '~/utils/constants';
 import RedenRouter from '~/components/RedenRouter.vue';
+import { useAppStore } from '~/store/app';
 
 const localePath = useLocalePath();
 const switchLocalePath = useSwitchLocalePath();
 
 const { t, locale } = useI18n();
+const appStore = useAppStore();
 </script>
 
 <template>
@@ -143,6 +145,18 @@ const { t, locale } = useI18n();
       >
         备案号： 京ICP备2021010288号-6
       </a>
+      <span class="bottom-right">
+        <a
+          href="javascript:void(0)"
+          @click="
+            appStore.gads = !appStore.gads;
+            appStore.save();
+          "
+        >
+          {{ appStore.gads ? 'Disable' : 'Enable' }}
+          Google ads
+        </a>
+      </span>
       <span class="bottom-right"> Privacy </span>
       <span class="router bottom-right">
         <a href="javascript:void(0)">

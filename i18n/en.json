@@ -38,7 +38,12 @@
     "and": "and",
     "back": "Back",
     "description": "Description",
+    "details": "Details",
+    "followers": "followers",
+    "following": "following",
+    "following_projects": "following projects",
     "link": "Link",
+    "loading___": "Loading...",
     "name": "Name",
     "next": "Next",
     "save": "Save",
@@ -61,13 +66,14 @@
     "description": "Generate Litematica files online for slimestone and technical minecraft machines, e.g. World Eaters, Tunnel bores, etc. This service is totally free.",
     "download": "Download",
     "download_count": "{count} downloads",
+    "failed_preview_load": "Failed to load litematica to preview",
     "not_found": "Litematica {name} not found!",
     "not_logged_in": "Guest users can only generate 5 times per minute, please log in to unlock this limit",
     "og_description": "Generate amazing redstone / slimestone contraptions online, such as world easters or tunnel bores, in any chunks size!",
     "select": "What do you want to generate today?",
     "size_description": "The size of the machine in x, y, z. for world eaters, the z size is the distance between the starting side and the returning side.",
-    "size_max": "The maximum size of the machine is {size}",
-    "size_min": "The minimum size of the machine is {size}",
+    "size_max": "The size of the machine must be less than {size}",
+    "size_min": "The size of the machine must be greater than {size}",
     "size_mod": "The size divided by {mod} must leave {rem}",
     "size_x": "Size in x",
     "size_y": "Size in y",
@@ -100,7 +106,11 @@
     "help": "Help build our site!",
     "title": "Page not found"
   },
+  "post": {
+    "preview": "Preview"
+  },
   "profile": {
+    "account_not_linked": "Account not linked",
     "edit": {
       "back": "Back to Your Profile",
       "basic_information": "Basic Information",
@@ -146,13 +156,23 @@
       "username_timer": "You can change your username again in {0} hours"
     },
     "editProfile": "Edit Profile",
+    "link_now": "Link Now!",
+    "microsoft_checked_verifying_minecraft": "Microsoft account checked, verifying Minecraft ownership...",
     "my_backup": "My Cloud Backups",
+    "no_machines": "This user has no posts yet.",
+    "no_minecraft": "No verified minecraft account linked",
     "oauth": {
       "link_account": "Link Account",
       "unlink_account": "Unlink Account"
     },
     "password": "Password",
-    "username": "Username"
+    "posts": "Posts",
+    "username": "Username",
+    "verified_minecraft": "Verified minecraft account",
+    "your_timezone": "(Your timezone)"
+  },
+  "profle": {
+    "logout": "Logout"
   },
   "reden": {
     "description": "Your one-stop destination for sharing Minecraft builds, exploring creative designs, and enhancing gameplay with cutting-edge redstone mods.",
@@ -231,7 +251,8 @@
       "home_full": "Homepage - Ultimate Technical Minecraft Mod",
       "my_account": "My Account",
       "rvc": "RVC",
-      "undo": "Undo"
+      "undo": "Undo",
+      "user_profile_seo": "{0} - {0}'s Posts - Download Minecraft Builds"
     },
     "user_not_found": "User Not Found",
     "wiki": "Wiki",
@@ -312,6 +333,7 @@
       "id_is_taken": "ID is taken, please choose another one",
       "litematica_generator": "Litematica Generator",
       "litematica_generator_only_support_uploading_1_litematica_file": "Litematica generator mode only support uploading 1 litematica file",
+      "manual_upload": "Normal Designs Upload",
       "maximum_size_per_image": "Maximum 2MB per image",
       "name_cannot_contain_special_characters": "Name cannot contain special characters",
       "please_contact_us_if_you_have_any_questions": "Please contact us if you have any questions:",

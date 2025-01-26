@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import type { NuxtError } from '#app';
 import { useRouter } from 'vue-router';
 
@@ -8,13 +8,15 @@ const prevPage = (router.currentRoute.value.meta?.prevPage as any) ?? '/';
 const props = defineProps({
   error: Object as () => NuxtError,
 });
-console.log('error', props.error);
-console.log('prevPage', prevPage);
-definePageMeta({
-  title:
+console.log('[error] err=', props.error, 'prevPage=', prevPage);
+const { t } = useI18n();
+useHead({
+  title: t(
     props.error?.statusCode === 4044
       ? 'reden.title.404'
       : `Error ${props.error?.statusCode}`,
+  ),
+  titleTemplate: '%s - Reden',
 });
 </script>
 
@@ -22,10 +24,10 @@ definePageMeta({
   <NuxtLayout>
     <v-empty-state
       v-if="error?.statusCode === 404"
-      headline="Whoops, 404"
-      :title="$t('page404.title')"
       :max-width="1000"
+      :title="$t('page404.title')"
       class="mx-auto"
+      headline="Whoops, 404"
     >
       <template #text>
         {{ $t('page404.evolving') }}
@@ -35,9 +37,9 @@ definePageMeta({
         </a>
       </template>
       <template #actions>
-        <v-btn color="primary" @click="router.push(prevPage)">{{
-          $t('page404.back')
-        }}</v-btn>
+        <v-btn color="primary" @click="router.push(prevPage)"
+          >{{ $t('page404.back') }}
+        </v-btn>
       </template>
     </v-empty-state>
     <v-empty-state
