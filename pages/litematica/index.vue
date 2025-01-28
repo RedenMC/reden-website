@@ -156,21 +156,16 @@ const { data: serverResponse } = await useFetch<ListLitematicaResponse>(
 const isClient = import.meta.client;
 const notification = ref<boolean>(false);
 const maintaining = false;
-const { mdAndUp, xs, sm, md, width } = useDisplay({
+const { mdAndUp, width } = useDisplay({
   mobileBreakpoint: 600,
 });
-const itemsPerRow = computed(() =>
-  xs.value ? 2 : sm.value || md.value ? 2 : 3,
-);
-const cardMaxWidth = computed(() => {
-  const referenceWidth = mdAndUp.value ? width.value - 340 : width.value;
-  return referenceWidth / itemsPerRow.value - 30;
-});
+const itemsPerRow = computed(() => (mdAndUp.value ? 3 : 2));
 const itemDisplayCols = computed(() => {
-  const cols: { def?: MachineDef[]; ad?: 'ad' }[] = [];
+  const cols: { def?: MachineDef[] }[] = [];
   for (let i = 0; i < itemsPerRow.value; i++) {
     cols[i] = { def: [] };
   }
+  console.log('itemsPerRow', itemsPerRow.value);
   let i = 0;
   for (const def of serverResponse.value?.d ?? []) {
     cols[i % itemsPerRow.value].def?.push(def);
@@ -281,50 +276,51 @@ const isHovering = useElementHover(ad);
       <sidebar-ad style="position: sticky; top: 80px; right: 10px" />
     </div>
     <v-container>
-      <v-btn
-        v-if="locale === 'zh_cn'"
-        class="mb-4 mr-4"
-        color="primary"
-        href="https://space.bilibili.com/1545239761"
-        prepend-icon="custom:Bilibili"
-        rounded="lg"
-        variant="outlined"
-      >
-        请在B站关注我，有故障请私信
-      </v-btn>
-      <v-btn
-        class="mb-4 mr-4"
-        color="primary"
-        prepend-icon="mdi-upload"
-        rounded="lg"
-        variant="outlined"
-      >
-        {{ t('litematica_generator.upload.button_msg') }}
-        <v-dialog
-          v-model="uploadDialog"
-          activator="parent"
-          close-on-back
-          max-width="900"
-          persistent
+      <div class="d-flex flex-wrap flex-row mb-4" style="gap: 16px">
+        <v-btn
+          v-if="locale === 'zh_cn'"
+          color="primary"
+          href="https://space.bilibili.com/1545239761"
+          prepend-icon="custom:Bilibili"
+          rounded="lg"
+          variant="outlined"
         >
-          <v-card variant="flat">
-            <LitematicaUpload />
-            <div class="position-absolute top-0 right-0">
-              <v-btn
-                icon="mdi-close"
-                variant="plain"
-                @click="uploadDialog = false"
-              />
-            </div>
-          </v-card>
-        </v-dialog>
-      </v-btn>
-      <v-btn
-        v-if="appStore.userCache?.roles?.includes('archiver')"
-        :to="localePath('/litematica/review')"
-      >
-        Archiver Review Panel
-      </v-btn>
+          请在B站关注我，有故障请私信
+        </v-btn>
+        <v-btn
+          color="primary"
+          prepend-icon="mdi-upload"
+          rounded="lg"
+          variant="outlined"
+        >
+          {{ t('litematica_generator.upload.button_msg') }}
+          <v-dialog
+            v-model="uploadDialog"
+            activator="parent"
+            close-on-back
+            max-width="900"
+            persistent
+          >
+            <v-card variant="flat">
+              <LazyLitematicaUpload />
+              <div class="position-absolute top-0 right-0">
+                <v-btn
+                  icon="mdi-close"
+                  variant="plain"
+                  @click="uploadDialog = false"
+                />
+              </div>
+            </v-card>
+          </v-dialog>
+        </v-btn>
+        <v-btn
+          v-if="appStore.userCache?.roles?.includes('archiver')"
+          :to="localePath('/litematica/review')"
+          variant="outlined"
+        >
+          Archiver Review Panel
+        </v-btn>
+      </div>
 
       <v-row justify="center">
         <v-pagination
@@ -338,8 +334,8 @@ const isHovering = useElementHover(ad);
       <v-row>
         <v-col
           v-for="col in itemDisplayCols"
-          :cols="12 / itemsPerRow"
-          align="start"
+          :cols="6"
+          :md="4"
           justify="center"
         >
           <MinecraftFarmCard
@@ -363,9 +359,7 @@ const isHovering = useElementHover(ad);
       </v-row>
       <div class="text-center opacity-60 w-100 pt-2">
         {{
-          $t('litematica_generator.total_downloads', [
-            serverResponse?.downloads,
-          ])
+          t('litematica_generator.total_downloads', [serverResponse?.downloads])
         }}
       </div>
     </v-container>

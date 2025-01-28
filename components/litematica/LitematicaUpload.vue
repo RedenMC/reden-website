@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { toast } from 'vuetify-sonner';
 import type { MachineDef } from '~/pages/litematica/index.vue';
 import { useDisplay } from 'vuetify';
+import selectableModels from '~/utils/litematica/models_selectable.json';
 
 const props = defineProps<{
   editMode?: boolean;
@@ -74,6 +75,17 @@ const machineId = ref<string>();
 const disallowedFilename = '\r\n\\\u0000\u000c`?*<>|:\'"'.split(''); // allow '/'
 const uploading = ref(false);
 const isOriginal = ref();
+const productRates = ref<
+  {
+    item: string;
+    rate: number;
+  }[]
+>([
+  {
+    item: '',
+    rate: 0,
+  },
+]);
 
 async function doUploadAll() {
   uploading.value = true;
@@ -528,11 +540,11 @@ watch(props, refreshProps);
                 v-model="selectedVersions"
                 :items="selectableVersions"
                 chips
-                variant="underlined"
                 color="primary"
                 density="comfortable"
                 label="Supported Versions"
                 multiple
+                variant="underlined"
               >
                 <template #chip="{ item }">
                   <v-chip color="px-2" size="sm">
@@ -573,6 +585,72 @@ watch(props, refreshProps);
                 />
               </v-radio-group>
             </v-card-text>
+
+            Note: This component is still wip, and has no real functionality
+            yet.
+            <v-data-table
+              :headers="[
+                { key: 'item', title: 'Item', sortable: false },
+                { key: 'rate', title: 'Rate', sortable: false },
+                { key: 'op', title: '', sortable: false },
+              ]"
+              :items="productRates"
+              :items-per-page="100"
+              hide-default-footer
+            >
+              <template #[`item.item`]="{ index }" class="px-2">
+                <v-autocomplete
+                  v-model="productRates[index].item"
+                  :items="selectableModels"
+                  color="secondary"
+                  density="compact"
+                  hide-details
+                >
+                  <template #prepend-inner>
+                    <minecraft-item-display
+                      :id="productRates[index].item"
+                      :scale="2"
+                    />
+                  </template>
+                  <template #item="{ item, props }">
+                    <v-list-item density="compact" v-bind="props">
+                      <template #prepend>
+                        <minecraft-item-display :id="item.value" :scale="2" />
+                      </template>
+                    </v-list-item>
+                  </template>
+                </v-autocomplete>
+              </template>
+              <template #[`item.rate`]="{ index }">
+                <v-text-field
+                  v-model="productRates[index].rate"
+                  color="secondary"
+                  density="compact"
+                  hide-details
+                  outlined
+                  type="number"
+                />
+              </template>
+              <template #[`item.op`]="{ index }">
+                <v-btn
+                  :disabled="productRates.length <= 1"
+                  color="error"
+                  icon
+                  size="36"
+                  @click="productRates.splice(index, 1)"
+                >
+                  <v-icon>mdi-delete</v-icon>
+                </v-btn>
+                <v-btn
+                  color="primary"
+                  icon
+                  size="36"
+                  @click="productRates.push({ item: '', rate: 0 })"
+                >
+                  <v-icon>mdi-plus</v-icon>
+                </v-btn>
+              </template>
+            </v-data-table>
             <v-card-actions>
               <v-btn
                 :loading="uploadingLocalizedData"

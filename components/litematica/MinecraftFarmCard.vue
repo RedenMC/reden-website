@@ -94,6 +94,7 @@ const tags = computed(
     <v-card-text
       :class="{
         'content-position': true,
+        'rounded-xl': true,
         'backdrop-blur': isHovering && item.description,
       }"
     >

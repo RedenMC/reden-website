@@ -236,7 +236,7 @@ const selectedImage = ref(bvid.value ? 'bilibili:' : selected.value.imageUrl);
           persistent
         >
           <v-card variant="flat">
-            <LitematicaUpload v-model:machine="localizedData" edit-mode />
+            <LazyLitematicaUpload v-model:machine="localizedData" edit-mode />
             <div class="position-absolute top-0 right-0">
               <v-btn
                 icon="mdi-close"
@@ -332,7 +332,7 @@ const selectedImage = ref(bvid.value ? 'bilibili:' : selected.value.imageUrl);
             <v-divider style="margin: 12px 0" />
             <MDC
               :value="selected.description || ''"
-              class="lm-description text-pre-wrap"
+              class="lm-description text-pre-wrap overflow-hidden"
             />
           </div>
         </v-col>
@@ -570,9 +570,14 @@ const selectedImage = ref(bvid.value ? 'bilibili:' : selected.value.imageUrl);
                   target="_blank"
                 >
                   <template #prepend>
-                    <v-icon color="grey-darken-2" size="large">
-                      mdi-folder-outline
-                    </v-icon>
+                    <v-icon
+                      :icon="
+                        attachment.name.endsWith('litematic')
+                          ? 'custom:CubeScan'
+                          : 'custom:ZipArchive'
+                      "
+                      :size="40"
+                    />
                   </template>
                   <v-list-item-title>
                     <a
@@ -690,6 +695,10 @@ p {
 
 :deep(.v-list-item__content) {
   width: 100%;
+}
+
+:deep(.v-list-item__spacer) {
+  width: 16px !important;
 }
 
 .lm-main-content {

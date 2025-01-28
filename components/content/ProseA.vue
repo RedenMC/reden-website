@@ -1,7 +1,7 @@
 <template>
-  <NuxtLink class="router" :href="props.href" :target="props.target">
+  <reden-router class="router" :to="props.href" :target="props.target">
     <slot />
-  </NuxtLink>
+  </reden-router>
 </template>
 
 <script setup lang="ts">

@@ -285,7 +285,7 @@ const { data: machines } = useFetch<ListLitematicaResponse>(
         v-if="machines"
         v-model:page="page"
         :machines="machines.d"
-        :totalPages="machines.count / 12"
+        :totalPages="Math.ceil(machines.count / 12)"
         class="mt-4"
       />
     </v-col>

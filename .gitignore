@@ -6,6 +6,7 @@
 .cache
 .vscode
 dist
+assets/hash.json
 
 # Node dependencies
 node_modules

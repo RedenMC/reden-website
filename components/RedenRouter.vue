@@ -38,37 +38,39 @@ const props = defineProps<
 >();
 
 const isExternalLink = computed(
-  () => typeof props.to === 'string' && props.to.startsWith('http'),
+  () =>
+    typeof props.to === 'string' &&
+    (props.to.startsWith('http') || props.to.startsWith('//')),
 );
 </script>
 
 <template>
   <a
     v-if="isExternalLink"
-    v-bind="$attrs"
-    class="router-external router"
     :href="props.to as string"
+    class="router-external router"
     target="_blank"
+    v-bind="$attrs"
   >
     <slot />
     <v-icon v-if="!noExternalIcon" size="xs">mdi-open-in-new</v-icon>
   </a>
   <nuxt-link-locale
     v-else
-    v-bind="$props"
-    :to="props.to"
-    custom
-    class="router"
     v-slot="{ isActive, href, navigate }"
+    :to="props.to"
+    class="router"
+    custom
+    v-bind="$props"
   >
     <a
-      v-bind="$attrs"
-      :href="href"
-      @click="navigate"
       :class="[
         isActive ? props.activeClass : props.inactiveClass || 'router-inactive',
         'router',
       ]"
+      :href="href"
+      v-bind="$attrs"
+      @click="navigate"
     >
       <slot />
     </a>

@@ -7,7 +7,7 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare && echo \\\"dev\\\" > assets/hash.json"
   },
   "dependencies": {
     "@nuxt/content": "^2.13.4",

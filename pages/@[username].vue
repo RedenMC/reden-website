@@ -67,7 +67,7 @@ const { data: machines } = useFetch<ListLitematicaResponse>(
         <UserContentPanel
           v-model:page="page"
           :machines="machines.d"
-          :totalPages="machines.count / 12"
+          :totalPages="Math.ceil(machines.count / 12)"
         />
       </v-col>
     </v-row>
