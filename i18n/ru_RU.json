@@ -40,7 +40,8 @@
     "name": "Имя",
     "next": "Далее",
     "save": "Сохранить",
-    "summary": "Краткое содержание"
+    "summary": "Краткое содержание",
+    "supported_version" : "Поддерживаемые версии"
   },
   "en": "English",
   "litematica_generator": {
@@ -290,13 +291,20 @@
       "upload_images": "Загрузить изображения (до 3)",
       "upload_schematic_or_world_save": "Загрузить схему или сохранение мира.",
       "you_will_receive_an_email_notification_when_approved": "Вы получите уведомление по электронной почте, когда дизайн будет одобрен.",
-      "your_machine_design_is_under_review_please_wait_with_patience": "Ваш дизайн машины находится на рассмотрении, пожалуйста, подождите с терпением."
+      "your_machine_design_is_under_review_please_wait_with_patience": "Ваш дизайн машины находится на рассмотрении, пожалуйста, подождите с терпением.",
+      "not_upload" : "Документы пока не загружены",
+      "post_type": "Пожалуйста, выберите тип этой записи"
     },
     "step": {
       "image": "Изображения",
       "translation": "Информация",
       "under-review": "На рассмотрении",
       "upload": "Загрузить"
+    },
+    "toast": {
+      "max_file_number": "Нельзя загружать более {count} файлов.",
+      "auto_filled_name": "Автоматическое заполнение имени из имени файла",
+      "auto_filled_id": "Автоматическое заполнение ID из имени"
     }
   },
   "user": {

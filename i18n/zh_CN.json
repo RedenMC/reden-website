@@ -47,7 +47,8 @@
     "name": "名称",
     "next": "下一步",
     "save": "保存",
-    "summary": "简介"
+    "summary": "简介",
+    "supported_version" : "支持版本"
   },
   "en": "English",
   "litematica_generator": {
@@ -343,13 +344,20 @@
       "upload_images": "上传图片 (最多3张)",
       "upload_schematic_or_world_save": "上传蓝图或存档",
       "you_will_receive_an_email_notification_when_approved": "当审核通过后，您将收到邮件通知。",
-      "your_machine_design_is_under_review_please_wait_with_patience": "您的机器设计正在审核中，请耐心等待。"
+      "your_machine_design_is_under_review_please_wait_with_patience": "您的机器设计正在审核中，请耐心等待。",
+      "not_upload" : "暂未上传文件",
+      "post_type": "请选择此帖子的类型"
     },
     "step": {
       "image": "上传图像",
       "translation": "基本信息",
       "under-review": "等待审核",
       "upload": "上传"
+    },
+    "toast" : {
+      "max_file_number" : "上传的文件不能超过 {count} 个。",
+      "auto_filled_name" : "从文件名自动填充名称",
+      "auto_filled_id" : "从名称自动填写ID"
     }
   },
   "user": {
