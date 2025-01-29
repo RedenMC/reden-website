@@ -447,13 +447,13 @@ const handlePictureChange = (event: Event) => {
           </v-card-title>
           <v-card-text class="text-center">
             <div
+              :class="{ 'active-drag': isActiveDrag }"
+              class="upload-container pa-4 border rounded-lg"
+              @click="fileInput?.click()"
               @dragenter.prevent="toggleActiveDrag(true)"
               @dragover.prevent="toggleActiveDrag(true)"
               @dragleave.prevent="toggleActiveDrag(false)"
               @drop.prevent="handleDrop"
-              :class="{ 'active-drag': isActiveDrag }"
-              class="upload-container pa-4 border rounded-lg"
-              @click="fileInput?.click()"
             >
               <v-icon color="primary" size="100">mdi-cloud-upload</v-icon>
               <div class="opacity-60">
@@ -478,20 +478,20 @@ const handlePictureChange = (event: Event) => {
                 v-if="selectedFiles.length == 0"
                 :title="t('upload.desc.not_upload')"
               ></v-empty-state>
-              <v-list class="pa-0 rounded-lg" border>
+              <v-list v-else border class="pa-0 rounded-lg">
                 <!-- 整体容器 -->
                 <v-list-item
                   v-for="(attachment, index) in selectedFiles"
+                  :style="{
+                    'border-bottom':
+                      index === selectedFiles.length - 1 ? 'none' : undefined,
+                  }"
                   border
                   style="
                     border-top: none;
                     border-left: none;
                     border-right: none;
                   "
-                  :style="{
-                    'border-bottom':
-                      index === selectedFiles.length - 1 ? 'none' : undefined,
-                  }"
                 >
                   <template #prepend>
                     <v-icon
@@ -574,11 +574,11 @@ const handlePictureChange = (event: Event) => {
             <v-radio-group
               v-if="isPossibleLitematicaGenerator"
               v-model="litematicaGenerator"
+              :label="t('upload.desc.post_type')"
               color="primary"
               density="compact"
-              :label="t('upload.desc.post_type')"
-              @update:model-value="() => (state = 'translation')"
               hide-details
+              @update:model-value="() => (state = 'translation')"
             >
               <v-radio
                 :label="t('upload.desc.manual_upload')"
@@ -687,15 +687,15 @@ const handlePictureChange = (event: Event) => {
               <v-select
                 v-model="selectedVersions"
                 :items="selectableVersions"
+                :label="$t('common.supported_version')"
                 chips
                 color="primary"
                 density="comfortable"
-                :label="$t('common.supported_version')"
                 multiple
                 variant="underlined"
               >
                 <template #chip="{ item }">
-                  <v-chip color="px-2" size="sm" class="pa-2">
+                  <v-chip class="pa-2" color="px-2" size="sm">
                     {{ item.value }}
                   </v-chip>
                 </template>
@@ -735,11 +735,11 @@ const handlePictureChange = (event: Event) => {
             </v-card-text>
 
             <v-alert
+              class="ml-4 mr-4"
               text="This component is still wip, and has no real functionality yet."
               title="Note"
               type="info"
               variant="tonal"
-              class="ml-4 mr-4"
             ></v-alert>
             <v-data-table
               :headers="[
@@ -799,11 +799,11 @@ const handlePictureChange = (event: Event) => {
                   <v-icon>mdi-delete</v-icon>
                 </v-btn>
                 <v-btn
+                  class="ml-4"
                   color="primary"
                   icon
                   size="36"
                   @click="productRates.push({ item: '', rate: 0 })"
-                  class="ml-4"
                 >
                   <v-icon>mdi-plus</v-icon>
                 </v-btn>
@@ -829,16 +829,16 @@ const handlePictureChange = (event: Event) => {
           </v-card-title>
           <v-card-text class="text-center">
             <div
+              :class="{ 'active-drag': isActiveDragPicture }"
+              class="upload-container pa-4 border dashed rounded-lg"
               @dragenter.prevent="toggleActiveDragPicture(true)"
               @dragover.prevent="toggleActiveDragPicture(true)"
               @dragleave.prevent="toggleActiveDragPicture(false)"
               @drop.prevent="handlePictureDrop"
-              :class="{ 'active-drag': isActiveDragPicture }"
-              class="upload-container pa-4 border dashed rounded-lg"
             >
               <v-icon class="" color="primary" size="100"
-                >mdi-image-plus</v-icon
-              >
+                >mdi-image-plus
+              </v-icon>
               <div class="opacity-60">
                 <p>{{ $t('upload.desc.upload_images') }}</p>
                 <p>{{ $t('upload.desc.maximum_size_per_image') }}</p>
@@ -892,10 +892,10 @@ const handlePictureChange = (event: Event) => {
                 </v-img>
                 <div class="delete-button-container">
                   <v-btn
+                    class="delete-button"
                     icon
                     size="x-small"
                     @click="() => selectedPictures.splice(index, 1)"
-                    class="delete-button"
                   >
                     <v-icon size="x-large">mdi-close</v-icon>
                   </v-btn>
