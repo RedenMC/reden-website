@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import {ref} from 'vue';
-import {toast} from 'vuetify-sonner';
-import type {MachineDef} from '~/pages/litematica/index.vue';
-import {useDisplay} from 'vuetify';
+import { ref } from 'vue';
+import { toast } from 'vuetify-sonner';
+import type { MachineDef } from '~/pages/litematica/index.vue';
+import { useDisplay } from 'vuetify';
 import selectableModels from '~/utils/litematica/models_selectable.json';
-import {useAppStore} from '~/store/app';
+import { useAppStore } from '~/store/app';
 
 const appStore = useAppStore();
 
@@ -18,7 +18,7 @@ const props = defineProps<{
 const emit = defineEmits<{
   'update:machine': [Record<string, Partial<MachineDef>>];
 }>();
-const {height} = useDisplay();
+const { height } = useDisplay();
 
 const localePath = useLocalePath();
 type State = 'upload' | 'translation' | 'image' | 'under-review';
@@ -224,8 +224,15 @@ onMounted(() => {
 const litematicaGenerator = ref<boolean>();
 const localizedData = ref<Record<string, Partial<MachineDef>>>({});
 
-const MAX_FILE_NUMBER = 3
-const MAX_IMAGE_NUMBER = 3
+const MAX_FILE_NUMBER = 3;
+const MAX_IMAGE_NUMBER = 3;
+
+const isPossibleLitematicaGenerator = computed(
+  () =>
+    selectedFiles.value.length === 1 &&
+    selectedFiles.value[0].fileType === 'uploading' &&
+    selectedFiles.value[0].file?.name.endsWith('.litematic'),
+);
 
 const handleFileChange = (event: Event) => {
   const target = event.target as HTMLInputElement;
@@ -234,17 +241,19 @@ const handleFileChange = (event: Event) => {
   // 确保不会超过最大文件数量
   const newFilesArray = Array.from(target.files);
   if (selectedFiles.value.length + newFilesArray.length > MAX_FILE_NUMBER) {
-    toast.error(t('upload.toast.max_file_number', {count: MAX_FILE_NUMBER}));
+    toast.error(t('upload.toast.max_file_number', { count: MAX_FILE_NUMBER }));
     return;
   }
 
   // 追加新上传的文件到已选择的文件列表中
-  selectedFiles.value.push(...newFilesArray.map((file) => ({
-    name: file.name,
-    file,
-    url: URL.createObjectURL(file),
-    fileType: 'uploading',
-  })));
+  selectedFiles.value.push(
+    ...newFilesArray.map((file) => ({
+      name: file.name,
+      file,
+      url: URL.createObjectURL(file),
+      fileType: 'uploading',
+    })),
+  );
 
   const obj = getLocalizedData(language.value);
 
@@ -258,8 +267,7 @@ const handleFileChange = (event: Event) => {
     toast.success(t('upload.toast.auto_filled_id'));
   }
 
-  // 如果选择了多于一个文件，则进入翻译状态
-  if (selectedFiles.value.length > 1) {
+  if (!isPossibleLitematicaGenerator.value) {
     state.value = 'translation';
     litematicaGenerator.value = false;
   }
@@ -285,17 +293,17 @@ const formatFileSize = (bytes: number): string => {
   }
 };
 
-const {t, availableLocales, locale} = useI18n();
+const { t, availableLocales, locale } = useI18n();
 const language = ref<string>(locale.value);
 const selectedVersions = ref<string[]>([]);
 const selectableVersions = computed(() => {
   const ret: (
     | string
     | {
-    value: string;
-    title: string;
-  }
-    )[] = [];
+        value: string;
+        title: string;
+      }
+  )[] = [];
   for (const version of Object.keys(versionGrouped).toReversed()) {
     ret.push(version + '.x');
     if (!selectedVersions.value.includes(version + '.x')) {
@@ -336,8 +344,8 @@ const goingBack = ref(false);
 refreshProps();
 watch(props, refreshProps);
 
-import {message} from 'ant-design-vue';
-import type {UploadChangeParam} from 'ant-design-vue';
+import { message } from 'ant-design-vue';
+import type { UploadChangeParam } from 'ant-design-vue';
 
 const fileList = ref([]);
 const handleChange = (info: UploadChangeParam) => {
@@ -362,7 +370,7 @@ const handleDrop = (event: DragEvent) => {
   toggleActiveDrag(false);
   const files = event.dataTransfer.files;
   if (files.length) {
-    handleFileChange({target: {files}});
+    handleFileChange({ target: { files } });
   }
 };
 
@@ -376,7 +384,7 @@ const handlePictureDrop = (event: Event) => {
   const files = event.dataTransfer.files;
   if (!files.length) return;
 
-  handlePictureChange({target: {files}});
+  handlePictureChange({ target: { files } });
 };
 
 const handlePictureChange = (event: Event) => {
@@ -386,7 +394,7 @@ const handlePictureChange = (event: Event) => {
   if (!files) return;
 
   if (selectedPictures.value.length + files.length > MAX_IMAGE_NUMBER) {
-    toast.error(t('upload.toast.max_file_number', {count: MAX_IMAGE_NUMBER}));
+    toast.error(t('upload.toast.max_file_number', { count: MAX_IMAGE_NUMBER }));
     return;
   }
   pictureStepError.value = '';
@@ -409,14 +417,6 @@ const handlePictureChange = (event: Event) => {
     }),
   );
 };
-
-
-let blob = ref<Blob[]>([]);
-
-function getBlobFromFile(file: File) {
-  return new Blob([file], {type: file.type});
-}
-
 </script>
 
 <template>
@@ -451,12 +451,12 @@ function getBlobFromFile(file: File) {
               @dragover.prevent="toggleActiveDrag(true)"
               @dragleave.prevent="toggleActiveDrag(false)"
               @drop.prevent="handleDrop"
-              :class="{'active-drag': isActiveDrag}"
+              :class="{ 'active-drag': isActiveDrag }"
               class="upload-container pa-4 border rounded-lg"
               @click="fileInput?.click()"
             >
               <v-icon color="primary" size="100">mdi-cloud-upload</v-icon>
-              <div class=" opacity-60">
+              <div class="opacity-60">
                 <p>{{ t('upload.desc.upload_schematic_or_world_save') }}</p>
                 <p>{{ t('upload.desc.design_supports_file_formats') }}</p>
                 <p>{{ t('upload.desc.design_maximal_file_size') }}</p>
@@ -468,24 +468,30 @@ function getBlobFromFile(file: File) {
                 type="file"
                 @change="handleFileChange"
               />
-              <v-btn
-                class="mt-4 text-capitalize"
-                color="primary"
-              >
+              <v-btn class="mt-4 text-capitalize" color="primary">
                 {{ t('upload.btn.select_files') }}
               </v-btn>
             </div>
 
-            <div class="mt-4 rounded-lg">
+            <div class="mt-4">
               <v-empty-state
                 v-if="selectedFiles.length == 0"
                 :title="t('upload.desc.not_upload')"
               ></v-empty-state>
-              <v-list class="pa-0 rounded-lg">
+              <v-list class="pa-0 rounded-lg" border>
                 <!-- 整体容器 -->
                 <v-list-item
                   v-for="(attachment, index) in selectedFiles"
                   border
+                  style="
+                    border-top: none;
+                    border-left: none;
+                    border-right: none;
+                  "
+                  :style="{
+                    'border-bottom':
+                      index === selectedFiles.length - 1 ? 'none' : undefined,
+                  }"
                 >
                   <template #prepend>
                     <v-icon
@@ -507,16 +513,14 @@ function getBlobFromFile(file: File) {
                       <v-dialog activator="parent" close-on-back>
                         <v-card>
                           <v-card-text class="overflow-hidden">
-                            <LitematicaPreview
-                              :blob="getBlobFromFile(attachment.file)"
-                            />
+                            <LitematicaPreview :blob="attachment.file!" />
                             <div
                               class="top-0 right-0 position-absolute mr-6 mt-4 text-white text-caption text-right"
                               style="user-select: none; line-height: 0.75rem"
                             >
                               <p class="opacity-60">
                                 Credit to misode, Ending Credits & Undecentions
-                                <br/>
+                                <br />
                                 This Vue component is made by zly2006 and
                                 licensed under AGPL v3
                               </p>
@@ -549,7 +553,11 @@ function getBlobFromFile(file: File) {
                     <v-icon
                       icon="mdi-close"
                       size="xs"
-                      @click.stop="()=>{selectedFiles.splice(index,1)}"
+                      @click.stop="
+                        () => {
+                          selectedFiles.splice(index, 1);
+                        }
+                      "
                     />
                   </template>
                 </v-list-item>
@@ -564,7 +572,7 @@ function getBlobFromFile(file: File) {
               {{ t('upload.desc.existing_machine_design') }}
             </div>
             <v-radio-group
-              v-if="selectedFiles.length === 1"
+              v-if="isPossibleLitematicaGenerator"
               v-model="litematicaGenerator"
               color="primary"
               density="compact"
@@ -760,7 +768,11 @@ function getBlobFromFile(file: File) {
                   <template #item="{ item, props }">
                     <v-list-item density="compact" v-bind="props">
                       <template #prepend>
-                        <minecraft-item-display :id="item.value" :scale="2" class="mr-2"/>
+                        <minecraft-item-display
+                          :id="item.value"
+                          :scale="2"
+                          class="mr-2"
+                        />
                       </template>
                     </v-list-item>
                   </template>
@@ -813,7 +825,7 @@ function getBlobFromFile(file: File) {
 
         <v-tabs-window-item value="image">
           <v-card-title class="text-h5"
-          >{{ $t('upload.step.image') }}
+            >{{ $t('upload.step.image') }}
           </v-card-title>
           <v-card-text class="text-center">
             <div
@@ -821,11 +833,13 @@ function getBlobFromFile(file: File) {
               @dragover.prevent="toggleActiveDragPicture(true)"
               @dragleave.prevent="toggleActiveDragPicture(false)"
               @drop.prevent="handlePictureDrop"
-              :class="{'active-drag': isActiveDragPicture}"
+              :class="{ 'active-drag': isActiveDragPicture }"
               class="upload-container pa-4 border dashed rounded-lg"
             >
-              <v-icon class="" color="primary" size="100">mdi-image-plus</v-icon>
-              <div class=" opacity-60">
+              <v-icon class="" color="primary" size="100"
+                >mdi-image-plus</v-icon
+              >
+              <div class="opacity-60">
                 <p>{{ $t('upload.desc.upload_images') }}</p>
                 <p>{{ $t('upload.desc.maximum_size_per_image') }}</p>
               </div>
@@ -845,11 +859,14 @@ function getBlobFromFile(file: File) {
                 {{ $t('upload.btn.select_files') }}
               </v-btn>
             </div>
-            <div v-if="selectedPictures.length > 0" class="mt-4 image-container">
+            <div
+              v-if="selectedPictures.length > 0"
+              class="mt-4 image-container"
+            >
               <div
                 v-for="(picture, index) in selectedPictures"
                 :key="index"
-                class="position-relative  text-center"
+                class="position-relative text-center"
               >
                 <v-img
                   :src="picture.url"
@@ -922,7 +939,7 @@ function getBlobFromFile(file: File) {
                   $t('upload.desc.please_contact_us_if_you_have_any_questions')
                 }}
                 <a class="router" href="mailto:info@redenmc.com"
-                >info@redenmc.com</a
+                  >info@redenmc.com</a
                 >
               </p>
             </div>
