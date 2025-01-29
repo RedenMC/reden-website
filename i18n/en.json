@@ -345,7 +345,7 @@
       "upload_schematic_or_world_save": "Upload schematic or world save.",
       "you_will_receive_an_email_notification_when_approved": "You will receive an email notification when the design is approved.",
       "your_machine_design_is_under_review_please_wait_with_patience": "Your machine design is under review, please wait with patience.",
-      "not_upload" : "No pictures have been uploaded yet",
+      "not_upload" : "No files have been uploaded yet",
       "post_type" : "Please select the type of this post"
     },
     "step": {

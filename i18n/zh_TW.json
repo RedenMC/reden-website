@@ -292,7 +292,7 @@
       "upload_schematic_or_world_save": "上傳藍圖或存檔",
       "you_will_receive_an_email_notification_when_approved": "當審核通過後，您將收到郵件通知。",
       "your_machine_design_is_under_review_please_wait_with_patience": "您的機器設計正在審核中，請耐心等待。",
-      "not_upload" : "暫未上傳圖片",
+      "not_upload" : "尚未上傳任何文件",
       "post_type": "請選擇此帖子的類型"
     },
     "step": {

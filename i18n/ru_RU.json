@@ -292,7 +292,7 @@
       "upload_schematic_or_world_save": "Загрузить схему или сохранение мира.",
       "you_will_receive_an_email_notification_when_approved": "Вы получите уведомление по электронной почте, когда дизайн будет одобрен.",
       "your_machine_design_is_under_review_please_wait_with_patience": "Ваш дизайн машины находится на рассмотрении, пожалуйста, подождите с терпением.",
-      "not_upload" : "Документы пока не загружены",
+      "not_upload" : "Не загружено никаких файлов",
       "post_type": "Пожалуйста, выберите тип этой записи"
     },
     "step": {

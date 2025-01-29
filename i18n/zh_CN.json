@@ -345,7 +345,7 @@
       "upload_schematic_or_world_save": "上传蓝图或存档",
       "you_will_receive_an_email_notification_when_approved": "当审核通过后，您将收到邮件通知。",
       "your_machine_design_is_under_review_please_wait_with_patience": "您的机器设计正在审核中，请耐心等待。",
-      "not_upload" : "暂未上传文件",
+      "not_upload" : "尚未上传任何文件",
       "post_type": "请选择此帖子的类型"
     },
     "step": {

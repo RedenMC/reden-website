@@ -4,6 +4,9 @@ import {toast} from 'vuetify-sonner';
 import type {MachineDef} from '~/pages/litematica/index.vue';
 import {useDisplay} from 'vuetify';
 import selectableModels from '~/utils/litematica/models_selectable.json';
+import {useAppStore} from '~/store/app';
+
+const appStore = useAppStore();
 
 const props = defineProps<{
   editMode?: boolean;
@@ -406,6 +409,14 @@ const handlePictureChange = (event: Event) => {
     }),
   );
 };
+
+
+let blob = ref<Blob[]>([]);
+
+function getBlobFromFile(file: File) {
+  return new Blob([file], {type: file.type});
+}
+
 </script>
 
 <template>
@@ -465,27 +476,84 @@ const handlePictureChange = (event: Event) => {
               </v-btn>
             </div>
 
-            <div class="mt-1 pa-4 border rounded-lg">
+            <div class="mt-4 rounded-lg">
               <v-empty-state
                 v-if="selectedFiles.length == 0"
                 :title="t('upload.desc.not_upload')"
               ></v-empty-state>
-              <div v-else>
-                <div v-for="(item,index) in selectedFiles" class="file-container my-1">
-                  <div class="file-name">
-                    {{ item.name }}
-                    ({{ formatFileSize(item?.file?.size ?? 0) }})
-                  </div>
-                  <v-btn
-                    color="error"
-                    icon="mdi-close"
-                    size="xs"
-                    variant="outlined"
-                    @click.stop="()=>{selectedFiles.splice(index,1)}"
-                  />
-                </div>
-
-              </div>
+              <v-list class="pa-0 rounded-lg">
+                <!-- 整体容器 -->
+                <v-list-item
+                  v-for="(attachment, index) in selectedFiles"
+                  border
+                >
+                  <template #prepend>
+                    <v-icon
+                      :icon="
+                        attachment.name.endsWith('litematic')
+                          ? 'custom:CubeScan'
+                          : 'custom:ZipArchive'
+                      "
+                      :size="40"
+                    />
+                  </template>
+                  <v-list-item-title class="text-left">
+                    <a
+                      v-if="attachment.name.endsWith('.litematic')"
+                      class="router cursor-pointer"
+                    >
+                      <v-icon size="sm">mdi-eye</v-icon>
+                      {{ t('post.preview') }}
+                      <v-dialog activator="parent" close-on-back>
+                        <v-card>
+                          <v-card-text class="overflow-hidden">
+                            <LitematicaPreview
+                              :blob="getBlobFromFile(attachment.file)"
+                            />
+                            <div
+                              class="top-0 right-0 position-absolute mr-6 mt-4 text-white text-caption text-right"
+                              style="user-select: none; line-height: 0.75rem"
+                            >
+                              <p class="opacity-60">
+                                Credit to misode, Ending Credits & Undecentions
+                                <br/>
+                                This Vue component is made by zly2006 and
+                                licensed under AGPL v3
+                              </p>
+                              <v-switch
+                                v-model="appStore.invertPreview"
+                                class="right-0 position-absolute"
+                                color="primary"
+                                hide-details
+                                label="Invert"
+                                @click="appStore.toggleInvertPreview()"
+                              />
+                            </div>
+                          </v-card-text>
+                        </v-card>
+                      </v-dialog>
+                    </a>
+                    <span>
+                      {{ attachment.name }}
+                    </span>
+                  </v-list-item-title>
+                  <!-- 右侧内容区域 -->
+                  <v-list-item-subtitle
+                    class="text-caption opacity-60 justify-space-between d-flex"
+                  >
+                    <span>
+                      {{ formatFileSize(attachment?.file?.size ?? 0) }}
+                    </span>
+                  </v-list-item-subtitle>
+                  <template #append>
+                    <v-icon
+                      icon="mdi-close"
+                      size="xs"
+                      @click.stop="()=>{selectedFiles.splice(index,1)}"
+                    />
+                  </template>
+                </v-list-item>
+              </v-list>
             </div>
             <div
               v-if="editMode"

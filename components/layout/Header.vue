@@ -150,6 +150,15 @@
           </v-list>
         </v-menu>
       </v-btn>
+
+      <v-btn icon="mdi-text-none">
+        <v-badge color="error" content="2">
+          <v-icon>mdi-bell-outline</v-icon>
+        </v-badge>
+
+
+      </v-btn>
+
       <v-btn
         :to="localePath(useAppStore().logined ? '/home' : '/login')"
         icon="mdi-account"
