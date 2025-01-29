@@ -20,7 +20,7 @@ export const storage = useLocalStorage<AppState>('redenCache', {
   uid: -1,
   csrfToken: null,
   userCache: undefined,
-  gads: false,
+  gads: true,
   invertPreview: false,
   theme: 'light',
 });
@@ -33,7 +33,7 @@ export const useAppStore = defineStore('reden', {
       uid: -1,
       csrfToken: null,
       userCache: undefined,
-      gads: false,
+      gads: true,
       invertPreview: false,
       theme: 'light',
     }) as AppState,
@@ -48,7 +48,6 @@ export const useAppStore = defineStore('reden', {
     storeState.uid = storage.value.uid;
     storeState.csrfToken = storage.value.csrfToken;
     storeState.userCache = storage.value.userCache;
-    storeState.gads = storage.value.gads;
     storeState.theme = storage.value.theme ?? 'light';
   },
   actions: {

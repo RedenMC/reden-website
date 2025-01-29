@@ -10,7 +10,13 @@ import {
   BlockDefinition,
   BlockModel,
   type BlockPos,
+  Identifier,
+  ItemModel,
+  ItemRenderer,
+  type ItemRendererResources,
+  ItemStack,
   NbtFile,
+  NbtTag,
   type Resources,
   Structure,
   StructureRenderer,
@@ -26,7 +32,7 @@ const props = defineProps<{
   blob: Blob;
 }>();
 const canvas = useTemplateRef<HTMLCanvasElement>('canvas');
-let deepslateResources: Resources;
+let deepslateResources: Resources & ItemRendererResources;
 const appStore = useAppStore();
 
 function upperPowerOfTwo(x: number) {
@@ -56,6 +62,10 @@ function loadResources(textureImage: HTMLImageElement) {
   Object.values(blockModels).forEach((m) =>
     m.flatten({ getBlockModel: (id) => blockModels[id.toString()] }),
   );
+  const itemModels: Record<string, ItemModel> = {};
+  Object.keys(assets.models).forEach((id) => {
+    itemModels['minecraft:' + id] = ItemModel.fromJson(assets.models[id]);
+  });
 
   const atlasCanvas = document.createElement('canvas');
   const atlasSize = upperPowerOfTwo(
@@ -114,6 +124,12 @@ function loadResources(textureImage: HTMLImageElement) {
     },
     getDefaultBlockProperties(id) {
       return null;
+    },
+    getItemModel(id: Identifier): ItemModel | null {
+      return itemModels[id.toString()];
+    },
+    getItemComponents(id: Identifier): Map<string, NbtTag> {
+      return new Map();
     },
   };
 }
@@ -175,9 +191,23 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
 
     renderer.drawStructure(view);
     renderer.drawGrid(view);
+
+    new ItemRenderer(
+      gl!,
+      new ItemStack(Identifier.parse('minecraft:stone'), 1),
+      deepslateResources,
+    );
   }
 
-  requestAnimationFrame(render);
+  let redrawHandle: number | undefined;
+  function redraw() {
+    if (redrawHandle) {
+      cancelAnimationFrame(redrawHandle);
+    }
+    redrawHandle = requestAnimationFrame(render);
+  }
+
+  redraw();
 
   function move3d(direction: vec3, relativeVertical = true, sensitivity = 1) {
     let offset = vec3.create();
@@ -255,7 +285,7 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
       ];
       runMovementFunction('middle-click-drag', args, { move, pan }, 'move');
       middleClickPos = [evt.clientX, evt.clientY];
-      requestAnimationFrame(render);
+      redraw();
     } else if (leftPos) {
       const args: [number, number] = [
         evt.clientX - leftPos[0],
@@ -263,7 +293,7 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
       ];
       runMovementFunction('click-drag', args, { move, pan }, 'pan');
       leftPos = [evt.clientX, evt.clientY];
-      requestAnimationFrame(render);
+      redraw();
     }
   });
   canvas.addEventListener('mouseup', (evt) => {
@@ -282,7 +312,7 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
   canvas.addEventListener('wheel', (evt) => {
     evt.preventDefault();
     move3d([0, 0, -evt.deltaY / 200]);
-    requestAnimationFrame(render);
+    redraw();
   });
 
   const moveDist = 0.2;
@@ -325,7 +355,7 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
       vec3.add(direction, direction, keyMoves[key]);
     }
     move3d(direction, false);
-    requestAnimationFrame(render);
+    redraw();
   }, 1000 / 60);
 
   canvas.addEventListener('touchstart', touchHandler);
@@ -352,7 +382,7 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
 
         pan([dx, dy]);
 
-        requestAnimationFrame(render);
+        redraw();
       }
       middleClickPos = [evt.touches[0].pageX, evt.touches[0].pageY];
     } else if (evt.touches.length == 2) {
@@ -371,7 +401,7 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
       const distY = (prevAvgY - avgY) * dragSpeed;
 
       move3d([distX, distY, (dist - prevDist) * pinchSpeed]);
-      requestAnimationFrame(render);
+      redraw();
       prevDist = dist;
       prevAvgX = avgX;
       prevAvgY = avgY;
