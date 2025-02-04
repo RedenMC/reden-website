@@ -6,6 +6,7 @@ import Bilibili from './Bilibili.vue';
 import QuarkCloud from './QuarkCloud.vue';
 import ZipArchive from './ZipArchive.vue';
 import CubeScan from './CubeScan.vue';
+import YouTube_Logo_2017 from '~/plugins/icons/YouTube_Logo_2017.vue';
 
 const customSvgNameToComponent: Record<string, DefineComponent<{}, {}, any>> = {
   DiscordIcon,
@@ -14,6 +15,7 @@ const customSvgNameToComponent: Record<string, DefineComponent<{}, {}, any>> = {
   QuarkCloud,
   ZipArchive,
   CubeScan,
+  YouTube_Logo_2017,
 };
 
 export const customSVGs: IconSet = {

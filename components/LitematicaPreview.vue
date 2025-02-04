@@ -63,9 +63,13 @@ function loadResources(textureImage: HTMLImageElement) {
     m.flatten({ getBlockModel: (id) => blockModels[id.toString()] }),
   );
   const itemModels: Record<string, ItemModel> = {};
-  Object.keys(assets.models).forEach((id) => {
-    itemModels['minecraft:' + id] = ItemModel.fromJson(assets.models[id]);
-  });
+  Object.keys(assets.models)
+    .filter((id) => id.startsWith('item/') && assets.models[id])
+    .forEach((id) => {
+      try {
+        itemModels['minecraft:' + id] = ItemModel.fromJson(assets.models[id]);
+      } catch (e) {}
+    });
 
   const atlasCanvas = document.createElement('canvas');
   const atlasSize = upperPowerOfTwo(
@@ -136,35 +140,26 @@ function loadResources(textureImage: HTMLImageElement) {
 
 let keyDownListener: (evt: KeyboardEvent) => any;
 let keyUpListener: (evt: KeyboardEvent) => any;
+let resizeListener: (evt: UIEvent) => any;
 
 function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
   // Create canvas and size it appropriately
   // TODO: Make size change on window resize
-  canvas.width =
-    window.innerWidth ||
-    document.documentElement.clientWidth ||
-    document.body.clientWidth;
-  canvas.height =
-    window.innerHeight ||
-    document.documentElement.clientHeight ||
-    document.body.clientHeight;
+  canvas.width = canvas.clientWidth;
+  canvas.height = canvas.clientHeight;
 
-  // Remove old content
-  // const oldContent = document.getElementById('main-content');
-  // oldContent.style.display = 'none';
-
-  let options;
+  let options = {
+    chunkSize: 8,
+    useInvisibleBlockBuffer: false,
+  };
   // Create Deepslate Renderer
   // Need chunksize 8 as seems to be a max number of faces per chunk that will render
   const gl = canvas.getContext('webgl');
-  const renderer = new StructureRenderer(
+  let renderer = new StructureRenderer(
     gl!,
     structure,
     deepslateResources,
-    (options = {
-      chunkSize: 8,
-      useInvisibleBlockBuffer: false,
-    }),
+    options,
   );
 
   // Crappy controls
@@ -192,14 +187,18 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
     renderer.drawStructure(view);
     renderer.drawGrid(view);
 
-    new ItemRenderer(
-      gl!,
-      new ItemStack(Identifier.parse('minecraft:stone'), 1),
-      deepslateResources,
-    );
+    //todo
+    if (0) {
+      new ItemRenderer(
+        gl!,
+        new ItemStack(Identifier.parse('minecraft:stone'), 1),
+        deepslateResources,
+      );
+    }
   }
 
   let redrawHandle: number | undefined;
+
   function redraw() {
     if (redrawHandle) {
       cancelAnimationFrame(redrawHandle);
@@ -277,7 +276,7 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
       middleClickPos = [evt.clientX, evt.clientY];
     }
   });
-  canvas.addEventListener('mousemove', (evt) => {
+  document.addEventListener('mousemove', (evt) => {
     if (middleClickPos) {
       const args: [number, number] = [
         evt.clientX - middleClickPos[0],
@@ -296,18 +295,12 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
       redraw();
     }
   });
-  canvas.addEventListener('mouseup', (evt) => {
-    if (evt.button === 0) {
+  document.addEventListener('mouseup', (evt) => {
+    if ((evt.button === 0 && leftPos) || (evt.button === 1 && middleClickPos)) {
       leftPos = null;
-    } else if (evt.button === 1) {
       middleClickPos = null;
       evt.preventDefault();
     }
-  });
-  canvas.addEventListener('mouseout', (evt) => {
-    leftPos = null;
-    middleClickPos = null;
-    evt.preventDefault();
   });
   canvas.addEventListener('wheel', (evt) => {
     evt.preventDefault();
@@ -342,8 +335,24 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
       pressedKeys.delete(evt.code);
     }
   };
+  resizeListener = () => {
+    canvas.width = canvas.clientWidth;
+    canvas.height = canvas.clientHeight;
+    // canvas.width = window.innerWidth;
+    // canvas.height = window.innerHeight;
+    const gl = canvas.getContext('webgl');
+    renderer = new StructureRenderer(
+      gl!,
+      structure,
+      deepslateResources,
+      options,
+    );
+    redraw();
+  };
   document.addEventListener('keydown', keyDownListener);
   document.addEventListener('keyup', keyUpListener);
+  //todo
+  // window.addEventListener('resize', resizeListener);
 
   window.addEventListener('blur', () => pressedKeys.clear());
 
@@ -494,46 +503,49 @@ function structureFromLitematic(litematic: Litematic) {
   return structure;
 }
 
-function readFile(file: Blob) {
-  if (!deepslateResources) {
-    throw createError('Resources not loaded yet');
-  }
-  let reader = new FileReader();
-  reader.readAsArrayBuffer(file);
-  console.log(reader.result);
+onMounted(async () => {
+  function readFile(file: Blob) {
+    if (!deepslateResources) {
+      throw createError('Resources not loaded yet');
+    }
+    let reader = new FileReader();
+    reader.readAsArrayBuffer(file);
+    console.log(reader.result);
 
-  reader.onload = (evt) => {
-    try {
-      const buff = new Uint8Array(reader.result as ArrayBuffer);
-      console.log('buffer[before un-gzip]', buff);
+    reader.onload = () => {
+      try {
+        const buff = new Uint8Array(reader.result as ArrayBuffer);
+        console.log('buffer[before un-gzip]', buff);
 
-      const nbtdata = NbtFile.read(buff, {
-        compression: 'gzip',
-      }).toJson(); //.result; // Don't care about .compressed
-      console.log('Loaded litematic with NBT data:', nbtdata);
-      const litematic = readLitematicFromNBTData(nbtdata);
+        const nbtdata = NbtFile.read(buff, {
+          compression: 'gzip',
+        }).toJson(); //.result; // Don't care about .compressed
+        console.log('Loaded litematic with NBT data:', nbtdata);
+        const litematic = readLitematicFromNBTData(nbtdata);
 
-      createRenderer(structureFromLitematic(litematic), canvas.value!);
-    } catch (e) {
-      console.error(e);
+        createRenderer(structureFromLitematic(litematic), canvas.value!);
+      } catch (e) {
+        console.error(e);
+        toast.error(t('litematica_generator.failed_preview_load'), {
+          duration: 5000,
+        });
+      }
+    };
+
+    reader.onerror = function () {
       toast.error(t('litematica_generator.failed_preview_load'), {
         duration: 5000,
       });
-    }
-  };
+      console.log(reader.error);
+    };
+  }
 
-  reader.onerror = function () {
-    toast.error(t('litematica_generator.failed_preview_load'), {
-      duration: 5000,
-    });
-    console.log(reader.error);
-  };
-}
-
-onMounted(async () => {
   const image = document.getElementById('atlas') as HTMLImageElement;
   if (!props.blob) {
     console.error('[LitematicaPreview] No blob provided');
+    toast.error(t('litematica_generator.failed_preview_load'), {
+      duration: 5000,
+    });
     return;
   }
   if (props.blob.size === 0) {
@@ -567,11 +579,12 @@ onUnmounted(() => {
 
   document.removeEventListener('keydown', keyDownListener);
   document.removeEventListener('keyup', keyUpListener);
+  window.removeEventListener('resize', resizeListener);
 });
 </script>
 
 <template>
-  <div style="background: #333">
+  <div style="background: #333; height: 100%">
     <!-- Texture atlas -->
     <img
       id="atlas"
@@ -581,7 +594,7 @@ onUnmounted(() => {
       src="/litematica/atlas.png"
     />
 
-    <canvas ref="canvas" class="w-100 h-100"></canvas>
+    <canvas ref="canvas" class="w-100 h-100" @contextmenu.prevent=""></canvas>
   </div>
 </template>
 

@@ -129,11 +129,26 @@ definePageMeta({
 });
 const biliPlayer = useTemplateRef<HTMLIFrameElement>('biliPlayer');
 const bvid = computed(() => parseBVID(selected.value?.link));
+const youtube = computed(() =>
+  selected.value?.link?.startsWith('https://www.youtube.com/watch')
+    ? new URL(selected.value.link).searchParams.get('v')
+    : selected.value?.link?.startsWith('https://youtu.be/')
+      ? new URL(selected.value.link).pathname.slice(1)
+      : undefined,
+);
 
 const tabs = computed(() => {
   const ret: string[] = [];
   if (bvid.value) {
     ret.push('bilibili:');
+  }
+  if (youtube.value) {
+    ret.push('youtube:');
+  }
+  if (selected.value.link) {
+    console.log('selected.value.link', selected.value.link);
+    console.log('bvid.value', bvid.value);
+    console.log('youtube.value', youtube.value);
   }
   ret.push(...(selected.value.images ?? []));
   return ret;
@@ -198,7 +213,9 @@ async function vote(vote: 'up' | 'down' | 'cancel') {
   }
 }
 
-const selectedImage = ref(bvid.value ? 'bilibili:' : selected.value.imageUrl);
+const selectedImage = ref(
+  tabs.value?.[0] ? tabs.value[0] : selected.value.imageUrl,
+);
 </script>
 
 <template>
@@ -278,16 +295,36 @@ const selectedImage = ref(bvid.value ? 'bilibili:' : selected.value.imageUrl);
           <div v-if="tabs.length">
             <v-divider style="margin: 12px 0" />
             <div style="max-width: 840px; margin: 0 auto">
-              <template v-if="selectedImage === 'bilibili:'">
-                <div class="bili-player-wrapper">
-                  <iframe
-                    ref="biliPlayer"
-                    :src="`https://player.bilibili.com/player.html?isOutside=true&bvid=${bvid}`"
-                    allowfullscreen
-                    class="bili-player"
-                  />
-                </div>
-              </template>
+              <div
+                v-if="selectedImage === 'bilibili:'"
+                class="bili-player-wrapper"
+              >
+                <iframe
+                  ref="biliPlayer"
+                  :src="`https://player.bilibili.com/player.html?isOutside=true&bvid=${bvid}`"
+                  allowfullscreen
+                  class="bili-player"
+                  title="Bilibili video player"
+                />
+              </div>
+              <div
+                v-else-if="selectedImage === 'youtube:'"
+                ref="wrapper-for-ytb"
+                class="bili-player-wrapper"
+              >
+                <iframe
+                  :height="
+                    (($refs['wrapper-for-ytb']?.clientWidth ?? 0) * 9) / 16
+                  "
+                  :src="`https://www.youtube-nocookie.com/embed/${youtube}`"
+                  :width="$refs['wrapper-for-ytb']?.clientWidth"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowfullscreen
+                  class="bili-player"
+                  referrerpolicy="strict-origin-when-cross-origin"
+                  title="YouTube video player"
+                />
+              </div>
               <template v-else>
                 <v-img :aspect-ratio="16 / 9" :src="selectedImage" />
               </template>
@@ -317,6 +354,9 @@ const selectedImage = ref(bvid.value ? 'bilibili:' : selected.value.imageUrl);
                   >
                     <v-icon v-if="image === 'bilibili:'" :size="80">
                       custom:Bilibili
+                    </v-icon>
+                    <v-icon v-else-if="image === 'youtube:'" :size="64">
+                      custom:YouTube_Logo_2017
                     </v-icon>
                     <v-img v-else :src="image" min-width="100px" />
                   </div>
@@ -357,11 +397,18 @@ const selectedImage = ref(bvid.value ? 'bilibili:' : selected.value.imageUrl);
             <!-- 摘要内容 -->
             <div>
               <div class="d-flex mt-3">
-                <div class="w-33 align-content-center">发布者：</div>
+                <div class="w-33 align-content-center">
+                  {{
+                    selected.original
+                      ? t('litematica_generator.by.author')
+                      : t('litematica_generator.by.uploader')
+                  }}
+                </div>
                 <router-link
                   v-if="selected.author"
                   :to="localePath(`/@${selected.author.username}`)"
                   class="d-flex flex-row router"
+                  style="line-height: 32px"
                 >
                   <v-avatar v-if="selected.author.avatarUrl" size="32">
                     <v-img :src="selected.author.avatarUrl" />
@@ -587,7 +634,12 @@ const selectedImage = ref(bvid.value ? 'bilibili:' : selected.value.imageUrl);
                     >
                       <v-icon size="sm">mdi-eye</v-icon>
                       {{ t('post.preview') }}
-                      <v-dialog activator="parent" close-on-back>
+                      <v-dialog
+                        #default="{ isActive }"
+                        activator="parent"
+                        close-on-back
+                        height="100%"
+                      >
                         <v-card :loading="!blob[index]">
                           <v-card-text class="overflow-hidden">
                             <LitematicaPreview
@@ -608,12 +660,22 @@ const selectedImage = ref(bvid.value ? 'bilibili:' : selected.value.imageUrl);
                               class="top-0 right-0 position-absolute mr-6 mt-4 text-white text-caption text-right"
                               style="user-select: none; line-height: 0.75rem"
                             >
-                              <p class="opacity-60">
-                                Credit to misode, Ending Credits & Undecentions
-                                <br />
-                                This Vue component is made by zly2006 and
-                                licensed under AGPL v3
-                              </p>
+                              <div class="flex-row d-flex">
+                                <div class="opacity-60">
+                                  Credit to misode, Ending Credits &
+                                  Undecentions
+                                  <br />
+                                  This Vue component is made by zly2006 and
+                                  licensed under AGPL v3
+                                </div>
+
+                                <v-btn
+                                  color="red"
+                                  icon="mdi-close"
+                                  variant="outlined"
+                                  @click="isActive.value = false"
+                                />
+                              </div>
                               <v-switch
                                 v-model="appStore.invertPreview"
                                 class="right-0 position-absolute"

@@ -93,8 +93,8 @@ const productRates = ref<
 async function doUploadAll() {
   uploading.value = true;
   if (!props.editMode || selectedFiles.value.length > 0) {
-    if (selectedFiles.value.length > 3) {
-      toast.error('你最多只能上传3个文件');
+    if (selectedFiles.value.length > 6) {
+      toast.error('你最多只能上传6个文件');
       return;
     }
     if (litematicaGenerator.value) {
@@ -204,6 +204,36 @@ const triggerPictureInput = () => {
   if (pictureInput.value) {
     pictureInput.value.click();
   }
+};
+
+const handlePictureChange = (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  const files = target.files;
+
+  if (!files) return;
+
+  if (selectedPictures.value.length + files.length > 5) {
+    pictureStepError.value = '最多只能上传5张图片';
+    return;
+  }
+  pictureStepError.value = undefined;
+
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    if (file.size > 2 * 1024 * 1024) {
+      pictureStepError.value = '图片大小不能超过2MB';
+      selectedPictures.value = [];
+      return;
+    }
+  }
+  Array.from(files).forEach((file) =>
+    selectedPictures.value.push({
+      name: file.name,
+      file,
+      url: URL.createObjectURL(file),
+      fileType: 'uploading',
+    }),
+  );
 };
 
 const removePicture = (index: number) => {
@@ -418,7 +448,6 @@ function getBlobFromFile(file: File) {
 }
 
 </script>
-
 <template>
   <v-tabs v-model="state" color="primary">
     <v-tab
