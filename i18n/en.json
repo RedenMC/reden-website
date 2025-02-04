@@ -372,6 +372,13 @@
     "staff": "Staff",
     "staff_hover": "This user is a staff member of this project"
   },
+  "message": {
+    "list_title": "My Messages",
+    "all": "All",
+    "unread": "Unread",
+    "mark_as_read": "Mark as Read",
+    "all_read": "All Read"
+  },
   "zh_cn": "简体中文",
   "zh_tw": "繁體中文"
 }

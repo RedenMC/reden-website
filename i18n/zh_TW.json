@@ -317,6 +317,13 @@
     "staff": "管理員",
     "staff_hover": "此用戶是本項目的管理員"
   },
+  "message": {
+    "list_title": "我的消息",
+    "all": "全部",
+    "unread": "未讀",
+    "mark_as_read": "標記為已讀",
+    "all_read": "全部已讀"
+  },
   "zh_cn": "简体中文",
   "zh_tw": "繁體中文"
 }

@@ -22,7 +22,7 @@
                   {{ $t('reden.header.mod') }}
                 </v-list-item-title>
               </v-list-item>
-              <v-divider />
+              <v-divider/>
               <template v-if="useAppStore().logined">
                 <v-list-item :to="localePath('/home')">
                   <template #prepend>
@@ -66,7 +66,7 @@
                   </v-list-item-title>
                 </v-list-item>
               </template>
-              <v-divider />
+              <v-divider/>
               <template v-if="useAppStore().userCache?.isStaff">
                 <v-list-item :to="localePath('/admin')">
                   <template #prepend>
@@ -77,14 +77,14 @@
                   </v-list-item-title>
                 </v-list-item>
               </template>
-              <slot name="mobile-menu-append" />
+              <slot name="mobile-menu-append"/>
             </v-list>
           </v-menu>
         </v-btn>
       </template>
       <template v-else>
         <v-btn :active="false" :to="localePath('/')" stacked title="Homepage">
-          <v-img src="/reden_256.png" width="36" />
+          <v-img src="/reden_256.png" width="36"/>
         </v-btn>
         <v-btn
           v-if="useAppStore().userCache?.isStaff"
@@ -127,17 +127,17 @@
     </v-text-field>
     <template #append>
       <template v-if="!mobile">
-        <v-btn :href="githubLink" icon="mdi-github" title="Github" />
+        <v-btn :href="githubLink" icon="mdi-github" title="Github"/>
         <v-btn
           :href="discordInvite"
           icon="custom:DiscordIcon"
           title="Discord"
         />
-        <slot name="desktop-append" />
+        <slot name="desktop-append"/>
       </template>
-      <slot name="common-append" />
+      <slot name="common-append"/>
       <v-btn icon="mdi-translate" title="Language">
-        <v-icon icon="mdi-translate" />
+        <v-icon icon="mdi-translate"/>
         <v-menu :close-on-content-click="true" activator="parent">
           <v-list active-color="primary">
             <v-list-item
@@ -151,14 +151,12 @@
         </v-menu>
       </v-btn>
 
-      <v-btn icon="mdi-text-none">
-        <v-badge color="error" content="2">
+      <v-btn icon="mdi-text-none" @click="drawer = !drawer">
+        <v-badge color="error" :content="unreadCount" v-if="unreadCount">
           <v-icon>mdi-bell-outline</v-icon>
         </v-badge>
-
-
+        <v-icon v-else>mdi-bell-outline</v-icon>
       </v-btn>
-
       <v-btn
         :to="localePath(useAppStore().logined ? '/home' : '/login')"
         icon="mdi-account"
@@ -180,14 +178,19 @@
   </v-app-bar>
 </template>
 <script lang="ts" setup>
-import { useDisplay } from 'vuetify';
-import { useAppStore } from '~/store/app';
+import {useDisplay} from 'vuetify';
+import {useAppStore} from '~/store/app';
+import {useMessageStore} from '~/store/message';
+
+const messageStore = useMessageStore();
+const {unreadCount, drawer} = storeToRefs(messageStore);
+
 
 const router = useRouter();
 const localePath = useLocalePath();
 const switchLocalePath = useSwitchLocalePath();
 
-const { mobile } = useDisplay({
+const {mobile} = useDisplay({
   mobileBreakpoint: 640,
 });
 
@@ -201,6 +204,8 @@ const search = ref((router.currentRoute.value.query.q as string) ?? '');
 watch(router.currentRoute, (value) => {
   search.value = (value.query.q as string) ?? '';
 });
+
+
 </script>
 <style scoped>
 .reden-app-bar {

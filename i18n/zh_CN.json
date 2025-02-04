@@ -372,6 +372,13 @@
     "staff": "管理员",
     "staff_hover": "此用户是本项目的管理员"
   },
+  "message" : {
+    "list_title" : "我的消息",
+    "all" : "全部",
+    "unread" : "未读",
+    "mark_as_read" : "标记为已读",
+    "all_read" : "全部已读"
+  },
   "zh_cn": "简体中文",
   "zh_tw": "繁體中文"
 }
