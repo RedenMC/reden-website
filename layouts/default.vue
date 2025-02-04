@@ -117,13 +117,13 @@ function reduceUnreadCount() {
 }
 
 // 标记为已读
-function markAsRead(message) {
+function markAsRead(message:any) {
   message.read = true;
   reduceUnreadCount();
 }
 
 // 鼠标进入事件处理函数
-function onMouseEnter(id) {
+function onMouseEnter(id:any) {
   hoveredItemId.value = id;
 }
 
@@ -151,7 +151,7 @@ function markAllAsRead() {
 let selectedMessage = ref<Object | null>(null);
 const dialog = ref(false);
 
-function showMessageDetailDialog(message: Object) {
+function showMessageDetailDialog(message: any) {
   message.read = true
   selectedMessage.value = message;
   dialog.value = true

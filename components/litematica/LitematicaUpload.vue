@@ -206,35 +206,35 @@ const triggerPictureInput = () => {
   }
 };
 
-const handlePictureChange = (event: Event) => {
-  const target = event.target as HTMLInputElement;
-  const files = target.files;
-
-  if (!files) return;
-
-  if (selectedPictures.value.length + files.length > 5) {
-    pictureStepError.value = '最多只能上传5张图片';
-    return;
-  }
-  pictureStepError.value = undefined;
-
-  for (let i = 0; i < files.length; i++) {
-    const file = files[i];
-    if (file.size > 2 * 1024 * 1024) {
-      pictureStepError.value = '图片大小不能超过2MB';
-      selectedPictures.value = [];
-      return;
-    }
-  }
-  Array.from(files).forEach((file) =>
-    selectedPictures.value.push({
-      name: file.name,
-      file,
-      url: URL.createObjectURL(file),
-      fileType: 'uploading',
-    }),
-  );
-};
+// const handlePictureChange = (event: Event) => {
+//   const target = event.target as HTMLInputElement;
+//   const files = target.files;
+//
+//   if (!files) return;
+//
+//   if (selectedPictures.value.length + files.length > 5) {
+//     pictureStepError.value = '最多只能上传5张图片';
+//     return;
+//   }
+//   pictureStepError.value = undefined;
+//
+//   for (let i = 0; i < files.length; i++) {
+//     const file = files[i];
+//     if (file.size > 2 * 1024 * 1024) {
+//       pictureStepError.value = '图片大小不能超过2MB';
+//       selectedPictures.value = [];
+//       return;
+//     }
+//   }
+//   Array.from(files).forEach((file) =>
+//     selectedPictures.value.push({
+//       name: file.name,
+//       file,
+//       url: URL.createObjectURL(file),
+//       fileType: 'uploading',
+//     }),
+//   );
+// };
 
 const removePicture = (index: number) => {
   const splice = selectedPictures.value.splice(index, 1);
@@ -254,8 +254,8 @@ onMounted(() => {
 const litematicaGenerator = ref<boolean>();
 const localizedData = ref<Record<string, Partial<MachineDef>>>({});
 
-const MAX_FILE_NUMBER = 3;
-const MAX_IMAGE_NUMBER = 3;
+const MAX_FILE_NUMBER = 6;
+const MAX_IMAGE_NUMBER = 5;
 
 const isPossibleLitematicaGenerator = computed(
   () =>
