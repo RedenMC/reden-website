@@ -16,6 +16,7 @@ import {useBackendMeta} from '~/store/meta';
 import {toast} from 'vuetify-sonner';
 import {useAppStore} from '~/store/app';
 import {useRouter} from "vue-router";
+import type {ListLitematicaResponse} from '~/pages/litematica/index.vue';
 
 const appStore = useAppStore();
 const introContent = ref<HTMLElement | null>(null);
@@ -29,32 +30,7 @@ useSeoMeta({
 
 const backendInfo = useBackendMeta();
 
-const topRedstoneSubmissions = [
-  {
-    image: 'https://static.redenmc.com/kook/_attachments_2023-04_21_O58XUxTuEr15s0q3.jpg',
-    name: '简洁的12gt全树种树场',
-    author: 'zly2006',
-    authorAvatar: 'https://avatars.githubusercontent.com/u/88337896?v=4',
-    downloads: 134,
-    url: '/litematica/45c8cf98-cddf-4fb5-b87e-a71da736e12b?backUrl=%2Flitematica'
-  },
-  {
-    image: 'https://static.redenmc.com/kook/_attachments_2023-03_25_VIWFyCJlLj0sg0sg.jpg',
-    name: 'Chronos苔藓骨粉机',
-    author: 'zly2006',
-    authorAvatar: 'https://avatars.githubusercontent.com/u/88337896?v=4',
-    downloads: 198,
-    url: '/litematica/10e32a32-aea5-4a2f-a43c-6484fc659442?backUrl=%2Flitematica%3Fpage%3D1'
-  },
-  {
-    image: 'https://static.redenmc.com/kook/_attachments_2023-03_28_Yw2IV8scSf1hc0s9.jpg',
-    name: '[1.13+] 172万6gt刷石机',
-    authorAvatar: 'https://avatars.githubusercontent.com/u/88337896?v=4',
-    author: '金合欢酱',
-    downloads: 40,
-    url: '/litematica/1a4bd283-4682-46f1-bb73-ebf82613449e?page=1'
-  }
-];
+let topRedstoneSubmissions = ref([]);
 
 const topAuthors = [
   // 同样，这里应该是从数据库或API获取的数据
@@ -104,12 +80,40 @@ const topAuthors = [
     url: '/@金合欢酱'
   },
 ]
+
 const router = useRouter();
 
 function viewAuthor(path: any) {
   console.log(path)
   router.push({path: path});
 }
+
+const {locale} = useI18n()
+
+const idList = ["b76c2b70-90d2-425e-b007-1d2e56f6fae5", "fe80a637-821f-4f7b-ae89-f8b6fc9fffd0", "pdc-stack-raid-farm-v7", "919a63d1-da48-4406-964a-ea354dacfdf8", "MultipleParallelDuplicateLineMachines"];
+for (const id of idList) {
+  try {
+    const {data, status, error} = await useFetch<ListLitematicaResponse>(
+      `/api/mc-services/yisibite/${id}/info/${locale.value}`,
+      {
+        key: `generators-${id}-${locale.value}`,
+      },
+    );
+    console.log("newData,", data.value);
+    const realData = data.value.d[0]
+    topRedstoneSubmissions.value.push({
+      image: realData.imageUrl,
+      name: realData.name,
+      author: realData.author.username,
+      authorAvatar: realData.author.avatarUrl,
+      downloads: realData.downloads,
+      url: '/litematica/' + id
+    });
+  } catch (error) {
+    console.error(`Error fetching data for id ${id}:`, error);
+  }
+}
+
 </script>
 
 <template>
@@ -207,7 +211,7 @@ function viewAuthor(path: any) {
             <v-container class="authors-list inner-container" fluid>
               <v-expansion-panels class="my-4" variant="accordion">
                 <v-expansion-panel class="author-panel"
-                  v-for="(item, index) in topAuthors" :key="index"
+                                   v-for="(item, index) in topAuthors" :key="index"
                 >
                   <v-expansion-panel-title class="author-item-title">
                     <span @click.stop="viewAuthor(item.url)" class="author-item-flex-col">
@@ -477,6 +481,7 @@ body {
     display: none;
   }
 }
+
 .v-window {
   height: 100% !important;
   overflow: hidden;

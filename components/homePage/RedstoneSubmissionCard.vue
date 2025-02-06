@@ -17,7 +17,7 @@
       </v-card-subtitle>
       <v-card-subtitle class="submission-card__subtitle downloads">
         {{ $t('reden.card.downloads') }}:
-        <v-chip small label color="blue lighten-4" text-color="blue darken-2">
+        <v-chip x-small label color="blue lighten-4" text-color="blue darken-2" class="ml-1">
           {{ submission.downloads }}
         </v-chip>
       </v-card-subtitle>
