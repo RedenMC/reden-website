@@ -95,6 +95,7 @@ async function doUploadAll() {
   if (!props.editMode || selectedFiles.value.length > 0) {
     if (selectedFiles.value.length > 6) {
       toast.error('你最多只能上传6个文件');
+      uploading.value = false;
       return;
     }
     if (litematicaGenerator.value) {
@@ -111,6 +112,7 @@ async function doUploadAll() {
             duration: 1e4,
           },
         );
+        uploading.value = false;
         return;
       }
     }
@@ -614,11 +616,15 @@ const handlePictureChange = (event: Event) => {
                 :value="false"
                 density="compact"
               />
-              <v-radio
-                :label="t('upload.desc.litematica_generator')"
-                :value="true"
-                density="compact"
-              />
+              <v-radio :value="true" density="compact">
+                <template #label>
+                  <div>
+                    {{ t('upload.desc.litematica_generator') }}
+                    勾选之前请确认你的投影符合
+                    <a href="/docs/zh_cn/generator-rules"> 生成器规则 </a>
+                  </div>
+                </template>
+              </v-radio>
             </v-radio-group>
           </v-card-text>
         </v-tabs-window-item>
@@ -964,9 +970,7 @@ const handlePictureChange = (event: Event) => {
             </div>
             <div class="mt-6">
               <p>
-                {{
-                  $t('upload.desc.please_contact_us_if_you_have_any_questions')
-                }}
+                {{ 'upload.desc.please_contact_us_if_you_have_any_questions' }}
                 <a class="router" href="mailto:info@redenmc.com"
                   >info@redenmc.com</a
                 >
@@ -980,7 +984,7 @@ const handlePictureChange = (event: Event) => {
               variant="outlined"
               @click="goingBack = true"
             >
-              {{ $t('common.back') }}
+              {{ t('common.back') }}
             </v-btn>
           </v-card-text>
         </v-tabs-window-item>
@@ -1000,8 +1004,8 @@ const handlePictureChange = (event: Event) => {
     >
       {{
         editMode
-          ? $t('upload.btn.finish_editing')
-          : $t('upload.btn.start_uploading')
+          ? t('upload.btn.finish_editing')
+          : t('upload.btn.start_uploading')
       }}
     </v-btn>
   </v-card-actions>

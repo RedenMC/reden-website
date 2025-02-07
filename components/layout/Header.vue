@@ -99,7 +99,8 @@
         <v-btn
           :active="false"
           :to="localePath('/litematica')"
-          class="ma-2 text-capitalize"
+          class="ma-2 text-capitalize px-1"
+          size="large"
         >
           {{ $t('reden.header.explore') }}
         </v-btn>
@@ -113,6 +114,7 @@
       density="comfortable"
       hide-details
       rounded="xl"
+      id="search"
       variant="outlined"
       @keydown.prevent.enter="
         router.push(localePath(`/litematica?q=${search}`))
@@ -126,8 +128,8 @@
       </template>
     </v-text-field>
     <template #append>
-      <template v-if="!mobile">
-        <v-btn :href="githubLink" icon="mdi-github" title="Github"/>
+      <template v-if="mdAndUp">
+        <v-btn :href="githubLink" icon="mdi-github" title="Github" />
         <v-btn
           :href="discordInvite"
           icon="custom:DiscordIcon"
@@ -166,11 +168,11 @@
         v-if="!mobile"
         :active="false"
         :to="localePath('/litematica#upload')"
-        class="ma-2 text-capitalize"
+        class="ma-2 text-capitalize px-1 mx-1"
         color="secondary"
         prepend-icon="mdi-upload"
-        size="x-large"
         variant="text"
+        stacked
       >
         {{ $t('reden.header.upload') }}
       </v-btn>
@@ -178,19 +180,14 @@
   </v-app-bar>
 </template>
 <script lang="ts" setup>
-import {useDisplay} from 'vuetify';
-import {useAppStore} from '~/store/app';
-import {useMessageStore} from '~/store/message';
-
-const messageStore = useMessageStore();
-const {unreadCount, drawer} = storeToRefs(messageStore);
-
+import { useDisplay } from 'vuetify';
+import { useAppStore } from '~/store/app';
 
 const router = useRouter();
 const localePath = useLocalePath();
 const switchLocalePath = useSwitchLocalePath();
 
-const {mobile} = useDisplay({
+const { mobile, mdAndUp } = useDisplay({
   mobileBreakpoint: 640,
 });
 
@@ -214,5 +211,9 @@ watch(router.currentRoute, (value) => {
 
 .max-w-520px {
   max-width: 520px;
+}
+
+.header-search :deep(.v-input__control > .v-field--appended) {
+  padding-inline-end: 0 !important;
 }
 </style>

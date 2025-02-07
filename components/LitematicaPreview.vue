@@ -145,8 +145,8 @@ let resizeListener: (evt: UIEvent) => any;
 function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
   // Create canvas and size it appropriately
   // TODO: Make size change on window resize
-  canvas.width = canvas.clientWidth;
-  canvas.height = canvas.clientHeight;
+  canvas.width = canvas.clientWidth * window.devicePixelRatio;
+  canvas.height = canvas.clientHeight * window.devicePixelRatio;
 
   let options = {
     chunkSize: 8,
@@ -503,46 +503,58 @@ function structureFromLitematic(litematic: Litematic) {
   return structure;
 }
 
-onMounted(async () => {
-  function readFile(file: Blob) {
-    if (!deepslateResources) {
-      throw createError('Resources not loaded yet');
-    }
-    let reader = new FileReader();
-    reader.readAsArrayBuffer(file);
-    console.log(reader.result);
+function readFile(file: Blob) {
+  if (!deepslateResources) {
+    throw createError('Resources not loaded yet');
+  }
+  let reader = new FileReader();
+  reader.readAsArrayBuffer(file);
+  console.log(reader.result);
 
-    reader.onload = () => {
-      try {
-        const buff = new Uint8Array(reader.result as ArrayBuffer);
-        console.log('buffer[before un-gzip]', buff);
+  reader.onload = () => {
+    try {
+      const buff = new Uint8Array(reader.result as ArrayBuffer);
+      console.log('buffer[before un-gzip]', buff);
 
-        const nbtdata = NbtFile.read(buff, {
-          compression: 'gzip',
-        }).toJson(); //.result; // Don't care about .compressed
-        console.log('Loaded litematic with NBT data:', nbtdata);
-        const litematic = readLitematicFromNBTData(nbtdata);
+      const nbtdata = NbtFile.read(buff, {
+        compression: 'gzip',
+      }).toJson(); //.result; // Don't care about .compressed
+      console.log('Loaded litematic with NBT data:', nbtdata);
+      const litematic = readLitematicFromNBTData(nbtdata);
 
-        createRenderer(structureFromLitematic(litematic), canvas.value!);
-      } catch (e) {
-        console.error(e);
-        toast.error(t('litematica_generator.failed_preview_load'), {
-          duration: 5000,
-        });
-      }
-    };
-
-    reader.onerror = function () {
+      createRenderer(structureFromLitematic(litematic), canvas.value!);
+    } catch (e) {
+      console.error(e);
       toast.error(t('litematica_generator.failed_preview_load'), {
         duration: 5000,
       });
-      console.log(reader.error);
-    };
-  }
+    }
+  };
 
+  reader.onerror = function () {
+    toast.error(t('litematica_generator.failed_preview_load'), {
+      duration: 5000,
+    });
+    console.log(reader.error);
+  };
+}
+
+let imageLoaded: (image: HTMLImageElement) => void;
+const resourceLoading = new Promise((resolve) => (imageLoaded = resolve));
+
+onMounted(async () => {
   const image = document.getElementById('atlas') as HTMLImageElement;
+  if (image.complete) {
+    loadResources(image);
+    imageLoaded(image);
+  } else {
+    image.addEventListener('load', () => {
+      loadResources(image);
+      imageLoaded(image);
+    });
+  }
   if (!props.blob) {
-    console.error('[LitematicaPreview] No blob provided');
+    console.error('[LitematicaPreview] No blob provided:', props.blob);
     toast.error(t('litematica_generator.failed_preview_load'), {
       duration: 5000,
     });
@@ -554,17 +566,8 @@ onMounted(async () => {
     });
   }
   try {
-    if (image.complete) {
-      loadResources(image);
-      readFile(props.blob);
-    } else {
-      console.log('Image not loaded', image);
-      image.addEventListener('load', () => {
-        console.log('Image loaded', image);
-        loadResources(image);
-        readFile(props.blob);
-      });
-    }
+    await resourceLoading;
+    readFile(props.blob);
   } catch (e) {
     toast.error(t('litematica_generator.failed_preview_load'), {
       duration: 5000,
@@ -581,6 +584,13 @@ onUnmounted(() => {
   document.removeEventListener('keyup', keyUpListener);
   window.removeEventListener('resize', resizeListener);
 });
+watch(
+  () => props.blob,
+  () => {
+    console.log('Blob changed', props.blob);
+    resourceLoading.then(() => readFile(props.blob));
+  },
+);
 </script>
 
 <template>

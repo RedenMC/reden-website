@@ -84,42 +84,39 @@ export type LoginResponse = GeneralResponse & {
   csrf_token: string;
 };
 
-export const doFetchPost = (url: string, data: any) =>
-  fetch(url, {
+export const doFetchPost = async (url: string, data: any) => {
+  const { body, isJson } = getPayloadType(data);
+  const headers: { [key: string]: string } = {
+    'X-Requested-With': 'Reden',
+    'X-CSRF-Token': useAppStore().csrfToken || '[Reden] no csrf token',
+  };
+  if (isJson) {
+    headers['Content-Type'] = 'application/json';
+  }
+  let res = await fetch(url, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Requested-With': 'Reden',
-      'X-CSRF-Token': useAppStore().csrfToken || '[Reden] no csrf token',
-    },
+    headers,
     credentials: 'include',
-    body:
-      typeof data === 'string'
-        ? data
-        : typeof data === 'object'
-          ? JSON.stringify(data)
-          : typeof data === 'number'
-            ? data.toString()
-            : data,
-  }).then((res) => {
-    if (res.status === 401) {
-      useAppStore().logout();
-    }
-    return res;
+    body,
   });
+  if (res.status === 401) {
+    useAppStore().logout();
+  }
+  return res;
+};
 
 function getPayloadType(data: any): {
   isJson: boolean;
-  fetchBody: any;
+  body: any;
 } {
-  if (data instanceof File || data instanceof FormData) {
-    return { isJson: false, fetchBody: data };
+  if (data instanceof Blob || data instanceof FormData) {
+    return { isJson: false, body: data };
   }
   if (data instanceof Object) {
-    return { isJson: true, fetchBody: JSON.stringify(data) };
+    return { isJson: true, body: JSON.stringify(data) };
   }
-  if (data instanceof String) {
-    return { isJson: false, fetchBody: data };
+  if (data instanceof String || typeof data === 'string') {
+    return { isJson: false, body: data };
   }
   throw new Error('Unknown type.');
 }
@@ -129,7 +126,7 @@ export function doFetchPut(
   data: any,
   _headers: Record<string, string> = {},
 ) {
-  const { fetchBody, isJson } = getPayloadType(data);
+  const { body, isJson } = getPayloadType(data);
   const headers: { [key: string]: string } = {
     'X-Requested-With': 'Reden',
     'X-CSRF-Token': useAppStore().csrfToken || '[Reden] no csrf token',
@@ -142,7 +139,7 @@ export function doFetchPut(
     method: 'PUT',
     credentials: 'include',
     headers,
-    body: fetchBody,
+    body,
   });
 }
 

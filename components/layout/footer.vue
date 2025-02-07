@@ -223,6 +223,6 @@ const appStore = useAppStore();
 .bottom-right {
   font-size: 0.7em;
   opacity: 0.7;
-  padding: 6px;
+  padding: 0 4px;
 }
 </style>

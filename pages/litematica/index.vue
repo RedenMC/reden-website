@@ -373,8 +373,10 @@ const isHovering = useElementHover(ad);
 
 <style scoped>
 @media (max-width: 400px) {
+  .v-col-md-4,
+  .v-col-6,
   .v-col {
-    padding: 3px !important;
+    padding: 0 !important;
   }
 }
 

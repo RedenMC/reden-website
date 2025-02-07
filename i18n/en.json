@@ -59,7 +59,7 @@
       "reason_uploaded_a": "a) because it has been published in public domain or",
       "reason_uploaded_b": "b) imported from an archive discord or",
       "reason_uploaded_c": "c) permitted by the original author.",
-      "uploader": "Posted by",
+      "uploader": "Uploader",
       "uploader_not_original_author": "The uploader of this design is not the original author."
     },
     "chunks": "chunks",

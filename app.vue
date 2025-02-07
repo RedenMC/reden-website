@@ -45,5 +45,12 @@ onMounted(() => {
         (window.clarity.q = window.clarity.q || []).push(arguments);
       };
   })();
+  (function monetag() {
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = 'https://kulroakonsu.net/88/tag.min.js';
+    script.dataset.zone = '129605';
+    script.dataset.cfasync = 'false';
+  })();
 });
 </script>

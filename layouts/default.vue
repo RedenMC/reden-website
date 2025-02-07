@@ -17,16 +17,13 @@ const {t} = useI18n();
 const theme = useTheme();
 const ourTheme = ref<'light' | 'dark'>('light');
 const appStore = useAppStore();
-watch(
-  () => appStore.theme,
-  () => {
-    console.log('[layouts/default] theme changed', appStore.theme);
-    if (import.meta.client) {
-      document.body.style.backgroundColor =
-        theme.themes.value[appStore.theme]!.colors.background;
-    }
-  },
-);
+watch(ourTheme, () => {
+  console.log('[layouts/default] theme changed', appStore.theme);
+  if (import.meta.client) {
+    document.body.style.backgroundColor =
+      theme.themes.value[appStore.theme]!.colors.background;
+  }
+});
 onMounted(() => {
   const colors: Record<string, string> =
     theme.themes.value[appStore.theme]!.colors;
@@ -162,23 +159,24 @@ function showMessageDetailDialog(message: any) {
 
 <template>
   <Html :lang="localeHead.htmlAttrs.lang">
-  <Head>
-    <template v-for="link in localeHead.link" :key="link.hid">
-      <Link
-        :id="link.hid"
-        :href="link.href"
-        :hreflang="link.hreflang"
-        :rel="link.rel"
-      />
-    </template>
-    <template v-for="meta in localeHead.meta" :key="meta.hid">
-      <Meta
-        :id="meta.hid"
-        :content="meta.content"
-        :property="meta.property"
-      />
-    </template>
-  </Head>
+    <Head>
+      <Meta name="monetag" content="38f365878eac2da0ab1c69a63a130ade" />
+      <template v-for="link in localeHead.link" :key="link.hid">
+        <Link
+          :id="link.hid"
+          :href="link.href"
+          :hreflang="link.hreflang"
+          :rel="link.rel"
+        />
+      </template>
+      <template v-for="meta in localeHead.meta" :key="meta.hid">
+        <Meta
+          :id="meta.hid"
+          :content="meta.content"
+          :property="meta.property"
+        />
+      </template>
+    </Head>
   </Html>
   <v-app :theme="ourTheme">
     <layout-header>

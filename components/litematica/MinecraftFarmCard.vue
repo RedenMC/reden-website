@@ -166,7 +166,7 @@ const tags = computed(
   }
 
   .v-card {
-    margin: 3px !important;
+    margin: 8px 4px !important;
     border-radius: 8px !important;
   }
 
