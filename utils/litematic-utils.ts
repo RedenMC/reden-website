@@ -148,7 +148,7 @@ function processNBTRegionData(
  * exercise extreme caution
  * @param nbtData
  */
-function __stripNBTTyping(nbtData: any): any {
+export function __stripNBTTyping(nbtData: any): any {
   if (nbtData.hasOwnProperty('type')) {
     switch (NbtType[nbtData.type]) {
       case 'Compound':

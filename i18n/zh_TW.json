@@ -41,7 +41,7 @@
     "next": "下一步",
     "save": "儲存",
     "summary": "簡介",
-    "supported_version" : "支持版本"
+    "supported_version": "支持版本"
   },
   "en": "English",
   "litematica_generator": {
@@ -82,6 +82,13 @@
     "or": "或者",
     "register": "去註冊",
     "title": "登入 Reden"
+  },
+  "message": {
+    "all": "全部",
+    "all_read": "全部已讀",
+    "list_title": "我的消息",
+    "mark_as_read": "標記為已讀",
+    "unread": "未讀"
   },
   "page404": {
     "back": "返回上一頁",
@@ -144,6 +151,12 @@
     "username": "使用者名稱"
   },
   "reden": {
+    "card": {
+      "author": "作者",
+      "downloads": "下載次數",
+      "redStoneTitle": "探索紅石機器",
+      "subscribeTitle": "關注最愛的作者"
+    },
     "description": "為紅石機器開發者提供一站式工作環境，成為最好的紅石調試和教學工具。",
     "download": "下載",
     "download_page": {
@@ -208,13 +221,7 @@
       "undo": "Undo"
     },
     "user_not_found": "未找到用戶",
-    "wiki": "Wiki",
-    "card" : {
-      "author" : "作者",
-      "downloads" : "下載次數",
-      "redStoneTitle" : "探索紅石機器",
-      "subscribeTitle" : "關注最愛的作者"
-    }
+    "wiki": "Wiki"
   },
   "register": {
     "button": {
@@ -284,16 +291,16 @@
       "id_is_taken": "此 ID 已被佔用",
       "maximum_size_per_image": "單張圖片最大 2MB",
       "name_cannot_contain_special_characters": "名稱不能包含特殊字元",
+      "not_upload": "尚未上傳任何文件",
       "please_contact_us_if_you_have_any_questions": "如有任何疑問，請聯絡我們：",
       "please_select_which_language_to_edit": "請選擇要編輯哪種語言的資訊",
+      "post_type": "請選擇此帖子的類型",
       "review_usually_takes_one_to_two_days": "審核通常需要一到二天時間。",
       "selected_count_files": "已選擇 {count} 個檔案",
       "upload_images": "上傳圖片 (最多3張)",
       "upload_schematic_or_world_save": "上傳藍圖或存檔",
       "you_will_receive_an_email_notification_when_approved": "當審核通過後，您將收到郵件通知。",
-      "your_machine_design_is_under_review_please_wait_with_patience": "您的機器設計正在審核中，請耐心等待。",
-      "not_upload" : "尚未上傳任何文件",
-      "post_type": "請選擇此帖子的類型"
+      "your_machine_design_is_under_review_please_wait_with_patience": "您的機器設計正在審核中，請耐心等待。"
     },
     "step": {
       "image": "上傳圖像",
@@ -302,9 +309,9 @@
       "upload": "上傳"
     },
     "toast": {
-      "max_file_number": "上傳的文件不能超過{count}個。",
+      "auto_filled_id": "從名稱自動填寫ID",
       "auto_filled_name": "從文件名自動填充名稱",
-      "auto_filled_id": "從名稱自動填寫ID"
+      "max_file_number": "上傳的文件不能超過{count}個。"
     }
   },
   "user": {
@@ -316,13 +323,6 @@
     "sponsor_hover": "此用戶贊助過本項目",
     "staff": "管理員",
     "staff_hover": "此用戶是本項目的管理員"
-  },
-  "message": {
-    "list_title": "我的消息",
-    "all": "全部",
-    "unread": "未讀",
-    "mark_as_read": "標記為已讀",
-    "all_read": "全部已讀"
   },
   "zh_cn": "简体中文",
   "zh_tw": "繁體中文"

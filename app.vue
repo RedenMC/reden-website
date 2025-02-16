@@ -51,6 +51,8 @@ onMounted(() => {
     script.src = 'https://kulroakonsu.net/88/tag.min.js';
     script.dataset.zone = '129605';
     script.dataset.cfasync = 'false';
+    //todo:
+    // document.head.appendChild(script);
   })();
 });
 </script>

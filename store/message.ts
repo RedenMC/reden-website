@@ -8,12 +8,12 @@ export const useMessageStore = defineStore('message', {
   } => ({
     // TODO 初始化未读消息数量
     unreadCount: 3,
-    drawer: false
+    drawer: false,
   }),
   actions: {
     decrementUnreadCount() {
       if (this.unreadCount > 0) {
-        console.log(this.unreadCount)
+        console.log(this.unreadCount);
         this.unreadCount--;
       }
     },

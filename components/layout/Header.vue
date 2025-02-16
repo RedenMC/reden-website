@@ -37,14 +37,21 @@
                     {{ $t('reden.header.my_profile') }}
                   </v-list-item-title>
                 </v-list-item>
-                <v-list-item>
+
+                <v-list-item :to="localePath('/litematica')">
+                  <template #prepend>
+                    <v-icon>mdi-download</v-icon>
+                  </template>
                   <v-list-item-title>
-                    {{ $t('reden.header.my_machines') }}
+                    {{ $t('reden.header.explore') }}
                   </v-list-item-title>
                 </v-list-item>
-                <v-list-item>
+                <v-list-item :to="localePath('/studio')">
+                  <template #prepend>
+                    <v-icon>mdi-pencil</v-icon>
+                  </template>
                   <v-list-item-title>
-                    {{ $t('reden.header.my_stars') }}
+                    {{ $t('studio.litematica_studio') }}
                   </v-list-item-title>
                 </v-list-item>
               </template>
@@ -97,24 +104,30 @@
           Admin
         </v-btn>
         <v-btn
-          :active="false"
           :to="localePath('/litematica')"
-          class="ma-2 text-capitalize px-1"
+          class="text-capitalize px-1"
           size="large"
         >
           {{ $t('reden.header.explore') }}
+        </v-btn>
+        <v-btn
+          :to="localePath('/studio')"
+          class="text-capitalize px-1"
+          size="large"
+        >
+          {{ $t('studio.litematica_studio') }}
         </v-btn>
       </template>
     </template>
     <p class="text-h5"></p>
     <v-text-field
+      id="search"
       v-model="search"
       :placeholder="$t('reden.header.search')"
       class="mx-auto max-w-520px"
       density="comfortable"
       hide-details
       rounded="xl"
-      id="search"
       variant="outlined"
       @keydown.prevent.enter="
         router.push(localePath(`/litematica?q=${search}`))
@@ -171,8 +184,8 @@
         class="ma-2 text-capitalize px-1 mx-1"
         color="secondary"
         prepend-icon="mdi-upload"
-        variant="text"
         stacked
+        variant="text"
       >
         {{ $t('reden.header.upload') }}
       </v-btn>

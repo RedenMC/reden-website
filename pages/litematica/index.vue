@@ -121,9 +121,16 @@ export type ListLitematicaResponse = {
   readonly downloads: number;
   readonly count: number;
 };
+export type LitematicaAuthorProfile = {
+  author: Profile;
+  totalDownloads: number;
+  totalVoteUps: number;
+  totalBookmarks: number;
+  top3posts: MachineDef[];
+};
 const { locale } = useI18n();
 
-const { data: serverResponse } = await useFetch<ListLitematicaResponse>(
+const { data: serverResponse, error } = await useFetch<ListLitematicaResponse>(
   () =>
     search.value
       ? `/api/mc-services/litematica/search?q=${search.value}&lang=${locale.value}&page=${Math.round(page.value)}&pageSize=${pageSize.value}`
@@ -131,9 +138,7 @@ const { data: serverResponse } = await useFetch<ListLitematicaResponse>(
   {
     dedupe: 'defer',
     key: `generators${locale.value}`,
-    headers: {
-      Authorization: process.env.REDEN_API_TOKEN as string,
-    },
+    headers: {},
     transform: (input: any): ListLitematicaResponse => {
       if (input.d) {
         return input;
@@ -152,6 +157,10 @@ const { data: serverResponse } = await useFetch<ListLitematicaResponse>(
     },
   },
 );
+
+if (error.value?.statusCode) {
+  throw error.value;
+}
 
 const isClient = import.meta.client;
 const notification = ref<boolean>(false);

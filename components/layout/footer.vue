@@ -139,6 +139,9 @@ const appStore = useAppStore();
         {{ new Date().getFullYear() }} — <b>RedenMC</b>
       </v-col>
     </v-row>
+    <div class="bottom-right text-capitalize">
+      {{ $t('reden.footer.mojang_disclaimer') }}
+    </div>
     <div class="text-right last-line">
       <a
         v-if="locale == zh_cn"

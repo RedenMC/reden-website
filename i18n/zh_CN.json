@@ -46,9 +46,10 @@
     "loading___": "加载中...",
     "name": "名称",
     "next": "下一步",
+    "or": "或",
     "save": "保存",
     "summary": "简介",
-    "supported_version" : "支持版本"
+    "supported_version": "支持版本"
   },
   "en": "English",
   "litematica_generator": {
@@ -82,6 +83,9 @@
     "suggested_values": "建议选择：",
     "suggestion_notice": "建议值仅供参考，可能无法正确生成有效投影",
     "title": "投影蓝图在线生成器",
+    "toast": {
+      "failed_to_load_litematica_preview": "加载投影预览失败"
+    },
     "total_downloads": "我们已累计提供 {0} 次下载服务。",
     "upload": {
       "button_msg": "上传你的机器",
@@ -101,6 +105,13 @@
     "register": "去注册",
     "title": "登录 Reden"
   },
+  "message": {
+    "all": "全部",
+    "all_read": "全部已读",
+    "list_title": "我的消息",
+    "mark_as_read": "标记为已读",
+    "unread": "未读"
+  },
   "page404": {
     "back": "返回上一页",
     "evolving": "你要找的页面并不存在，我们的网站正在进化中……",
@@ -108,6 +119,8 @@
     "title": "页面没有找到"
   },
   "post": {
+    "litematica_online_edit": "编辑",
+    "litematica_online_edit_desc": "下载之前在线编辑此投影，进行个性化设置，你可以批量替换方块，或者转换其版本。",
     "preview": "预览"
   },
   "profile": {
@@ -176,6 +189,13 @@
     "logout": "退出登录"
   },
   "reden": {
+    "card": {
+      "author": "作者",
+      "downloads": "下载量",
+      "redStoneTitle": "探索红石机器",
+      "subscribeTitle": "关注最爱的作者",
+      "viewProfile": "前往个人空间"
+    },
     "description": "为红石机器开发者提供一站式工作环境，探索各种创意设计和前沿红石科技。",
     "download": "下载",
     "download_page": {
@@ -189,6 +209,7 @@
         "title": "关注我们",
         "youtube": "Youtube"
       },
+      "mojang_disclaimer": "不是《我的世界》官方服务。与Mojang、网易或微软无关。",
       "reden_community": {
         "community_events": "社区活动",
         "community_guidelines": "社区指南",
@@ -256,13 +277,7 @@
       "user_profile_seo": "{0} - {0} 的红石机器设计 - 下载我的世界机器设计"
     },
     "user_not_found": "未找到用户",
-    "wiki": "维基",
-    "card" : {
-      "author" : "作者",
-      "downloads" : "下载量",
-      "redStoneTitle" : "探索红石机器",
-      "subscribeTitle" : "关注最爱的作者"
-    }
+    "wiki": "维基"
   },
   "register": {
     "button": {
@@ -317,6 +332,23 @@
     "paypal": "使用 PayPal 支持我们",
     "title": "赞助者"
   },
+  "studIo": {
+    "replacement": "替换为"
+  },
+  "studio": {
+    "apply": "应用并预览",
+    "block_to_replace": "方块",
+    "browse_files": "浏览本地文件",
+    "convert": "转换版本",
+    "convert_version": "转换版本",
+    "drop_schematic_file_here": "拖拽投影文件到这里",
+    "edit_your_litematica_file_here": "在这个页面可以编辑你的投影文件，批量替换方块，转换版本，等等。",
+    "litematica_studio": "投影工作室",
+    "please_upload_a_litematica_file_to_edit_online": "请先上传文件以开始在线编辑。",
+    "replace_blocks": "批量替换方块",
+    "title": "投影工作室 - 在线投影文件编辑器 批量替婚方块 版本转换 格式转换 导入 下载",
+    "toolbox": "工具箱"
+  },
   "upload": {
     "btn": {
       "finish_editing": "完成编辑",
@@ -337,16 +369,16 @@
       "manual_upload": "普通机器投稿",
       "maximum_size_per_image": "单张图片最大 2MB",
       "name_cannot_contain_special_characters": "名称不能包含特殊字符",
+      "not_upload": "尚未上传任何文件",
       "please_contact_us_if_you_have_any_questions": "如有任何疑问，请联系我们：",
       "please_select_which_language_to_edit": "请选择要编辑哪种语言的信息",
+      "post_type": "请选择此帖子的类型",
       "review_usually_takes_one_to_two_days": "审核通常需要一到二天时间。",
       "selected_count_files": "已选择 {count} 个文件",
       "upload_images": "上传图片 (最多3张)",
       "upload_schematic_or_world_save": "上传蓝图或存档",
       "you_will_receive_an_email_notification_when_approved": "当审核通过后，您将收到邮件通知。",
-      "your_machine_design_is_under_review_please_wait_with_patience": "您的机器设计正在审核中，请耐心等待。",
-      "not_upload" : "尚未上传任何文件",
-      "post_type": "请选择此帖子的类型"
+      "your_machine_design_is_under_review_please_wait_with_patience": "您的机器设计正在审核中，请耐心等待。"
     },
     "step": {
       "image": "上传图像",
@@ -354,10 +386,10 @@
       "under-review": "等待审核",
       "upload": "上传"
     },
-    "toast" : {
-      "max_file_number" : "上传的文件不能超过 {count} 个。",
-      "auto_filled_name" : "从文件名自动填充名称",
-      "auto_filled_id" : "从名称自动填写ID"
+    "toast": {
+      "auto_filled_id": "从名称自动填写ID",
+      "auto_filled_name": "从文件名自动填充名称",
+      "max_file_number": "上传的文件不能超过 {count} 个。"
     }
   },
   "user": {
@@ -371,13 +403,6 @@
     "sponsor_hover": "此用户赞助过本项目",
     "staff": "管理员",
     "staff_hover": "此用户是本项目的管理员"
-  },
-  "message" : {
-    "list_title" : "我的消息",
-    "all" : "全部",
-    "unread" : "未读",
-    "mark_as_read" : "标记为已读",
-    "all_read" : "全部已读"
   },
   "zh_cn": "简体中文",
   "zh_tw": "繁體中文"

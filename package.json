@@ -21,6 +21,7 @@
     "core-js": "^3.29.0",
     "countries-and-timezones": "^3.6.0",
     "deepslate": "^0.23.5",
+    "localforage": "^1.10.0",
     "nuxt": "^3.13.0",
     "randomcolor": "^0.6.2",
     "roboto-fontface": "*",

@@ -566,3 +566,5 @@ export function size2text(val: number) {
     return kb.toFixed(2) + ' KB';
   }
 }
+
+export const globalTheme = ref<'light' | 'dark'>('light');

@@ -46,9 +46,10 @@
     "loading___": "Loading...",
     "name": "Name",
     "next": "Next",
+    "or": "or",
     "save": "Save",
     "summary": "Summary",
-    "supported_version" : "Supported version"
+    "supported_version": "Supported version"
   },
   "en": "English",
   "litematica_generator": {
@@ -82,6 +83,9 @@
     "suggested_values": "Suggested Values: ",
     "suggestion_notice": "These suggested values are for your reference only",
     "title": "Litematica Online Generator",
+    "toast": {
+      "failed_to_load_litematica_preview": "Failed to load litematica preview"
+    },
     "total_downloads": "We have provided {0} downloads in total.",
     "upload": {
       "button_msg": "Upload New Design",
@@ -101,6 +105,13 @@
     "register": "Register",
     "title": "Login to Reden"
   },
+  "message": {
+    "all": "All",
+    "all_read": "All Read",
+    "list_title": "My Messages",
+    "mark_as_read": "Mark as Read",
+    "unread": "Unread"
+  },
   "page404": {
     "back": "Go Back",
     "evolving": "The page you were looking for does not exist, the site is still evolving.",
@@ -108,6 +119,8 @@
     "title": "Page not found"
   },
   "post": {
+    "litematica_online_edit": "Edit",
+    "litematica_online_edit_desc": "Edit this litematica online before you download, including replace blocks, convert version, etc.",
     "preview": "Preview"
   },
   "profile": {
@@ -176,6 +189,13 @@
     "logout": "Logout"
   },
   "reden": {
+    "card": {
+      "author": "author",
+      "downloads": "downloads",
+      "redStoneTitle": "Explore the Red Stone Machine",
+      "subscribeTitle": "Follow Your Favorite Authors",
+      "viewProfile": "View Profile"
+    },
     "description": "Your one-stop destination for sharing Minecraft builds, exploring creative designs, and enhancing gameplay with cutting-edge redstone mods.",
     "download": "Download",
     "download_page": {
@@ -189,6 +209,7 @@
         "title": "Follow Us",
         "youtube": "Youtube"
       },
+      "mojang_disclaimer": "NOT AN OFFICIAL MINECRAFT SERVICE. NOT APPROVED BY OR ASSOCIATED WITH MOJANG, NETEASE OR MICROSOFT.",
       "reden_community": {
         "community_events": "Community Events",
         "community_guidelines": "Community Guidelines",
@@ -317,6 +338,23 @@
     "paypal": "Support us with PayPal",
     "title": "Sponsors"
   },
+  "studIo": {
+    "replacement": "Replacement"
+  },
+  "studio": {
+    "apply": "Apply Preview",
+    "block_to_replace": "Block",
+    "browse_files": "Browse Local Files",
+    "convert": "Convert Version",
+    "convert_version": "Convert Version",
+    "drop_schematic_file_here": "Drop schematic file here",
+    "edit_your_litematica_file_here": "Edit your Litematica file here. Replace blocks, translate versions, and more.",
+    "litematica_studio": "Litematica Studio",
+    "please_upload_a_litematica_file_to_edit_online": "Please upload a litematica file to edit online.",
+    "replace_blocks": "Replace Blocks",
+    "title": "Litematica Studio - Online Litematica Editor, Replace Blocks, Convert Version, Import, Download",
+    "toolbox": "Toolbox"
+  },
   "upload": {
     "btn": {
       "finish_editing": "Finish Editing",
@@ -337,8 +375,10 @@
       "manual_upload": "Normal Designs Upload",
       "maximum_size_per_image": "Maximum 2MB per image",
       "name_cannot_contain_special_characters": "Name cannot contain special characters",
+      "not_upload": "No files have been uploaded yet",
       "please_contact_us_if_you_have_any_questions": "Please contact us if you have any questions:",
       "please_select_which_language_to_edit": "Please select which language to edit",
+      "post_type": "Please select the type of this post",
       "review_usually_takes_one_to_two_days": "Review usually takes one to two days.",
       "selected_count_files": "Selected {count} files",
       "upload_images": "Upload images (up to 3)",
@@ -355,9 +395,9 @@
       "upload": "Upload"
     },
     "toast": {
-      "max_file_number": "Cannot upload more than {count} files.",
+      "auto_filled_id": "Auto-filled ID from name",
       "auto_filled_name": "Auto-filled name from file name",
-      "auto_filled_id": "Auto-filled ID from name"
+      "max_file_number": "Cannot upload more than {count} files."
     }
   },
   "user": {

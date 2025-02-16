@@ -30,10 +30,22 @@ import { useAppStore } from '~/store/app';
 const { t } = useI18n();
 const props = defineProps<{
   blob: Blob;
+  noKeyListeners?: boolean;
+}>();
+const emits = defineEmits<{
+  'loaded-resources': [Resources & ItemRendererResources];
 }>();
 const canvas = useTemplateRef<HTMLCanvasElement>('canvas');
 let deepslateResources: Resources & ItemRendererResources;
 const appStore = useAppStore();
+
+// Position and rotation
+let viewDist = 4;
+let xOffset = 0;
+let yOffset = 0;
+let xRotation = 0.8;
+let yRotation = 0.5;
+let cameraPos: vec3 | null = null;
 
 function upperPowerOfTwo(x: number) {
   x -= 1;
@@ -126,8 +138,17 @@ function loadResources(textureImage: HTMLImageElement) {
     getBlockProperties(id) {
       return null;
     },
-    getDefaultBlockProperties(id) {
-      return null;
+    getDefaultBlockProperties(id: Identifier) {
+      const props = Object.keys(
+        assets.blockstates[id.path]?.variants ?? {},
+      )?.[0];
+      if (!props) return null;
+      const ret: Record<string, string> = {};
+      props.split(',').forEach((prop) => {
+        const [key, value] = prop.split('=');
+        ret[key] = value;
+      });
+      return ret;
     },
     getItemModel(id: Identifier): ItemModel | null {
       return itemModels[id.toString()];
@@ -136,17 +157,22 @@ function loadResources(textureImage: HTMLImageElement) {
       return new Map();
     },
   };
+  emits('loaded-resources', deepslateResources);
 }
 
-let keyDownListener: (evt: KeyboardEvent) => any;
-let keyUpListener: (evt: KeyboardEvent) => any;
-let resizeListener: (evt: UIEvent) => any;
-
-function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
+function createRenderer(
+  structure: Structure,
+  canvas: HTMLCanvasElement,
+): () => void {
   // Create canvas and size it appropriately
-  // TODO: Make size change on window resize
-  canvas.width = canvas.clientWidth * window.devicePixelRatio;
-  canvas.height = canvas.clientHeight * window.devicePixelRatio;
+  function resizeCanvas() {
+    // reset canvas size (default 300)
+    canvas.width = -1;
+    canvas.height = -1;
+    canvas.width = canvas.clientWidth * window.devicePixelRatio;
+    canvas.height = canvas.clientHeight * window.devicePixelRatio;
+  }
+  resizeCanvas();
 
   let options = {
     chunkSize: 8,
@@ -163,14 +189,12 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
   );
 
   // Crappy controls
-  let viewDist = 4;
-  let xRotation = 0.8;
-  let yRotation = 0.5;
-  let xOffset = 0;
-  let yOffset = 0;
   const size = structure.getSize();
-  let cameraPos = vec3.create();
-  vec3.set(cameraPos, -size[0] / 2, -size[1] / 2, -size[2] / 2);
+  if (!cameraPos) {
+    // init
+    cameraPos = vec3.create();
+    vec3.set(cameraPos, -size[0] / 2, -size[1] / 2, -size[2] / 2);
+  }
 
   // refactor this code to use separate functions for each type of control
   function render() {
@@ -181,7 +205,7 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
     const view = mat4.create();
     mat4.rotateX(view, view, xRotation);
     mat4.rotateY(view, view, yRotation);
-    mat4.translate(view, view, cameraPos); //[xOffset, yOffset, -viewDist]);
+    mat4.translate(view, view, cameraPos!); //[xOffset, yOffset, -viewDist]);
     //mat4.translate(view, view, );
 
     renderer.drawStructure(view);
@@ -198,10 +222,14 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
   }
 
   let redrawHandle: number | undefined;
+  let destroy = false;
 
   function redraw() {
     if (redrawHandle) {
       cancelAnimationFrame(redrawHandle);
+    }
+    if (destroy) {
+      return;
     }
     redrawHandle = requestAnimationFrame(render);
   }
@@ -220,7 +248,7 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
       vec3.rotateX(offset, offset, [0, 0, 0], -xRotation * sensitivity);
     }
     vec3.rotateY(offset, offset, [0, 0, 0], -yRotation * sensitivity);
-    vec3.add(cameraPos, cameraPos, offset);
+    vec3.add(cameraPos!, cameraPos!, offset);
   }
 
   function pan(direction: [number, number], sensitivity = 1) {
@@ -237,7 +265,7 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
     vec3.set(offset_vector, xOffset, -yOffset, 0);
     vec3.rotateX(offset_vector, offset_vector, [0, 0, 0], -xRotation);
     vec3.rotateY(offset_vector, offset_vector, [0, 0, 0], -yRotation);
-    vec3.add(cameraPos, cameraPos, offset_vector);
+    vec3.add(cameraPos!, cameraPos!, offset_vector);
   }
 
   function runMovementFunction(
@@ -323,21 +351,20 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
   };
   let pressedKeys = new Set<string>();
 
-  keyDownListener = (evt) => {
+  const keyDownListener: (evt: KeyboardEvent) => any = (evt) => {
     if (evt.code in keyMoves) {
       evt.preventDefault();
       pressedKeys.add(evt.code);
     }
   };
-  keyUpListener = (evt) => {
+  const keyUpListener: (evt: KeyboardEvent) => any = (evt) => {
     if (evt.code in keyMoves) {
       evt.preventDefault();
       pressedKeys.delete(evt.code);
     }
   };
-  resizeListener = () => {
-    canvas.width = canvas.clientWidth;
-    canvas.height = canvas.clientHeight;
+  const resizeListener: (evt: UIEvent) => any = () => {
+    resizeCanvas();
     // canvas.width = window.innerWidth;
     // canvas.height = window.innerHeight;
     const gl = canvas.getContext('webgl');
@@ -349,12 +376,13 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
     );
     redraw();
   };
-  document.addEventListener('keydown', keyDownListener);
-  document.addEventListener('keyup', keyUpListener);
-  //todo
-  // window.addEventListener('resize', resizeListener);
+  if (!props.noKeyListeners) {
+    document.addEventListener('keydown', keyDownListener);
+    document.addEventListener('keyup', keyUpListener);
 
-  window.addEventListener('blur', () => pressedKeys.clear());
+    window.addEventListener('blur', () => pressedKeys.clear());
+  }
+  window.addEventListener('resize', resizeListener);
 
   setInterval(() => {
     if (pressedKeys.size == 0) return;
@@ -416,6 +444,18 @@ function createRenderer(structure: Structure, canvas: HTMLCanvasElement) {
       prevAvgY = avgY;
     }
   }
+
+  return () => {
+    destroy = true;
+    console.log('Cleaning up renderer', renderer);
+
+    document.removeEventListener('keydown', keyDownListener);
+    document.removeEventListener('keyup', keyUpListener);
+    window.removeEventListener('resize', resizeListener);
+
+    canvas.removeEventListener('touchstart', touchHandler);
+    canvas.removeEventListener('touchmove', touchHandler);
+  };
 }
 
 function structureFromLitematic(litematic: Litematic) {
@@ -503,6 +543,8 @@ function structureFromLitematic(litematic: Litematic) {
   return structure;
 }
 
+let destroy = () => {};
+
 function readFile(file: Blob) {
   if (!deepslateResources) {
     throw createError('Resources not loaded yet');
@@ -522,7 +564,10 @@ function readFile(file: Blob) {
       console.log('Loaded litematic with NBT data:', nbtdata);
       const litematic = readLitematicFromNBTData(nbtdata);
 
-      createRenderer(structureFromLitematic(litematic), canvas.value!);
+      destroy();
+
+      const cvs = canvas.value!;
+      destroy = createRenderer(structureFromLitematic(litematic), cvs);
     } catch (e) {
       console.error(e);
       toast.error(t('litematica_generator.failed_preview_load'), {
@@ -576,13 +621,8 @@ onMounted(async () => {
   }
 });
 onUnmounted(() => {
-  // const oldContent = document.getElementById('main-content');
-  // oldContent.style.display = 'block';
   console.log('Unmounting');
-
-  document.removeEventListener('keydown', keyDownListener);
-  document.removeEventListener('keyup', keyUpListener);
-  window.removeEventListener('resize', resizeListener);
+  destroy();
 });
 watch(
   () => props.blob,

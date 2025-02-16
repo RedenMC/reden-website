@@ -3,8 +3,7 @@ title: 'Title of the page'
 description: 'meta description of the page'
 ---
 
-Hello World!
-===
+# Hello World!
 
 This is a simple markdown file with some content.
 

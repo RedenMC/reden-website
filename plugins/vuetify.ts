@@ -2,6 +2,7 @@
 // import '@mdi/font/css/materialdesignicons.css';
 import 'vuetify/styles';
 import { createVuetify } from 'vuetify';
+import * as components from 'vuetify/components';
 import { customSVGs } from '~/plugins/icons/customSvgs';
 import { mdi } from 'vuetify/iconsets/mdi';
 
@@ -17,6 +18,9 @@ export default defineNuxtPlugin((app) => {
         mdi,
         custom: customSVGs,
       },
+    },
+    components: {
+      ...components,
     },
     theme: {
       themes: {

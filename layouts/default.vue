@@ -1,23 +1,23 @@
 <script lang="ts" setup>
 import '@mdi/font/css/materialdesignicons.css';
-import {VSonner} from 'vuetify-sonner';
-import {onMounted, ref} from 'vue';
-import {useTheme} from 'vuetify';
-import {useAppStore} from '~/store/app';
+import { VSonner } from 'vuetify-sonner';
+import { onMounted, ref } from 'vue';
+import { useTheme } from 'vuetify';
+import { useAppStore } from '~/store/app';
 import '@/assets/main.css';
+import { globalTheme } from '@/utils/constants';
 import LayoutHeader from '~/components/layout/Header.vue';
 import LayoutFooter from '~/components/layout/footer.vue';
 
-import {useI18n} from 'vue-i18n';
+import { useI18n } from 'vue-i18n';
 
 const localePath = useLocalePath();
 
-const {t} = useI18n();
+const { t } = useI18n();
 
 const theme = useTheme();
-const ourTheme = ref<'light' | 'dark'>('light');
 const appStore = useAppStore();
-watch(ourTheme, () => {
+watch(globalTheme, () => {
   console.log('[layouts/default] theme changed', appStore.theme);
   if (import.meta.client) {
     document.body.style.backgroundColor =
@@ -29,7 +29,7 @@ onMounted(() => {
     theme.themes.value[appStore.theme]!.colors;
   const css: string[] = [];
   let themeText = `[onMounted layouts/default] theme: ${theme.name.value} app: ${appStore.theme}\n`;
-  ourTheme.value = appStore.theme;
+  globalTheme.value = appStore.theme;
   for (const key in colors) {
     themeText += `%c ${key} %c${colors[key]}`;
     css.push('color:unset;');
@@ -40,7 +40,7 @@ onMounted(() => {
 
 function toggleTheme() {
   appStore.theme = appStore.theme === 'light' ? 'dark' : 'light';
-  ourTheme.value = appStore.theme;
+  globalTheme.value = appStore.theme;
   if (import.meta.client) {
     document.body.style.backgroundColor =
       theme.themes.value[appStore.theme]!.colors.background;
@@ -54,46 +54,48 @@ const localeHead = useLocaleHead({
   },
 });
 
-import {useMessageStore} from '~/store/message'; // 确保路径正确
+import { useMessageStore } from '~/store/message'; // 确保路径正确
 const messageStore = useMessageStore();
-const { unreadCount, drawer} = storeToRefs(messageStore);
+const { drawer } = storeToRefs(messageStore);
 
 const messages = [
   {
-    "id": 1,
-    "subject": "Your Post Rejected",
-    "message": "Your post https://redenmc.com/litematica/dd8ab23b-0f61-4eb9-850f-9c784623fc36 (Internal ID: 123) has been rejected, reason: no perm by Scorpio",
-    "language": "en",
-    "sent": false,
-    "recalled": false,
-    "read": false,
-    "createdAt": 1737787279420,
-    "readAt": null
+    id: 1,
+    subject: 'Your Post Rejected',
+    message:
+      'Your post https://redenmc.com/litematica/dd8ab23b-0f61-4eb9-850f-9c784623fc36 (Internal ID: 123) has been rejected, reason: no perm by Scorpio',
+    language: 'en',
+    sent: false,
+    recalled: false,
+    read: false,
+    createdAt: 1737787279420,
+    readAt: null,
   },
   {
-    "id": 2,
-    "subject": "你的稿件审核未通过",
-    "message": "你的稿件 https://redenmc.com/litematica/2033d77a-0d7c-480d-b454-31239e309fbc (内部ID：205) 未通过审核，原因：no perm by Scorpio",
-    "language": "zh_cn",
-    "sent": false,
-    "recalled": false,
-    "read": false,
-    "createdAt": 1737787353872,
-    "readAt": null
+    id: 2,
+    subject: '你的稿件审核未通过',
+    message:
+      '你的稿件 https://redenmc.com/litematica/2033d77a-0d7c-480d-b454-31239e309fbc (内部ID：205) 未通过审核，原因：no perm by Scorpio',
+    language: 'zh_cn',
+    sent: false,
+    recalled: false,
+    read: false,
+    createdAt: 1737787353872,
+    readAt: null,
   },
   {
-    "id": 3,
-    "subject": "你的稿件审核未通过",
-    "message": "你的稿件 https://redenmc.com/litematica/3ca30d3c-d9a7-4a11-bb0a-f75ce5cbd068 (内部ID：368) 未通过审核，原因：no perm by Scorpio",
-    "language": "zh_cn",
-    "sent": false,
-    "recalled": false,
-    "read": false,
-    "createdAt": 1737787947969,
-    "readAt": null
+    id: 3,
+    subject: '你的稿件审核未通过',
+    message:
+      '你的稿件 https://redenmc.com/litematica/3ca30d3c-d9a7-4a11-bb0a-f75ce5cbd068 (内部ID：368) 未通过审核，原因：no perm by Scorpio',
+    language: 'zh_cn',
+    sent: false,
+    recalled: false,
+    read: false,
+    createdAt: 1737787947969,
+    readAt: null,
   },
-
-]
+];
 
 // 当前过滤器状态
 let filter = ref('all');
@@ -104,7 +106,7 @@ let hoveredItemId = ref(null);
 // 计算属性：根据过滤器返回消息列表
 const filteredMessages = computed(() => {
   if (filter.value === 'unread') {
-    return messages.filter(m => !m.read);
+    return messages.filter((m) => !m.read);
   }
   return messages;
 });
@@ -114,13 +116,13 @@ function reduceUnreadCount() {
 }
 
 // 标记为已读
-function markAsRead(message:any) {
+function markAsRead(message: any) {
   message.read = true;
   reduceUnreadCount();
 }
 
 // 鼠标进入事件处理函数
-function onMouseEnter(id:any) {
+function onMouseEnter(id: any) {
   hoveredItemId.value = id;
 }
 
@@ -136,11 +138,10 @@ const formatDate = (timestamp: number) => {
 
 // 标记所有消息为已读
 function markAllAsRead() {
-  messages.forEach(message => {
+  messages.forEach((message) => {
     if (!message.read) {
       message.read = true;
       reduceUnreadCount();
-
     }
   });
 }
@@ -149,18 +150,17 @@ let selectedMessage = ref<Object | null>(null);
 const dialog = ref(false);
 
 function showMessageDetailDialog(message: any) {
-  message.read = true
+  message.read = true;
   selectedMessage.value = message;
-  dialog.value = true
+  dialog.value = true;
   reduceUnreadCount();
-
 }
 </script>
 
 <template>
   <Html :lang="localeHead.htmlAttrs.lang">
     <Head>
-      <Meta name="monetag" content="38f365878eac2da0ab1c69a63a130ade" />
+      <Meta content="38f365878eac2da0ab1c69a63a130ade" name="monetag" />
       <template v-for="link in localeHead.link" :key="link.hid">
         <Link
           :id="link.hid"
@@ -178,7 +178,7 @@ function showMessageDetailDialog(message: any) {
       </template>
     </Head>
   </Html>
-  <v-app :theme="ourTheme">
+  <v-app :theme="globalTheme">
     <layout-header>
       <template #desktop-append>
         <v-btn
