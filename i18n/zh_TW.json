@@ -154,7 +154,7 @@
     "card": {
       "author": "作者",
       "downloads": "下載次數",
-      "redStoneTitle": "探索紅石機器",
+      "explore_redstone_machines": "探索紅石機器",
       "subscribeTitle": "關注最愛的作者"
     },
     "description": "為紅石機器開發者提供一站式工作環境，成為最好的紅石調試和教學工具。",

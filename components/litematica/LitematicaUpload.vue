@@ -5,6 +5,8 @@ import type { MachineDef } from '~/pages/litematica/index.vue';
 import { useDisplay } from 'vuetify';
 import selectableModels from '~/utils/litematica/models_selectable.json';
 import { useAppStore } from '~/store/app';
+import { getGlobalThis } from '@vue/shared';
+import type { VForm } from 'vuetify/components';
 
 const appStore = useAppStore();
 
@@ -45,7 +47,7 @@ const refreshProps = () => {
       (item) =>
         ({
           name: item.name,
-          url: item.name,
+          url: item.url,
           fileType: 'uploaded',
         }) as MyFile,
     ) ?? [];
@@ -126,6 +128,9 @@ async function doUploadAll() {
     }
     const file = selectedFiles.value[0];
     let response: Response | undefined;
+    if (!machineId.value) {
+      machineId.value = crypto.randomUUID();
+    }
     if (litematicaGenerator.value && file.fileType === 'uploading') {
       response = await doFetchPut(
         `/api/mc-services/yisibite/${machineId.value}`,
@@ -259,12 +264,20 @@ const localizedData = ref<Record<string, Partial<MachineDef>>>({});
 const MAX_FILE_NUMBER = 6;
 const MAX_IMAGE_NUMBER = 5;
 
+// 是否 **有可能** 是投影生成器，if true, ask the user to confirm
 const isPossibleLitematicaGenerator = computed(
   () =>
     selectedFiles.value.length === 1 &&
     selectedFiles.value[0].fileType === 'uploading' &&
     selectedFiles.value[0].file?.name.endsWith('.litematic'),
 );
+
+function generateMachineIdIfEmpty() {
+  if (!machineId.value) {
+    machineId.value = crypto.randomUUID();
+  }
+  return true;
+}
 
 const handleFileChange = (event: Event) => {
   const target = event.target as HTMLInputElement;
@@ -300,7 +313,9 @@ const handleFileChange = (event: Event) => {
   }
 
   if (!isPossibleLitematicaGenerator.value) {
-    state.value = 'translation';
+    if (!props.editMode) {
+      state.value = 'translation';
+    }
     litematicaGenerator.value = false;
   }
 };
@@ -312,6 +327,7 @@ const {
 } = useFetch(() => `/api/mc-services/yisibite/${machineId.value}/info`, {
   dedupe: 'defer',
 });
+const infoForm = useTemplateRef<VForm>('infoForm');
 
 const formatFileSize = (bytes: number): string => {
   if (bytes < 1024) {
@@ -364,10 +380,15 @@ function delay(ms: number) {
 }
 
 async function uploadLocalizedData() {
-  uploadingLocalizedData.value = true;
-  await delay(500);
-  uploadingLocalizedData.value = false;
-  state.value = 'image';
+  generateMachineIdIfEmpty();
+  const validate: undefined | { valid: boolean; errors: any[] } =
+    await infoForm.value?.validate();
+  if (validate?.valid) {
+    uploadingLocalizedData.value = true;
+    await delay(500);
+    uploadingLocalizedData.value = false;
+    state.value = 'image';
+  }
 }
 
 const minHeight = Math.max(490, height.value - 300);
@@ -375,9 +396,6 @@ const maxHeight = Math.max(490, height.value - 300);
 const goingBack = ref(false);
 refreshProps();
 watch(props, refreshProps);
-
-import { message } from 'ant-design-vue';
-import type { UploadChangeParam } from 'ant-design-vue';
 
 const fileList = ref([]);
 const handleChange = (info: UploadChangeParam) => {
@@ -433,8 +451,8 @@ const handlePictureChange = (event: Event) => {
 
   for (let i = 0; i < files.length; i++) {
     const file = files[i];
-    if (file.size > 2 * 1024 * 1024) {
-      pictureStepError.value = '图片大小不能超过2MB';
+    if (file.size > 10 * 1024 * 1024) {
+      pictureStepError.value = '图片大小不能超过 10 MB';
       selectedPictures.value = [];
       return;
     }
@@ -630,7 +648,7 @@ const handlePictureChange = (event: Event) => {
         </v-tabs-window-item>
 
         <v-tabs-window-item value="translation">
-          <v-form fast-fail>
+          <v-form fast-fail ref="infoForm">
             <v-card-title>
               <v-row class="justify-space-between">
                 <v-col class="mb-1 mb-md-3" cols="12" sm="6">
@@ -678,6 +696,7 @@ const handlePictureChange = (event: Event) => {
                 ]"
                 color="primary"
                 label="ID"
+                messages="ID 是用来制定网址的唯一的字符串，在投稿上传后不可修改，建议使用英文名称的关键词（或者留空自动生成）"
                 outlined
                 variant="underlined"
                 @update:model-value="() => editMode && checkIdTaken()"
@@ -769,81 +788,83 @@ const handlePictureChange = (event: Event) => {
               </v-radio-group>
             </v-card-text>
 
-            <v-alert
-              class="ml-4 mr-4"
-              text="This component is still wip, and has no real functionality yet."
-              title="Note"
-              type="info"
-              variant="tonal"
-            ></v-alert>
-            <v-data-table
-              :headers="[
-                { key: 'item', title: 'Item', sortable: false },
-                { key: 'rate', title: 'Rate', sortable: false },
-                { key: 'op', title: '', sortable: false },
-              ]"
-              :items="productRates"
-              :items-per-page="100"
-              hide-default-footer
-            >
-              <template #[`item.item`]="{ index }" class="px-2">
-                <v-autocomplete
-                  v-model="productRates[index].item"
-                  :items="selectableModels"
-                  color="secondary"
-                  density="compact"
-                  hide-details
-                >
-                  <template #prepend-inner>
-                    <minecraft-item-display
-                      :id="productRates[index].item"
-                      :scale="2"
-                    />
-                  </template>
-                  <template #item="{ item, props }">
-                    <v-list-item density="compact" v-bind="props">
-                      <template #prepend>
-                        <minecraft-item-display
-                          :id="item.value"
-                          :scale="2"
-                          class="mr-2"
-                        />
-                      </template>
-                    </v-list-item>
-                  </template>
-                </v-autocomplete>
-              </template>
-              <template #[`item.rate`]="{ index }">
-                <v-text-field
-                  v-model="productRates[index].rate"
-                  color="secondary"
-                  density="compact"
-                  hide-details
-                  outlined
-                  type="number"
-                />
-              </template>
-              <template #[`item.op`]="{ index }">
-                <v-btn
-                  :disabled="productRates.length <= 1"
-                  color="error"
-                  icon
-                  size="36"
-                  @click="productRates.splice(index, 1)"
-                >
-                  <v-icon>mdi-delete</v-icon>
-                </v-btn>
-                <v-btn
-                  class="ml-4"
-                  color="primary"
-                  icon
-                  size="36"
-                  @click="productRates.push({ item: '', rate: 0 })"
-                >
-                  <v-icon>mdi-plus</v-icon>
-                </v-btn>
-              </template>
-            </v-data-table>
+            <template v-if="false">
+              <v-alert
+                class="ml-4 mr-4"
+                text="This component is still wip, and has no real functionality yet."
+                title="Note"
+                type="info"
+                variant="tonal"
+              ></v-alert>
+              <v-data-table
+                :headers="[
+                  { key: 'item', title: 'Item', sortable: false },
+                  { key: 'rate', title: 'Rate', sortable: false },
+                  { key: 'op', title: '', sortable: false },
+                ]"
+                :items="productRates"
+                :items-per-page="100"
+                hide-default-footer
+              >
+                <template #[`item.item`]="{ index }" class="px-2">
+                  <v-autocomplete
+                    v-model="productRates[index].item"
+                    :items="selectableModels"
+                    color="secondary"
+                    density="compact"
+                    hide-details
+                  >
+                    <template #prepend-inner>
+                      <minecraft-item-display
+                        :id="productRates[index].item"
+                        :scale="2"
+                      />
+                    </template>
+                    <template #item="{ item, props }">
+                      <v-list-item density="compact" v-bind="props">
+                        <template #prepend>
+                          <minecraft-item-display
+                            :id="item.value"
+                            :scale="2"
+                            class="mr-2"
+                          />
+                        </template>
+                      </v-list-item>
+                    </template>
+                  </v-autocomplete>
+                </template>
+                <template #[`item.rate`]="{ index }">
+                  <v-text-field
+                    v-model="productRates[index].rate"
+                    color="secondary"
+                    density="compact"
+                    hide-details
+                    outlined
+                    type="number"
+                  />
+                </template>
+                <template #[`item.op`]="{ index }">
+                  <v-btn
+                    :disabled="productRates.length <= 1"
+                    color="error"
+                    icon
+                    size="36"
+                    @click="productRates.splice(index, 1)"
+                  >
+                    <v-icon>mdi-delete</v-icon>
+                  </v-btn>
+                  <v-btn
+                    class="ml-4"
+                    color="primary"
+                    icon
+                    size="36"
+                    @click="productRates.push({ item: '', rate: 0 })"
+                  >
+                    <v-icon>mdi-plus</v-icon>
+                  </v-btn>
+                </template>
+              </v-data-table>
+            </template>
             <v-card-actions>
               <v-btn
                 :loading="uploadingLocalizedData"
@@ -970,7 +991,9 @@ const handlePictureChange = (event: Event) => {
             </div>
             <div class="mt-6">
               <p>
-                {{ 'upload.desc.please_contact_us_if_you_have_any_questions' }}
+                {{
+                  t('upload.desc.please_contact_us_if_you_have_any_questions')
+                }}
                 <a class="router" href="mailto:info@redenmc.com"
                   >info@redenmc.com</a
                 >

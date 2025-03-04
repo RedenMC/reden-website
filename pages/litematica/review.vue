@@ -48,7 +48,7 @@ const rejectReason = ref<string>();
       { title: 'Type', key: 'type' },
       { title: 'Description', key: 'description' },
       { title: 'Updated', key: 'updatedAt' },
-      { title: 'Actions', key: 'edit' },
+      { title: 'Actions', key: 'edit', minWidth: '180px' },
       { title: 'Status', key: 'status' },
     ]"
     :items="data?.d"

@@ -96,6 +96,11 @@ watch(router.currentRoute, () => {
   page.value = Number(router.currentRoute.value.query.page) || 1;
   uploadDialog.value = router.currentRoute.value.hash === '#upload';
 });
+const params = useUrlSearchParams('history') as Record<
+  'page' | 'zh_cn',
+  string
+>;
+params.zh_cn + [params.page];
 watch([page, pageSize, search, uploadDialog], () => {
   goto(0);
   router.replace({
@@ -168,7 +173,7 @@ const maintaining = false;
 const { mdAndUp, width } = useDisplay({
   mobileBreakpoint: 600,
 });
-const itemsPerRow = computed(() => (mdAndUp.value ? 3 : 2));
+const itemsPerRow = computed(() => (!(width.value && mdAndUp.value) ? 2 : 3));
 const itemDisplayCols = computed(() => {
   const cols: { def?: MachineDef[] }[] = [];
   for (let i = 0; i < itemsPerRow.value; i++) {

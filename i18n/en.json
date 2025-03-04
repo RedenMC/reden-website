@@ -192,7 +192,7 @@
     "card": {
       "author": "author",
       "downloads": "downloads",
-      "redStoneTitle": "Explore the Red Stone Machine",
+      "explore_redstone_machines": "Explore Redstone Machines",
       "subscribeTitle": "Follow Your Favorite Authors",
       "viewProfile": "View Profile"
     },
@@ -262,6 +262,15 @@
     },
     "learn_more": "Learn More",
     "my_account": "My Account",
+    "post": {
+      "status": {
+        "approved": "Approved",
+        "deleted": "Deleted",
+        "pending": "Pending",
+        "rejected": "Rejected",
+        "takendown": "Taken Down"
+      }
+    },
     "title": {
       "404": "404 Not Found",
       "copyright_complaint": "Copyright Complaint",

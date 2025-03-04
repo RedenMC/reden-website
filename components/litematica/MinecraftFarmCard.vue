@@ -72,6 +72,8 @@ const tags = computed(
             style="max-width: 100px"
           />
           <span class="stat-line">
+            <v-icon :size="22" style="top: 2px">mdi-arrow-up-bold</v-icon>
+            {{ item.upVotes }}
             <v-icon :size="22" style="top: 2px">mdi-download-outline</v-icon>
             {{ item.downloads }}
           </span>
@@ -109,7 +111,10 @@ const tags = computed(
       <template v-if="!mobile">
         {{ timeSince(item.updatedAt ?? Date.now()) }}
         <v-spacer />
-        <v-icon size="18">mdi-download-outline</v-icon>
+
+        <v-icon :size="18">mdi-heart-outline</v-icon>
+        {{ item.upVotes }}
+        <v-icon :size="18">mdi-download-outline</v-icon>
         {{ number2text(item.downloads ?? 0) }}
       </template>
     </v-card-actions>

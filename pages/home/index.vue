@@ -33,21 +33,23 @@ const loading = ref(true);
 const needInstallWebhook = ref(false);
 if (import.meta.client) {
   fetchUser(user).then(() => (loading.value = false));
-  doFetchGet('/api/account/activity').then((response) => {
-    if (response.ok) {
-      response.json().then((data) => {
-        console.log(data);
-      });
-    } else {
-      if (response.status === 412) {
-        needInstallWebhook.value = true;
-      } else if (response.status === 404) {
-        // nothing
+  if (false) {
+    doFetchGet('/api/account/activity').then((response) => {
+      if (response.ok) {
+        response.json().then((data) => {
+          console.log(data);
+        });
       } else {
-        toastError(response);
+        if (response.status === 412) {
+          needInstallWebhook.value = true;
+        } else if (response.status === 404) {
+          // nothing
+        } else {
+          toastError(response);
+        }
       }
-    }
-  });
+    });
+  }
 }
 
 function logout() {

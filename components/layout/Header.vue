@@ -3,7 +3,7 @@
     <template #prepend>
       <template v-if="mobile">
         <v-btn v-show="mobile" icon="mdi-menu" title="Menu">
-          <v-icon>mdi-menu</v-icon>
+          <v-avatar image="/reden_256.png" :size="48" border />
           <v-menu :close-on-content-click="true" activator="parent">
             <v-list class="w-100">
               <v-list-item :to="localePath('/')">
@@ -22,7 +22,23 @@
                   {{ $t('reden.header.mod') }}
                 </v-list-item-title>
               </v-list-item>
-              <v-divider/>
+              <v-list-item :to="localePath('/litematica')">
+                <template #prepend>
+                  <v-icon>mdi-download</v-icon>
+                </template>
+                <v-list-item-title>
+                  {{ $t('reden.header.explore') }}
+                </v-list-item-title>
+              </v-list-item>
+              <v-list-item :to="localePath('/studio')">
+                <template #prepend>
+                  <v-icon>mdi-pencil</v-icon>
+                </template>
+                <v-list-item-title>
+                  {{ $t('studio.litematica_studio') }}
+                </v-list-item-title>
+              </v-list-item>
+              <v-divider />
               <template v-if="useAppStore().logined">
                 <v-list-item :to="localePath('/home')">
                   <template #prepend>
@@ -35,23 +51,6 @@
                   </template>
                   <v-list-item-title>
                     {{ $t('reden.header.my_profile') }}
-                  </v-list-item-title>
-                </v-list-item>
-
-                <v-list-item :to="localePath('/litematica')">
-                  <template #prepend>
-                    <v-icon>mdi-download</v-icon>
-                  </template>
-                  <v-list-item-title>
-                    {{ $t('reden.header.explore') }}
-                  </v-list-item-title>
-                </v-list-item>
-                <v-list-item :to="localePath('/studio')">
-                  <template #prepend>
-                    <v-icon>mdi-pencil</v-icon>
-                  </template>
-                  <v-list-item-title>
-                    {{ $t('studio.litematica_studio') }}
                   </v-list-item-title>
                 </v-list-item>
               </template>
@@ -73,7 +72,7 @@
                   </v-list-item-title>
                 </v-list-item>
               </template>
-              <v-divider/>
+              <v-divider />
               <template v-if="useAppStore().userCache?.isStaff">
                 <v-list-item :to="localePath('/admin')">
                   <template #prepend>
@@ -84,14 +83,14 @@
                   </v-list-item-title>
                 </v-list-item>
               </template>
-              <slot name="mobile-menu-append"/>
+              <slot name="mobile-menu-append" />
             </v-list>
           </v-menu>
         </v-btn>
       </template>
       <template v-else>
         <v-btn :active="false" :to="localePath('/')" stacked title="Homepage">
-          <v-img src="/reden_256.png" width="36"/>
+          <v-img src="/reden_256.png" width="36" />
         </v-btn>
         <v-btn
           v-if="useAppStore().userCache?.isStaff"
@@ -148,11 +147,11 @@
           icon="custom:DiscordIcon"
           title="Discord"
         />
-        <slot name="desktop-append"/>
+        <slot name="desktop-append" />
       </template>
-      <slot name="common-append"/>
+      <slot name="common-append" />
       <v-btn icon="mdi-translate" title="Language">
-        <v-icon icon="mdi-translate"/>
+        <v-icon icon="mdi-translate" />
         <v-menu :close-on-content-click="true" activator="parent">
           <v-list active-color="primary">
             <v-list-item
@@ -164,13 +163,6 @@
             </v-list-item>
           </v-list>
         </v-menu>
-      </v-btn>
-
-      <v-btn icon="mdi-text-none" @click="drawer = !drawer">
-        <v-badge color="error" :content="unreadCount" v-if="unreadCount">
-          <v-icon>mdi-bell-outline</v-icon>
-        </v-badge>
-        <v-icon v-else>mdi-bell-outline</v-icon>
       </v-btn>
       <v-btn
         :to="localePath(useAppStore().logined ? '/home' : '/login')"
@@ -214,8 +206,6 @@ const search = ref((router.currentRoute.value.query.q as string) ?? '');
 watch(router.currentRoute, (value) => {
   search.value = (value.query.q as string) ?? '';
 });
-
-
 </script>
 <style scoped>
 .reden-app-bar {

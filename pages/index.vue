@@ -17,7 +17,6 @@ import { useAppStore } from '~/store/app';
 import type {
   ListLitematicaResponse,
   LitematicaAuthorProfile,
-  MachineDef,
 } from '~/pages/litematica/index.vue';
 import RedstonePostCard from '~/components/homePage/RedstonePostCard.vue';
 
@@ -35,7 +34,6 @@ useSeoMeta({
 });
 
 const backendInfo = useBackendMeta();
-const topRedstonePosts = ref<MachineDef[]>([]);
 const topAuthorIds = [
   '%E7%81%AB%E5%BC%A6%E6%9C%88',
   'Scorpio',
@@ -60,26 +58,9 @@ const { data: topAuthors } = useAsyncData<LitematicaAuthorProfile[]>(
   },
 );
 
-const idList = [
-  'b76c2b70-90d2-425e-b007-1d2e56f6fae5',
-  'fe80a637-821f-4f7b-ae89-f8b6fc9fffd0',
-  'pdc-stack-raid-farm-v7',
-  '919a63d1-da48-4406-964a-ea354dacfdf8',
-  'MultipleParallelDuplicateLineMachines',
-];
-for (const id of idList) {
-  try {
-    const { data } = await useFetch<ListLitematicaResponse>(
-      `/api/mc-services/yisibite/${id}/info/${locale.value}`,
-      {
-        key: `generators-${id}-${locale.value}`,
-      },
-    );
-    topRedstonePosts.value.push(data.value!.d[0]);
-  } catch (error) {
-    console.error(`Error fetching data for id ${id}:`, error);
-  }
-}
+const { data: topRedstonePosts } = await useFetch<ListLitematicaResponse>(
+  '/api/mc-services/yisibite/?order=random-extra&pageSize=8',
+);
 </script>
 
 <template>
@@ -116,7 +97,7 @@ for (const id of idList) {
           <v-img class="d-none d-sm-block" src="/reden_256.png" width="148" />
         </v-col>
       </v-row>
-      <div class="d-flex buttons">
+      <div class="d-flex align-center flex-wrap">
         <v-btn
           :to="localePath('/litematica')"
           class="ma-2 text-none"
@@ -124,6 +105,7 @@ for (const id of idList) {
           prepend-icon="mdi-download"
           rounded="rounded"
           size="x-large"
+          style="max-width: 220px"
         >
           {{ t('reden.home.go_litematica') }}
         </v-btn>
@@ -133,16 +115,19 @@ for (const id of idList) {
           prepend-icon="mdi-github"
           rounded="rounded"
           size="x-large"
+          style="max-width: 220px"
           variant="outlined"
         >
           Github
         </v-btn>
         <v-btn
+          v-if="false"
           class="ma-2"
           href="https://wiki.redenmc.com"
           prepend-icon="mdi-book-open"
           rounded="rounded"
           size="x-large"
+          style="max-width: 220px"
           variant="outlined"
         >
           {{ $t('reden.wiki') }}
@@ -158,12 +143,12 @@ for (const id of idList) {
             <v-card-title
               class="text-h5 text-sm-h4 font-weight-semibold text-center text-white pa-4"
             >
-              {{ $t('reden.card.redStoneTitle') }}
+              {{ $t('reden.card.explore_redstone_machines') }}
             </v-card-title>
             <v-container class="pa-5" fluid>
               <v-carousel cycle hide-delimiters>
                 <v-carousel-item
-                  v-for="(post, index) in topRedstonePosts"
+                  v-for="(post, index) in topRedstonePosts?.d"
                   :key="index"
                   class="h-100"
                 >
@@ -191,6 +176,7 @@ for (const id of idList) {
                   <v-expansion-panel-title
                     class="d-flex flex-row justify-space-between"
                     style="line-height: 32px"
+                    v-if="item"
                   >
                     <span class="mr-3">
                       <v-avatar :image="item.author.avatarUrl" :size="32" />
@@ -258,7 +244,7 @@ for (const id of idList) {
     </div>
     <Feature />
     <div class="content-common">
-      <v-row class="community-intro">
+      <v-row v-if="false" class="community-intro">
         <v-col>
           <v-card color="light-blue">
             <v-card-title>
@@ -284,7 +270,7 @@ for (const id of idList) {
           </v-card>
         </v-col>
       </v-row>
-      <RedstoneSectionTitle :title="$t('reden.home.community_intro.title')">
+      <RedstoneSectionTitle :title="t('reden.home.community_intro.title')">
         <template #default="{ leverOn }">
           <RedStoneSection :lever-on="leverOn" :size="3">
             <template #title> Open Source</template>

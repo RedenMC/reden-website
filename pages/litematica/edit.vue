@@ -15,6 +15,15 @@ const { data, status } = useFetch<ListLitematicaResponse>(
 
 const localizedData = ref<Record<string, MachineDef>>();
 const currentLoadedData = ref<string>();
+const { t } = useI18n();
+
+const colorMap: Record<string, string> = {
+  Pending: 'grey',
+  Approved: 'green',
+  Rejected: 'red',
+  Deleted: 'red',
+  TakenDown: 'red',
+};
 </script>
 
 <template>
@@ -96,6 +105,12 @@ const currentLoadedData = ref<string>();
     </template>
     <template #[`item.updatedAt`]="{ value }">
       {{ new Date(value).toLocaleString() }}
+    </template>
+    <template #[`item.status`]="{ value }">
+      <v-chip
+        :text="t('reden.post.status.' + String(value).toLowerCase())"
+        :color="colorMap[value]"
+      />
     </template>
   </v-data-table-server>
 </template>

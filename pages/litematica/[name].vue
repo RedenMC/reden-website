@@ -194,6 +194,7 @@ try {
 
 async function editLitematica(index: number) {
   await loadBlob(index);
+  await doFetchPost(`/api/mc-services/yisibite/${machineId}/add-edit-stat`, {});
 
   if (blob.value[index]) {
     await localforage.setItem('litematica-studio', blob.value[index]);

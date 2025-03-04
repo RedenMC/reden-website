@@ -33,6 +33,12 @@ definePageMeta({
           <v-card-text> Quark Maintenance </v-card-text>
         </v-card>
       </v-col>
+      <v-col>
+        <v-card href="/api/admin/litematica/stat" min-width="200">
+          <v-card-title> 投影下载使用统计 </v-card-title>
+          <v-card-text> 上一周投影下载使用情况统计 </v-card-text>
+        </v-card>
+      </v-col>
     </v-row>
   </v-container>
 </template>
