@@ -1,19 +1,19 @@
 <script lang="ts" setup>
 import '@mdi/font/css/materialdesignicons.css';
-import { VSonner } from 'vuetify-sonner';
-import { onMounted, ref } from 'vue';
-import { useTheme } from 'vuetify';
-import { useAppStore } from '~/store/app';
+import {VSonner} from 'vuetify-sonner';
+import {onMounted, ref} from 'vue';
+import {useTheme} from 'vuetify';
+import {useAppStore} from '~/store/app';
 import '@/assets/main.css';
-import { globalTheme } from '@/utils/constants';
+import {globalTheme} from '@/utils/constants';
 import LayoutHeader from '~/components/layout/Header.vue';
 import LayoutFooter from '~/components/layout/footer.vue';
 
-import { useI18n } from 'vue-i18n';
+import {useI18n} from 'vue-i18n';
 
 const localePath = useLocalePath();
 
-const { t } = useI18n();
+const {t} = useI18n();
 
 const theme = useTheme();
 const appStore = useAppStore();
@@ -25,6 +25,10 @@ watch(globalTheme, () => {
   }
 });
 onMounted(() => {
+  // 初始化未读消息数量
+  messageStore.initMessageList();
+  drawer.value = false;
+
   const colors: Record<string, string> =
     theme.themes.value[appStore.theme]!.colors;
   const css: string[] = [];
@@ -54,82 +58,26 @@ const localeHead = useLocaleHead({
   },
 });
 
-import { useMessageStore } from '~/store/message'; // 确保路径正确
-const messageStore = useMessageStore();
-const { drawer } = storeToRefs(messageStore);
+import {useMessageStore} from '~/store/message';
 
-const messages = [
-  {
-    id: 1,
-    subject: 'Your Post Rejected',
-    message:
-      'Your post https://redenmc.com/litematica/dd8ab23b-0f61-4eb9-850f-9c784623fc36 (Internal ID: 123) has been rejected, reason: no perm by Scorpio',
-    language: 'en',
-    sent: false,
-    recalled: false,
-    read: false,
-    createdAt: 1737787279420,
-    readAt: null,
-  },
-  {
-    id: 2,
-    subject: '你的稿件审核未通过',
-    message:
-      '你的稿件 https://redenmc.com/litematica/2033d77a-0d7c-480d-b454-31239e309fbc (内部ID：205) 未通过审核，原因：no perm by Scorpio',
-    language: 'zh_cn',
-    sent: false,
-    recalled: false,
-    read: false,
-    createdAt: 1737787353872,
-    readAt: null,
-  },
-  {
-    id: 3,
-    subject: '你的稿件审核未通过',
-    message:
-      '你的稿件 https://redenmc.com/litematica/3ca30d3c-d9a7-4a11-bb0a-f75ce5cbd068 (内部ID：368) 未通过审核，原因：no perm by Scorpio',
-    language: 'zh_cn',
-    sent: false,
-    recalled: false,
-    read: false,
-    createdAt: 1737787947969,
-    readAt: null,
-  },
-];
+const messageStore = useMessageStore();
+const drawer = ref(false);
+const {drawer: storeDrawer} = storeToRefs(messageStore);
+// 当 storeDrawer 变化时，更新 drawer 的值
+watchEffect(() => {
+  drawer.value = storeDrawer.value;
+});
 
 // 当前过滤器状态
 let filter = ref('all');
 
-// 记录当前悬停的item id
-let hoveredItemId = ref(null);
-
 // 计算属性：根据过滤器返回消息列表
 const filteredMessages = computed(() => {
   if (filter.value === 'unread') {
-    return messages.filter((m) => !m.read);
+    return messageStore.unreadMessages;
   }
-  return messages;
+  return messageStore.messages;
 });
-
-function reduceUnreadCount() {
-  messageStore.decrementUnreadCount();
-}
-
-// 标记为已读
-function markAsRead(message: any) {
-  message.read = true;
-  reduceUnreadCount();
-}
-
-// 鼠标进入事件处理函数
-function onMouseEnter(id: any) {
-  hoveredItemId.value = id;
-}
-
-// 鼠标离开事件处理函数
-function onMouseLeave() {
-  hoveredItemId.value = null;
-}
 
 const formatDate = (timestamp: number) => {
   const date = new Date(timestamp);
@@ -138,12 +86,26 @@ const formatDate = (timestamp: number) => {
 
 // 标记所有消息为已读
 function markAllAsRead() {
-  messages.forEach((message) => {
-    if (!message.read) {
-      message.read = true;
-      reduceUnreadCount();
-    }
-  });
+  doFetchPost(`/api/account/notifications/read-all`, '')
+    .then(response => {
+      if (response.ok) {
+        messageStore.initMessageList()
+      } else {
+        toastError(response);
+      }
+    })
+}
+
+// 标记当前消息为已读
+function markAsRead(id: number) {
+  doFetchPost(`/api/account/notifications/${id}/read`, '')
+    .then(response => {
+      if (response.ok) {
+        messageStore.initMessageList()
+      } else {
+        toastError(response);
+      }
+    })
 }
 
 let selectedMessage = ref<Object | null>(null);
@@ -153,30 +115,51 @@ function showMessageDetailDialog(message: any) {
   message.read = true;
   selectedMessage.value = message;
   dialog.value = true;
-  reduceUnreadCount();
+  markAsRead(message.id)
+}
+
+let page = 1;
+let pageSize = 10;
+let isFinish = ref(false);
+
+// 加载消息
+function loadMessages() {
+  page++;
+  doFetchGet(`/api/account/notifications/all?page=${page}&pageSize=${pageSize}`)
+    .then(async (response) => {
+      if (response.ok) {
+        const data = await response.json();
+        if (!data || data.length < pageSize) {
+          isFinish.value = true
+        }
+        messageStore.messages.push(...data)
+      } else {
+        console.error('Failed to fetch all notifications:', response.statusText);
+      }
+    }).catch((e) => toastError(e, 'Failed to fetch all notifications'));
 }
 </script>
 
 <template>
   <Html :lang="localeHead.htmlAttrs.lang">
-    <Head>
-      <Meta content="38f365878eac2da0ab1c69a63a130ade" name="monetag" />
-      <template v-for="link in localeHead.link" :key="link.hid">
-        <Link
-          :id="link.hid"
-          :href="link.href"
-          :hreflang="link.hreflang"
-          :rel="link.rel"
-        />
-      </template>
-      <template v-for="meta in localeHead.meta" :key="meta.hid">
-        <Meta
-          :id="meta.hid"
-          :content="meta.content"
-          :property="meta.property"
-        />
-      </template>
-    </Head>
+  <Head>
+    <Meta content="38f365878eac2da0ab1c69a63a130ade" name="monetag"/>
+    <template v-for="link in localeHead.link" :key="link.hid">
+      <Link
+        :id="link.hid"
+        :href="link.href"
+        :hreflang="link.hreflang"
+        :rel="link.rel"
+      />
+    </template>
+    <template v-for="meta in localeHead.meta" :key="meta.hid">
+      <Meta
+        :id="meta.hid"
+        :content="meta.content"
+        :property="meta.property"
+      />
+    </template>
+  </Head>
   </Html>
   <v-app :theme="globalTheme">
     <layout-header>
@@ -214,6 +197,7 @@ function showMessageDetailDialog(message: any) {
 
     <v-navigation-drawer
       v-model="drawer"
+      v-show="drawer"
       location="right"
       temporary
       width="512"
@@ -235,27 +219,32 @@ function showMessageDetailDialog(message: any) {
 
         <!-- 消息列表 -->
         <v-list dense>
-          <v-list-item v-for="message in filteredMessages" :key="message.id"
-                       @mouseenter="onMouseEnter(message.id)"
-                       @mouseleave="onMouseLeave()"
-                       class="message-item cursor-pointer"
-                       @click="showMessageDetailDialog(message)"
-          >
-            <template v-slot:prepend>
-              <v-icon>{{ message.read ? 'mdi-email-open' : 'mdi-email' }}</v-icon>
+          <v-infinite-scroll height="100%" :items="filteredMessages" @load="loadMessages" mode="manual">
+            <template v-for="(message, index) in filteredMessages" :key="index">
+              <v-list-item class="message-item cursor-pointer"
+                           :class="{ 'unread-class': !message.read }"
+                           @click="showMessageDetailDialog(message)"
+              >
+                <template v-slot:prepend>
+                  <v-icon>{{ message.read ? 'mdi-email-open' : 'mdi-email' }}</v-icon>
+                </template>
+                <div style="flex: 1;">
+                  <div class="message-header">
+                    <v-list-item-title class="text-truncate">{{ message.subject }}</v-list-item-title>
+                    <span class="text-blue cursor-pointer mark-as-read-class"
+                          @click.stop="markAsRead(message.id)">{{ t('message.mark_as_read') }}</span>
+                  </div>
+                  <v-list-item-subtitle>
+                    <div class="text-truncate-2lines">{{ message.message }}</div>
+                    <div class="text-right mt-1" style="color: #000000">{{ formatDate(message.createdAt) }}</div>
+                  </v-list-item-subtitle>
+                </div>
+              </v-list-item>
             </template>
-            <div style="flex: 1;">
-              <div class="message-header">
-                <v-list-item-title class="text-truncate">{{ message.subject }}</v-list-item-title>
-                <span class="text-blue cursor-pointer" v-if="!message.read && hoveredItemId === message.id"
-                      @click.stop="markAsRead(message)">{{ t('message.mark_as_read') }}</span>
-              </div>
-              <v-list-item-subtitle>
-                <div class="text-truncate-2lines">{{ message.message }}</div>
-                <div class="text-right mt-1" style="color: #000000">{{ formatDate(message.createdAt) }}</div>
-              </v-list-item-subtitle>
-            </div>
-          </v-list-item>
+            <template v-slot:loading>
+              <div v-if="!isFinish">Loading ...</div>
+            </template>
+          </v-infinite-scroll>
         </v-list>
       </v-container>
     </v-navigation-drawer>
@@ -268,7 +257,7 @@ function showMessageDetailDialog(message: any) {
         </v-toolbar>
         <v-card-text>
           <div class="message-content">{{ selectedMessage.message }}</div>
-          <div class="text-right mt-2">{{ formatDate(selectedMessage.createdAt)}}</div>
+          <div class="text-right mt-2">{{ formatDate(selectedMessage.createdAt) }}</div>
 
         </v-card-text>
         <v-divider></v-divider>
@@ -306,6 +295,16 @@ function showMessageDetailDialog(message: any) {
   height: auto;
 }
 
-.message-item:hover {
+.mark-as-read-class {
+  display: none;
+  transition: transform 0.2s ease; /* 添加过渡效果 */
+}
+
+.mark-as-read-class:hover {
+  transform: translateY(-3px);
+}
+
+.unread-class:hover .mark-as-read-class {
+  display: block;
 }
 </style>

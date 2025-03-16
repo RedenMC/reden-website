@@ -164,6 +164,13 @@
           </v-list>
         </v-menu>
       </v-btn>
+
+      <v-btn icon="mdi-text-none" @click="drawer = !drawer">
+        <v-badge color="error" :content="unreadCount" v-if="unreadCount">
+          <v-icon>mdi-bell-outline</v-icon>
+        </v-badge>
+        <v-icon v-else>mdi-bell-outline</v-icon>
+      </v-btn>
       <v-btn
         :to="localePath(useAppStore().logined ? '/home' : '/login')"
         icon="mdi-account"
@@ -187,6 +194,10 @@
 <script lang="ts" setup>
 import { useDisplay } from 'vuetify';
 import { useAppStore } from '~/store/app';
+import {useMessageStore} from '~/store/message';
+
+const messageStore = useMessageStore();
+const {unreadCount, drawer} = storeToRefs(messageStore);
 
 const router = useRouter();
 const localePath = useLocalePath();
