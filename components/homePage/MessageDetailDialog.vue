@@ -1,7 +1,5 @@
 <!-- components/MessageDetailDialog.vue -->
-<template>
-
-</template>
+<template></template>
 
 <script setup lang="ts">
 import { computed } from 'vue';
@@ -25,7 +23,7 @@ const localShow = computed({
   },
   set(value) {
     emit('update:modelValue', value);
-  }
+  },
 });
 
 function closeDialog() {

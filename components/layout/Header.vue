@@ -194,10 +194,10 @@
 <script lang="ts" setup>
 import { useDisplay } from 'vuetify';
 import { useAppStore } from '~/store/app';
-import {useMessageStore} from '~/store/message';
+import { useMessageStore } from '~/store/message';
 
 const messageStore = useMessageStore();
-const {unreadCount, drawer} = storeToRefs(messageStore);
+const { unreadCount, drawer } = storeToRefs(messageStore);
 
 const router = useRouter();
 const localePath = useLocalePath();

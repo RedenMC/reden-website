@@ -9,15 +9,25 @@
       </div>
     </div>
     <div class="card-content">
-      <v-card-title class="submission-card__title">{{ submission.name }}</v-card-title>
+      <v-card-title class="submission-card__title">{{
+        submission.name
+      }}</v-card-title>
       <v-card-subtitle class="submission-card__subtitle author">
         {{ $t('reden.card.author') }}:
-        <span><v-avatar :image="submission.authorAvatar" size="x-small"></v-avatar></span>
+        <span
+          ><v-avatar :image="submission.authorAvatar" size="x-small"></v-avatar
+        ></span>
         <span>{{ submission.author }}</span>
       </v-card-subtitle>
       <v-card-subtitle class="submission-card__subtitle downloads">
         {{ $t('reden.card.downloads') }}:
-        <v-chip x-small label color="blue lighten-4" text-color="blue darken-2" class="ml-1">
+        <v-chip
+          x-small
+          label
+          color="blue lighten-4"
+          text-color="blue darken-2"
+          class="ml-1"
+        >
           {{ submission.downloads }}
         </v-chip>
       </v-card-subtitle>
@@ -31,7 +41,7 @@ import { useRouter, useRoute } from 'vue-router';
 import { defineProps } from 'vue';
 
 const props = defineProps({
-  submission: Object
+  submission: Object,
 });
 
 const { t } = useI18n();
@@ -47,13 +57,14 @@ function goToSubmissionPage() {
 
 <style scoped>
 .submission-card {
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s;
   background: rgb(var(--v-theme-background));
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   position: relative;
   border-radius: 0;
-
 }
 
 .submission-card:hover {
@@ -88,11 +99,13 @@ function goToSubmissionPage() {
   opacity: 0;
 }
 
-.zoom-enter-active, .zoom-leave-active {
+.zoom-enter-active,
+.zoom-leave-active {
   transition: opacity 0.3s ease;
 }
 
-.zoom-enter-to, .zoom-leave-from {
+.zoom-enter-to,
+.zoom-leave-from {
   opacity: 1;
 }
 
@@ -129,6 +142,3 @@ function goToSubmissionPage() {
   gap: 8px;
 }
 </style>
-
-
-
