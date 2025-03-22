@@ -1,11 +1,8 @@
 <script lang="ts" setup>
-import {
-  type Captcha,
-  cloudflareCAPTCHAKey,
-  isInChina,
-} from '@/utils/constants';
+import { type Captcha, cloudflareCAPTCHAKey } from '@/utils/constants';
 import VueTurnstile from 'vue-turnstile';
 import { onMounted, ref } from 'vue';
+import { useAppStore } from '~/store/app';
 
 const vaptcha = ref();
 
@@ -32,14 +29,15 @@ const props = defineProps<{
   forceCn?: boolean;
 }>();
 
-const china = ref(props.forceCn || (await isInChina()));
+const appStore = useAppStore();
+const china = ref(props.forceCn || (await appStore.isInChina()));
 onMounted(async () => {
   model.value = {
     provider: '',
     token: '',
     server: null,
   };
-  china.value = props.forceCn || (await isInChina());
+  china.value = props.forceCn || (await appStore.isInChina());
 });
 if (china.value) {
   onMounted(() => {
@@ -79,7 +77,7 @@ if (china.value) {
 
 <template>
   <v-btn v-if="china" @click="china = false" variant="outlined">
-    使用 Cloudflare 验证码
+    切换成 Cloudflare 验证码
   </v-btn>
   <template v-if="china">
     <div ref="vaptcha" />

@@ -115,94 +115,94 @@ function deleteItem(item: Backup, onSuccess: () => void) {
         >通过指令导入进 X Backup 模组的增量备份数据库中。（还没写）
       </span>
     </p>
+    <v-data-table-server
+      :headers="[
+        {
+          title: '存档路径',
+          key: 'localPath',
+          sortable: false,
+        },
+        {
+          title: '世界名称',
+          key: 'worldName',
+          sortable: false,
+        },
+        {
+          title: '创建时间',
+          key: 'createdAt',
+          sortable: false,
+        },
+        {
+          title: '创建者',
+          key: 'user',
+          sortable: false,
+        },
+        {
+          title: '存档大小',
+          key: 'zipSize',
+          sortable: false,
+        },
+        {
+          title: '操作',
+          key: 'actions',
+          sortable: false,
+          minWidth: '150px',
+        },
+      ]"
+      :items="serverItems"
+      :items-length="totalItems"
+      :items-per-page="pageSize"
+      :loading="loading"
+      :page="page"
+      :search="search"
+      @update:options="loadItems"
+    >
+      <template #[`item.actions`]="{ item }">
+        <v-btn :href="item.restUrl" :loading="downloading" color="primary"
+          >查看/下载
+        </v-btn>
+        <v-btn color="error">
+          删除
+          <v-dialog activator="parent" max-width="500">
+            <template #default="{ isActive }">
+              <v-card>
+                <v-card-title>删除备份</v-card-title>
+                <v-card-text>
+                  <p>确定要删除此备份吗？</p>
+                  <p>备份路径： {{ item.localPath }}</p>
+                  <p>世界名称： {{ item.worldName }}</p>
+                  <p>
+                    备份时间： {{ new Date(item.createdAt).toLocaleString() }}
+                  </p>
+                  <p>此操作不可逆，请谨慎操作。</p>
+                </v-card-text>
+                <v-card-actions>
+                  <v-btn
+                    color="error"
+                    @click="deleteItem(item, () => (isActive.value = false))"
+                  >
+                    确定
+                  </v-btn>
+                  <v-btn color="secondary" @click="isActive.value = false"
+                    >取消
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </template>
+          </v-dialog>
+        </v-btn>
+      </template>
+      <template #[`item.user`]="{ item }">
+        {{ item.user.username }}
+      </template>
+      <template #[`item.createdAt`]="{ item }">
+        {{ new Date(item.createdAt).toLocaleString() }}
+      </template>
+      <template #[`item.zipSize`]="{ item }">
+        {{ size2text(item.zipSize) }}
+      </template>
+    </v-data-table-server>
   </div>
-  <v-data-table-server
-    :headers="[
-      {
-        title: '存档路径',
-        key: 'localPath',
-        sortable: false,
-      },
-      {
-        title: '世界名称',
-        key: 'worldName',
-        sortable: false,
-      },
-      {
-        title: '创建时间',
-        key: 'createdAt',
-        sortable: false,
-      },
-      {
-        title: '创建者',
-        key: 'user',
-        sortable: false,
-      },
-      {
-        title: '存档大小',
-        key: 'zipSize',
-        sortable: false,
-      },
-      {
-        title: '操作',
-        key: 'actions',
-        sortable: false,
-        minWidth: '150px',
-      },
-    ]"
-    :items="serverItems"
-    :items-length="totalItems"
-    :items-per-page="pageSize"
-    :loading="loading"
-    :page="page"
-    :search="search"
-    @update:options="loadItems"
-  >
-    <template #[`item.actions`]="{ item }">
-      <v-btn :href="item.restUrl" :loading="downloading" color="primary"
-        >查看/下载
-      </v-btn>
-      <v-btn color="error">
-        删除
-        <v-dialog activator="parent" max-width="500">
-          <template #default="{ isActive }">
-            <v-card>
-              <v-card-title>删除备份</v-card-title>
-              <v-card-text>
-                <p>确定要删除此备份吗？</p>
-                <p>备份路径： {{ item.localPath }}</p>
-                <p>世界名称： {{ item.worldName }}</p>
-                <p>
-                  备份时间： {{ new Date(item.createdAt).toLocaleString() }}
-                </p>
-                <p>此操作不可逆，请谨慎操作。</p>
-              </v-card-text>
-              <v-card-actions>
-                <v-btn
-                  color="error"
-                  @click="deleteItem(item, () => (isActive.value = false))"
-                >
-                  确定
-                </v-btn>
-                <v-btn color="secondary" @click="isActive.value = false"
-                  >取消
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </template>
-        </v-dialog>
-      </v-btn>
-    </template>
-    <template #[`item.user`]="{ item }">
-      {{ item.user.username }}
-    </template>
-    <template #[`item.createdAt`]="{ item }">
-      {{ new Date(item.createdAt).toLocaleString() }}
-    </template>
-    <template #[`item.zipSize`]="{ item }">
-      {{ size2text(item.zipSize) }}
-    </template>
-  </v-data-table-server>
 </template>
 
 <style scoped></style>

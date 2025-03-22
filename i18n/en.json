@@ -37,6 +37,8 @@
   "common": {
     "and": "and",
     "back": "Back",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
     "description": "Description",
     "details": "Details",
     "followers": "followers",
@@ -69,10 +71,13 @@
     "download": "Download",
     "download_count": "{count} downloads",
     "failed_preview_load": "Failed to load litematica to preview",
+    "material_list": "Material List",
     "not_found": "Litematica {name} not found!",
     "not_logged_in": "Guest users can only generate 5 times per minute, please log in to unlock this limit",
     "og_description": "Generate amazing redstone / slimestone contraptions online, such as world easters or tunnel bores, in any chunks size!",
     "select": "What do you want to generate today?",
+    "share": "Share",
+    "share_link_copied_to_clipboard": "Share link copied to clipboard.",
     "size_description": "The size of the machine in x, y, z. for world eaters, the z size is the distance between the starting side and the returning side.",
     "size_max": "The size of the machine must be less than {size}",
     "size_min": "The size of the machine must be greater than {size}",
@@ -80,6 +85,13 @@
     "size_x": "Size in x",
     "size_y": "Size in y",
     "size_z": "Size in z",
+    "sort": {
+      "createdAt": "Latest",
+      "downloads": "Most Popular",
+      "random-extra": "Explore (Random)",
+      "sort_by": "Sort by:"
+    },
+    "status": "Visibility",
     "suggested_values": "Suggested Values: ",
     "suggestion_notice": "These suggested values are for your reference only",
     "title": "Litematica Online Generator",
@@ -87,6 +99,7 @@
       "failed_to_load_litematica_preview": "Failed to load litematica preview"
     },
     "total_downloads": "We have provided {0} downloads in total.",
+    "updated_at": "Updated At",
     "upload": {
       "button_msg": "Upload New Design",
       "edit_or_improve_translation": "Edit or Improve Translation"
@@ -119,9 +132,13 @@
     "title": "Page not found"
   },
   "post": {
+    "delete": "Delete",
+    "delete_reason": "Deleting Reason",
     "litematica_online_edit": "Edit",
     "litematica_online_edit_desc": "Edit this litematica online before you download, including replace blocks, convert version, etc.",
-    "preview": "Preview"
+    "management_op": "管理操作：",
+    "preview": "Preview",
+    "transfer_ownership": "Transfer Ownership"
   },
   "profile": {
     "account_not_linked": "Account not linked",
@@ -171,6 +188,7 @@
     },
     "editProfile": "Edit Profile",
     "link_now": "Link Now!",
+    "logout": "Logout",
     "microsoft_checked_verifying_minecraft": "Microsoft account checked, verifying Minecraft ownership...",
     "my_backup": "My Cloud Backups",
     "no_machines": "This user has no posts yet.",
@@ -184,9 +202,6 @@
     "username": "Username",
     "verified_minecraft": "Verified minecraft account",
     "your_timezone": "(Your timezone)"
-  },
-  "profle": {
-    "logout": "Logout"
   },
   "reden": {
     "card": {
@@ -322,6 +337,7 @@
       "password": "Password",
       "username": "Username"
     },
+    "quick": "Quick registration using a 3rd-party account",
     "title": "Register to Reden",
     "toast": {
       "error": {
@@ -334,6 +350,22 @@
       },
       "try": "Please try again later"
     }
+  },
+  "reset_pass": {
+    "confirm_password": "Confirm New Password",
+    "email_sent": "Email Sent",
+    "email_sent_desc": "An email has been sent to your email address. Please check your inbox and follow the instructions to reset your password.",
+    "forgot_password": "Forgot Password",
+    "input_email": "Email or Usernme",
+    "input_password": "New Password",
+    "invalid_link": "Invalid link",
+    "invalid_link_info": "The link is malformed or expired.",
+    "invalid_link_instruction": "If you want to reset your password, please request a new link from the",
+    "invalid_link_instruction_link": "forgot password page",
+    "please_wait_for_a_while": "Please wait for a while before trying again",
+    "submit": "Submit",
+    "success": "Successfully reset password",
+    "you_can_only_request": "You can only request password reset once per minutes."
   },
   "ru": "Русский",
   "search": {
@@ -381,7 +413,7 @@
       "id_is_taken": "ID is taken, please choose another one",
       "litematica_generator": "Litematica Generator",
       "litematica_generator_only_support_uploading_1_litematica_file": "Litematica generator mode only support uploading 1 litematica file",
-      "manual_upload": "Normal Designs Upload",
+      "manual_upload": "Normal designs upload, most designs should choose this option",
       "maximum_size_per_image": "Maximum 2MB per image",
       "name_cannot_contain_special_characters": "Name cannot contain special characters",
       "not_upload": "No files have been uploaded yet",

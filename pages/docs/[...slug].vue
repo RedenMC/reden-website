@@ -1,5 +1,7 @@
 <script lang="ts" setup></script>
 
 <template>
-  <ContentDoc></ContentDoc>
+  <div>
+    <ContentDoc></ContentDoc>
+  </div>
 </template>

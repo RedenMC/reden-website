@@ -62,6 +62,8 @@ export type Profile = {
   followers?: number;
   following?: number;
   followingProjects?: number;
+  // 中国大陆实名认证信息
+  realName?: string;
 };
 
 export type Preference = {
@@ -163,7 +165,7 @@ export function doFetchGet(
     method: 'GET',
     headers: {
       'X-Requested-With': 'Reden',
-      'X-CSRF-Token': useAppStore(/*pinia*/).csrfToken || '<no csrf token>',
+      'X-CSRF-Token': useAppStore().csrfToken || '<no csrf token>',
     },
     credentials: 'include',
   });
@@ -231,40 +233,41 @@ export type ErrorResponse = {
   error_description: string;
 };
 
-export function fetchUser(userRef: Ref<Profile | undefined>) {
+export async function fetchUser(userRef: Ref<Profile | undefined>) {
   useNuxtApp();
-  return doFetchGet('/api/account/profile')
-    .then(async (response) => {
-      if (response.ok) {
-        const data: Profile = await response.json();
-        userRef.value = data;
-        useAppStore().updateCache(data);
-      } else {
-        if (response.status === 401) {
-          toast('Error', {
-            description: 'You are not logged in',
-            duration: 3e3,
-            cardProps: {
-              color: 'error',
-            },
-          });
-          useAppStore().logout();
-          const localeRoute = useLocaleRoute();
-          useRouter().push(
-            localeRoute({
-              path: '/login',
-              hash: '#status=401',
-            })!,
-          );
-          console.log(
-            '%c[Reden] User is not logged in',
-            'color: #f00; font-weight: bold; font-size: 1.2em;background-color: #000',
-          );
-        }
-        return Promise.reject(await response.json());
+  try {
+    let response = await doFetchGet('/api/account/profile');
+    if (response.ok) {
+      const data: Profile = await response.json();
+      userRef.value = data;
+      useAppStore().updateCache(data);
+    } else {
+      if (response.status === 401) {
+        toast('Error', {
+          description: 'You are not logged in',
+          duration: 3e3,
+          cardProps: {
+            color: 'error',
+          },
+        });
+        useAppStore().logout();
+        const localeRoute = useLocaleRoute();
+        await useRouter().push(
+          localeRoute({
+            path: '/login',
+            hash: '#status=401',
+          })!,
+        );
+        console.log(
+          '%c[Reden] User is not logged in',
+          'color: #f00; font-weight: bold; font-size: 1.2em;background-color: #000',
+        );
       }
-    })
-    .catch((e) => toastError(e, 'Failed to get user profile'));
+      return Promise.reject(await response.json());
+    }
+  } catch (e) {
+    return await toastError(e, 'Failed to get user profile');
+  }
 }
 
 export type OAuthAccount = {
@@ -274,26 +277,6 @@ export type OAuthAccount = {
   name?: string;
 };
 
-export function getOauth(
-  type: string,
-  url: string,
-  account: Ref<OAuthAccount | undefined>,
-): Promise<void | undefined> {
-  return doFetchGet(url)
-    .then((res) => {
-      if (res.ok) {
-        res.json().then((data: OAuthAccount) => {
-          account.value = data;
-        });
-      } else if (res.status == 404) {
-        account.value = undefined;
-      } else {
-        return Promise.reject(res);
-      }
-    })
-    .catch((e) => toastError(e, `Failed to get ${type} account`));
-}
-
 export function isStrongPassword(password: string) {
   return !!(
     password.length >= 8 &&
@@ -302,29 +285,7 @@ export function isStrongPassword(password: string) {
   );
 }
 
-export const debugMessages = () => !useBackendMeta(/*pinia*/).get().production;
-
-let _isInChina: boolean | undefined = undefined;
-
-export async function isInChina() {
-  if (_isInChina) return _isInChina;
-  if (!import.meta.client) return false;
-  else {
-    let res = await doFetchGet('/api/ip');
-    if (res.ok) {
-      let data = await res.json();
-      if (data.mm?.country_code === 'CN') {
-        console.log('ip', data.ip, 'is in china.');
-        _isInChina = true;
-        return true;
-      } else {
-        _isInChina = false;
-        return false;
-      }
-    }
-  }
-}
-
+export const debugMessages = () => !useBackendMeta().get().production;
 export function number2text(num?: number) {
   num = num || 0;
   if (num >= 1e6) return (num / 1e6).toFixed(1) + 'M';
@@ -568,3 +529,24 @@ export function size2text(val: number) {
 }
 
 export const globalTheme = ref<'light' | 'dark'>('light');
+
+export enum PostType {
+  LitematicaGen = 'LitematicaGen',
+  LitematicaShare = 'LitematicaShare',
+}
+
+export enum PostStatus {
+  Pending = 'Pending',
+  Approved = 'Approved',
+  Rejected = 'Rejected',
+  Deleted = 'Deleted',
+  TakenDown = 'TakenDown',
+}
+
+export const allPostTypes = [
+  PostStatus.Pending,
+  PostStatus.Approved,
+  PostStatus.Rejected,
+  PostStatus.Deleted,
+  PostStatus.TakenDown,
+];

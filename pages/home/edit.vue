@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import {
   type Captcha,
+  doFetchDelete,
   doFetchPost,
   fetchUser,
   isStrongPassword,
@@ -10,7 +11,6 @@ import {
   zh_cn,
 } from '@/utils/constants';
 import { ref, watch } from 'vue';
-import OAuthAccountLine from '@/components/editProfilePage/OAuthAccountLine.vue';
 import { toast } from 'vuetify-sonner';
 import { useI18n } from 'vue-i18n';
 import CommonCaptcha from '@/components/CommonCaptcha.vue';
@@ -41,6 +41,14 @@ const mockUser: Profile = {
  */
 const userCopy = ref<Profile>(mockUser);
 const user = ref<Profile>(mockUser);
+watch(user, () => {
+  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  if (!user.value.preference.timezone) {
+    console.log(`user updated, auto add timezone ${timeZone}`);
+    user.value.preference.timezone = timeZone;
+    doFetchPost('/api/account/update/preference', user.value.preference);
+  }
+});
 const dialogChangePassword = ref(
   router.currentRoute.value?.hash === '#change-password',
 );
@@ -52,6 +60,39 @@ useHead({
 definePageMeta({
   needLogin: true,
 });
+const {
+  data: oauthData,
+  status: oauthLoading,
+  refresh: refreshOAuth,
+} = useFetch<OAuthAccount[]>('/api/account/oauth');
+
+if (import.meta.client) {
+  refreshOAuth();
+}
+
+function getOAuthAccount(type: string) {
+  return oauthData.value?.find((a) => a.type === type);
+}
+
+async function unlinkAccount(type: string) {
+  let response = await doFetchDelete(`/api/account/${type}`);
+  if (response.ok) {
+    await refreshOAuth();
+    toast('Account unlinked', {
+      cardProps: {
+        color: 'success',
+      },
+      duration: 5000,
+    });
+  } else {
+    toast(response.statusText, {
+      cardProps: {
+        color: 'error',
+      },
+      duration: 5000,
+    });
+  }
+}
 
 watch(dialogChangePassword, () => {
   if (dialogChangePassword.value) {
@@ -115,26 +156,21 @@ function changePassword() {
 const savingInfo = ref(false);
 const savingPreferences = ref(false);
 
-function saveInfo() {
+async function saveInfo() {
   savingInfo.value = true;
-  doFetchPost('/api/account/update', user.value)
-    .then((response) => {
-      if (response.ok) {
-        toast.success(t('profile.edit.success'), {
-          description: t('profile.edit.information_saved'),
-          duration: 1000,
-        });
-        fetchUser(user).then(() => {
-          userCopy.value = JSON.parse(JSON.stringify(user.value));
-        });
-      } else {
-        return Promise.reject(response);
-      }
-    })
-    .catch((e) => toastError(e, t('profile.edit.failed_to_save_information')))
-    .finally(() => {
-      savingInfo.value = false;
+  const response = await doFetchPost('/api/account/update', user.value);
+  if (response.ok) {
+    toast.success(t('profile.edit.success'), {
+      description: t('profile.edit.information_saved'),
+      duration: 1000,
     });
+    fetchUser(user).then(() => {
+      userCopy.value = JSON.parse(JSON.stringify(user.value));
+    });
+  } else {
+    await toastError(response, t('profile.edit.failed_to_save_information'));
+  }
+  savingInfo.value = false;
 }
 
 function changed(a: Record<string, unknown>, b: Record<string, unknown>) {
@@ -175,322 +211,406 @@ function savePreferences() {
 </script>
 
 <template>
-  <div class="section">
-    <v-btn
-      :to="localePath('/home')"
-      class="text-capitalize"
-      color="primary"
-      prepend-icon="mdi-arrow-left"
-      variant="outlined"
+  <div>
+    <div class="section">
+      <v-btn
+        :to="localePath('/home')"
+        class="text-capitalize"
+        color="primary"
+        prepend-icon="mdi-arrow-left"
+        variant="outlined"
+      >
+        {{ t('profile.edit.back') }}
+      </v-btn>
+      <h1>
+        {{ t('reden.title.edit_profile') }}
+      </h1>
+    </div>
+    <v-card
+      v-if="user"
+      border
+      class="setting-section-card section"
+      rounded="lg"
     >
-      {{ $t('profile.edit.back') }}
-    </v-btn>
-    <h1>
-      {{ $t('reden.title.edit_profile') }}
-    </h1>
-  </div>
-  <v-card v-if="user" border class="setting-section-card section" rounded="lg">
-    <h3 class="setting-section-title">
-      {{ $t('profile.edit.basic_information') }}
-    </h3>
-    <v-row>
-      <v-col>
-        <p class="setting-label">Email</p>
-        <p class="setting-description">
-          {{ t('profile.edit.email_desc') }}
-        </p>
-      </v-col>
-      <div>
-        <span class="setting-button">
-          {{ user.email }}
-        </span>
-        <v-btn class="text-capitalize setting-button" color="primary">
-          {{ t('profile.edit.changeEmail') }}
-        </v-btn>
-      </div>
-    </v-row>
-    <v-row>
-      <v-col>
-        <p class="setting-label">{{ t('profile.edit.username') }}</p>
-        <p class="setting-description">
-          {{ t('profile.edit.username_desc') }}
-        </p>
-      </v-col>
-      <v-col>
-        <v-text-field
-          v-model="user.username"
-          :disabled="(user.canChangeNameUntil || 0) > Date.now()"
-          class="setting-input"
-          color="primary"
-        >
-          <template #prepend>
-            <v-icon>mdi-account</v-icon>
-          </template>
-          <template v-if="(user.canChangeNameUntil || 0) > Date.now()" #details>
-            {{
-              t('profile.edit.username_timer', [
-                Math.round(
-                  (user.canChangeNameUntil! - Date.now()) / 1000 / 60 / 60,
-                ),
-              ])
-            }}
-          </template>
-        </v-text-field>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-        <p class="setting-label">{{ t('profile.edit.bio') }}</p>
-        <p class="setting-description">{{ t('profile.edit.bio_desc') }}</p>
-      </v-col>
-      <v-col>
-        <v-textarea v-model="user.bio" class="setting-input" color="primary">
-        </v-textarea>
-      </v-col>
-    </v-row>
-
-    <v-row>
-      <v-spacer />
-      <v-btn
-        :disabled="
-          userCopy?.username == user.username &&
-          (userCopy?.bio || '') == user.bio
-        "
-        :loading="savingInfo"
-        class="text-capitalize setting-button"
-        color="primary"
-        @click="saveInfo"
-      >
-        {{ t('profile.edit.save') }}
-      </v-btn>
-    </v-row>
-  </v-card>
-
-  <v-card border class="setting-section-card section" rounded="lg">
-    <h3 class="setting-section-title">{{ t('profile.edit.preferences') }}</h3>
-    <v-row>
-      <v-col cols="9">
-        <p class="setting-label">
-          {{ t('profile.edit.preference.showEmail') }}
-        </p>
-        <p class="setting-description">
-          {{ $t('profile.edit.preference.show_email_desc') }}
-        </p>
-      </v-col>
-      <v-spacer />
-      <v-switch
-        v-model="user.preference.showEmail"
-        :hide-details="true"
-        class="setting-button"
-        color="primary"
-      />
-    </v-row>
-    <v-row>
-      <v-col cols="9">
-        <p class="setting-label">
-          {{ t('profile.edit.preference.show_minecraft_uuid') }}
-        </p>
-        <p class="setting-description">
-          {{ $t('profile.edit.preference.show_minecraft_uuid_desc') }}
-        </p>
-      </v-col>
-      <v-spacer />
-      <v-switch
-        v-model="user.preference.showMC"
-        :hide-details="true"
-        class="setting-button"
-        color="primary"
-      />
-    </v-row>
-    <v-row>
-      <v-col cols="9">
-        <p class="setting-label">
-          {{ t('profile.edit.preference.show_github') }}
-        </p>
-        <p class="setting-description">
-          {{ t('profile.edit.preference.show_github_desc') }}
-        </p>
-      </v-col>
-      <v-spacer />
-      <v-switch
-        v-model="user.preference.showGithub"
-        class="setting-button"
-        color="primary"
-        hide-details
-      />
-    </v-row>
-    <v-row>
-      <v-col cols="9">
-        <p class="setting-label">
-          {{ t('profile.edit.preference.show_timezone') }}
-        </p>
-        <p class="setting-description">
-          {{ $t('profile.edit.preference.show_timezone_desc') }}
-        </p>
-      </v-col>
-      <v-spacer />
-      <v-switch
-        v-model="user.preference.showTimezone"
-        class="setting-button"
-        color="primary"
-        hide-details
-      />
-    </v-row>
-    <v-row v-if="locale == zh_cn">
-      <v-col cols="9">
-        <p class="setting-label">显示 QQ</p>
-        <p class="setting-description">向其他人显示你的QQ号码。</p>
-      </v-col>
-      <v-spacer />
-      <v-switch
-        v-model="user.preference.showQQ"
-        class="setting-button"
-        color="primary"
-        hide-details
-      />
-    </v-row>
-    <v-row>
-      <v-col>
-        <p class="setting-label">{{ t('profile.edit.preference.pronouns') }}</p>
-        <p class="setting-description">
-          {{ t('profile.edit.preference.pronouns_desc') }}
-        </p>
-      </v-col>
-      <v-col>
-        <v-text-field
-          v-model="user.preference.pronouns"
-          class="setting-input"
-          color="primary"
-        />
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-        <p class="setting-label">
-          {{ $t('profile.edit.preference.timezone') }}
-        </p>
-        <p class="setting-description">
-          {{ $t('profile.edit.preference.timezone_desc') }}
-        </p>
-      </v-col>
-      <v-col>
-        <v-select
-          v-model="user.preference.timezone"
-          :items="timezones"
-          class="setting-input"
-        />
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-spacer />
-      <v-btn
-        :disabled="
-          userCopy && user && !changed(user.preference, userCopy.preference)
-        "
-        :loading="savingPreferences"
-        class="text-capitalize setting-button"
-        color="primary"
-        @click="savePreferences"
-      >
-        {{ t('profile.edit.save_preferences') }}
-      </v-btn>
-    </v-row>
-  </v-card>
-
-  <v-card v-if="user" border class="setting-section-card section" rounded="lg">
-    <h3 class="setting-section-title">
-      {{ t('profile.edit.password.title') }}
-    </h3>
-    <p>{{ t('profile.edit.password.desc') }}</p>
-
-    <v-row>
-      <v-spacer />
-      <v-btn
-        class="text-capitalize setting-button"
-        color="primary"
-        @click="dialogChangePassword = true"
-      >
-        {{ t('profile.edit.password.changePassword') }}
-      </v-btn>
-      <v-dialog
-        v-model="dialogChangePassword"
-        max-width="500"
-        scroll-strategy="block"
-      >
-        <v-card>
-          <v-card-title>
-            {{ t('profile.edit.password.changePassword') }}
-          </v-card-title>
-          <v-card-text>
-            <v-form>
-              <input :value="user.username" autocomplete="username" hidden />
-              <v-text-field
-                v-if="!user.passwordNotSet"
-                v-model="oldPassword"
-                :label="t('profile.edit.password.old')"
-                autocomplete="current-password"
-                class="setting-input"
-                color="primary"
-                type="password"
-              />
-              <p v-if="user.passwordNotSet">
-                {{ t('profile.edit.password.first') }}
-              </p>
-              <v-text-field
-                v-model="newPassword"
-                :label="t('profile.edit.password.mew')"
-                :rules="[
-                  (v: string) =>
-                    isStrongPassword(v) ||
-                    t('profile.edit.password.requirements'),
-                  (v: string) =>
-                    v !== oldPassword ||
-                    'New password must be different from old password',
-                ]"
-                autocomplete="new-password"
-                class="setting-input"
-                color="primary"
-                type="password"
-              />
-              <v-text-field
-                v-model="confirmNewPassword"
-                :label="t('profile.edit.password.confirm')"
-                :rules="[
-                  (v: string) =>
-                    v === newPassword ||
-                    t('profile.edit.password.passwordsDoNotMatch'),
-                ]"
-                autocomplete="new-password"
-                class="setting-input"
-                color="primary"
-                type="password"
-              />
-            </v-form>
-            <common-captcha v-model="captcha" />
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer />
-            <v-btn
-              :loading="changingPassword"
-              class="text-capitalize setting-button"
-              color="primary"
-              variant="elevated"
-              @click="changePassword"
+      <h3 class="setting-section-title">
+        {{ t('profile.edit.basic_information') }}
+      </h3>
+      <v-row>
+        <v-col>
+          <p class="setting-label">Email</p>
+          <p class="setting-description">
+            {{ t('profile.edit.email_desc') }}
+          </p>
+        </v-col>
+        <div>
+          <span class="setting-button">
+            {{ user.email }}
+          </span>
+          <v-btn class="text-capitalize setting-button" color="primary">
+            {{ t('profile.edit.changeEmail') }}
+          </v-btn>
+        </div>
+      </v-row>
+      <v-row>
+        <v-col>
+          <p class="setting-label">{{ t('profile.edit.username') }}</p>
+          <p class="setting-description">
+            {{ t('profile.edit.username_desc') }}
+          </p>
+        </v-col>
+        <v-col>
+          <v-text-field
+            v-model="user.username"
+            :disabled="(user.canChangeNameUntil || 0) > Date.now()"
+            class="setting-input"
+            color="primary"
+          >
+            <template #prepend>
+              <v-icon>mdi-account</v-icon>
+            </template>
+            <template
+              v-if="(user.canChangeNameUntil || 0) > Date.now()"
+              #details
             >
+              {{
+                t('profile.edit.username_timer', [
+                  Math.round(
+                    (user.canChangeNameUntil! - Date.now()) / 1000 / 60 / 60,
+                  ),
+                ])
+              }}
+            </template>
+          </v-text-field>
+        </v-col>
+      </v-row>
+      <v-row v-if="locale === 'zh_cn'">
+        <v-col>
+          <p class="setting-label">实名认证</p>
+          <p class="setting-description">
+            仅针对中国大陆用户，未经实名认证的用户和非中国公民用户的评论、发帖等，对于中国大陆用户隐藏。
+            <router-link class="router" to="/zh_cn/docs/real-person">
+              了解更多
+            </router-link>
+          </p>
+        </v-col>
+        <v-col>
+          <v-btn
+            class="text-capitalize setting-button"
+            color="primary"
+            disabled
+            variant="outlined"
+          >
+            {{ user.realName ? '已认证' : '未认证' }}
+          </v-btn>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <p class="setting-label">{{ t('profile.edit.bio') }}</p>
+          <p class="setting-description">{{ t('profile.edit.bio_desc') }}</p>
+        </v-col>
+        <v-col>
+          <v-textarea v-model="user.bio" class="setting-input" color="primary">
+          </v-textarea>
+        </v-col>
+      </v-row>
+
+      <v-row>
+        <v-spacer />
+        <v-btn
+          :disabled="
+            userCopy?.username == user.username &&
+            (userCopy?.bio || '') == user.bio
+          "
+          :loading="savingInfo"
+          class="text-capitalize setting-button"
+          color="primary"
+          @click="saveInfo"
+        >
+          {{ t('profile.edit.save') }}
+        </v-btn>
+      </v-row>
+    </v-card>
+
+    <v-card border class="setting-section-card section" rounded="lg">
+      <h3 class="setting-section-title">{{ t('profile.edit.preferences') }}</h3>
+      <v-row>
+        <v-col cols="9">
+          <p class="setting-label">
+            {{ t('profile.edit.preference.showEmail') }}
+          </p>
+          <p class="setting-description">
+            {{ t('profile.edit.preference.show_email_desc') }}
+          </p>
+        </v-col>
+        <v-spacer />
+        <v-switch
+          v-model="user.preference.showEmail"
+          :hide-details="true"
+          class="setting-button"
+          color="primary"
+        />
+      </v-row>
+      <v-row>
+        <v-col cols="9">
+          <p class="setting-label">
+            {{ t('profile.edit.preference.show_minecraft_uuid') }}
+          </p>
+          <p class="setting-description">
+            {{ t('profile.edit.preference.show_minecraft_uuid_desc') }}
+          </p>
+        </v-col>
+        <v-spacer />
+        <v-switch
+          v-model="user.preference.showMC"
+          :hide-details="true"
+          class="setting-button"
+          color="primary"
+        />
+      </v-row>
+      <v-row>
+        <v-col cols="9">
+          <p class="setting-label">
+            {{ t('profile.edit.preference.show_github') }}
+          </p>
+          <p class="setting-description">
+            {{ t('profile.edit.preference.show_github_desc') }}
+          </p>
+        </v-col>
+        <v-spacer />
+        <v-switch
+          v-model="user.preference.showGithub"
+          class="setting-button"
+          color="primary"
+          hide-details
+        />
+      </v-row>
+      <v-row>
+        <v-col cols="9">
+          <p class="setting-label">
+            {{ t('profile.edit.preference.show_timezone') }}
+          </p>
+          <p class="setting-description">
+            {{ t('profile.edit.preference.show_timezone_desc') }}
+          </p>
+        </v-col>
+        <v-spacer />
+        <v-switch
+          v-model="user.preference.showTimezone"
+          class="setting-button"
+          color="primary"
+          hide-details
+        />
+      </v-row>
+      <v-row v-if="locale == zh_cn">
+        <v-col cols="9">
+          <p class="setting-label">显示 QQ</p>
+          <p class="setting-description">向其他人显示你的QQ号码。</p>
+        </v-col>
+        <v-spacer />
+        <v-switch
+          v-model="user.preference.showQQ"
+          class="setting-button"
+          color="primary"
+          hide-details
+        />
+      </v-row>
+      <v-row>
+        <v-col>
+          <p class="setting-label">
+            {{ t('profile.edit.preference.pronouns') }}
+          </p>
+          <p class="setting-description">
+            {{ t('profile.edit.preference.pronouns_desc') }}
+          </p>
+        </v-col>
+        <v-col>
+          <v-text-field
+            v-model="user.preference.pronouns"
+            class="setting-input"
+            color="primary"
+          />
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <p class="setting-label">
+            {{ t('profile.edit.preference.timezone') }}
+          </p>
+          <p class="setting-description">
+            {{ t('profile.edit.preference.timezone_desc') }}
+          </p>
+        </v-col>
+        <v-col>
+          <v-select
+            v-model="user.preference.timezone"
+            :items="timezones"
+            class="setting-input"
+          />
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-spacer />
+        <v-btn
+          :disabled="
+            userCopy && user && !changed(user.preference, userCopy.preference)
+          "
+          :loading="savingPreferences"
+          class="text-capitalize setting-button"
+          color="primary"
+          @click="savePreferences"
+        >
+          {{ t('profile.edit.save_preferences') }}
+        </v-btn>
+      </v-row>
+    </v-card>
+
+    <v-card
+      v-if="user"
+      border
+      class="setting-section-card section"
+      rounded="lg"
+    >
+      <h3 class="setting-section-title">
+        {{ t('profile.edit.password.title') }}
+      </h3>
+      <p>{{ t('profile.edit.password.desc') }}</p>
+
+      <v-row>
+        <v-spacer />
+        <v-btn
+          class="text-capitalize setting-button"
+          color="primary"
+          @click="dialogChangePassword = true"
+        >
+          {{ t('profile.edit.password.changePassword') }}
+        </v-btn>
+        <v-dialog
+          v-model="dialogChangePassword"
+          max-width="500"
+          scroll-strategy="block"
+        >
+          <v-card>
+            <v-card-title>
               {{ t('profile.edit.password.changePassword') }}
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </v-row>
-  </v-card>
-  <v-card border class="setting-section-card section" rounded="lg">
-    <h3 class="setting-section-title">
-      {{ $t('profile.edit.third_party_accounts') }}
-    </h3>
-    <OAuthAccountLine icon="mdi-microsoft" type="microsoft" />
-    <OAuthAccountLine icon="mdi-github" type="github" />
-  </v-card>
+            </v-card-title>
+            <v-card-text>
+              <v-form>
+                <input :value="user.username" autocomplete="username" hidden />
+                <v-text-field
+                  v-if="!user.passwordNotSet"
+                  v-model="oldPassword"
+                  :label="t('profile.edit.password.old')"
+                  autocomplete="current-password"
+                  class="setting-input"
+                  color="primary"
+                  type="password"
+                />
+                <p v-if="user.passwordNotSet">
+                  {{ t('profile.edit.password.first') }}
+                </p>
+                <v-text-field
+                  v-model="newPassword"
+                  :label="t('profile.edit.password.mew')"
+                  :rules="[
+                    (v: string) =>
+                      isStrongPassword(v) ||
+                      t('profile.edit.password.requirements'),
+                    (v: string) =>
+                      v !== oldPassword ||
+                      'New password must be different from old password',
+                  ]"
+                  autocomplete="new-password"
+                  class="setting-input"
+                  color="primary"
+                  type="password"
+                />
+                <v-text-field
+                  v-model="confirmNewPassword"
+                  :label="t('profile.edit.password.confirm')"
+                  :rules="[
+                    (v: string) =>
+                      v === newPassword ||
+                      t('profile.edit.password.passwordsDoNotMatch'),
+                  ]"
+                  autocomplete="new-password"
+                  class="setting-input"
+                  color="primary"
+                  type="password"
+                />
+              </v-form>
+              <common-captcha v-model="captcha" />
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer />
+              <v-btn
+                :loading="changingPassword"
+                class="text-capitalize setting-button"
+                color="primary"
+                variant="elevated"
+                @click="changePassword"
+              >
+                {{ t('profile.edit.password.changePassword') }}
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-row>
+    </v-card>
+    <v-card border class="setting-section-card section" rounded="lg">
+      <h3 class="setting-section-title">
+        {{ t('profile.edit.third_party_accounts') }}
+      </h3>
+      <v-list border>
+        <v-list-item
+          v-for="type in [
+            {
+              name: 'Microsoft',
+              icon: 'custom:Microsoft',
+            },
+            { name: 'Github', icon: 'mdi-github' },
+            { name: 'Google', icon: 'custom:Google' },
+          ]"
+        >
+          <v-row class="line">
+            <v-col>
+              <v-icon v-if="type.icon">{{ type.icon }}</v-icon>
+              <span class="setting-label">
+                {{ type.name }}
+              </span>
+            </v-col>
+            <v-col>
+              <p v-if="getOAuthAccount(type.name)">
+                {{ getOAuthAccount(type.name)?.name }}
+              </p>
+            </v-col>
+            <v-col>
+              <v-btn
+                v-if="!getOAuthAccount(type.name)"
+                :href="`/api/oauth/${type.name.toLowerCase()}?redirect_url=${encodeURI('/home/edit')}`"
+                :loading="oauthLoading === 'pending'"
+                block
+                class="text-capitalize setting-button"
+                color="primary"
+              >
+                {{ t('profile.oauth.link_account') }}
+              </v-btn>
+              <v-btn
+                v-if="getOAuthAccount(type.name)"
+                :loading="oauthLoading === 'pending'"
+                block
+                class="text-capitalize setting-button"
+                color="error"
+                @click="unlinkAccount(type.name)"
+              >
+                {{ t('profile.oauth.unlink_account') }}
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-list-item>
+      </v-list>
+    </v-card>
+  </div>
 </template>
 
 <!--suppress CssUnusedSymbol -->

@@ -28,7 +28,7 @@ const turn = ref(0);
 const address = // fuck you nuxt
   import.meta.dev
     ? `ws://${location.hostname}:10005/ws/generals/play?auth=${props.token}`
-    : 'wss://ws.redenmc.com:20443/ws/generals/play?auth=' + props.token;
+    : 'wss://api.redenmc.com/ws/generals/play?auth=' + props.token;
 const playersWaiting = ref({
   total: 0,
   forceStart: 0,

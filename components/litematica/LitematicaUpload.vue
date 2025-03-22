@@ -5,7 +5,6 @@ import type { MachineDef } from '~/pages/litematica/index.vue';
 import { useDisplay } from 'vuetify';
 import selectableModels from '~/utils/litematica/models_selectable.json';
 import { useAppStore } from '~/store/app';
-import { getGlobalThis } from '@vue/shared';
 import type { VForm } from 'vuetify/components';
 
 const appStore = useAppStore();
@@ -645,7 +644,12 @@ const handlePictureChange = (event: Event) => {
                   <div>
                     {{ t('upload.desc.litematica_generator') }}
                     勾选之前请确认你的投影符合
-                    <a href="/docs/zh_cn/generator-rules"> 生成器规则 </a>
+                    <router-link
+                      class="router"
+                      to="/zh_cn/docs/generator-rules"
+                    >
+                      生成器规则</router-link
+                    >
                   </div>
                 </template>
               </v-radio>
@@ -654,7 +658,7 @@ const handlePictureChange = (event: Event) => {
         </v-tabs-window-item>
 
         <v-tabs-window-item value="translation">
-          <v-form fast-fail ref="infoForm">
+          <v-form ref="infoForm" fast-fail>
             <v-card-title>
               <v-row class="justify-space-between">
                 <v-col class="mb-1 mb-md-3" cols="12" sm="6">

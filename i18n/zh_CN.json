@@ -37,6 +37,8 @@
   "common": {
     "and": "和",
     "back": "返回",
+    "cancel": "取消",
+    "confirm": "确认",
     "description": "介绍",
     "details": "详细信息",
     "followers": "粉丝",
@@ -69,10 +71,13 @@
     "download": "下载",
     "download_count": "{count} 次下载",
     "failed_preview_load": "加载投影预览失败",
+    "material_list": "材料列表",
     "not_found": "未找到投影 {name}！",
     "not_logged_in": "游客用户每分钟只能生成 5 次，登录后解锁此限制",
     "og_description": "生成我的世界红石机器投影，包括世吞、盾构等，支持任意大小，完全免费！",
     "select": "今天你想生成什么？",
+    "share": "分享",
+    "share_link_copied_to_clipboard": "分享链接已复制到剪切板。",
     "size_description": "机器的 x, y, z 尺寸。对于世界吞噬者，z 尺寸是出发站和返回站之间的距离。",
     "size_max": "机器的尺寸必须小于 {size}",
     "size_min": "机器的尺寸必须大于 {size}",
@@ -80,6 +85,13 @@
     "size_x": "x 方向尺寸",
     "size_y": "y 方向尺寸",
     "size_z": "z 方向尺寸",
+    "sort": {
+      "createdAt": "最新发布",
+      "downloads": "最多下载",
+      "random-extra": "探索队列（随机）",
+      "sort_by": "排序方式："
+    },
+    "status": "当前状态",
     "suggested_values": "建议选择：",
     "suggestion_notice": "建议值仅供参考，可能无法正确生成有效投影",
     "title": "投影蓝图在线生成器",
@@ -87,6 +99,7 @@
       "failed_to_load_litematica_preview": "加载投影预览失败"
     },
     "total_downloads": "我们已累计提供 {0} 次下载服务。",
+    "updated_at": "更新时间",
     "upload": {
       "button_msg": "上传你的机器",
       "edit_or_improve_translation": "编辑此机器或改进其翻译"
@@ -119,9 +132,13 @@
     "title": "页面没有找到"
   },
   "post": {
+    "delete": "下架",
+    "delete_reason": "下架原因",
     "litematica_online_edit": "编辑",
     "litematica_online_edit_desc": "下载之前在线编辑此投影，进行个性化设置，你可以批量替换方块，或者转换其版本。",
-    "preview": "预览"
+    "management_op": "管理操作：",
+    "preview": "预览",
+    "transfer_ownership": "转让帖子"
   },
   "profile": {
     "account_not_linked": "未链接账号",
@@ -171,6 +188,7 @@
     },
     "editProfile": "编辑个人资料",
     "link_now": "点击链接",
+    "logout": "退出登录",
     "microsoft_checked_verifying_minecraft": "微软账号已绑定，正在检查 Minecraft 所有权...",
     "my_backup": "我的云备份",
     "no_machines": "此用户还没有投稿。",
@@ -184,9 +202,6 @@
     "username": "用户名",
     "verified_minecraft": "已认证的 Minecraft 账号",
     "your_timezone": "（相同时区）"
-  },
-  "profle": {
-    "logout": "退出登录"
   },
   "reden": {
     "card": {
@@ -316,6 +331,7 @@
       "password": "密码",
       "username": "用户名"
     },
+    "quick": "使用第三方账号快速注册",
     "title": "注册 Reden",
     "toast": {
       "error": {
@@ -328,6 +344,22 @@
       },
       "try": "请稍后再试"
     }
+  },
+  "reset_pass": {
+    "confirm_password": "确认新密码",
+    "email_sent": "邮件已发送",
+    "email_sent_desc": "我们已经一封电子邮件发送给你，请检查收件箱并按照其中的指示重置密码。",
+    "forgot_password": "忘记密码",
+    "input_email": "电子邮件或用户名",
+    "input_password": "新密码",
+    "invalid_link": "链接无效",
+    "invalid_link_info": "此链接格式错误或者已过期。",
+    "invalid_link_instruction": "如果你想重置密码，请前往密码重置页面",
+    "invalid_link_instruction_link": "重新获取一个重置链接",
+    "please_wait_for_a_while": "请稍等一下再试",
+    "submit": "确认",
+    "success": "密码重置成功",
+    "you_can_only_request": "每分钟只能请求一次密码重置邮件。"
   },
   "ru": "Русский",
   "search": {
@@ -375,7 +407,7 @@
       "id_is_taken": "此 ID 已被占用",
       "litematica_generator": "投影生成器",
       "litematica_generator_only_support_uploading_1_litematica_file": "投影生成器模式只支持上传单个投影文件",
-      "manual_upload": "普通机器投稿",
+      "manual_upload": "普通机器投稿，大多数稿件应选择此选项",
       "maximum_size_per_image": "单张图片最大 2MB",
       "name_cannot_contain_special_characters": "名称不能包含特殊字符",
       "not_upload": "尚未上传任何文件",

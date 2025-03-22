@@ -2,9 +2,12 @@
 
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
+
+const scriptPath = fileURLToPath(import.meta.url);
 
 function fixI18n(lang) {
-  const i18nPath = path.resolve(`../i18n/${lang}.json`);
+  const i18nPath = path.resolve(scriptPath, `../../i18n/${lang}.json`);
   const i18n = JSON.parse(fs.readFileSync(i18nPath, 'utf8'));
 
   function removeEmptyValues(obj) {
@@ -27,6 +30,7 @@ function fixI18n(lang) {
       });
     return sorted;
   }
+
   // leave a blank line at the end
   fs.writeFileSync(
     i18nPath,

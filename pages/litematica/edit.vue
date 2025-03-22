@@ -7,6 +7,7 @@ import type {
   ListLitematicaResponse,
   MachineDef,
 } from '~/pages/litematica/index.vue';
+import RedenPostStatusChip from '~/components/litematica/RedenPostStatusChip.vue';
 
 const page = ref(1);
 const { data, status } = useFetch<ListLitematicaResponse>(
@@ -15,15 +16,6 @@ const { data, status } = useFetch<ListLitematicaResponse>(
 
 const localizedData = ref<Record<string, MachineDef>>();
 const currentLoadedData = ref<string>();
-const { t } = useI18n();
-
-const colorMap: Record<string, string> = {
-  Pending: 'grey',
-  Approved: 'green',
-  Rejected: 'red',
-  Deleted: 'red',
-  TakenDown: 'red',
-};
 </script>
 
 <template>
@@ -107,10 +99,7 @@ const colorMap: Record<string, string> = {
       {{ new Date(value).toLocaleString() }}
     </template>
     <template #[`item.status`]="{ value }">
-      <v-chip
-        :text="t('reden.post.status.' + String(value).toLowerCase())"
-        :color="colorMap[value]"
-      />
+      <reden-post-status-chip :value="value" />
     </template>
   </v-data-table-server>
 </template>

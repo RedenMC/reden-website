@@ -1,6 +1,6 @@
 // Utilities
 import { defineStore } from 'pinia';
-import { type Profile } from '@/utils/constants';
+import { doFetchGet, type Profile } from '@/utils/constants';
 import { useLocalStorage } from '@vueuse/core';
 
 type AppState = {
@@ -11,6 +11,7 @@ type AppState = {
   userCache?: Profile;
   gads?: boolean;
   invertPreview: boolean;
+  _isInChina?: boolean;
   theme: 'light' | 'dark';
 };
 
@@ -22,6 +23,7 @@ export const storage = useLocalStorage<AppState>('redenCache', {
   userCache: undefined,
   gads: true,
   invertPreview: false,
+  _isInChina: undefined,
   theme: 'light',
 });
 
@@ -49,6 +51,7 @@ export const useAppStore = defineStore('reden', {
     storeState.csrfToken = storage.value.csrfToken;
     storeState.userCache = storage.value.userCache;
     storeState.theme = storage.value.theme ?? 'light';
+    storeState._isInChina = storage.value._isInChina ?? undefined;
   },
   actions: {
     save() {
@@ -61,6 +64,7 @@ export const useAppStore = defineStore('reden', {
         gads: this.gads,
         invertPreview: this.invertPreview,
         theme: this.theme,
+        _isInChina: this._isInChina,
       };
     },
     login(username: string, uid: number) {
@@ -85,12 +89,48 @@ export const useAppStore = defineStore('reden', {
       this.invertPreview = !this.invertPreview;
       this.save();
     },
+    async isInChina() {
+      if (this._isInChina !== undefined) return this._isInChina;
+      if (!import.meta.client) return false;
+      else {
+        const res = await doFetchGet('/api/ip');
+        if (res.ok) {
+          const data: {
+            ip: string;
+            mm?: {
+              country_code: string;
+              country: string;
+              country_zh: string;
+              subdivision: string;
+              subdivision_zh: string;
+              city: string;
+              city_zh: string;
+              latitude: number;
+              longitude: number;
+            };
+          } = await res.json();
+          if (data.mm?.country_code === 'CN') {
+            console.log('ip', data.ip, 'is in china.');
+            this._isInChina = true;
+            this.save();
+            return true;
+          } else if (data.mm?.country_code) {
+            this._isInChina = false;
+            this.save();
+            return false;
+          } else {
+            console.log('ip', data.ip, 'is unknown.');
+          }
+        }
+      }
+    },
     logout() {
       this.logined = false;
       this.username = undefined;
       this.uid = -1;
       this.csrfToken = null;
       this.userCache = undefined;
+      this._isInChina = undefined;
       this.save();
     },
   },

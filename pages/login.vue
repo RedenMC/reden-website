@@ -14,6 +14,7 @@ import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 import { useDisplay } from 'vuetify';
 import RedenRouter from '~/components/RedenRouter.vue';
+import OAuthButtons from '~/components/misc/OAuthButtons.vue';
 
 const { t } = useI18n();
 const { mobile } = useDisplay({
@@ -138,31 +139,10 @@ function login() {
       </span>
 
       <h2>
-        {{ $t('login.oauth') }}
+        {{ t('login.oauth') }}
       </h2>
+      <o-auth-buttons />
 
-      <v-row>
-        <v-col>
-          <v-btn
-            :block="true"
-            :href="'/api/oauth/github?redirect_url=' + encodeURI('/login')"
-            color="blue"
-          >
-            <v-icon left>mdi-github</v-icon>
-            Github
-          </v-btn>
-        </v-col>
-        <v-col>
-          <v-btn
-            :block="true"
-            :href="'/api/oauth/microsoft?redirect_url=' + encodeURI('/login')"
-            color="red"
-          >
-            <v-icon left>mdi-microsoft</v-icon>
-            Microsoft
-          </v-btn>
-        </v-col>
-      </v-row>
       <v-row v-if="false">
         <v-col>
           <v-btn

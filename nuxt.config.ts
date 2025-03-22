@@ -5,6 +5,15 @@ import transformAssetUrls = vuetify.transformAssetUrls;
 
 const { resolve } = createResolver(import.meta.url);
 
+let isPrerender = false;
+if (
+  process.argv.find((arg) => arg.includes('/nuxi')) &&
+  (process.argv.includes('build') || process.argv.includes('generate')) // nuxi build command
+) {
+  isPrerender = true;
+  console.log('\x1b[32m😭 Pre-rendering');
+}
+
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
@@ -130,7 +139,8 @@ export default defineNuxtConfig({
     // },
     '/api/**': {
       proxy:
-        process.env.NODE_ENV === 'development'
+        // process.env.NODE_ENV === 'development' ||
+        isPrerender
           ? 'https://api.redenmc.com/api/**'
           : 'http://localhost:10005/api/**',
     },
@@ -154,6 +164,12 @@ export default defineNuxtConfig({
   },
   site: {
     url: 'redenmc.com',
+  },
+  app: {
+    pageTransition: {
+      name: 'page',
+      mode: 'out-in', // default
+    },
   },
   pwa: {
     registerType: 'autoUpdate',
