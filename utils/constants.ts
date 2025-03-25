@@ -550,3 +550,11 @@ export const allPostTypes = [
   PostStatus.Deleted,
   PostStatus.TakenDown,
 ];
+
+export type Message = {
+  id: number;
+  subject: string;
+  message: string;
+  createdAt: number;
+  read: boolean;
+};

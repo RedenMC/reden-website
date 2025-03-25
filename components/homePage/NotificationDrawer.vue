@@ -179,7 +179,7 @@ function markAsRead(id: number) {
 
 const dialog = ref(false);
 
-function showMessageDetailDialog(message: any) {
+function showMessageDetailDialog(message: Message) {
   message.read = true;
   dialog.value = true;
   markAsRead(message.id);
@@ -203,10 +203,10 @@ const loadMessages: VInfiniteScroll['$props']['onLoad'] = ({ done }) => {
         done('ok');
         messageStore.messages.push(...data);
       } else {
+        done('empty');
         console.error(
           'Failed to fetch all notifications:',
           response.statusText,
-          done('empty'),
         );
       }
     })

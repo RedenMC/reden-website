@@ -5,8 +5,8 @@ export const useMessageStore = defineStore('message', {
   state: (): {
     unreadCount: number;
     drawer: boolean;
-    unreadMessages: any[];
-    messages: any[];
+    unreadMessages: Message[];
+    messages: Message[];
   } => ({
     unreadCount: 0,
     drawer: false,
