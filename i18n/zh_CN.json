@@ -105,6 +105,8 @@
       "edit_or_improve_translation": "编辑此机器或改进其翻译"
     },
     "view_all_designs": "查看所有可生成的机器",
+    "vote_down": "点踩",
+    "vote_up": "点赞",
     "web_title": "在线生成{name} - Reden投影蓝图在线生成器"
   },
   "login": {
@@ -257,6 +259,7 @@
       "my_profile": "我的账号",
       "my_stars": "我的收藏",
       "search": "搜索",
+      "studio": "投影工作室",
       "upload": "投稿"
     },
     "home": {

@@ -231,7 +231,7 @@ const { data: topRedstonePosts } = useAsyncData(
     </div>
 
     <div ref="introContent" class="intro-content">
-      <div class="content-common">
+      <div class="content-common d-none">
         <p>
           Reden 的名字来自于 Redstone Eden，意为红石伊甸园。我们希望 Reden
           能成为一个 Minecraft

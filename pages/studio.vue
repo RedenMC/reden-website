@@ -43,6 +43,8 @@ function translateMinecraft(id: string) {
 useServerSeoMeta({
   title: t('studio.title'),
   titleTemplate: '%s - Reden',
+  ogTitle: t('studio.litematica_studio'),
+  ogDescription: t('studio.title'),
 });
 
 const replacements = ref<{ block: string; replacement: string }[]>([

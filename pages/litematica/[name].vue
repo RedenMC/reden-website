@@ -211,12 +211,14 @@ const selectedImage = ref(
           </v-card>
         </v-dialog>
       </v-btn>
-      <template
+      <div
         v-if="
           appStore.userCache &&
           (appStore.userCache?.roles?.includes('archiver') ||
             appStore.userCache?.id === selected.author?.id)
         "
+        class="d-flex align-center"
+        style="gap: 12px"
       >
         {{ t('post.management_op') }}
         <v-btn class="text-capitalize" color="red">
@@ -255,7 +257,7 @@ const selectedImage = ref(
             />
           </v-dialog>
         </v-btn>
-      </template>
+      </div>
     </div>
 
     <div class="ma-4">
@@ -358,12 +360,54 @@ const selectedImage = ref(
                 <div class="text-h5 text-sm-h4 font-weight-bold">
                   {{ t('common.details') }}
                 </div>
-                <v-btn
-                  class="details-title-btn"
-                  icon="mdi-dots-horizontal"
-                  size="32"
-                  variant="text"
-                />
+                <v-btn icon size="32" variant="text">
+                  <v-icon>mdi-dots-horizontal</v-icon>
+                  <v-menu activator="parent">
+                    <v-list>
+                      <v-list-item
+                        @click="copyLink"
+                        v-if="selected.link"
+                        v-ripple
+                      >
+                        <v-list-item-title>
+                          <v-icon>mdi-link</v-icon>
+                          {{ t('litematica_generator.share') }}
+                        </v-list-item-title>
+                      </v-list-item>
+                      <v-list-item
+                        @click="
+                          vote(selected.ud?.vote === true ? 'cancel' : 'up')
+                        "
+                        v-ripple
+                      >
+                        <v-list-item-title>
+                          <v-icon
+                            :color="selected.ud?.vote === true ? 'primary' : ''"
+                            >mdi-thumb-up-outline</v-icon
+                          >
+                          {{ t('litematica_generator.vote_up') }}
+                        </v-list-item-title>
+                      </v-list-item>
+                      <v-list-item
+                        @click="
+                          vote(selected.ud?.vote === false ? 'cancel' : 'down')
+                        "
+                        v-ripple
+                      >
+                        <v-list-item-title>
+                          <v-icon
+                            :color="
+                              selected.ud?.vote === false ? 'primary' : ''
+                            "
+                          >
+                            mdi-thumb-down-outline
+                          </v-icon>
+                          {{ t('litematica_generator.vote_down') }}
+                        </v-list-item-title>
+                      </v-list-item>
+                    </v-list>
+                  </v-menu>
+                </v-btn>
               </div>
               <v-divider style="margin: 12px 0" />
             </div>

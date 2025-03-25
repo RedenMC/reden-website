@@ -136,7 +136,7 @@
     "delete_reason": "Deleting Reason",
     "litematica_online_edit": "Edit",
     "litematica_online_edit_desc": "Edit this litematica online before you download, including replace blocks, convert version, etc.",
-    "management_op": "管理操作：",
+    "management_op": "Manage Post:",
     "preview": "Preview",
     "transfer_ownership": "Transfer Ownership"
   },
@@ -257,6 +257,7 @@
       "my_profile": "My Profile",
       "my_stars": "My Stars",
       "search": "Search",
+      "studio": "Studio",
       "upload": "upload"
     },
     "home": {

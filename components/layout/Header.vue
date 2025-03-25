@@ -3,7 +3,7 @@
     <template #prepend>
       <template v-if="mobile">
         <v-btn v-show="mobile" icon="mdi-menu" title="Menu">
-          <v-avatar image="/reden_256.png" :size="48" border />
+          <v-avatar :size="48" border image="/reden_256.png" />
           <v-menu :close-on-content-click="true" activator="parent">
             <v-list class="w-100">
               <v-list-item :to="localePath('/')">
@@ -27,7 +27,7 @@
                   <v-icon>mdi-download</v-icon>
                 </template>
                 <v-list-item-title>
-                  {{ $t('reden.header.explore') }}
+                  {{ t('reden.header.explore') }}
                 </v-list-item-title>
               </v-list-item>
               <v-list-item :to="localePath('/studio')">
@@ -35,7 +35,7 @@
                   <v-icon>mdi-pencil</v-icon>
                 </template>
                 <v-list-item-title>
-                  {{ $t('studio.litematica_studio') }}
+                  {{ t('reden.header.studio') }}
                 </v-list-item-title>
               </v-list-item>
               <v-divider />
@@ -50,7 +50,7 @@
                     <v-icon v-else> mdi-account</v-icon>
                   </template>
                   <v-list-item-title>
-                    {{ $t('reden.header.my_profile') }}
+                    {{ t('reden.header.my_profile') }}
                   </v-list-item-title>
                 </v-list-item>
               </template>
@@ -60,7 +60,7 @@
                     <v-icon>mdi-account</v-icon>
                   </template>
                   <v-list-item-title>
-                    {{ $t('login.button.login') }}
+                    {{ t('login.button.login') }}
                   </v-list-item-title>
                 </v-list-item>
                 <v-list-item :to="localePath('/register')">
@@ -68,7 +68,7 @@
                     <v-icon>mdi-account-plus</v-icon>
                   </template>
                   <v-list-item-title>
-                    {{ $t('register.button.register') }}
+                    {{ t('register.button.register') }}
                   </v-list-item-title>
                 </v-list-item>
               </template>
@@ -107,14 +107,14 @@
           class="text-capitalize px-1"
           size="large"
         >
-          {{ $t('reden.header.explore') }}
+          {{ t('reden.header.explore') }}
         </v-btn>
         <v-btn
           :to="localePath('/studio')"
           class="text-capitalize px-1"
           size="large"
         >
-          {{ $t('studio.litematica_studio') }}
+          {{ t('studio.litematica_studio') }}
         </v-btn>
       </template>
     </template>
@@ -122,7 +122,7 @@
     <v-text-field
       id="search"
       v-model="search"
-      :placeholder="$t('reden.header.search')"
+      :placeholder="t('reden.header.search')"
       class="mx-auto max-w-520px"
       density="comfortable"
       hide-details
@@ -155,11 +155,11 @@
         <v-menu :close-on-content-click="true" activator="parent">
           <v-list active-color="primary">
             <v-list-item
-              v-for="locale in $i18n.availableLocales"
+              v-for="locale in availableLocales"
               :key="`locale-${locale}`"
               :to="switchLocalePath(locale)"
             >
-              <v-list-item-title>{{ $t(locale) }}</v-list-item-title>
+              <v-list-item-title>{{ t(locale) }}</v-list-item-title>
             </v-list-item>
           </v-list>
         </v-menu>
@@ -186,7 +186,7 @@
         stacked
         variant="text"
       >
-        {{ $t('reden.header.upload') }}
+        {{ t('reden.header.upload') }}
       </v-btn>
     </template>
   </v-app-bar>
@@ -202,7 +202,7 @@ const { unreadCount, drawer } = storeToRefs(messageStore);
 const router = useRouter();
 const localePath = useLocalePath();
 const switchLocalePath = useSwitchLocalePath();
-
+const { t, availableLocales } = useI18n();
 const { mobile, mdAndUp } = useDisplay({
   mobileBreakpoint: 640,
 });

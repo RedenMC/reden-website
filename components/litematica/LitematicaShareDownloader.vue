@@ -1,27 +1,27 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useI18n } from 'vue-i18n'
-import type { Machine } from '~/pages/litematica/index.vue'
-import { size2text, timeSince } from '~/utils/constants'
-import { useAppStore } from '~/store/app'
-import { toast } from 'vuetify-sonner'
-import * as localforage from 'localforage'
-import { useRouter } from 'vue-router'
+import { ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import type { Machine } from '~/pages/litematica/index.vue';
+import { size2text, timeSince } from '~/utils/constants';
+import { useAppStore } from '~/store/app';
+import { toast } from 'vuetify-sonner';
+import * as localforage from 'localforage';
+import { useRouter } from 'vue-router';
 
 const props = defineProps<{
-  selected: Machine
-}>()
+  selected: Machine;
+}>();
 
-const router = useRouter()
-const { t } = useI18n()
-const appStore = useAppStore()
-const previewing = ref(-1)
-const blob = ref<Blob[]>([])
-const localeRoute = useLocaleRoute()
+const router = useRouter();
+const { t } = useI18n();
+const appStore = useAppStore();
+const previewing = ref(-1);
+const blob = ref<Blob[]>([]);
+const localeRoute = useLocaleRoute();
 
 watch(blob, () => {
   console.log('blob changed', blob.value);
-})
+});
 
 async function loadBlob(index: number) {
   if (blob.value[index]) {
@@ -57,7 +57,10 @@ async function loadBlob(index: number) {
 
 async function editLitematica(index: number) {
   await loadBlob(index);
-  await doFetchPost(`/api/mc-services/yisibite/${props.selected.key}/add-edit-stat`, {});
+  await doFetchPost(
+    `/api/mc-services/yisibite/${props.selected.key}/add-edit-stat`,
+    {},
+  );
 
   if (blob.value[index]) {
     try {
@@ -155,8 +158,8 @@ async function editLitematica(index: number) {
                         <div class="opacity-60">
                           Credit to misode, Ending Credits & Undecentions
                           <br />
-                          This Vue component is made by zly2006 and licensed under
-                          AGPL v3
+                          This Vue component is made by zly2006 and licensed
+                          under AGPL v3
                         </div>
 
                         <v-btn
