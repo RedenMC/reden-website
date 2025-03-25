@@ -78,12 +78,12 @@
       "login": "登入"
     },
     "forgot_password": "忘記密碼？",
+    "load_more": "加載更多消息",
+    "no_message": "暫無更多消息",
     "oauth": "或使用以下方式登入",
     "or": "或者",
     "register": "去註冊",
-    "title": "登入 Reden",
-    "no_message" : "暫無更多消息",
-    "load_more" : "加載更多消息"
+    "title": "登入 Reden"
   },
   "message": {
     "all": "全部",
