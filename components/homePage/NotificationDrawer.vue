@@ -7,18 +7,22 @@
       temporary
       width="512"
     >
-      <v-card-title>{{ t('message.list_title') }}</v-card-title>
-      <v-divider></v-divider>
+      <v-card-title class="d-flex justify-space-between">
+        <span style="font-size: 28px">
+          {{ t('message.list_title') }}
+        </span>
+        <v-btn
+          icon="mdi-close"
+          color="error"
+          variant="plain"
+          @click="drawer = false"
+        />
+      </v-card-title>
+      <v-divider />
 
       <v-container>
         <!-- 过滤选项和全部已读按钮 -->
-        <div
-          style="
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-          "
-        >
+        <div class="d-flex align-center justify-space-between">
           <v-tabs>
             <v-tab @click="filter = 'all'">{{ t('message.all') }}</v-tab>
             <v-tab @click="filter = 'unread'">{{ t('message.unread') }}</v-tab>
@@ -49,13 +53,13 @@
               >
                 <template v-slot:prepend>
                   <v-icon
-                    >{{ message.read ? 'mdi-email-open' : 'mdi-email' }}
-                  </v-icon>
+                    :icon="message.read ? 'mdi-email-open' : 'mdi-email'"
+                  />
                 </template>
                 <div style="flex: 1">
                   <div class="message-header">
-                    <v-list-item-title class="text-truncate"
-                      >{{ message.subject }}
+                    <v-list-item-title class="text-truncate">
+                      {{ message.subject }}
                     </v-list-item-title>
                     <span
                       class="text-blue cursor-pointer mark-as-read-class"
@@ -91,14 +95,15 @@
                         {{ formatDate(message.createdAt) }}
                       </div>
                     </v-card-text>
-                    <v-divider></v-divider>
+                    <v-divider />
                     <v-card-actions>
-                      <v-spacer></v-spacer>
+                      <v-spacer />
                       <v-btn
                         color="primary"
                         variant="text"
                         @click="isActive.value = false"
-                        >{{ t('$vuetify.close') }}
+                      >
+                        {{ t('$vuetify.close') }}
                       </v-btn>
                     </v-card-actions>
                   </v-card>
@@ -106,9 +111,9 @@
               </v-list-item>
             </template>
             <template v-slot:empty>
-              <v-alert variant="tonal" type="warning">{{
-                t('message.no_message')
-              }}</v-alert>
+              <v-alert type="warning" variant="tonal">
+                {{ t('message.no_message') }}
+              </v-alert>
             </template>
             <template v-slot:load-more="{ props }">
               <v-btn v-bind="props" variant="outlined">
@@ -156,32 +161,27 @@ const formatDate = (timestamp: number) => {
 };
 
 // 标记所有消息为已读
-function markAllAsRead() {
-  doFetchPost(`/api/account/notifications/read-all`, '').then((response) => {
-    if (response.ok) {
-      messageStore.initMessageList();
-    } else {
-      toastError(response);
-    }
-  });
+async function markAllAsRead() {
+  let response = await doFetchPost(`/api/account/notifications/read-all`, '');
+  if (response.ok) {
+    await messageStore.initMessageList();
+  } else {
+    toastError(response);
+  }
 }
 
 // 标记当前消息为已读
-function markAsRead(id: number) {
-  doFetchPost(`/api/account/notifications/${id}/read`, '').then((response) => {
-    if (response.ok) {
-      messageStore.initMessageList();
-    } else {
-      toastError(response);
-    }
-  });
+async function markAsRead(id: number) {
+  let response = await doFetchPost(`/api/account/notifications/${id}/read`, '');
+  if (response.ok) {
+    await messageStore.initMessageList();
+  } else {
+    toastError(response);
+  }
 }
-
-const dialog = ref(false);
 
 function showMessageDetailDialog(message: Message) {
   message.read = true;
-  dialog.value = true;
   markAsRead(message.id);
 }
 
@@ -189,28 +189,29 @@ let page = 1;
 let pageSize = 10;
 
 // 加载消息
-const loadMessages: VInfiniteScroll['$props']['onLoad'] = ({ done }) => {
+const loadMessages: VInfiniteScroll['$props']['onLoad'] = async ({ done }) => {
   console.log('loadMessage');
   page++;
-  doFetchGet(`/api/account/notifications/all?page=${page}&pageSize=${pageSize}`)
-    .then(async (response) => {
-      if (response.ok) {
-        const data = await response.json();
-        if (!data || data.length == 0) {
-          done('empty');
-          return;
-        }
-        done('ok');
-        messageStore.messages.push(...data);
-      } else {
+  try {
+    const response = await doFetchGet(
+      `/api/account/notifications/all?page=${page}&pageSize=${pageSize}`,
+    );
+    if (response.ok) {
+      const data: Message[] = await response.json();
+      if (!data || data.length == 0) {
         done('empty');
-        console.error(
-          'Failed to fetch all notifications:',
-          response.statusText,
-        );
+        return;
       }
-    })
-    .catch((e) => toastError(e, 'Failed to fetch all notifications'));
+      done('ok');
+      messageStore.messages.push(...data);
+    } else {
+      done('empty');
+      console.error('Failed to fetch all notifications:', response.statusText);
+    }
+  } catch (e) {
+    done('empty');
+    toastError(e, 'Failed to fetch all notifications');
+  }
 };
 
 onMounted(() => {
