@@ -1,127 +1,135 @@
 <template>
-   <v-no-ssr>
-     <v-navigation-drawer
-       v-model="drawer"
-       v-show="drawer"
-       location="right"
-       temporary
-       width="512"
-     >
-       <v-card-title>{{ t('message.list_title') }}</v-card-title>
-       <v-divider></v-divider>
+  <v-no-ssr>
+    <v-navigation-drawer
+      v-show="drawer"
+      v-model="drawer"
+      location="right"
+      temporary
+      width="512"
+    >
+      <v-card-title>{{ t('message.list_title') }}</v-card-title>
+      <v-divider></v-divider>
 
-       <v-container>
-         <!-- 过滤选项和全部已读按钮 -->
-         <div
-           style="
+      <v-container>
+        <!-- 过滤选项和全部已读按钮 -->
+        <div
+          style="
             display: flex;
             align-items: center;
             justify-content: space-between;
           "
-         >
-           <v-tabs>
-             <v-tab @click="filter = 'all'">{{ t('message.all') }}</v-tab>
-             <v-tab @click="filter = 'unread'">{{ t('message.unread') }}</v-tab>
-           </v-tabs>
-           <v-btn
-             variant="text"
-             color="primary"
-             @click="markAllAsRead"
-             style="margin-left: 16px"
-           >
-             {{ t('message.all_read') }}
-           </v-btn>
-         </div>
+        >
+          <v-tabs>
+            <v-tab @click="filter = 'all'">{{ t('message.all') }}</v-tab>
+            <v-tab @click="filter = 'unread'">{{ t('message.unread') }}</v-tab>
+          </v-tabs>
+          <v-btn
+            color="primary"
+            style="margin-left: 16px"
+            variant="text"
+            @click="markAllAsRead"
+          >
+            {{ t('message.all_read') }}
+          </v-btn>
+        </div>
 
-         <!-- 消息列表 -->
-         <v-list dense>
-           <v-infinite-scroll
-             height="100%"
-             :items="filteredMessages"
-             @load="loadMessages"
-             mode="manual"
-           >
-             <template v-for="(message, index) in filteredMessages" :key="index">
-               <v-list-item
-                 class="message-item cursor-pointer"
-                 :class="{ 'unread-class': !message.read }"
-                 @click="showMessageDetailDialog(message)"
-               >
-                 <template v-slot:prepend>
-                   <v-icon>{{
-                       message.read ? 'mdi-email-open' : 'mdi-email'
-                     }}</v-icon>
-                 </template>
-                 <div style="flex: 1">
-                   <div class="message-header">
-                     <v-list-item-title class="text-truncate">{{
-                         message.subject
-                       }}</v-list-item-title>
-                     <span
-                       class="text-blue cursor-pointer mark-as-read-class"
-                       @click.stop="markAsRead(message.id)"
-                     >{{ t('message.mark_as_read') }}</span
-                     >
-                   </div>
-                   <v-list-item-subtitle>
-                     <div class="text-truncate-2lines">
-                       {{ message.message }}
-                     </div>
-                     <div class="text-right mt-1" style="color: #000000">
-                       {{ formatDate(message.createdAt) }}
-                     </div>
-                   </v-list-item-subtitle>
-                 </div>
-               </v-list-item>
-             </template>
-             <template v-slot:empty>
-               <v-alert type="warning">{{ t('message.no_message') }}</v-alert>
-             </template>
-             <template v-slot:load-more="{ props }">
-               <v-btn
-                 variant="outlined"
-                 v-bind="props"
-               >
-                 {{ t('message.load_more') }}
-               </v-btn>
-             </template>
-           </v-infinite-scroll>
-         </v-list>
-       </v-container>
-     </v-navigation-drawer>
+        <!-- 消息列表 -->
+        <v-list dense>
+          <v-infinite-scroll
+            :items="filteredMessages"
+            height="100%"
+            mode="manual"
+            @load="loadMessages"
+          >
+            <template v-for="(message, index) in filteredMessages" :key="index">
+              <v-list-item
+                :class="{ 'unread-class': !message.read }"
+                class="message-item cursor-pointer"
+                @click="showMessageDetailDialog(message)"
+              >
+                <template v-slot:prepend>
+                  <v-icon
+                    >{{ message.read ? 'mdi-email-open' : 'mdi-email' }}
+                  </v-icon>
+                </template>
+                <div style="flex: 1">
+                  <div class="message-header">
+                    <v-list-item-title class="text-truncate"
+                      >{{ message.subject }}
+                    </v-list-item-title>
+                    <span
+                      class="text-blue cursor-pointer mark-as-read-class"
+                      @click.stop="markAsRead(message.id)"
+                      >{{ t('message.mark_as_read') }}</span
+                    >
+                  </div>
+                  <v-list-item-subtitle>
+                    <div class="text-truncate-2lines">
+                      {{ message.message }}
+                    </div>
+                    <div class="text-right mt-1" style="color: #000000">
+                      {{ formatDate(message.createdAt) }}
+                    </div>
+                  </v-list-item-subtitle>
+                </div>
 
-     <!-- 对话框组件 -->
-     <v-dialog v-model="dialog" max-width="500px">
-       <v-card>
-         <v-toolbar color="primary" dark>
-           <v-toolbar-title>{{ selectedMessage.subject }}</v-toolbar-title>
-         </v-toolbar>
-         <v-card-text>
-           <div class="message-content">{{ selectedMessage.message }}</div>
-           <div class="text-right mt-2">
-             {{ formatDate(selectedMessage.createdAt) }}
-           </div>
-         </v-card-text>
-         <v-divider></v-divider>
-         <v-card-actions>
-           <v-spacer></v-spacer>
-           <v-btn variant="text" color="primary" @click="dialog = false">{{
-               t('$vuetify.close')
-             }}</v-btn>
-         </v-card-actions>
-       </v-card>
-     </v-dialog>
-   </v-no-ssr>
-
+                <!-- 对话框组件 -->
+                <v-dialog
+                  #default="{ isActive }"
+                  activator="parent"
+                  max-width="500px"
+                >
+                  <v-card>
+                    <v-toolbar color="primary" dark>
+                      <v-toolbar-title>{{ message.subject }}</v-toolbar-title>
+                    </v-toolbar>
+                    <v-card-text>
+                      <div class="message-content">
+                        {{ message.message }}
+                      </div>
+                      <div class="text-right mt-2">
+                        {{ formatDate(message.createdAt) }}
+                      </div>
+                    </v-card-text>
+                    <v-divider></v-divider>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn
+                        color="primary"
+                        variant="text"
+                        @click="isActive.value = false"
+                        >{{ t('$vuetify.close') }}
+                      </v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+              </v-list-item>
+            </template>
+            <template v-slot:empty>
+              <v-alert variant="tonal" type="warning">{{
+                t('message.no_message')
+              }}</v-alert>
+            </template>
+            <template v-slot:load-more="{ props }">
+              <v-btn v-bind="props" variant="outlined">
+                {{ t('message.load_more') }}
+              </v-btn>
+            </template>
+          </v-infinite-scroll>
+        </v-list>
+      </v-container>
+    </v-navigation-drawer>
+  </v-no-ssr>
 </template>
 
 <script lang="ts" setup>
-import {useI18n} from "vue-i18n";
-import {onMounted} from "vue";
+import type { VInfiniteScroll } from 'vuetify/components';
+
+import { useI18n } from 'vue-i18n';
+import { onMounted } from 'vue';
+import { useMessageStore } from '~/store/message';
 
 const { t } = useI18n();
-
-import { useMessageStore } from '~/store/message';
 
 const messageStore = useMessageStore();
 const drawer = ref(false);
@@ -169,12 +177,10 @@ function markAsRead(id: number) {
   });
 }
 
-let selectedMessage = ref<Object | null>(null);
 const dialog = ref(false);
 
 function showMessageDetailDialog(message: any) {
   message.read = true;
-  selectedMessage.value = message;
   dialog.value = true;
   markAsRead(message.id);
 }
@@ -183,29 +189,29 @@ let page = 1;
 let pageSize = 10;
 
 // 加载消息
-function loadMessages({ done }) {
-  console.log("loadMessage")
+const loadMessages: VInfiniteScroll['$props']['onLoad'] = ({ done }) => {
+  console.log('loadMessage');
   page++;
   doFetchGet(`/api/account/notifications/all?page=${page}&pageSize=${pageSize}`)
     .then(async (response) => {
       if (response.ok) {
         const data = await response.json();
         if (!data || data.length == 0) {
-          done('empty')
-          return
+          done('empty');
+          return;
         }
-        done('ok')
+        done('ok');
         messageStore.messages.push(...data);
       } else {
         console.error(
           'Failed to fetch all notifications:',
           response.statusText,
-          done('empty')
+          done('empty'),
         );
       }
     })
     .catch((e) => toastError(e, 'Failed to fetch all notifications'));
-}
+};
 
 onMounted(() => {
   // 初始化未读消息数量
@@ -250,10 +256,10 @@ onMounted(() => {
   display: block;
 }
 
-
 .v-navigation-drawer {
-  z-index: 9999 !important;
-  height: 100% !important;;
-  top: 0 !important;;
+  /*appbar的z-index是1006，所以这里设置为1007*/
+  z-index: 1007 !important;
+  height: 100% !important;
+  top: 0 !important;
 }
 </style>
