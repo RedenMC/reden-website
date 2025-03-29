@@ -155,9 +155,20 @@ const filteredMessages = computed(() => {
   return messageStore.messages;
 });
 
+// 格式化时间戳（修改为当地时区）
 const formatDate = (timestamp: number) => {
   const date = new Date(timestamp);
-  return date.toISOString().replace('T', ' ').slice(0, 19);
+
+  // 获取本地时间的各个部分
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
+
+  // 格式化为 YYYY-MM-DD HH:MM:SS
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 };
 
 // 标记所有消息为已读

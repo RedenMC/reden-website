@@ -396,19 +396,6 @@ const goingBack = ref(false);
 refreshProps();
 watch(props, refreshProps);
 
-// const fileList = ref([]);
-// const handleChange = (info: UploadChangeParam) => {
-//   const status = info.file.status;
-//   if (status !== 'uploading') {
-//     console.log(info.file, info.fileList);
-//   }
-//   if (status === 'done') {
-//     message.success(`${info.file.name} file uploaded successfully.`);
-//   } else if (status === 'error') {
-//     message.error(`${info.file.name} file upload failed.`);
-//   }
-// };
-
 const isActiveDrag = ref(false);
 
 const toggleActiveDrag = (active: Boolean) => {
