@@ -15,13 +15,13 @@ export const useMessageStore = defineStore('message', {
   }),
   actions: {
     // 初始化未读消息数量
-    async initMessageList() {
+    initMessageList() {
       doFetchGet('/api/account/notifications/unread')
         .then(async (response) => {
           if (response.ok) {
             const data = await response.json();
-            this.unreadCount = data.length;
-            this.unreadMessages = data;
+            this.unreadCount = data.total;
+            this.unreadMessages = data.notifications;
           } else {
             console.error(
               'Failed to fetch unread notifications:',
@@ -34,7 +34,7 @@ export const useMessageStore = defineStore('message', {
         .then(async (response) => {
           if (response.ok) {
             const data = await response.json();
-            this.messages = data;
+            this.messages = data.notifications;
             console.log('messages:', this.messages);
           } else {
             console.error(
