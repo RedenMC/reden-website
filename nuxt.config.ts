@@ -5,6 +5,8 @@ import transformAssetUrls = vuetify.transformAssetUrls;
 
 const { resolve } = createResolver(import.meta.url);
 
+console.log('argv:', process.argv);
+
 let isPrerender = false;
 if (
   process.argv.find((arg) => arg.includes('/nuxi')) &&
