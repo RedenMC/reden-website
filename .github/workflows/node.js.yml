@@ -1,0 +1,33 @@
+name: Node.js CI
+
+on:
+  push:
+    branches:
+      - new
+  pull_request:
+    branches:
+      - new
+  workflow_dispatch: # 允许手动触发工作流
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js # 步骤2: 设置 Node.js 环境
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22' # 指定 Node.js 版本，你可以根据你的项目需求修改
+          cache: 'yarn' # 缓存 Yarn 依赖，提高构建速度
+      - name: Install dependencies # 步骤3: 安装 Yarn 依赖
+        run: yarn install --frozen-lockfile # 使用 --frozen-lockfile 确保使用 yarn.lock 中的精确版本
+      - name: Build project # 步骤5: 构建项目 (如果你的项目需要编译或打包)
+        run: yarn build # 或者 npm run build，取决于你的 package.json 配置
+
+      # 你可以添加更多步骤，例如：
+      # - name: Lint code
+      #   run: yarn lint
+      # - name: Deploy (if applicable)
+      #   run: yarn deploy
