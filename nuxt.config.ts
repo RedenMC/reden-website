@@ -24,7 +24,7 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     '@pinia/nuxt',
     '@nuxtjs/i18n',
-    // '@nuxtjs/sitemap',
+    '@nuxtjs/sitemap',
     '@nuxt/content',
     '@nuxtjs/mdc',
     '@nuxtjs/color-mode',
@@ -136,9 +136,9 @@ export default defineNuxtConfig({
       proxy:
         // process.env.NODE_ENV === 'development' ||
         // isPrerender
-          //?
-           'https://api.redenmc.com/api/**'
-          //: 'http://localhost:10005/api/**',
+        //?
+        'https://api.redenmc.com/api/**',
+      //: 'http://localhost:10005/api/**',
     },
   },
   sitemap: {
