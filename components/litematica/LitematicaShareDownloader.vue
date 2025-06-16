@@ -19,7 +19,7 @@ const previewing = ref(-1);
 const blob = ref<Blob[]>([]);
 const localeRoute = useLocaleRoute();
 
-async function loadBlob(index: number) {
+async function loadBlob(index: number, bypassLimit: boolean = false) {
   if (blob.value[index]) {
     previewing.value = index;
     return;
@@ -29,7 +29,7 @@ async function loadBlob(index: number) {
     toast.error(`No url for index #${index}.`);
     return;
   }
-  if (props.selected!.attachments![index].size > 10 * 1024) {
+  if (!bypassLimit && props.selected!.attachments![index].size > 10 * 1024) {
     toast.error(t('这个投影太大了 (10 KB)，不支持预览，请下载后在本地查看。'));
     previewing.value = -1;
     return;
@@ -59,7 +59,7 @@ async function loadBlob(index: number) {
 }
 
 async function editLitematica(index: number) {
-  await loadBlob(index);
+  await loadBlob(index, true);
   await doFetchPost(
     `/api/mc-services/yisibite/${props.selected.key}/add-edit-stat`,
     {},
