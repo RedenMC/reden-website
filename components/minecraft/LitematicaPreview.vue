@@ -5,6 +5,8 @@ import {
   OPAQUE_BLOCKS,
   TRANSPARENT_BLOCKS,
 } from '~/utils/litematica/opaque';
+import textureAtlas from '~/utils/litematica/blocks/atlas.png';
+import textureData from '~/utils/litematica/blocks/data.json';
 
 import {
   BlockDefinition,
@@ -40,7 +42,7 @@ let deepslateResources: Resources & ItemRendererResources;
 const appStore = useAppStore();
 
 // Position and rotation
-let viewDist = 4;
+let viewDist = 7;
 let xOffset = 0;
 let yOffset = 0;
 let xRotation = 0.8;
@@ -74,14 +76,14 @@ function loadResources(textureImage: HTMLImageElement) {
   Object.values(blockModels).forEach((m) =>
     m.flatten({ getBlockModel: (id) => blockModels[id.toString()] }),
   );
-  const itemModels: Record<string, ItemModel> = {};
-  Object.keys(assets.models)
-    .filter((id) => id.startsWith('item/') && assets.models[id])
-    .forEach((id) => {
-      try {
-        itemModels['minecraft:' + id] = ItemModel.fromJson(assets.models[id]);
-      } catch (e) {}
-    });
+  // const itemModels: Record<string, ItemModel> = {};
+  // Object.keys(assets.models)
+  //   .filter((id) => id.startsWith('item/') && assets.models[id])
+  //   .forEach((id) => {
+  //     try {
+  //       itemModels['minecraft:' + id] = ItemModel.fromJson(assets.models[id]);
+  //     } catch (e) {}
+  //   });
 
   const atlasCanvas = document.createElement('canvas');
   const atlasSize = upperPowerOfTwo(
@@ -102,8 +104,10 @@ function loadResources(textureImage: HTMLImageElement) {
     [u1: number, v1: number, u2: number, v2: number]
   > = {};
 
-  Object.keys(assets.textures).forEach((id) => {
-    const [u, v, du, dv] = assets.textures[id];
+  Object.keys(textureData).forEach((id) => {
+    const [u, v, du, dv] = (
+      textureData as unknown as Record<string, [number, number, number, number]>
+    )[id];
     const dv2 = du !== dv && id.startsWith('block/') ? du : dv;
     idMap['minecraft:' + id] = [
       u / atlasSize,
@@ -151,7 +155,7 @@ function loadResources(textureImage: HTMLImageElement) {
       return ret;
     },
     getItemModel(id: Identifier): ItemModel | null {
-      return itemModels[id.toString()];
+      return null;
     },
     getItemComponents(id: Identifier): Map<string, NbtTag> {
       return new Map();
@@ -193,7 +197,7 @@ function createRenderer(
   if (!cameraPos) {
     // init
     cameraPos = vec3.create();
-    vec3.set(cameraPos, -size[0] / 2, -size[1] / 2, -size[2] / 2);
+    vec3.set(cameraPos, 0, -size[1] * 3, -size[2] * 1.5);
   }
 
   // refactor this code to use separate functions for each type of control
@@ -364,7 +368,7 @@ function createRenderer(
     }
   };
   const resizeListener: (evt: UIEvent) => any = () => {
-    resizeCanvas();
+    // resizeCanvas();
     // canvas.width = window.innerWidth;
     // canvas.height = window.innerHeight;
     const gl = canvas.getContext('webgl');
@@ -642,7 +646,7 @@ watch(
       alt="Texture atlas"
       crossorigin="anonymous"
       hidden
-      src="/litematica/atlas.png"
+      :src="textureAtlas"
     />
 
     <canvas ref="canvas" class="w-100 h-100" @contextmenu.prevent=""></canvas>

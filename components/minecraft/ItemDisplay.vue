@@ -1,6 +1,9 @@
 <script lang="ts" setup>
 import { assets } from '~/utils/litematica/assets';
 
+import textureAtlas from '~/utils/litematica/blocks/atlas.png';
+import textureDataBlock from '~/utils/litematica/blocks/data.json';
+
 const props = defineProps<{
   id: string;
   scale?: number;
@@ -29,8 +32,12 @@ const texture = computed(() => {
 });
 
 const textureData = computed(() => {
-  const textureData: [number, number, number, number] =
-    assets['textures'][texture.value ?? ''];
+  const textureData: [number, number, number, number] = (
+    textureDataBlock as unknown as Record<
+      string,
+      [number, number, number, number]
+    >
+  )[texture.value ?? ''];
   if (!textureData) {
     console.error(`Texture data not found: ${texture}`);
     return [];
@@ -57,7 +64,7 @@ const height = computed(() => textureData.value[3]);
     <img
       :alt="id"
       :height="height"
-      :src="`/litematica/atlas.png`"
+      :src="textureAtlas"
       :style="{
         userSelect: 'none',
         objectPosition: `-${x}px -${y}px`,
