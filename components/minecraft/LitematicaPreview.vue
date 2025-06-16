@@ -330,14 +330,11 @@ function createRenderer(
       evt.preventDefault();
     }
   });
-  canvas.addEventListener(
-    'wheel',
-    (evt) => {
-      move3d([0, 0, -evt.deltaY / 200]);
-      redraw();
-    },
-    { passive: true },
-  );
+  canvas.addEventListener('wheel', (evt) => {
+    evt.preventDefault();
+    move3d([0, 0, -evt.deltaY / 200]);
+    redraw();
+  });
 
   const moveDist = 0.2;
   const keyMoves: Record<string, [number, number, number]> = {
@@ -398,8 +395,8 @@ function createRenderer(
     redraw();
   }, 1000 / 60);
 
-  canvas.addEventListener('touchstart', touchHandler, { passive: true });
-  canvas.addEventListener('touchmove', touchHandler, { passive: true });
+  canvas.addEventListener('touchstart', touchHandler);
+  canvas.addEventListener('touchmove', touchHandler);
   canvas.addEventListener('touchend', () => {
     middleClickPos = null;
     prevDist = 0;
@@ -424,6 +421,7 @@ function createRenderer(
         redraw();
       }
       middleClickPos = [evt.touches[0].pageX, evt.touches[0].pageY];
+      evt.preventDefault();
     } else if (evt.touches.length == 2) {
       // Pinch to move forward/backward
       const dx = evt.touches[0].pageX - evt.touches[1].pageX;
@@ -444,6 +442,7 @@ function createRenderer(
       prevDist = dist;
       prevAvgX = avgX;
       prevAvgY = avgY;
+      evt.preventDefault();
     }
   }
 
