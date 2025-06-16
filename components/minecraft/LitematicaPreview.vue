@@ -7,6 +7,7 @@ import {
 } from '~/utils/litematica/opaque';
 import textureAtlas from '~/utils/litematica/blocks/atlas.png';
 import textureData from '~/utils/litematica/blocks/data.json';
+import defaultPropertiesData from '~/utils/litematica/blocks/mc-data-extract.json';
 
 import {
   BlockDefinition,
@@ -42,7 +43,7 @@ let deepslateResources: Resources & ItemRendererResources;
 const appStore = useAppStore();
 
 // Position and rotation
-let viewDist = 7;
+let viewDist = 4;
 let xOffset = 0;
 let yOffset = 0;
 let xRotation = 0.8;
@@ -143,16 +144,16 @@ function loadResources(textureImage: HTMLImageElement) {
       return null;
     },
     getDefaultBlockProperties(id: Identifier) {
-      const props = Object.keys(
-        assets.blockstates[id.path]?.variants ?? {},
-      )?.[0];
-      if (!props) return null;
-      const ret: Record<string, string> = {};
-      props.split(',').forEach((prop) => {
-        const [key, value] = prop.split('=');
-        ret[key] = value;
-      });
-      return ret;
+      const props = (
+        defaultPropertiesData.defaultProperties as Record<
+          string,
+          Record<string, string>
+        >
+      )[id.toString()];
+      if (props) {
+        return {};
+      }
+      return props;
     },
     getItemModel(id: Identifier): ItemModel | null {
       return null;

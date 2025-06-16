@@ -132,7 +132,7 @@ async function applyTool() {
           if (replacement) {
             console.log(
               'Replacing',
-              blockNbt.getAsString(),
+              blockNbt.toSimplifiedJson(),
               'with',
               replacement,
               'index',
@@ -143,25 +143,21 @@ async function applyTool() {
               const defaultBlockProperties =
                 resources.value.getDefaultBlockProperties(
                   Identifier.parse(replacement),
-                );
-              if (defaultBlockProperties) {
-                const propertiesNbt = blockNbt.get('Properties') as
-                  | NbtCompound
-                  | undefined;
-                const resultNbt = new NbtCompound();
-                const keys = Object.keys(defaultBlockProperties).concat(
-                  propertiesNbt ? Object.keys(propertiesNbt.toJson()) : [],
-                );
-                for (const key of keys) {
-                  if (propertiesNbt && propertiesNbt.has(key)) {
-                    resultNbt.set(key, propertiesNbt.get(key)!);
-                  } else {
-                    const value = defaultBlockProperties[key];
-                    resultNbt.set(key, new NbtString(value));
-                  }
+                ) ?? {};
+              const propertiesNbt = blockNbt.get('Properties') as
+                | NbtCompound
+                | undefined;
+              const resultNbt = new NbtCompound();
+              for (const key of Object.keys(defaultBlockProperties)) {
+                if (propertiesNbt && propertiesNbt.has(key)) {
+                  resultNbt.set(key, propertiesNbt.get(key)!);
+                } else {
+                  const value = defaultBlockProperties[key];
+                  resultNbt.set(key, new NbtString(value));
                 }
-                blockNbt.set('Properties', resultNbt);
               }
+              blockNbt.set('Properties', resultNbt);
+              console.log(resultNbt);
             } else {
               console.error('[studio.vue] resource not loaded');
             }
