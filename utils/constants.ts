@@ -64,6 +64,7 @@ export type Profile = {
   followingProjects?: number;
   // 中国大陆实名认证信息
   realName?: string;
+  earningPlan?: string;
 };
 
 export type Preference = {

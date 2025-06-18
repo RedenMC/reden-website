@@ -284,7 +284,12 @@ const { data: machines } = useFetch<ListLitematicaResponse>(
             </v-tooltip>
           </v-btn>
           <v-btn
-            :to="localePath('/litematica/earning-dashboard')"
+            :to="
+              user?.earningPlan === 'Ok' ||
+              user?.earningPlan === 'PendingRealNameIdentity'
+                ? localePath('/litematica/earning-dashboard')
+                : localePath('/litematica/earning')
+            "
             class="text-none"
             color="success"
             rounded="lg"
