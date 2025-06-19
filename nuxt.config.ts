@@ -14,6 +14,8 @@ if (
   console.log('\x1b[32m😭 Pre-rendering');
 }
 
+const isProd = process.env.REDEN_APP_ENV === 'production';
+
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
@@ -24,11 +26,10 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     '@pinia/nuxt',
     '@nuxtjs/i18n',
-    // '@nuxtjs/sitemap',
+    '@nuxtjs/sitemap',
     '@nuxt/content',
     '@nuxtjs/mdc',
     '@nuxtjs/color-mode',
-    '@ant-design-vue/nuxt',
     '@vite-pwa/nuxt',
     // cause OOM
     // '@nuxthq/studio',

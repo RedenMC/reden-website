@@ -67,6 +67,21 @@ export type Profile = {
   earningPlan?: string;
 };
 
+enum EarningPlan {
+  None = 'None',
+  PendingReview = 'PendingReview', // 管理员审核
+  PendingRealNameIdentity = 'PendingRealNameIdentity', // 实名认证
+  Ok = 'Ok', // 通过
+  Rejected = 'Rejected', // 拒绝
+  Disabled = 'Disabled', // 禁用
+}
+
+export function isEarningPlanOk(plan?: EarningPlan | string): boolean {
+  return (
+    plan === EarningPlan.Ok || plan === EarningPlan.PendingRealNameIdentity
+  );
+}
+
 export type Preference = {
   showEmail: boolean;
   showQQ: boolean;

@@ -3,6 +3,7 @@ import {
   doFetchGet,
   doFetchPut,
   fetchUser,
+  isEarningPlanOk,
   type Profile,
   toastError,
 } from '@/utils/constants';
@@ -18,7 +19,7 @@ import { useI18n } from 'vue-i18n';
 
 const router = useRouter();
 const localePath = useLocalePath();
-const { t } = useI18n();
+const { t, locale } = useI18n();
 useHead({
   title: t('reden.my_account'),
   titleTemplate: '%s - Reden',
@@ -183,7 +184,9 @@ const { data: machines } = useFetch<ListLitematicaResponse>(
             <v-dialog activator="parent" max-width="600">
               <v-form v-if="!personalToken" @submit.prevent="getPersonalToken">
                 <v-card>
-                  <v-card-title>生成个人密钥</v-card-title>
+                  <v-card-title>
+                    {{ t('profile.generate_access_token') }}
+                  </v-card-title>
                   <v-card-text>
                     选择一个有效期，生成一个个人密钥，用于备份和恢复数据
                     <v-row>
@@ -269,7 +272,7 @@ const { data: machines } = useFetch<ListLitematicaResponse>(
             rounded="lg"
             variant="outlined"
           >
-            {{ $t('profile.my_backup') }}
+            {{ t('profile.my_backup') }}
           </v-btn>
           <v-btn
             :to="localePath('/litematica/edit')"
@@ -278,18 +281,18 @@ const { data: machines } = useFetch<ListLitematicaResponse>(
             rounded="lg"
             variant="outlined"
           >
-            投稿管理
+            {{ t('profile.post_management') }}
             <v-tooltip activator="parent" location="bottom">
-              此页面用于管理投稿，编辑投稿，可以查看还在审核中的投稿
+              {{ t('profile.post_management_desc') }}
             </v-tooltip>
           </v-btn>
           <v-btn
             :to="
-              user?.earningPlan === 'Ok' ||
-              user?.earningPlan === 'PendingRealNameIdentity'
+              isEarningPlanOk(user?.earningPlan)
                 ? localePath('/litematica/earning-dashboard')
                 : localePath('/litematica/earning')
             "
+            v-if="locale === 'zh_cn'"
             class="text-none"
             color="success"
             rounded="lg"

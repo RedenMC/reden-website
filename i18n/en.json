@@ -188,6 +188,7 @@
       "username_timer": "You can change your username again in {0} hours"
     },
     "editProfile": "Edit Profile",
+    "generate_access_token": "Generate Access Token",
     "link_now": "Link Now!",
     "logout": "Logout",
     "microsoft_checked_verifying_minecraft": "Microsoft account checked, verifying Minecraft ownership...",
@@ -199,6 +200,8 @@
       "unlink_account": "Unlink Account"
     },
     "password": "Password",
+    "post_management": "Post Management",
+    "post_management_desc": "View & edit your posts, including posts under review",
     "posts": "Posts",
     "username": "Username",
     "verified_minecraft": "Verified minecraft account",

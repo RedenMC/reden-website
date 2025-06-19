@@ -190,6 +190,7 @@
       "username_timer": "你可以在{0}小时后修改用户名"
     },
     "editProfile": "编辑个人资料",
+    "generate_access_token": "生成个人密钥",
     "link_now": "点击链接",
     "logout": "退出登录",
     "microsoft_checked_verifying_minecraft": "微软账号已绑定，正在检查 Minecraft 所有权...",
@@ -201,6 +202,8 @@
       "unlink_account": "取消连接"
     },
     "password": "密码",
+    "post_management": "投稿管理",
+    "post_management_desc": "管理您的投稿，编辑投稿，还可以查看还在审核中的投稿",
     "posts": "投稿列表",
     "username": "用户名",
     "verified_minecraft": "已认证的 Minecraft 账号",
