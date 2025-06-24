@@ -51,13 +51,6 @@
         </v-btn>
         <v-btn @click="refresh"> refresh </v-btn>
       </v-col>
-      <v-col cols="auto">
-        <v-pagination
-          v-model="currentPage"
-          :length="totalPages"
-          @update:model-value="fetchTags"
-        ></v-pagination>
-      </v-col>
     </v-row>
 
     <!-- 标签列表表格 -->
@@ -69,6 +62,7 @@
         class="elevation-1"
         :items-per-page="pageSize"
         :items-length="totalTags"
+        :page="currentPage"
         :no-data-text="t('tags.table.noData')"
       >
         <template v-slot:item.parent="{ item }">
