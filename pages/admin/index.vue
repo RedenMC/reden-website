@@ -33,6 +33,12 @@ definePageMeta({
         </v-card>
       </v-col>
       <v-col>
+        <v-card :to="localePath('/tags')" min-width="200">
+          <v-card-title> {{ t('tags.title') }} </v-card-title>
+          <v-card-text> {{ t('tags.admin.description') }} </v-card-text>
+        </v-card>
+      </v-col>
+      <v-col>
         <v-card href="/api/quark" min-width="200">
           <v-card-title> Quark </v-card-title>
           <v-card-text> Quark Maintenance </v-card-text>

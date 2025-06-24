@@ -103,7 +103,7 @@ export default defineNuxtConfig({
     },
     server: {
       proxy: {
-        '/api': 'https://api.redenmc.com/',
+        '/api': 'http://localhost:10005',
       },
     },
   },
@@ -144,23 +144,29 @@ export default defineNuxtConfig({
     },
     '/api/**': {
       proxy:
-        process.env.NODE_ENV === 'development' || isPrerender
-          ? 'https://api.redenmc.com/api/**'
-          : 'http://localhost:10005/api/**',
+        // process.env.NODE_ENV === 'development' || isPrerender
+        //   ? 'https://api.redenmc.com/api/**'
+        //   :
+        'http://localhost:10005/api/**',
     },
   },
   sitemap: {
     exclude: ['/secret/**', '/admin/**', '/api/**'],
     urls: async () => {
-      const backendData: string[] = await (
-        await fetch(
-          'https://api.redenmc.com/api/mc-services/yisibite/all-internal',
-        )
-      ).json();
-      return backendData.map((id) => ({
-        loc: `/litematica/${id}`,
-        _i18nTransform: true,
-      }));
+      try {
+        const backendData: string[] = await (
+          await fetch(
+            'https://api.redenmc.com/api/mc-services/yisibite/all-internal',
+          )
+        ).json();
+        backendData.sort();
+        return backendData.map((id) => ({
+          loc: `/litematica/${id}`,
+          _i18nTransform: true,
+        }));
+      } catch (e) {
+        console.error('Failed to fetch backend data for sitemap:', e);
+      }
     },
   },
   devServer: {

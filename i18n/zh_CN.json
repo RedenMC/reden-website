@@ -397,6 +397,57 @@
     "title": "投影工作室 - 在线投影文件编辑器 批量替婚方块 版本转换 格式转换 导入 下载",
     "toolbox": "工具箱"
   },
+  "tags": {
+    "actions": {
+      "create": "创建标签"
+    },
+    "admin": {
+      "description": "管理所有语言的标签，支持增删改查"
+    },
+    "delete": {
+      "confirm": "确定要删除标签 '{tag}' 吗？此操作无法撤销。",
+      "title": "删除标签"
+    },
+    "dialog": {
+      "create": "创建新标签",
+      "edit": "编辑标签"
+    },
+    "filter": {
+      "language": "语言",
+      "search": "搜索标签",
+      "title": "筛选与搜索",
+      "type": "标签类型"
+    },
+    "form": {
+      "description": "描述",
+      "name": "标签名称",
+      "parent": "父标签",
+      "required": "此字段为必填项",
+      "tag": "标签代码",
+      "type": "标签类型"
+    },
+    "notifications": {
+      "deleteError": "删除标签时出错",
+      "deleteSuccess": "标签已成功删除",
+      "saveError": "保存标签时出错",
+      "saveSuccess": "标签保存成功"
+    },
+    "table": {
+      "actions": "操作",
+      "id": "ID",
+      "name": "标签名称",
+      "noData": "暂无标签数据",
+      "parent": "父标签",
+      "tag": "标签代码",
+      "type": "类型"
+    },
+    "title": "标签管理",
+    "types": {
+      "category": "分类",
+      "feature": "功能",
+      "version": "版本"
+    }
+  },
   "upload": {
     "btn": {
       "finish_editing": "完成编辑",

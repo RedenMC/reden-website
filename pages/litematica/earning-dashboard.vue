@@ -88,7 +88,7 @@ const tips = '冻结中金额将在60天后自动解禁，解禁后可提现。�
         <div class="card-value text-blue-grey">
           ￥{{ formatAmount(stat.totalPending) }}
         </div>
-        <v-tooltip activator="parent">
+        <v-tooltip activator="parent" open-on-click>
           冻结金额是合作商还没有支付给 Reden 平台的部分，<br />
           这部分金额将在60天后自动解禁，解禁后可提现。<br />
           此金额仅为估计，实际金额可能会有变动。
