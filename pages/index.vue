@@ -72,51 +72,51 @@ function getRankIcon(index: number) {
 
 // Stats data for hero section
 const stats = ref([
-  { number: '500+', label: '红石机器' },
-  { number: '128.4K+', label: '下载量' },
-  { number: '8K+', label: '用户' },
-  { number: '24/7', label: '在线服务' },
+  { number: '500+', label: t('reden.home.stats.redstone_machines') },
+  { number: '128.4K+', label: t('reden.home.stats.total_downloads') },
+  { number: '8K+', label: t('reden.home.stats.users') },
+  { number: '24/7', label: t('reden.home.stats.online_service') },
 ]);
 
 // Dashboard metrics data
 const dashboardMetrics = ref([
   {
     value: '500+',
-    label: '红石机器',
+    label: t('reden.home.stats.redstone_machines'),
     icon: 'mdi-cube-outline',
     color: 'blue-lighten-4',
     iconColor: 'blue',
-    change: '+15% 本月',
+    change: `+15% ${t('reden.home.stats.change_this_month')}`,
     trendIcon: 'mdi-trending-up',
     trendColor: 'green',
   },
   {
     value: '128.4K+',
-    label: '总下载量',
+    label: t('reden.home.stats.total_downloads'),
     icon: 'mdi-download',
     color: 'green-lighten-4',
     iconColor: 'green',
-    change: '+23% 本月',
+    change: `+23% ${t('reden.home.stats.change_this_month')}`,
     trendIcon: 'mdi-trending-up',
     trendColor: 'green',
   },
   {
     value: '8200+',
-    label: '活跃用户',
+    label: t('reden.home.stats.active_users'),
     icon: 'mdi-account-group',
     color: 'purple-lighten-4',
     iconColor: 'purple',
-    change: '+8% 本月',
+    change: `+8% ${t('reden.home.stats.change_this_month')}`,
     trendIcon: 'mdi-trending-up',
     trendColor: 'green',
   },
   {
     value: '99.9%',
-    label: '服务可用性',
+    label: t('reden.home.stats.service_availability'),
     icon: 'mdi-server',
     color: 'orange-lighten-4',
     iconColor: 'orange',
-    change: '稳定运行',
+    change: t('reden.home.stats.stable_running'),
     trendIcon: 'mdi-check-circle',
     trendColor: 'green',
   },
@@ -134,22 +134,22 @@ watch(homepageData, (data) => {
 <template>
   <div>
     <div v-if="backendInfo.developmentMode">
-      <v-alert closable close-label="关闭" icon="mdi-alert">
-        <v-alert-title>开发模式选项</v-alert-title>
+      <v-alert closable :close-label="$t('$vuetify.close')" icon="mdi-alert">
+        <v-alert-title>{{ t('reden.home.dev_mode.title') }}</v-alert-title>
         <v-btn
           color="primary"
           @click="
             doFetchGet('/api/account/login-test-account').then((res) => {
               if (res.ok) {
                 appStore.login('test', 1);
-                toast.success('登录成功');
+                toast.success(t('reden.home.dev_mode.login_success'));
               } else {
                 toastError(res);
               }
             })
           "
         >
-          登录测试账号
+          {{ t('reden.home.dev_mode.login_test_account') }}
         </v-btn>
       </v-alert>
     </div>
@@ -386,7 +386,7 @@ watch(homepageData, (data) => {
             <div class="card-header">
               <h3 class="card-title">
                 <v-icon class="mr-2" color="red">mdi-fire</v-icon>
-                热门红石机器
+                {{ t('reden.home.popular_machines.title') }}
               </h3>
               <v-btn
                 :to="localePath('/litematica')"
@@ -394,7 +394,7 @@ watch(homepageData, (data) => {
                 size="small"
                 prepend-icon="mdi-arrow-right"
               >
-                查看全部
+                {{ t('reden.home.popular_machines.view_all') }}
               </v-btn>
             </div>
             <div class="card-content">
@@ -452,9 +452,9 @@ watch(homepageData, (data) => {
             <div class="card-header">
               <h3 class="card-title">
                 <v-icon class="mr-2" color="amber">mdi-crown</v-icon>
-                顶级创作者
+                {{ t('reden.home.creator_ranking.title') }}
               </h3>
-              <v-chip color="cyan" size="small" variant="outlined">实时</v-chip>
+              <v-chip color="cyan" size="small" variant="outlined">{{ t('reden.home.creator_ranking.real_time') }}</v-chip>
             </div>
             <div class="card-content">
               <div class="creators-list">
@@ -527,7 +527,7 @@ watch(homepageData, (data) => {
           class="text-h4 font-weight-bold text-center mb-8 d-flex align-center justify-center"
         >
           <v-icon class="mr-2" color="cyan" size="large">mdi-chart-line</v-icon>
-          平台数据总览
+          {{ t('reden.home.platform_overview.title') }}
         </h2>
         <v-row>
           <v-col
@@ -568,26 +568,15 @@ watch(homepageData, (data) => {
     <div ref="introContent" class="intro-content">
       <div class="content-common d-none">
         <p>
-          Reden 的名字来自于 Redstone Eden，意为红石伊甸园。我们希望 Reden
-          能成为一个 Minecraft
-          红石爱好者的乐园，为玩家提供丰富的红石机器、配置、教程等资源。
-          我们致力于打造一个开放、友好的社区，欢迎各位加入我们！
+          {{ t('reden.home.intro_description.intro_1') }}
         </p>
         <p>
-          Reden 本是我的模组的名字，同时也是这个社区的名字。
-          不管是我的模组还是这个社区，都是为了让玩家更好地享受游戏，更好地创造。
-          Reden
-          承载着通过代码与技术方便玩家的初衷，也指引着我们的社区朝着更开放、
-          包容、高技术力量的方向发展。
+          {{ t('reden.home.intro_description.intro_2') }}
         </p>
         <p>
-          从专门生成世吞等机器的专用网站，到现在的红石爱好者社区，Reden
-          一直在不断发展。到2025年2月，Reden已经拥有数百个红石机器，和数万次下载，成为了
-          Minecraft 红石社区中的一股新力量。 Reden
-          拥有多项独创性技术正在开发或已经上线，包括：更好的投影预览功能，
-          红石机器产物速率标注功能，红石机器的自动化生成，投影在线编辑技术，基于游戏内模组的机器一键下载一键使用等等。
+          {{ t('reden.home.intro_description.intro_3') }}
         </p>
-        <p>下面是对于模组功能和社区组成部分的介绍</p>
+        <p>{{ t('reden.home.intro_description.intro_4') }}</p>
       </div>
       <Feature />
       <div class="content-common">
@@ -607,13 +596,12 @@ watch(homepageData, (data) => {
           </v-col>
           <v-col>
             <v-card color="orange">
-              <v-card-title>Github 同步</v-card-title>
+              <v-card-title>{{ t('reden.home.sync_github.title') }}</v-card-title>
               <v-card-text>
-                绑定 GitHub
-                Apps，同步机器、配置、你关注的仓库和创作者：你的世界！
+                {{ t('reden.home.sync_github.description') }}
               </v-card-text>
               <v-card-actions>
-                <v-btn :to="localePath('/home')" color="White">点击前往</v-btn>
+                <v-btn :to="localePath('/home')" color="White">{{ t('reden.home.sync_github.go_to') }}</v-btn>
               </v-card-actions>
             </v-card>
           </v-col>

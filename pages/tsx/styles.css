@@ -1,0 +1,88 @@
+.tsx-demo-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.tsx-demo-page h1 {
+  color: #2c3e50;
+  border-bottom: 2px solid #42b883;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+.tsx-demo-page h2 {
+  color: #34495e;
+  margin-top: 30px;
+  font-size: 1.5em;
+}
+
+.features-section ul {
+  padding-left: 20px;
+}
+
+.features-section li {
+  margin: 8px 0;
+  position: relative;
+}
+
+.counter-section {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+.counter-component {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+.counter-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.counter-buttons button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+.increment-btn {
+  background-color: #42b883;
+  color: white;
+}
+
+.increment-btn:hover {
+  background-color: #3aa876;
+}
+
+.decrement-btn {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.decrement-btn:hover {
+  background-color: #d44637;
+}
+
+.info-section {
+  background-color: #f0f7ff;
+  padding: 20px;
+  border-radius: 8px;
+  border-left: 4px solid #42b883;
+}
+
+.info-section p {
+  line-height: 1.6;
+  margin: 10px 0;
+}

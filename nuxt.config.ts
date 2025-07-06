@@ -22,6 +22,17 @@ export default defineNuxtConfig({
   build: {
     transpile: ['vuetify'],
   },
+  typescript: {
+    shim: false,
+    strict: true,
+    tsConfig: {
+      compilerOptions: {
+        jsx: 'preserve',
+        jsxFactory: 'h',
+        jsxFragmentFactory: 'Fragment',
+      },
+    },
+  },
   modules: [
     '@vueuse/nuxt',
     '@pinia/nuxt',

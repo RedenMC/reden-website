@@ -274,13 +274,50 @@
         "title": "社区",
         "wiki": "Reden Wiki 包含了您需要了解的关于红石和 Reden 的几乎所有内容。这也是与社区分享您的知识的好地方。"
       },
+      "creator_ranking": {
+        "real_time": "实时",
+        "title": "顶级创作者"
+      },
+      "dev_mode": {
+        "login_success": "登录成功",
+        "login_test_account": "登录测试账号",
+        "title": "开发模式选项"
+      },
       "feature_intro": {
         "debugger": "搞不清楚为什么您的红石装置不工作？Reden 调试器可以帮助您查看游戏如何处理您的红石装置。",
         "rvc": "RVC（Reden 版本控制）是专为红石设计的版本控制系统。它可以让您轻松管理所有版本的红石项目。",
         "title": "功能介绍",
         "undo": "不小心出了错？Reden 可以通过按下 Ctrl+Z 快速撤销您的操作。所有连锁反应都将被撤销。"
       },
-      "go_litematica": "下载投影"
+      "go_litematica": "下载投影",
+      "intro_description": {
+        "intro_1": "Reden 的名字来自于 Redstone Eden，意为红石伊甸园。我们希望 Reden 能成为一个 Minecraft 红石爱好者的乐园，为玩家提供丰富的红石机器、配置、教程等资源。我们致力于打造一个开放、友好的社区，欢迎各位加入我们！",
+        "intro_2": "Reden 本是我的模组的名字，同时也是这个社区的名字。不管是我的模组还是这个社区，都是为了让玩家更好地享受游戏，更好地创造。Reden 承载着通过代码与技术方便玩家的初衷，也指引着我们的社区朝着更开放、包容、高技术力量的方向发展。",
+        "intro_3": "从专门生成世吞等机器的专用网站，到现在的红石爱好者社区，Reden 一直在不断发展。到2025年2月，Reden已经拥有数百个红石机器，和数万次下载，成为了 Minecraft 红石社区中的一股新力量。Reden 拥有多项独创性技术正在开发或已经上线，包括：更好的投影预览功能，红石机器产物速率标注功能，红石机器的自动化生成，投影在线编辑技术，基于游戏内模组的机器一键下载一键使用等等。",
+        "intro_4": "下面是对于模组功能和社区组成部分的介绍"
+      },
+      "platform_overview": {
+        "title": "平台数据总览"
+      },
+      "popular_machines": {
+        "title": "热门红石机器",
+        "view_all": "查看全部"
+      },
+      "stats": {
+        "active_users": "活跃用户",
+        "change_this_month": "本月",
+        "online_service": "在线服务",
+        "redstone_machines": "红石机器",
+        "service_availability": "服务可用性",
+        "stable_running": "稳定运行",
+        "total_downloads": "总下载量",
+        "users": "用户"
+      },
+      "sync_github": {
+        "description": "绑定 GitHub Apps，同步机器、配置、你关注的仓库和创作者：你的世界！",
+        "go_to": "点击前往",
+        "title": "Github 同步"
+      }
     },
     "learn_more": "了解更多",
     "my_account": "我的账户",

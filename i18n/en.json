@@ -272,13 +272,50 @@
         "title": "Community",
         "wiki": "Reden Wiki contains almost everything you need to know about redstone ans Reden. It is also a great place to share your knowledge with the community."
       },
+      "creator_ranking": {
+        "real_time": "Real-time",
+        "title": "Top Creators"
+      },
+      "dev_mode": {
+        "login_success": "Login successful",
+        "login_test_account": "Login Test Account",
+        "title": "Development Mode Options"
+      },
       "feature_intro": {
         "debugger": "Can't figure out why your redstone contraption isn't working? Reden Debugger can help you see how the game exactly processes your redstone contraption.",
         "rvc": "RVC (Reden Version Control) is a version control system designed for redstone. It allows you to manage your redstone projects in all versions with ease.",
         "title": "Features",
         "undo": "Made a mistake? Reden can quickly undo your actions by just pressing Ctrl+Z. All chain reactions will be undone."
       },
-      "go_litematica": "MC Builds"
+      "go_litematica": "MC Builds",
+      "intro_description": {
+        "intro_1": "The name Reden comes from Redstone Eden, meaning a paradise for redstone. We hope Reden can become a paradise for Minecraft redstone enthusiasts, providing players with rich redstone machines, configurations, tutorials and other resources. We are committed to building an open and friendly community, and welcome everyone to join us!",
+        "intro_2": "Reden was originally the name of my mod, and it's also the name of this community. Whether it's my mod or this community, it's all about making players enjoy the game better and create better. Reden carries the original intention of facilitating players through code and technology, and also guides our community towards a more open, inclusive, and high-tech direction.",
+        "intro_3": "From a dedicated website for generating world eaters and other machines, to the current redstone enthusiast community, Reden has been constantly developing. By February 2025, Reden has hundreds of redstone machines and tens of thousands of downloads, becoming a new force in the Minecraft redstone community. Reden has multiple innovative technologies under development or already online, including: better schematic preview functions, redstone machine output rate annotation functions, automated generation of redstone machines, online schematic editing technology, one-click download and use of machines based on in-game mods, etc.",
+        "intro_4": "Below is an introduction to the mod features and community components"
+      },
+      "platform_overview": {
+        "title": "Platform Data Overview"
+      },
+      "popular_machines": {
+        "title": "Popular Redstone Machines",
+        "view_all": "View All"
+      },
+      "stats": {
+        "active_users": "Active Users",
+        "change_this_month": "This Month",
+        "online_service": "Online Service",
+        "redstone_machines": "Redstone Machines",
+        "service_availability": "Service Availability",
+        "stable_running": "Stable Running",
+        "total_downloads": "Total Downloads",
+        "users": "Users"
+      },
+      "sync_github": {
+        "description": "Bind GitHub Apps, sync machines, configurations, repositories and creators you follow: your world!",
+        "go_to": "Go To",
+        "title": "GitHub Sync"
+      }
     },
     "learn_more": "Learn More",
     "my_account": "My Account",

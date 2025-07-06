@@ -15,7 +15,7 @@
               @update:model-value="fetchTags"
               variant="outlined"
               density="compact"
-            ></v-select>
+            />
           </v-col>
           <v-col cols="12" sm="4">
             <v-select
@@ -66,7 +66,7 @@
         :no-data-text="t('tags.table.noData')"
       >
         <template v-slot:item.parent="{ item }">
-          {{ item.parent ? findTagName(item.parent) : '-' }}
+          {{ item.parent ?? '-' }}
         </template>
         <template v-slot:item.actions="{ item }">
           <v-btn
@@ -74,7 +74,7 @@
             variant="text"
             size="small"
             color="primary"
-            @click="openEditDialog(item.raw)"
+            @click="openEditDialog(item)"
           >
             <v-icon>mdi-pencil</v-icon>
           </v-btn>
@@ -83,7 +83,7 @@
             variant="text"
             size="small"
             color="error"
-            @click="confirmDelete(item.raw)"
+            @click="confirmDelete(item)"
           >
             <v-icon>mdi-delete</v-icon>
           </v-btn>
@@ -106,6 +106,7 @@
                   :items="availableLanguages"
                   :label="t('tags.form.language')"
                   required
+                  :disabled="isEditing"
                   :rules="[(v) => !!v || t('tags.form.required')]"
                 ></v-select>
               </v-col>
@@ -142,14 +143,14 @@
                 ></v-select>
               </v-col>
               <v-col cols="12">
-                <v-select
+                <v-autocomplete
                   v-model="formData.parent"
                   :items="parentOptions"
                   item-title="name"
                   item-value="id"
                   :label="t('tags.form.parent')"
                   clearable
-                ></v-select>
+                ></v-autocomplete>
               </v-col>
             </v-row>
           </v-form>
@@ -206,18 +207,13 @@ interface TagFormData {
   name: string;
   description: string;
   type: string;
-  parent: number | null;
+  parent: string | null;
   language: string;
 }
 
 interface TagTypeOption {
   title: string;
   value: string;
-}
-
-interface ParentOption {
-  id: number;
-  name: string;
 }
 
 interface TagLocalization {
@@ -232,16 +228,9 @@ interface MultiLanguageTag {
   id: number;
   tag: string;
   type: string;
-  parent: number | null;
+  parent: string | null;
   createdAt: number;
   localizations: TagLocalization[];
-}
-
-interface MultiLanguageTagsResponse {
-  data: MultiLanguageTag[];
-  total: number;
-  page: number;
-  pageSize: number;
 }
 
 const { t, availableLocales } = useI18n();
@@ -356,7 +345,7 @@ const tags = computed(() => {
       );
 
       // 如果找到该语言的本地化数据，使用它；否则显示空或占位符
-      tag[`name_${lang.value}`] = localization ? localization.name : '-';
+      tag[`name_${lang.value}`] = localization?.name;
     });
 
     // 设置主要显示名称，优先使用当前选择的语言
@@ -379,14 +368,11 @@ function fetchTags() {
   refresh();
 }
 
-const parentOptions = computed((): ParentOption[] => {
+const parentOptions = computed(() => {
   // 过滤掉当前编辑的标签（避免自己作为自己的父标签）
   return tags.value
     .filter((tag) => !isEditing.value || tag.id !== formData.value.id)
-    .map((tag) => ({
-      id: tag.id,
-      name: `${tag.name} (${tag.tag})`,
-    }));
+    .map((tag) => tag.tag);
 });
 
 // 监听筛选条件变化
