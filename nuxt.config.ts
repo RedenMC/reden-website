@@ -2,6 +2,7 @@
 import vuetify from 'vite-plugin-vuetify';
 import { createResolver } from '@nuxt/kit';
 import transformAssetUrls = vuetify.transformAssetUrls;
+import { $fetch } from 'ofetch';
 
 const { resolve } = createResolver(import.meta.url);
 
@@ -15,6 +16,15 @@ if (
 }
 
 const isProd = process.env.REDEN_APP_ENV === 'production';
+const useRemoteBackend =
+  process.env.REMOTE === 'true'
+    ? true
+    : process.env.REMOTE === 'false'
+      ? false
+      : !isProd && !isPrerender;
+const sitemap = await $fetch(
+  'https://api.redenmc.com/api/mc-services/yisibite/nuxt-sitemap',
+);
 
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
@@ -114,7 +124,9 @@ export default defineNuxtConfig({
     },
     server: {
       proxy: {
-        '/api': 'http://localhost:10005',
+        '/api': useRemoteBackend
+          ? 'http://localhost:10005'
+          : 'https://api.redenmc.com',
       },
     },
   },
@@ -154,31 +166,17 @@ export default defineNuxtConfig({
       },
     },
     '/api/**': {
-      proxy:
-        // process.env.NODE_ENV === 'development' || isPrerender
-        //   ? 'https://api.redenmc.com/api/**'
-        //   :
-        'http://localhost:10005/api/**',
+      proxy: useRemoteBackend
+        ? 'https://api.redenmc.com/api/**'
+        : 'http://localhost:10005/api/**',
     },
   },
   sitemap: {
     exclude: ['/secret/**', '/admin/**', '/api/**'],
-    urls: async () => {
-      try {
-        const backendData: string[] = await (
-          await fetch(
-            'https://api.redenmc.com/api/mc-services/yisibite/all-internal',
-          )
-        ).json();
-        backendData.sort();
-        return backendData.map((id) => ({
-          loc: `/litematica/${id}`,
-          _i18nTransform: true,
-        }));
-      } catch (e) {
-        console.error('Failed to fetch backend data for sitemap:', e);
-      }
+    urls() {
+      return sitemap;
     },
+    sources: ['https://api.redenmc.com/api/mc-services/yisibite/nuxt-sitemap'],
   },
   devServer: {
     host: '0.0.0.0',
