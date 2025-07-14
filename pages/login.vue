@@ -87,7 +87,7 @@ function login() {
   <div class="main-page">
     <div class="login-form">
       <h1>
-        {{ $t('login.title') }}
+        {{ t('login.title') }}
       </h1>
       <v-form>
         <v-text-field
@@ -123,18 +123,22 @@ function login() {
           dev
             ? 'Login (dev)'
             : captcha?.token
-              ? $t('login.button.login')
-              : $t('login.button.captcha')
+              ? t('login.button.login')
+              : t('login.button.captcha')
         }}
       </v-btn>
 
       <span class="text-center" style="padding: 4px">
+        <reden-router :to="localePath('/legal/privacy')">
+          {{ t('common.privacy_policy') }}
+        </reden-router>
+        ·
         <reden-router :to="localePath('/forgot-password')">{{
-          $t('login.forgot_password')
+          t('login.forgot_password')
         }}</reden-router>
-        {{ $t('login.or') }}
+        ·
         <reden-router :to="localePath('/register')">{{
-          $t('login.register')
+          t('login.register')
         }}</reden-router>
       </span>
 

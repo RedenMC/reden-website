@@ -70,6 +70,12 @@ function register(e: SubmitEventPromise) {
       <h2 class="mt-6">
         {{ t('register.quick') }}
       </h2>
+      <span>
+        {{ t('register.oauth_agree') }}
+        <reden-router :to="localePath('/legal/privacy')">
+          {{ t('common.privacy_policy') }}
+        </reden-router>
+      </span>
 
       <o-auth-buttons />
       <h1 class="mt-6">
@@ -79,9 +85,7 @@ function register(e: SubmitEventPromise) {
         v-model="email"
         :label="t('register.placeholder.email')"
         :placeholder="t('register.placeholder.email')"
-        :rules="[
-          () => /.+@.+\..+/i.test(email) || $t('register.invalid.email'),
-        ]"
+        :rules="[() => /.+@.+\..+/i.test(email) || t('register.invalid.email')]"
         autocomplete="email"
         required
       >
@@ -91,10 +95,10 @@ function register(e: SubmitEventPromise) {
       </v-text-field>
       <v-text-field
         v-model="username"
-        :label="$t('register.placeholder.username')"
-        :placeholder="$t('register.placeholder.username')"
+        :label="t('register.placeholder.username')"
+        :placeholder="t('register.placeholder.username')"
         :rules="[
-          () => usernameRegex.test(username) || $t('register.invalid.username'),
+          () => usernameRegex.test(username) || t('register.invalid.username'),
         ]"
         autocomplete="username"
         required
@@ -110,7 +114,7 @@ function register(e: SubmitEventPromise) {
         :rules="[
           () =>
             isStrongPassword(password) ||
-            $t('register.invalid.password.strength'),
+            t('register.invalid.password.strength'),
         ]"
         autocomplete="new-password"
         required
@@ -123,11 +127,11 @@ function register(e: SubmitEventPromise) {
       <v-text-field
         v-model="confirmPassword"
         :label="t('register.placeholder.confirm')"
-        :placeholder="$t('register.placeholder.confirm')"
+        :placeholder="t('register.placeholder.confirm')"
         :rules="[
           () =>
             confirmPassword == password ||
-            $t('register.invalid.password.mismatching'),
+            t('register.invalid.password.mismatching'),
         ]"
         autocomplete="new-password"
         required
@@ -144,11 +148,14 @@ function register(e: SubmitEventPromise) {
         :placeholder="t('register.placeholder.invitation_code')"
       />
       <span>
-        {{ $t('register.existing') }}
+        {{ t('register.existing') }}
         <reden-router :to="localePath('/login')">{{
-          $t('register.login')
+          t('register.login')
         }}</reden-router>
       </span>
+      <reden-router :to="localePath('/legal/privacy')">
+        {{ t('common.privacy_policy') }}
+      </reden-router>
       <v-btn
         :disabled="!captcha?.token"
         :loading="loading"
@@ -157,8 +164,8 @@ function register(e: SubmitEventPromise) {
       >
         {{
           captcha?.token
-            ? $t('register.button.register')
-            : $t('register.button.captcha')
+            ? t('register.button.register')
+            : t('register.button.captcha')
         }}
       </v-btn>
     </v-form>
@@ -178,10 +185,10 @@ function register(e: SubmitEventPromise) {
         ></v-icon>
 
         <h2 class="text-h5 mb-6">
-          {{ $t('register.email_verification.title') }}
+          {{ t('register.email_verification.title') }}
         </h2>
         <span>{{
-          $t('register.email_verification.message', { email: email })
+          t('register.email_verification.message', { email: email })
         }}</span>
 
         <v-divider class="mb-4"></v-divider>
@@ -196,7 +203,7 @@ function register(e: SubmitEventPromise) {
             variant="flat"
             width="90"
           >
-            {{ $t('register.button.done') }}
+            {{ t('register.button.done') }}
           </v-btn>
         </v-row>
       </v-sheet>

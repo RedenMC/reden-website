@@ -77,7 +77,7 @@
       "captcha": "請先完成驗證碼",
       "login": "登入"
     },
-    "forgot_password": "忘記密碼？",
+    "forgot_password": "忘記密碼",
     "oauth": "或使用以下方式登入",
     "or": "或者",
     "register": "去註冊",
@@ -244,6 +244,7 @@
     },
     "login": "登入",
     "oauth": "或使用以下方式註冊",
+    "oauth_agree": "",
     "placeholder": {
       "confirm": "重複密碼",
       "email": "電子郵件",

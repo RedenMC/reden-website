@@ -22,7 +22,7 @@ const useRemoteBackend =
     : process.env.REMOTE === 'false'
       ? false
       : !isProd && !isPrerender;
-const sitemap = await $fetch(
+const sitemap = await fetch(
   'https://api.redenmc.com/api/mc-services/yisibite/nuxt-sitemap',
 );
 

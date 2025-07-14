@@ -49,6 +49,7 @@
     "name": "Name",
     "next": "Next",
     "or": "or",
+    "privacy_policy": "Privacy Policy",
     "save": "Save",
     "summary": "Summary",
     "supported_version": "Supported version"
@@ -113,7 +114,7 @@
       "captcha": "Please complete the captcha first",
       "login": "Login"
     },
-    "forgot_password": "Forgot Password?",
+    "forgot_password": "Forgot Password",
     "oauth": "Or login with",
     "or": "Or",
     "register": "Register",
@@ -366,6 +367,7 @@
     },
     "login": "Login",
     "oauth": "Or register with: ",
+    "oauth_agree": "By clicking the button below, you agree",
     "placeholder": {
       "confirm": "Confirm Password",
       "email": "Email",
