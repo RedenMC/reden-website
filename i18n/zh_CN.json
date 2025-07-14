@@ -125,7 +125,9 @@
     "all": "全部",
     "all_read": "全部已读",
     "list_title": "我的消息",
+    "load_more": "加载更多消息",
     "mark_as_read": "标记为已读",
+    "no_message": "暂无更多消息",
     "unread": "未读"
   },
   "page404": {

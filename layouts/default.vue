@@ -8,14 +8,13 @@ import '@/assets/main.css';
 import { globalTheme } from '@/utils/constants';
 import LayoutHeader from '~/components/layout/Header.vue';
 import LayoutFooter from '~/components/layout/footer.vue';
+import NotificationDrawer from "~//components/homePage/NotificationDrawer.vue";
 
 import { useI18n } from 'vue-i18n';
-import { useMessageStore } from '~/store/message'; // 确保路径正确
 
 const localePath = useLocalePath();
-const switchLocalePath = useSwitchLocalePath();
 
-const { t, locale } = useI18n();
+const { t } = useI18n();
 
 const theme = useTheme();
 const appStore = useAppStore();
@@ -26,15 +25,7 @@ watch(globalTheme, () => {
       theme.themes.value[appStore.theme]!.colors.background;
   }
 });
-const zhCNLanguageNoti = ref(false);
 onMounted(() => {
-  appStore
-    .isInChina()
-    .then(
-      (result) =>
-        (zhCNLanguageNoti.value =
-          locale.value !== 'zh_cn' && (result ?? false)),
-    );
   const colors: Record<string, string> =
     theme.themes.value[appStore.theme]!.colors;
   const css: string[] = [];
@@ -65,106 +56,6 @@ const localeHead = useLocaleHead({
   },
 });
 
-const messageStore = useMessageStore();
-const { drawer } = storeToRefs(messageStore);
-
-const messages = [
-  {
-    id: 1,
-    subject: 'Your Post Rejected',
-    message:
-      'Your post https://redenmc.com/litematica/dd8ab23b-0f61-4eb9-850f-9c784623fc36 (Internal ID: 123) has been rejected, reason: no perm by Scorpio',
-    language: 'en',
-    sent: false,
-    recalled: false,
-    read: false,
-    createdAt: 1737787279420,
-    readAt: null,
-  },
-  {
-    id: 2,
-    subject: '你的稿件审核未通过',
-    message:
-      '你的稿件 https://redenmc.com/litematica/2033d77a-0d7c-480d-b454-31239e309fbc (内部ID：205) 未通过审核，原因：no perm by Scorpio',
-    language: 'zh_cn',
-    sent: false,
-    recalled: false,
-    read: false,
-    createdAt: 1737787353872,
-    readAt: null,
-  },
-  {
-    id: 3,
-    subject: '你的稿件审核未通过',
-    message:
-      '你的稿件 https://redenmc.com/litematica/3ca30d3c-d9a7-4a11-bb0a-f75ce5cbd068 (内部ID：368) 未通过审核，原因：no perm by Scorpio',
-    language: 'zh_cn',
-    sent: false,
-    recalled: false,
-    read: false,
-    createdAt: 1737787947969,
-    readAt: null,
-  },
-];
-
-// 当前过滤器状态
-let filter = ref('all');
-
-// 记录当前悬停的item id
-let hoveredItemId = ref(null);
-
-// 计算属性：根据过滤器返回消息列表
-const filteredMessages = computed(() => {
-  if (filter.value === 'unread') {
-    return messages.filter((m) => !m.read);
-  }
-  return messages;
-});
-
-function reduceUnreadCount() {
-  messageStore.decrementUnreadCount();
-}
-
-// 标记为已读
-function markAsRead(message: any) {
-  message.read = true;
-  reduceUnreadCount();
-}
-
-// 鼠标进入事件处理函数
-function onMouseEnter(id: any) {
-  hoveredItemId.value = id;
-}
-
-// 鼠标离开事件处理函数
-function onMouseLeave() {
-  hoveredItemId.value = null;
-}
-
-const formatDate = (timestamp: number) => {
-  const date = new Date(timestamp);
-  return date.toISOString().replace('T', ' ').slice(0, 19);
-};
-
-// 标记所有消息为已读
-function markAllAsRead() {
-  messages.forEach((message) => {
-    if (!message.read) {
-      message.read = true;
-      reduceUnreadCount();
-    }
-  });
-}
-
-let selectedMessage = ref<Object | null>(null);
-const dialog = ref(false);
-
-function showMessageDetailDialog(message: any) {
-  message.read = true;
-  selectedMessage.value = message;
-  dialog.value = true;
-  reduceUnreadCount();
-}
 </script>
 
 <template>
@@ -218,159 +109,15 @@ function showMessageDetailDialog(message: any) {
     </layout-header>
 
     <VSonner :expand="true" :position="'top-right'" />
-    <v-dialog
-      #default="{ isActive }"
-      :model-value="zhCNLanguageNoti"
-      max-width="600"
-      @close="zhCNLanguageNoti = false"
-    >
-      <v-card>
-        <v-card-title>切换到您常用的语言</v-card-title>
-        <v-card-text>
-          您现在的IP地址是中国大陆的地址，我们检测到您的浏览器语言设置为
-          <b>{{ t(locale) }}</b>
-          ，是否切换到简体中文？
-        </v-card-text>
-        <v-card-actions>
-          <v-btn @click="zhCNLanguageNoti = false">不切换</v-btn>
-          <v-btn
-            :to="switchLocalePath('zh_cn')"
-            color="primary"
-            @click="zhCNLanguageNoti = false"
-          >
-            切换
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
     <v-main class="router" style="--v-layout-top: 64px">
       <slot />
     </v-main>
-
-    <!--屎山封条-->
-    <template v-if="false">
-      <v-navigation-drawer
-        v-model="drawer"
-        location="right"
-        temporary
-        width="512"
-      >
-        <v-card-title>{{ t('message.list_title') }}</v-card-title>
-        <v-divider></v-divider>
-
-        <v-container>
-          <!-- 过滤选项和全部已读按钮 -->
-          <div
-            style="
-              display: flex;
-              align-items: center;
-              justify-content: space-between;
-            "
-          >
-            <v-tabs>
-              <v-tab @click="filter = 'all'">{{ t('message.all') }}</v-tab>
-              <v-tab @click="filter = 'unread'"
-                >{{ t('message.unread') }}
-              </v-tab>
-            </v-tabs>
-            <v-btn
-              color="primary"
-              style="margin-left: 16px"
-              variant="text"
-              @click="markAllAsRead"
-            >
-              {{ t('message.all_read') }}
-            </v-btn>
-          </div>
-
-          <!-- 消息列表 -->
-          <v-list dense>
-            <v-list-item
-              v-for="message in filteredMessages"
-              :key="message.id"
-              class="message-item cursor-pointer"
-              @click="showMessageDetailDialog(message)"
-              @mouseenter="onMouseEnter(message.id)"
-              @mouseleave="onMouseLeave()"
-            >
-              <template v-slot:prepend>
-                <v-icon
-                  >{{ message.read ? 'mdi-email-open' : 'mdi-email' }}
-                </v-icon>
-              </template>
-              <div style="flex: 1">
-                <div class="message-header">
-                  <v-list-item-title class="text-truncate"
-                    >{{ message.subject }}
-                  </v-list-item-title>
-                  <span
-                    v-if="!message.read && hoveredItemId === message.id"
-                    class="text-blue cursor-pointer"
-                    @click.stop="markAsRead(message)"
-                    >{{ t('message.mark_as_read') }}</span
-                  >
-                </div>
-                <v-list-item-subtitle>
-                  <div class="text-truncate-2lines">{{ message.message }}</div>
-                  <div class="text-right mt-1" style="color: #000000">
-                    {{ formatDate(message.createdAt) }}
-                  </div>
-                </v-list-item-subtitle>
-              </div>
-            </v-list-item>
-          </v-list>
-        </v-container>
-      </v-navigation-drawer>
-
-      <!-- 对话框组件 -->
-      <v-dialog v-model="dialog" max-width="500px">
-        <v-card>
-          <v-toolbar color="primary" dark>
-            <v-toolbar-title>{{ selectedMessage.subject }}</v-toolbar-title>
-          </v-toolbar>
-          <v-card-text>
-            <div class="message-content">{{ selectedMessage.message }}</div>
-            <div class="text-right mt-2">
-              {{ formatDate(selectedMessage.createdAt) }}
-            </div>
-          </v-card-text>
-          <v-divider></v-divider>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="primary" variant="text" @click="dialog = false"
-              >{{ t('$vuetify.close') }}
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </template>
     <layout-footer />
+    <notification-drawer></notification-drawer>
+
   </v-app>
 </template>
 
 <style scoped>
-/* 自定义样式 */
-.text-truncate {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
 
-.text-truncate-2lines {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.message-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: auto;
-}
-
-.message-item:hover {
-}
 </style>

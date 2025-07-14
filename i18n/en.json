@@ -123,7 +123,9 @@
     "all": "All",
     "all_read": "All Read",
     "list_title": "My Messages",
+    "load_more": "Load more Message",
     "mark_as_read": "Mark as Read",
+    "no_message": "No more messages",
     "unread": "Unread"
   },
   "page404": {

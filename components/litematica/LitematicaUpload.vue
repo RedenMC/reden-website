@@ -396,28 +396,21 @@ const goingBack = ref(false);
 refreshProps();
 watch(props, refreshProps);
 
-const fileList = ref([]);
-const handleChange = (info: UploadChangeParam) => {
-  const status = info.file.status;
-  if (status !== 'uploading') {
-    console.log(info.file, info.fileList);
-  }
-  if (status === 'done') {
-    message.success(`${info.file.name} file uploaded successfully.`);
-  } else if (status === 'error') {
-    message.error(`${info.file.name} file upload failed.`);
-  }
-};
-
 const isActiveDrag = ref(false);
 
 const toggleActiveDrag = (active: Boolean) => {
   isActiveDrag.value = active;
 };
 
-const handleDrop = (event: DragEvent) => {
-  toggleActiveDrag(false);
-  const files = event.dataTransfer.files;
+const handleDrop = (event: DragEvent | null) => {
+  if (event === null) {
+    return;
+  }
+  const dataTransfer = event.dataTransfer;
+  if (dataTransfer === null) {
+    return;
+  }
+  const files = dataTransfer.files;
   if (files.length) {
     handleFileChange({ target: { files } });
   }
@@ -561,7 +554,7 @@ const handlePictureChange = (event: Event) => {
                       <v-dialog activator="parent" close-on-back>
                         <v-card>
                           <v-card-text class="overflow-hidden">
-                            <LitematicaPreview :blob="attachment.file!" />
+                            <LitematicaPreview :blob="attachment.file" />
                             <div
                               class="top-0 right-0 position-absolute mr-6 mt-4 text-white text-caption text-right"
                               style="user-select: none; line-height: 0.75rem"
