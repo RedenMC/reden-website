@@ -244,7 +244,6 @@
     },
     "login": "登入",
     "oauth": "或使用以下方式註冊",
-    "oauth_agree": "",
     "placeholder": {
       "confirm": "重複密碼",
       "email": "電子郵件",
