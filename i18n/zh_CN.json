@@ -460,7 +460,7 @@
     "form": {
       "description": "描述",
       "name": "标签名称",
-      "parent": "父标签",
+      "parent": "父标签（标签代码）",
       "required": "此字段为必填项",
       "tag": "标签代码",
       "type": "标签类型"
@@ -483,7 +483,7 @@
     "title": "标签管理",
     "types": {
       "category": "分类",
-      "feature": "功能",
+      "feature": "特征",
       "version": "版本"
     }
   },

@@ -435,15 +435,41 @@
     "toolbox": "Toolbox"
   },
   "tags": {
+    "actions": {
+      "create": "New Tag"
+    },
+    "dialog": {
+      "create": "Create Tag",
+      "edit": "Edit Tag"
+    },
+    "filter": {
+      "language": "Language",
+      "search": "Search Tags",
+      "title": "Filter & Search",
+      "type": "Tag Type"
+    },
+    "form": {
+      "description": "Tag Description",
+      "name": "Tag Name",
+      "parent": "Parent Tag (tag code)",
+      "required": "Required",
+      "type": "Tag Type"
+    },
     "notifications": {
       "deleteError": "Error deleting tag",
       "deleteSuccess": "Successfully deleted tag"
     },
     "table": {
       "actions": "Actions",
+      "noData": "No Data",
       "parent": "Parent",
       "tag": "Tag Code",
       "type": "Type"
+    },
+    "title": "Tag Editor",
+    "types": {
+      "category": "Category",
+      "feature": "Feature"
     }
   },
   "upload": {

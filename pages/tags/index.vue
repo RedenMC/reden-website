@@ -10,7 +10,7 @@
           <v-col cols="12" sm="4">
             <v-select
               v-model="selectedLang"
-              :items="availableLanguages"
+              :items="availableLocales"
               :label="t('tags.filter.language')"
               variant="outlined"
               density="compact"
@@ -43,11 +43,15 @@
     <!-- 标签操作栏 -->
     <v-row class="mb-4">
       <v-col>
-        <v-btn color="primary" @click="openCreateDialog">
+        <v-btn
+          color="primary"
+          class="text-capitalize"
+          @click="openCreateDialog"
+        >
           <v-icon left>mdi-plus</v-icon>
           {{ t('tags.actions.create') }}
         </v-btn>
-        <v-btn @click="refresh"> refresh </v-btn>
+        <v-btn class="text-capitalize" @click="refresh"> refresh </v-btn>
       </v-col>
     </v-row>
 
@@ -107,12 +111,12 @@
               <v-col cols="12">
                 <v-select
                   v-model="formData.language"
-                  :items="availableLanguages"
-                  :label="t('tags.form.language')"
+                  :items="availableLocales"
+                  :label="t('tags.filter.language')"
                   required
                   :disabled="isEditing"
                   :rules="[(v) => !!v || t('tags.form.required')]"
-                ></v-select>
+                />
               </v-col>
               <v-col cols="12">
                 <v-text-field
@@ -238,22 +242,6 @@ interface MultiLanguageTag {
 
 const { t, availableLocales, locale } = useI18n();
 
-// 计算属性获取可用语言列表
-const availableLanguages = computed(() => {
-  return availableLocales.map((locale) => {
-    const localeTitles: Record<string, string> = {
-      en: '英文',
-      zh_cn: '简体中文',
-      zh_tw: '繁體中文',
-      ru: 'Русский',
-    };
-    return {
-      title: localeTitles[locale] || locale,
-      value: locale,
-    };
-  });
-});
-
 // 数据状态
 const currentPage = ref<number>(1);
 const pageSize = ref<number>(20);
@@ -320,7 +308,6 @@ const headers = computed(() => [
 const tagTypes: TagTypeOption[] = [
   { title: t('tags.types.feature'), value: 'Feature' },
   { title: t('tags.types.category'), value: 'Category' },
-  { title: t('tags.types.version'), value: 'Version' },
 ];
 
 // 使用 useAsyncData 和 $fetch 获取所有语言的标签数据
@@ -336,56 +323,13 @@ const {
     `/api/mc-services/tags/all-languages?page=${currentPage.value}&pageSize=${pageSize.value}&type=${selectedTagType.value || ''}&search=${searchQuery.value || ''}`,
 );
 
-watch(currentPage, () => {
-  console.log('Current page changed:', currentPage.value);
-  // 每次页码变化时，重新获取数据
-  refresh();
-});
-
 const totalTags = ref(100);
 watch(multiLangTagsData, (data) => {
   if (data) {
     totalTags.value = data?.total;
   }
 });
-/**
- *   { title: 'ID', key: 'id', sortable: true, width: '80px' },
- *   { title: t('tags.table.tag'), key: 'tag', sortable: true, width: '120px' },
- *   {
- *     title: 'English',
- *     key: 'name',
- *     sortable: true,
- *     width: '120px',
- *   },
- *   ...(locale.value === 'en'
- *     ? []
- *     : [
- *         {
- *           title: t('tags.table.name'),
- *           key: 'name_locale',
- *           sortable: true,
- *           width: '120px',
- *         },
- *       ]),
- *   {
- *     title: t('tags.table.type'),
- *     key: 'type',
- *     sortable: true,
- *     width: '120px',
- *   },
- *   {
- *     title: t('tags.table.parent'),
- *     key: 'parent',
- *     sortable: false,
- *     width: '120px',
- *   },
- *   {
- *     title: t('tags.table.actions'),
- *     key: 'actions',
- *     sortable: false,
- *     width: '100px',
- *   },
- */
+
 type TagView = {
   // Database ID
   id: number;
@@ -478,7 +422,7 @@ function openEditDialog(tagView: TagView) {
       formData.value.name = currentLocalization.name;
       formData.value.description = currentLocalization.description || '';
     } else {
-      formData.value.name = '(Not Found)';
+      formData.value.name = '';
       formData.value.description = '';
     }
   }

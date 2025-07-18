@@ -34,6 +34,7 @@ const { data: localizedData } = useNuxtData<Record<string, MachineDef>>(
 const {
   data: serverResponse,
   refresh,
+  status,
   error,
 } = await useFetch<ListLitematicaResponse>(
   `/api/mc-services/yisibite/${machineId}/info/${locale.value}`,
@@ -90,12 +91,21 @@ const selected = computed<Machine | null>(() =>
 
 // workaround
 onMounted(() => {
-  refresh();
-  if (selected.value == null) {
-    console.error('加载失败，selected.value is null, err=', error.value);
-  }
-  if (error.value) {
-    console.error('加载失败，, err=', error.value);
+  if (import.meta.client && status.value !== 'pending' && !selected.value) {
+    refresh().then(() => {
+      useHead({
+        title: () =>
+          t('litematica_generator.web_title', {
+            name: selected.value?.name,
+          }),
+      });
+      if (selected.value == null) {
+        console.error('加载失败，selected.value is null, err=', error.value);
+      }
+      if (error.value) {
+        console.error('加载失败，, err=', error.value);
+      }
+    });
   }
 });
 
@@ -114,6 +124,12 @@ useSeoMeta({
 });
 definePageMeta({
   name: 'litematica-name',
+});
+useHead({
+  title: () =>
+    t('litematica_generator.web_title', {
+      name: selected.value?.name,
+    }),
 });
 const biliPlayer = useTemplateRef<HTMLIFrameElement>('biliPlayer');
 const bvid = computed(() => parseBVID(selected.value?.link));
