@@ -434,6 +434,18 @@
     "title": "Litematica Studio - Online Litematica Editor, Replace Blocks, Convert Version, Import, Download",
     "toolbox": "Toolbox"
   },
+  "tags": {
+    "notifications": {
+      "deleteError": "Error deleting tag",
+      "deleteSuccess": "Successfully deleted tag"
+    },
+    "table": {
+      "actions": "Actions",
+      "parent": "Parent",
+      "tag": "Tag Code",
+      "type": "Type"
+    }
+  },
   "upload": {
     "btn": {
       "finish_editing": "Finish Editing",

@@ -12,7 +12,6 @@
               v-model="selectedLang"
               :items="availableLanguages"
               :label="t('tags.filter.language')"
-              @update:model-value="fetchTags"
               variant="outlined"
               density="compact"
             />
@@ -22,7 +21,6 @@
               v-model="selectedTagType"
               :items="tagTypes"
               :label="t('tags.filter.type')"
-              @update:model-value="fetchTags"
               variant="outlined"
               density="compact"
             ></v-select>
@@ -34,8 +32,8 @@
               variant="outlined"
               density="compact"
               append-icon="mdi-magnify"
-              @click:append="fetchTags"
-              @keyup.enter="fetchTags"
+              @click:append="refresh"
+              @keyup.enter="refresh"
             ></v-text-field>
           </v-col>
         </v-row>
@@ -58,7 +56,7 @@
       <v-data-table-server
         :headers="headers"
         :items="tags"
-        :loading="loading"
+        :loading="pending"
         class="elevation-1"
         :items-per-page="pageSize"
         :items-length="totalTags"
@@ -74,7 +72,7 @@
             variant="text"
             size="small"
             color="primary"
-            @click="openEditDialog(item)"
+            @click="// openEditDialog(item)"
           >
             <v-icon>mdi-pencil</v-icon>
           </v-btn>
@@ -145,7 +143,6 @@
               <v-col cols="12">
                 <v-autocomplete
                   v-model="formData.parent"
-                  :items="parentOptions"
                   item-title="name"
                   item-value="id"
                   :label="t('tags.form.parent')"
@@ -233,7 +230,7 @@ interface MultiLanguageTag {
   localizations: TagLocalization[];
 }
 
-const { t, availableLocales } = useI18n();
+const { t, availableLocales, locale } = useI18n();
 
 // 计算属性获取可用语言列表
 const availableLanguages = computed(() => {
@@ -271,19 +268,30 @@ const isFormValid = ref<boolean>(false);
 const form = ref(null);
 const saving = ref<boolean>(false);
 const deleteDialog = ref<boolean>(false);
-const selectedTag = ref<MultiLanguageTag | null>(null);
+const selectedTag = ref<TagView | null>(null);
 const deleting = ref<boolean>(false);
 
 // 计算属性
 const totalPages = computed(() => Math.ceil(totalTags.value / pageSize.value));
 const headers = computed(() => [
-  { title: t('tags.table.id'), key: 'id', sortable: true, width: '80px' },
+  { title: 'ID', key: 'id', sortable: true, width: '80px' },
   { title: t('tags.table.tag'), key: 'tag', sortable: true, width: '120px' },
-  ...availableLanguages.value.map((lang) => ({
-    title: lang.title,
-    key: `name_${lang.value}`,
+  {
+    title: 'English',
+    key: 'name',
     sortable: true,
-  })),
+    width: '120px',
+  },
+  ...(selectedLang.value === 'en'
+    ? []
+    : [
+        {
+          title: t('tags.table.name'),
+          key: 'name_locale',
+          sortable: true,
+          width: '120px',
+        },
+      ]),
   {
     title: t('tags.table.type'),
     key: 'type',
@@ -323,56 +331,80 @@ const {
     `/api/mc-services/tags/all-languages?page=${currentPage.value}&pageSize=${pageSize.value}&type=${selectedTagType.value || ''}&search=${searchQuery.value || ''}`,
 );
 
-// 将多语言标签数据转换为展示所有语言的格式
-const tags = computed(() => {
-  if (!multiLangTagsData.value?.data) return [];
-
-  return multiLangTagsData.value.data.map((multiLangTag) => {
-    // 创建基础标签对象
-    const tag: ExtendedMultiLanguageTag = {
-      id: multiLangTag.id,
-      tag: multiLangTag.tag,
-      type: multiLangTag.type,
-      parent: multiLangTag.parent,
-      createdAt: multiLangTag.createdAt,
-      localizations: multiLangTag.localizations,
-    };
-
-    // 为每种语言添加对应的名称字段
-    availableLanguages.value.forEach((lang) => {
-      const localization = multiLangTag.localizations.find(
-        (loc) => loc.language.toLowerCase() === lang.value.toLowerCase(),
-      );
-
-      // 如果找到该语言的本地化数据，使用它；否则显示空或占位符
-      tag[`name_${lang.value}`] = localization?.name;
-    });
-
-    // 设置主要显示名称，优先使用当前选择的语言
-    const currentLocalization = multiLangTag.localizations.find(
-      (loc) => loc.language.toLowerCase() === selectedLang.value.toLowerCase(),
-    );
-    tag.name = currentLocalization
-      ? currentLocalization.name
-      : tag[`name_${availableLanguages.value[0].value}`];
-
-    return tag;
-  });
+const totalTags = ref(100);
+watch(multiLangTagsData, (data) => {
+  if (data) {
+    totalTags.value = data?.total;
+  }
 });
+/**
+ *   { title: 'ID', key: 'id', sortable: true, width: '80px' },
+ *   { title: t('tags.table.tag'), key: 'tag', sortable: true, width: '120px' },
+ *   {
+ *     title: 'English',
+ *     key: 'name',
+ *     sortable: true,
+ *     width: '120px',
+ *   },
+ *   ...(locale.value === 'en'
+ *     ? []
+ *     : [
+ *         {
+ *           title: t('tags.table.name'),
+ *           key: 'name_locale',
+ *           sortable: true,
+ *           width: '120px',
+ *         },
+ *       ]),
+ *   {
+ *     title: t('tags.table.type'),
+ *     key: 'type',
+ *     sortable: true,
+ *     width: '120px',
+ *   },
+ *   {
+ *     title: t('tags.table.parent'),
+ *     key: 'parent',
+ *     sortable: false,
+ *     width: '120px',
+ *   },
+ *   {
+ *     title: t('tags.table.actions'),
+ *     key: 'actions',
+ *     sortable: false,
+ *     width: '100px',
+ *   },
+ */
+type TagView = {
+  // Database ID
+  id: number;
+  // Tag code
+  tag: string;
+  name: string;
+  name_locale?: string; // 用于其他语言的名称
+  type: string;
+  parent?: string;
+};
 
-const totalTags = computed(() => multiLangTagsData.value?.total || 100);
-const loading = computed(() => pending.value);
-
-// 方法
-function fetchTags() {
-  refresh();
+function toTagView(tag: MultiLanguageTag): TagView {
+  return {
+    id: tag.id,
+    tag: tag.tag,
+    name:
+      tag.localizations.find((loc) => loc.language.toLowerCase() === 'en')
+        ?.name || '',
+    name_locale:
+      tag.localizations.find(
+        (loc) =>
+          loc.language.toLowerCase() === selectedLang.value.toLowerCase(),
+      )?.name || '',
+    type: tag.type,
+    parent: tag.parent || undefined,
+  };
 }
 
-const parentOptions = computed(() => {
-  // 过滤掉当前编辑的标签（避免自己作为自己的父标签）
-  return tags.value
-    .filter((tag) => !isEditing.value || tag.id !== formData.value.id)
-    .map((tag) => tag.tag);
+const tags = computed(() => {
+  return multiLangTagsData.value?.data.map((tag) => toTagView(tag)) || [];
 });
 
 // 监听筛选条件变化
@@ -382,7 +414,9 @@ watch([selectedLang, selectedTagType, searchQuery], () => {
 
 // 初始化
 onMounted(() => {
-  fetchTags();
+  if (tags.value.length === 0) {
+    refresh();
+  }
 });
 
 function findTagName(id: number): string {
@@ -470,7 +504,7 @@ async function saveTag() {
   }
 }
 
-function confirmDelete(tag: MultiLanguageTag) {
+function confirmDelete(tag: TagView) {
   selectedTag.value = tag;
   deleteDialog.value = true;
 }

@@ -44,7 +44,8 @@ const {
 }>(`api/mc-services/litematica/homepage-profiles?lang=${locale.value}`, {
   dedupe: 'cancel',
 });
-if (import.meta.client) {
+if (import.meta.client && status.value !== 'pending' && !homepageData.value) {
+  // load failure, refresh
   refresh();
 }
 
@@ -454,7 +455,9 @@ watch(homepageData, (data) => {
                 <v-icon class="mr-2" color="amber">mdi-crown</v-icon>
                 {{ t('reden.home.creator_ranking.title') }}
               </h3>
-              <v-chip color="cyan" size="small" variant="outlined">{{ t('reden.home.creator_ranking.real_time') }}</v-chip>
+              <v-chip color="cyan" size="small" variant="outlined">{{
+                t('reden.home.creator_ranking.real_time')
+              }}</v-chip>
             </div>
             <div class="card-content">
               <div class="creators-list">
@@ -596,12 +599,16 @@ watch(homepageData, (data) => {
           </v-col>
           <v-col>
             <v-card color="orange">
-              <v-card-title>{{ t('reden.home.sync_github.title') }}</v-card-title>
+              <v-card-title>{{
+                t('reden.home.sync_github.title')
+              }}</v-card-title>
               <v-card-text>
                 {{ t('reden.home.sync_github.description') }}
               </v-card-text>
               <v-card-actions>
-                <v-btn :to="localePath('/home')" color="White">{{ t('reden.home.sync_github.go_to') }}</v-btn>
+                <v-btn :to="localePath('/home')" color="White">{{
+                  t('reden.home.sync_github.go_to')
+                }}</v-btn>
               </v-card-actions>
             </v-card>
           </v-col>

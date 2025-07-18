@@ -23,10 +23,15 @@ const {
   data,
   status: queryStatus,
   error,
+  refresh,
 } = useFetch<ListLitematicaResponse>(
   () =>
     `/api/mc-services/litematica/archiver-review?page=${page.value}&status=${status.value}`,
 );
+if (import.meta.client && queryStatus.value !== 'pending' && !data.value) {
+  // load failure, refresh
+  refresh();
+}
 
 watch(error, (value) => {
   if (value) {
