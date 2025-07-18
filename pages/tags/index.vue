@@ -72,7 +72,7 @@
             variant="text"
             size="small"
             color="primary"
-            @click="// openEditDialog(item)"
+            @click="openEditDialog(item)"
           >
             <v-icon>mdi-pencil</v-icon>
           </v-btn>
@@ -437,20 +437,25 @@ function openCreateDialog() {
   dialog.value = true;
 }
 
-function openEditDialog(tag: MultiLanguageTag) {
+function openEditDialog(tagView: TagView) {
   isEditing.value = true;
 
   // 基本信息赋值
   formData.value = {
-    id: tag.id,
-    tag: tag.tag,
-    type: tag.type,
-    parent: tag.parent,
+    id: tagView.id,
+    tag: tagView.tag,
+    type: tagView.type,
+    parent: tagView.parent ?? null,
     language: selectedLang.value,
     name: '', // 将根据选择的语言设置
     description: '', // 将根据选择的语言设置
   };
 
+  const tag = multiLangTagsData.value?.data?.find((t) => t.id === tagView.id);
+  if (!tag) {
+    toast.error('Tag not found');
+    return;
+  }
   // 如果标签有本地化信息，找到当前选择语言的本地化数据
   if (tag.localizations && tag.localizations.length > 0) {
     const currentLocalization = tag.localizations.find(
@@ -462,9 +467,7 @@ function openEditDialog(tag: MultiLanguageTag) {
       formData.value.name = currentLocalization.name;
       formData.value.description = currentLocalization.description || '';
     } else {
-      // 如果当前语言没有本地化数据，使用名称映射或默认值
-      const nameKey = `name_${selectedLang.value}` as keyof typeof tag;
-      formData.value.name = (tag[nameKey] as string) || '';
+      formData.value.name = '(Not Found)';
       formData.value.description = '';
     }
   }
