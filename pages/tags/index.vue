@@ -58,9 +58,15 @@
         :items="tags"
         :loading="pending"
         class="elevation-1"
-        :items-per-page="pageSize"
+        v-model:items-per-page="pageSize"
         :items-length="totalTags"
-        :page="currentPage"
+        v-model:page="currentPage"
+        @update:options="
+          (options) => {
+            console.log('Data table options updated:', options);
+            currentPage = options.page;
+          }
+        "
         :no-data-text="t('tags.table.noData')"
       >
         <template v-slot:item.parent="{ item }">
@@ -272,7 +278,6 @@ const selectedTag = ref<TagView | null>(null);
 const deleting = ref<boolean>(false);
 
 // 计算属性
-const totalPages = computed(() => Math.ceil(totalTags.value / pageSize.value));
 const headers = computed(() => [
   { title: 'ID', key: 'id', sortable: true, width: '80px' },
   { title: t('tags.table.tag'), key: 'tag', sortable: true, width: '120px' },
@@ -330,6 +335,12 @@ const {
   () =>
     `/api/mc-services/tags/all-languages?page=${currentPage.value}&pageSize=${pageSize.value}&type=${selectedTagType.value || ''}&search=${searchQuery.value || ''}`,
 );
+
+watch(currentPage, () => {
+  console.log('Current page changed:', currentPage.value);
+  // 每次页码变化时，重新获取数据
+  refresh();
+});
 
 const totalTags = ref(100);
 watch(multiLangTagsData, (data) => {
