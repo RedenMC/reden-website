@@ -1,6 +1,10 @@
 echo "\"$(git rev-parse --short HEAD)\"" > assets/hash.json
 
-nuxi cleanup && nuxi build
+# Note: force use latest nodejs
+# Causes "ERROR terminated" (zlib: incorrect header check)
+export PATH=/opt/homebrew/bin:$PATH
+
+nuxi cleanup && nuxi build || exit 1
 
 echo
 echo "==========="
