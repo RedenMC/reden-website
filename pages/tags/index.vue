@@ -151,13 +151,13 @@
                 ></v-select>
               </v-col>
               <v-col cols="12">
-                <v-autocomplete
+                <v-combobox
                   v-model="formData.parent"
                   item-title="name"
                   item-value="id"
                   :label="t('tags.form.parent')"
                   clearable
-                ></v-autocomplete>
+                />
               </v-col>
             </v-row>
           </v-form>
