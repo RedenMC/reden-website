@@ -297,6 +297,27 @@ watch(tabs, (newTabs) => {
                   color="red"
                   required
                 />
+                <div>
+                  默认理由：
+                  <v-btn
+                    color="primary"
+                    @click="
+                      removeReason =
+                        '投影太大了，请清空箱子、杀死所有实体并重新保存投影。'
+                    "
+                  >
+                    投影太大
+                  </v-btn>
+                  <v-btn
+                    color="primary"
+                    @click="
+                      removeReason =
+                        '投影被标注为转载，请标明原作者，如果未知，请填写原作者未知。'
+                    "
+                  >
+                    标明原作者
+                  </v-btn>
+                </div>
               </v-card-text>
               <v-card-actions>
                 <v-btn color="red" @click="cancelApproval">
