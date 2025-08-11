@@ -11,7 +11,7 @@
                   <v-icon>mdi-home</v-icon>
                 </template>
                 <v-list-item-title>
-                  {{ $t('reden.header.home') }}
+                  {{ t('reden.header.home') }}
                 </v-list-item-title>
               </v-list-item>
               <v-list-item :to="localePath('/feature')">
@@ -19,7 +19,7 @@
                   <v-icon>mdi-view-dashboard</v-icon>
                 </template>
                 <v-list-item-title>
-                  {{ $t('reden.header.mod') }}
+                  {{ t('reden.header.mod') }}
                 </v-list-item-title>
               </v-list-item>
               <v-list-item :to="localePath('/litematica')">
@@ -79,7 +79,7 @@
                     <v-icon>mdi-cog</v-icon>
                   </template>
                   <v-list-item-title>
-                    {{ $t('admin.title.admin') }}
+                    {{ t('admin.title.admin') }}
                   </v-list-item-title>
                 </v-list-item>
               </template>
@@ -166,11 +166,13 @@
           </v-list>
         </v-menu>
       </v-btn>
-      <v-btn
-        :to="localePath(useAppStore().logined ? '/home' : '/login')"
-        icon="mdi-account"
-        title="Account"
-      />
+      <client-only>
+        <v-btn
+          :to="localePath(useAppStore().logined ? '/home' : '/login')"
+          icon="mdi-account"
+          title="Account"
+        />
+      </client-only>
       <v-btn
         v-if="!mobile"
         :active="false"

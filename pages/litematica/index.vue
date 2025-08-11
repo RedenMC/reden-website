@@ -64,6 +64,7 @@ export type MachineDef = {
     favorite: boolean;
   };
   versions?: string[];
+  source: 'self' | 'minemev';
 };
 
 const appStore = useAppStore();
@@ -436,7 +437,7 @@ const isHovering = useElementHover(ad);
             </v-col>
           </v-row>
 
-          <v-row v-if="serverResponse.d && serverResponse.d.length === 0">
+          <v-row v-if="serverResponse?.d && serverResponse.d.length === 0">
             <v-col cols="12" class="text-center">
               <v-alert type="info" variant="outlined">
                 {{ t('litematica_generator.no_results') }}

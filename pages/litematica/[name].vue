@@ -435,6 +435,17 @@ watch(tabs, (newTabs) => {
               :value="selected.description || ''"
               class="lm-description text-pre-wrap overflow-hidden"
             />
+            <div v-if="selected?.source === 'minemev'" class="w-100">
+              <div class="rounded-lg border pa-2" style="width: fit-content">
+                <v-icon> mdi-information-outline </v-icon>
+                本稿件来自 Minemev，如果想要了解更多信息，请访问
+                <a :href="`https://minemev.com/p/${selected.key}`">原始页面</a
+                >。<br />
+                Minemev 是注册并运营在阿根廷的网站，Reden 与其没有任何关联。<br />
+                该网站的服务条款与隐私政策可能与 Reden 不同。<br />
+                您在 Reden 的个人信息不会被跨境传输。
+              </div>
+            </div>
           </div>
         </v-col>
         <v-col cols="12" md="4">
@@ -507,9 +518,13 @@ watch(tabs, (newTabs) => {
                       : t('litematica_generator.by.uploader')
                   }}
                 </div>
-                <router-link
+                <reden-router
                   v-if="selected.author"
-                  :to="localePath(`/@${selected.author.username}`)"
+                  :to="
+                    selected.source === 'minemev'
+                      ? `https://minemev.com/u/${selected.author.username}`
+                      : localePath(`/@${selected.author.username}`)
+                  "
                   class="d-flex flex-row router"
                   style="line-height: 32px"
                 >
@@ -517,7 +532,7 @@ watch(tabs, (newTabs) => {
                     <v-img :src="selected.author.avatarUrl" />
                   </v-avatar>
                   {{ selected.author.username }}
-                </router-link>
+                </reden-router>
               </div>
               <div class="d-flex mt-3">
                 <div class="w-33 align-content-center">
