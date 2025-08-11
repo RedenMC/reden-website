@@ -73,16 +73,16 @@ function getRankIcon(index: number) {
 
 // Stats data for hero section
 const stats = ref([
-  { number: '500+', label: t('reden.home.stats.redstone_machines') },
-  { number: '128.4K+', label: t('reden.home.stats.total_downloads') },
-  { number: '8K+', label: t('reden.home.stats.users') },
+  { number: '900+', label: t('reden.home.stats.redstone_machines') },
+  { number: '180.4K+', label: t('reden.home.stats.total_downloads') },
+  { number: '9300+', label: t('reden.home.stats.users') },
   { number: '24/7', label: t('reden.home.stats.online_service') },
 ]);
 
 // Dashboard metrics data
 const dashboardMetrics = ref([
   {
-    value: '500+',
+    value: stats.value[0].number,
     label: t('reden.home.stats.redstone_machines'),
     icon: 'mdi-cube-outline',
     color: 'blue-lighten-4',
@@ -92,7 +92,7 @@ const dashboardMetrics = ref([
     trendColor: 'green',
   },
   {
-    value: '128.4K+',
+    value: stats.value[1].number,
     label: t('reden.home.stats.total_downloads'),
     icon: 'mdi-download',
     color: 'green-lighten-4',
@@ -102,7 +102,7 @@ const dashboardMetrics = ref([
     trendColor: 'green',
   },
   {
-    value: '8200+',
+    value: stats.value[2].number,
     label: t('reden.home.stats.active_users'),
     icon: 'mdi-account-group',
     color: 'purple-lighten-4',

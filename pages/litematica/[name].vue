@@ -221,6 +221,13 @@ watch(tabs, (newTabs) => {
 
 <template>
   <v-form ref="form" class="lm-main-content" fast-fail @submit.prevent="submit">
+    <div v-if="selected?.source === 'minemev'" class="w-100">
+      <div class="rounded-lg border pa-2" style="width: fit-content">
+        <v-icon> mdi-information-outline </v-icon>
+        本稿件来自 Minemev
+        <a :href="`https://minemev.com/p/${selected.key}`">Minemev</a>。
+      </div>
+    </div>
     <div class="ma-4 d-flex flex-wrap" style="gap: 12px">
       <v-btn
         :to="backUrl ?? localePath('/litematica')"
@@ -316,6 +323,9 @@ watch(tabs, (newTabs) => {
                     "
                   >
                     标明原作者
+                  </v-btn>
+                  <v-btn color="primary" @click="removeReason = '重复。'">
+                    重复
                   </v-btn>
                 </div>
               </v-card-text>
