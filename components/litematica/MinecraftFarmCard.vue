@@ -46,13 +46,6 @@ const tags = computed(
     <v-card-title class="card-title text-3lines">{{ item.name }}</v-card-title>
     <v-card-subtitle v-if="!hideAuthorInfo" class="opacity-100">
       <div class="d-flex flex-row author-line" style="line-height: 24px">
-        <span class="mr-1">
-          {{
-            item.original
-              ? $t('litematica_generator.by.author')
-              : $t('litematica_generator.by.uploader')
-          }}
-        </span>
         <v-avatar v-if="item.author?.avatarUrl" size="24">
           <v-img :aspect-ratio="16 / 9" :src="item.author?.avatarUrl" />
         </v-avatar>

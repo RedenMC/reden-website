@@ -87,12 +87,16 @@ const page = useRouteQuery('page', 1, { transform: Number });
 const pageSize = ref(18);
 const search = useRouteQuery<string>('q', '');
 const sortType = useRouteQuery<SortType>('sort', 'downloads');
-const totalPages = computed(() =>
-  Math.ceil((serverResponse.value?.count ?? 2006) / pageSize.value),
-);
+// const totalPages = computed(() =>
+//   Math.ceil((serverResponse.value?.count ?? 2006) / pageSize.value),
+// );
 const uploadDialog = ref(router.currentRoute.value.hash === '#upload');
-watch(page, () => goto(0));
-watch(sortType, () => (page.value = 1));
+watch(page, () => {
+  return goto(0);
+});
+watch(sortType, () => {
+  return (page.value = 1);
+});
 
 export type Machine = MachineDef & {
   conditions: { [key: string]: ((v: number) => any)[] };
@@ -130,22 +134,6 @@ const {
 } = useFetch<ListLitematicaResponse>(url, {
   dedupe: 'defer',
   headers: {},
-  transform: (input: any): ListLitematicaResponse => {
-    if (input.d) {
-      return input;
-    } else {
-      input = input as {
-        hits: Record<string, MachineDef>;
-        estimatedTotalHits: number;
-        downloads: number;
-      };
-      return {
-        d: input.hits,
-        count: input.estimatedTotalHits,
-        downloads: input.downloads,
-      };
-    }
-  },
   onRequestError: (context) => {
     if (context) {
       toast.error(
@@ -163,6 +151,18 @@ const {
       }
     }
   },
+});
+const totalPages = ref(
+  serverResponse.value
+    ? Math.ceil(serverResponse.value.count / pageSize.value)
+    : 10,
+);
+const totalDownloads = ref(serverResponse.value?.downloads ?? 0);
+watch(serverResponse, (data) => {
+  if (data && data.d) {
+    totalPages.value = Math.ceil(data.count / pageSize.value);
+    totalDownloads.value = data.downloads;
+  }
 });
 
 // if (error.value?.statusCode) {
@@ -455,11 +455,7 @@ const isHovering = useElementHover(ad);
           />
         </v-row>
         <div class="text-center opacity-60 w-100 pt-2">
-          {{
-            t('litematica_generator.total_downloads', [
-              serverResponse?.downloads,
-            ])
-          }}
+          {{ t('litematica_generator.total_downloads', [totalDownloads]) }}
         </div>
       </v-container>
       <div v-if="mdAndUp" class="my-ads">
