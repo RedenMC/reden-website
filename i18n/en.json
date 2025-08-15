@@ -505,6 +505,7 @@
     },
     "step": {
       "image": "Images",
+      "tags": "Categories & Tags",
       "translation": "Information",
       "under-review": "Under Review",
       "upload": "Upload"

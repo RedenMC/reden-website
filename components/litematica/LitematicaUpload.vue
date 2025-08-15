@@ -6,6 +6,7 @@ import { useDisplay } from 'vuetify';
 import selectableModels from '~/utils/litematica/models_selectable.json';
 import { useAppStore } from '~/store/app';
 import type { VForm } from 'vuetify/components';
+import TagSelector from '~/components/litematica/TagSelector.vue';
 
 const appStore = useAppStore();
 
@@ -22,8 +23,14 @@ const emit = defineEmits<{
 const { height } = useDisplay();
 
 const localePath = useLocalePath();
-type State = 'upload' | 'translation' | 'image' | 'under-review';
-const states = ['upload', 'translation', 'image', 'under-review'] as const;
+type State = 'upload' | 'translation' | 'tags' | 'image' | 'under-review';
+const states = [
+  'upload',
+  'translation',
+  'tags',
+  'image',
+  'under-review',
+] as const;
 const state = ref<State>('upload');
 watch(state, (newState) => {
   if (!availableSteps.value.includes(newState)) {
@@ -167,6 +174,7 @@ async function doUploadAll() {
           link: data.link,
           isOriginal: isOriginal.value,
           versions: selectedVersions.value,
+          tagCodes: tagsWithName.value.map((tag) => tag.code),
         },
       );
       if (response.ok) {
@@ -259,6 +267,12 @@ onMounted(() => {
 
 const litematicaGenerator = ref<boolean>();
 const localizedData = ref<Record<string, Partial<MachineDef>>>({});
+const tagsWithName = ref<
+  {
+    name: string;
+    code: string;
+  }[]
+>([]);
 
 const MAX_FILE_NUMBER = 6;
 const MAX_IMAGE_NUMBER = 5;
@@ -291,12 +305,15 @@ const handleFileChange = (event: Event) => {
 
   // 追加新上传的文件到已选择的文件列表中
   selectedFiles.value.push(
-    ...newFilesArray.map((file) => ({
-      name: file.name,
-      file,
-      url: URL.createObjectURL(file),
-      fileType: 'uploading',
-    })),
+    ...newFilesArray.map(
+      (file) =>
+        ({
+          name: file.name,
+          file,
+          url: URL.createObjectURL(file),
+          fileType: 'uploading',
+        }) as MyFile,
+    ),
   );
 
   const obj = getLocalizedData(language.value);
@@ -386,7 +403,7 @@ async function uploadLocalizedData() {
     uploadingLocalizedData.value = true;
     await delay(500);
     uploadingLocalizedData.value = false;
-    state.value = 'image';
+    state.value = 'tags';
   }
 }
 
@@ -398,30 +415,14 @@ watch(props, refreshProps);
 
 const isActiveDrag = ref(false);
 
-const toggleActiveDrag = (active: Boolean) => {
-  isActiveDrag.value = active;
-};
+const toggleActiveDrag = (active: Boolean) => {};
 
-const handleDrop = (event: DragEvent) => {
-  toggleActiveDrag(false);
-  const files = event.dataTransfer.files;
-  if (files.length) {
-    handleFileChange({ target: { files } });
-  }
-};
+const handleDrop = (event: DragEvent) => {};
 
 const isActiveDragPicture = ref(false);
-const toggleActiveDragPicture = (active: Boolean) => {
-  isActiveDragPicture.value = active;
-};
+const toggleActiveDragPicture = (active: Boolean) => {};
 
-const handlePictureDrop = (event: Event) => {
-  toggleActiveDragPicture(false);
-  const files = event.dataTransfer.files;
-  if (!files.length) return;
-
-  handlePictureChange({ target: { files } });
-};
+const handlePictureDrop = (event: Event) => {};
 
 const handlePictureChange = (event: Event) => {
   const target = event.target as HTMLInputElement;
@@ -651,7 +652,7 @@ const handlePictureChange = (event: Event) => {
                   <div class="d-flex flex-row justify-end flex-wrap">
                     <div class="opacity-60 language-sel-tr">
                       {{
-                        $t('upload.desc.please_select_which_language_to_edit')
+                        t('upload.desc.please_select_which_language_to_edit')
                       }}
                     </div>
                     <v-select
@@ -679,11 +680,11 @@ const handlePictureChange = (event: Event) => {
                   (v) => !!v || 'ID is required',
                   (v) =>
                     /^[a-z0-9\-_]+$/.test(v) ||
-                    $t('upload.desc.id_can_only_contain'),
+                    t('upload.desc.id_can_only_contain'),
                   (_) =>
                     editMode ||
                     isIdTakenResponse?.statusCode === 404 ||
-                    $t('upload.desc.id_is_taken'),
+                    t('upload.desc.id_is_taken'),
                 ]"
                 color="primary"
                 label="ID"
@@ -708,11 +709,11 @@ const handlePictureChange = (event: Event) => {
               </v-text-field>
               <v-text-field
                 v-model="getLocalizedData(language).name"
-                :label="$t('common.name')"
+                :label="t('common.name')"
                 :rules="[
                   (v) =>
                     !disallowedFilename.some((c) => v.includes(c)) ||
-                    $t('upload.desc.name_cannot_contain_special_characters'),
+                    t('upload.desc.name_cannot_contain_special_characters'),
                 ]"
                 color="primary"
                 outlined
@@ -723,7 +724,7 @@ const handlePictureChange = (event: Event) => {
               <v-text-field
                 v-if="false"
                 v-model="getLocalizedData(language).summary"
-                :label="$t('common.summary')"
+                :label="t('common.summary')"
                 color="primary"
                 hide-details
                 outlined
@@ -732,7 +733,7 @@ const handlePictureChange = (event: Event) => {
               <v-select
                 v-model="selectedVersions"
                 :items="selectableVersions"
-                :label="$t('common.supported_version')"
+                :label="t('common.supported_version')"
                 chips
                 color="primary"
                 density="comfortable"
@@ -747,7 +748,7 @@ const handlePictureChange = (event: Event) => {
               </v-select>
               <v-textarea
                 v-model="getLocalizedData(language).description"
-                :label="$t('common.description')"
+                :label="t('common.description')"
                 color="primary"
                 hide-details
                 outlined
@@ -755,7 +756,7 @@ const handlePictureChange = (event: Event) => {
               />
               <v-text-field
                 v-model="getLocalizedData(language).link"
-                :label="$t('common.link')"
+                :label="t('common.link')"
                 color="primary"
                 hide-details
                 outlined
@@ -769,11 +770,11 @@ const handlePictureChange = (event: Event) => {
                 row
               >
                 <v-radio
-                  :label="$t('upload.desc.i_am_the_author')"
+                  :label="t('upload.desc.i_am_the_author')"
                   :value="true"
                 />
                 <v-radio
-                  :label="$t('upload.desc.i_am_not_the_author')"
+                  :label="t('upload.desc.i_am_not_the_author')"
                   :value="false"
                 />
               </v-radio-group>
@@ -864,15 +865,41 @@ const handlePictureChange = (event: Event) => {
                 variant="elevated"
                 @click="uploadLocalizedData"
               >
-                {{ $t('common.save') }}
+                {{ t('common.save') }}
               </v-btn>
             </v-card-actions>
           </v-form>
         </v-tabs-window-item>
 
+        <v-tabs-window-item value="tags">
+          <v-card-title class="text-h5">
+            {{ t('upload.step.tags') }}
+          </v-card-title>
+          <v-card-text>
+            请选择合适的分类<br />
+            <span class="opacity-80">
+              <v-icon>mdi-information-outline</v-icon>
+              您可以输入关键词进行搜索，然后从下拉列表中选择标签。
+            </span>
+            <tag-selector v-model="tagsWithName" />
+          </v-card-text>
+          <v-card-actions>
+            <v-btn
+              :disabled="!tagsWithName.length"
+              class="text-none"
+              color="primary"
+              rounded="lg"
+              variant="flat"
+              @click="state = 'image'"
+            >
+              {{ t('common.save') }}
+            </v-btn>
+          </v-card-actions>
+        </v-tabs-window-item>
+
         <v-tabs-window-item value="image">
-          <v-card-title class="text-h5"
-            >{{ $t('upload.step.image') }}
+          <v-card-title class="text-h5">
+            {{ t('upload.step.image') }}
           </v-card-title>
           <v-card-text class="text-center">
             <div
@@ -887,8 +914,8 @@ const handlePictureChange = (event: Event) => {
                 >mdi-image-plus
               </v-icon>
               <div class="opacity-60">
-                <p>{{ $t('upload.desc.upload_images') }}</p>
-                <p>{{ $t('upload.desc.maximum_size_per_image') }}</p>
+                <p>{{ t('upload.desc.upload_images') }}</p>
+                <p>{{ t('upload.desc.maximum_size_per_image') }}</p>
               </div>
               <input
                 ref="pictureInput"
@@ -903,7 +930,7 @@ const handlePictureChange = (event: Event) => {
                 color="primary"
                 @click="triggerPictureInput"
               >
-                {{ $t('upload.btn.select_files') }}
+                {{ t('upload.btn.select_files') }}
               </v-btn>
             </div>
             <div
@@ -963,18 +990,18 @@ const handlePictureChange = (event: Event) => {
             <div class="mt-4 opacity-60 text-center">
               <p>
                 {{
-                  $t(
+                  t(
                     'upload.desc.your_machine_design_is_under_review_please_wait_with_patience',
                   )
                 }}
               </p>
               <p></p>
               <p>
-                {{ $t('upload.desc.review_usually_takes_one_to_two_days') }}
+                {{ t('upload.desc.review_usually_takes_one_to_two_days') }}
               </p>
               <p>
                 {{
-                  $t(
+                  t(
                     'upload.desc.you_will_receive_an_email_notification_when_approved',
                   )
                 }}

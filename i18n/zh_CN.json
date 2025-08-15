@@ -520,6 +520,7 @@
     },
     "step": {
       "image": "上传图像",
+      "tags": "分类和标签",
       "translation": "基本信息",
       "under-review": "等待审核",
       "upload": "上传"
