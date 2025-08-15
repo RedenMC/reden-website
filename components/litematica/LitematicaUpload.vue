@@ -69,7 +69,7 @@ const refreshProps = () => {
   selectedVersions.value = machine?.versions ?? [];
 };
 const availableSteps = ref<State[]>(
-  props.editMode ? ['upload', 'translation', 'image'] : ['upload'],
+  props.editMode ? ['upload', 'translation', 'tags', 'image'] : ['upload'],
 );
 type MyFile = {
   file?: File;

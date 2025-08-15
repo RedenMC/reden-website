@@ -585,15 +585,16 @@ watch(tabs, (newTabs) => {
                 </div>
               </div>
               <div v-if="selected.categoryTag" class="d-flex mt-3">
-                <div class="w-33 align-content-center">设计标签：</div>
+                <div class="w-33 align-content-center">分类：</div>
                 <v-chip v-if="selected.categoryTag" style="margin-right: 8px">
                   {{ selected.categoryTag.name }}
                 </v-chip>
               </div>
               <div v-if="selected.featureTags?.length" class="d-flex mt-3">
-                <div class="w-33 align-content-center">特性标签：</div>
+                <div class="w-33 align-content-center">标签：</div>
                 <v-chip
                   v-for="(tag, index) in selected.featureTags"
+                  :to="localePath(`/tags/${tag.tag}`)"
                   :key="index"
                   style="margin-right: 8px"
                 >
