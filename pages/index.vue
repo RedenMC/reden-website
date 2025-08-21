@@ -35,7 +35,7 @@ const {
   data: homepageData,
   refresh,
   status,
-} = useFetch<{
+} = await useFetch<{
   posts: MachineDef[];
   profiles: { author: Profile; totalDownloads: number; totalVoteUps: number }[];
   totalDownloads: number;

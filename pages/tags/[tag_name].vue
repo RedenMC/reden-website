@@ -6,7 +6,7 @@ import { ref } from 'vue';
 
 const route = useRoute();
 const router = useRouter();
-const tagName = route.params['tag-name'] as string;
+const tagName = route.params.tag_name as string;
 const { t, locale } = useI18n();
 const localePath = useLocalePath();
 const appStore = useAppStore();
