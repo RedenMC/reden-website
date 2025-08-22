@@ -594,7 +594,7 @@ watch(tabs, (newTabs) => {
                 <div class="w-33 align-content-center">标签：</div>
                 <v-chip
                   v-for="(tag, index) in selected.featureTags"
-                  :to="localePath(`/tags/${tag.tag}`)"
+                  :to="localePath(`/tag/${tag.tag}`)"
                   :key="index"
                   style="margin-right: 8px"
                 >
