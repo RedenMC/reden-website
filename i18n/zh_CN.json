@@ -37,6 +37,7 @@
   "common": {
     "and": "和",
     "back": "返回",
+    "back_to_home": "回到首页",
     "cancel": "取消",
     "confirm": "确认",
     "description": "介绍",
@@ -435,6 +436,12 @@
     "replace_blocks": "批量替换方块",
     "title": "投影工作室 - 在线投影文件编辑器 批量替婚方块 版本转换 格式转换 导入 下载",
     "toolbox": "工具箱"
+  },
+  "tag": {
+    "not_found": "找不到标签",
+    "not_found_description": "没有找到这个标签。",
+    "posts_with_tag": "相关投稿",
+    "tag_associated": "此标签下有 {count} 个投稿。"
   },
   "tags": {
     "actions": {

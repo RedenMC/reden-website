@@ -17,7 +17,7 @@ useHead({
   titleTemplate: '%s - Reden',
 });
 
-const page = ref(1);
+const page = useRouteQuery<number>('page', 1);
 const status = useRouteQuery<PostStatus>('status', PostStatus.Pending);
 const {
   data,

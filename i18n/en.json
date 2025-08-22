@@ -37,6 +37,7 @@
   "common": {
     "and": "and",
     "back": "Back",
+    "back_to_home": "Back to Home",
     "cancel": "Cancel",
     "confirm": "Confirm",
     "description": "Description",
@@ -433,6 +434,12 @@
     "replace_blocks": "Replace Blocks",
     "title": "Litematica Studio - Online Litematica Editor, Replace Blocks, Convert Version, Import, Download",
     "toolbox": "Toolbox"
+  },
+  "tag": {
+    "not_found": "Tag not Found",
+    "not_found_description": "This tag is not found, please ensure the tag is correct.",
+    "posts_with_tag": "Posts with This Tag",
+    "tag_associated": "This tag is associated with {count} posts."
   },
   "tags": {
     "actions": {

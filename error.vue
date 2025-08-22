@@ -25,20 +25,20 @@ useHead({
     <v-empty-state
       v-if="error?.statusCode === 404"
       :max-width="1000"
-      :title="$t('page404.title')"
+      :title="t('page404.title')"
       class="mx-auto"
       headline="Whoops, 404"
     >
       <template #text>
-        {{ $t('page404.evolving') }}
+        {{ t('page404.evolving') }}
         <br />
         <a href="https://github.com/RedenMC/reden-website">
-          {{ $t('page404.help') }}
+          {{ t('page404.help') }}
         </a>
       </template>
       <template #actions>
         <v-btn color="primary" @click="router.push(prevPage)"
-          >{{ $t('page404.back') }}
+          >{{ t('page404.back') }}
         </v-btn>
       </template>
     </v-empty-state>
@@ -52,16 +52,20 @@ useHead({
         <component v-html="error?.stack" />
         <br />
         <a href="https://github.com/RedenMC/reden-website">
-          {{ $t('page404.help') }}
+          {{ t('page404.help') }}
         </a>
       </template>
       <template #actions>
         <v-btn color="primary" @click="router.push(prevPage)">
-          {{ $t('page404.back') }}
+          {{ t('page404.back') }}
         </v-btn>
       </template>
     </v-empty-state>
   </NuxtLayout>
 </template>
 
-<style scoped></style>
+<style scoped>
+.v-empty-state__text {
+  white-space: pre-wrap;
+}
+</style>

@@ -41,7 +41,7 @@
   },
   "devDependencies": {
     "@mdi/font": "^7.4.47",
-    "@nuxt/kit": "^3.17.5",
+    "@nuxt/kit": "^3.17.7",
     "@types/randomcolor": "^0.5.9",
     "prettier": "3.2.5",
     "vite-plugin-vuetify": "^2.0.4"

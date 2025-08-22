@@ -60,7 +60,7 @@ function toggleTheme() {
 }
 
 const localeHead = useLocaleHead({
-  addSeoAttributes: {
+  seo: {
     canonicalQueries: ['page', 'q'],
   },
 });
@@ -168,7 +168,7 @@ function showMessageDetailDialog(message: any) {
 </script>
 
 <template>
-  <Html :lang="localeHead.htmlAttrs.lang">
+  <Html :lang="localeHead?.htmlAttrs?.lang">
     <Head>
       <Meta content="38f365878eac2da0ab1c69a63a130ade" name="monetag" />
       <template v-for="link in localeHead.link" :key="link.hid">
@@ -326,12 +326,12 @@ function showMessageDetailDialog(message: any) {
       <v-dialog v-model="dialog" max-width="500px">
         <v-card>
           <v-toolbar color="primary" dark>
-            <v-toolbar-title>{{ selectedMessage.subject }}</v-toolbar-title>
+            <!-- <v-toolbar-title>{{  selectedMessage.subject }}</v-toolbar-title>-->
           </v-toolbar>
           <v-card-text>
-            <div class="message-content">{{ selectedMessage.message }}</div>
+            <!-- <div class="message-content">{{ selectedMessage.message }}</div>-->
             <div class="text-right mt-2">
-              {{ formatDate(selectedMessage.createdAt) }}
+              <!-- {{ formatDate(selectedMessage.createdAt) }}-->
             </div>
           </v-card-text>
           <v-divider></v-divider>
