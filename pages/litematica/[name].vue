@@ -436,7 +436,7 @@ watch(tabs, (newTabs) => {
             </v-row>
           </div>
           <!-- 描述 -->
-          <div class="mt-4">
+          <div class="mt-4" id="description">
             <div class="text-h5 font-weight-bold">
               {{ t('common.description') }}
             </div>
@@ -773,5 +773,9 @@ p {
 .lm-main-content {
   max-width: 1280px;
   margin: 0 auto;
+}
+
+#description p {
+  margin: initial;
 }
 </style>

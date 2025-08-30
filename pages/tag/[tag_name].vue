@@ -19,7 +19,6 @@ const {
 } = useFetch<{
   tag: Tag;
   posts: MachineDef[];
-  1;
 }>(`/api/mc-services/tags/${tagName}/posts`);
 </script>
 
@@ -71,7 +70,7 @@ const {
           <div class="text-sm text-gray-500 dark:text-gray-400">
             {{ t('litematica_generator.by.author') }}:
             <router-link
-              :to="`/user/${post.author?.username}`"
+              :to="localePath(`/@${post.author?.username}`)"
               class="text-blue-600 dark:text-blue-400 hover:underline"
             >
               {{ post.author!.username }}

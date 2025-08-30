@@ -9,10 +9,16 @@ import type {
 } from '~/pages/litematica/index.vue';
 import RedenPostStatusChip from '~/components/litematica/RedenPostStatusChip.vue';
 
-const page = ref(1);
+const page = useRouteQuery<number>('page', 1);
+let totalPages = ref(100);
 const { data, status } = useFetch<ListLitematicaResponse>(
-  () => `/api/mc-services/yisibite/me?page=${page.value}`,
+  () => `/api/mc-services/yisibite/me?page=${page.value}&pageSize=10`,
 );
+watch(data, (value) => {
+  if (value) {
+    totalPages.value = Math.ceil(value.count / 10);
+  }
+});
 
 const localizedData = ref<Record<string, MachineDef>>();
 const currentLoadedData = ref<string>();
@@ -31,7 +37,7 @@ const currentLoadedData = ref<string>();
       { title: '状态', key: 'status' },
     ]"
     :items="data?.d"
-    :items-length="data?.count ?? 100"
+    :items-length="totalPages"
     :items-per-page-options="[10]"
     :loading="status === 'pending'"
   >
