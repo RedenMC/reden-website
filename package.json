@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "nuxt build",
+    "build-unlimited": "node --max-old-space-size=4096 node_modules/nuxt/bin/nuxt.mjs build",
     "dev": "nuxt dev",
     "dev-prod-backend": "nuxt dev --prod-backend",
     "generate": "nuxt generate",
