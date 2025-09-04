@@ -2,12 +2,11 @@
 import { discordInvite, githubLink, zh_cn } from '~/utils/constants';
 import RedenRouter from '~/components/RedenRouter.vue';
 import { useAppStore } from '~/store/app';
-import gitHash from '~/assets/hash.json';
 
 const localePath = useLocalePath();
 const switchLocalePath = useSwitchLocalePath();
 
-const { t, locale } = useI18n();
+const { t, locale, availableLocales } = useI18n();
 const appStore = useAppStore();
 </script>
 
@@ -17,29 +16,29 @@ const appStore = useAppStore();
       <v-col>
         <div class="footer-list-title">
           <b>
-            {{ $t('reden.footer.reden_mod.title') }}
+            {{ t('reden.footer.reden_mod.title') }}
           </b>
         </div>
         <div class="footer-list-item">
           <reden-router :to="localePath('/')">
-            {{ $t('reden.title.home') }}
+            {{ t('reden.title.home') }}
           </reden-router>
         </div>
         <div class="footer-list-item">
           <reden-router :to="localePath('/download')">
-            {{ $t('reden.download') }}
+            {{ t('reden.download') }}
           </reden-router>
         </div>
         <div class="footer-list-item">
           <reden-router :to="localePath('/feature/undo')">
-            {{ $t('reden.footer.reden_mod.undo_redo') }}
+            {{ t('reden.footer.reden_mod.undo_redo') }}
           </reden-router>
         </div>
       </v-col>
       <v-col>
         <div class="footer-list-title">
           <b>
-            {{ $t('reden.footer.reden_ecosystem.title') }}
+            {{ t('reden.footer.reden_ecosystem.title') }}
           </b>
         </div>
         <div class="footer-list-item">
@@ -47,12 +46,12 @@ const appStore = useAppStore();
         </div>
         <div class="footer-list-item">
           <reden-router :to="localePath('/sponsors')">
-            {{ $t('reden.footer.reden_ecosystem.sponsors') }}
+            {{ t('reden.footer.reden_ecosystem.sponsors') }}
           </reden-router>
         </div>
         <div class="footer-list-item">
           <reden-router to="https://github.com/RedenMC">
-            {{ $t('reden.footer.reden_ecosystem.github_organization') }}
+            {{ t('reden.footer.reden_ecosystem.github_organization') }}
           </reden-router>
         </div>
         <div class="footer-list-item">
@@ -64,12 +63,12 @@ const appStore = useAppStore();
       <v-col>
         <div class="footer-list-title">
           <b>
-            {{ $t('reden.footer.reden_community.title') }}
+            {{ t('reden.footer.reden_community.title') }}
           </b>
         </div>
         <div class="footer-list-item">
           <reden-router :to="localePath('/litematica')">
-            {{ $t('litematica_generator.title') }}
+            {{ t('litematica_generator.title') }}
           </reden-router>
         </div>
         <template v-if="locale == 'zh_cn'">
@@ -90,24 +89,24 @@ const appStore = useAppStore();
       <v-col>
         <div class="footer-list-title">
           <b>
-            {{ $t('reden.footer.social.title') }}
+            {{ t('reden.footer.social.title') }}
           </b>
         </div>
         <div class="footer-list-item">
           <reden-router :to="discordInvite">
-            {{ $t('reden.footer.reden_community.discord') }}
+            {{ t('reden.footer.reden_community.discord') }}
           </reden-router>
         </div>
         <div class="footer-list-item">
           <reden-router external-icon to="https://youtube.com/@zly2006">
             <v-icon icon="mdi-youtube" />
-            {{ $t('reden.footer.follow_us.youtube') }}
+            {{ t('reden.footer.follow_us.youtube') }}
           </reden-router>
         </div>
         <div class="footer-list-item">
           <reden-router to="https://space.bilibili.com/1545239761">
             <v-icon icon="custom:Bilibili" />
-            {{ $t('reden.footer.follow_us.bilibili') }}
+            {{ t('reden.footer.follow_us.bilibili') }}
           </reden-router>
         </div>
       </v-col>
@@ -115,18 +114,18 @@ const appStore = useAppStore();
     <div class="">
       <v-col :cols="12" class="text-center">
         <reden-router :to="githubLink">Reden</reden-router>
-        {{ $t('common.and') }}
+        {{ t('common.and') }}
         <reden-router to="https://github.com/RedenMC/reden-website"
-          >{{ $t('reden.footer.this_website') }}
+          >{{ t('reden.footer.this_website') }}
         </reden-router>
-        <span class="text-caption opacity-60"> @{{ gitHash }} </span>
-        {{ $t('reden.footer.are_both_free_software') }}
+        <span v-if="false" class="text-caption opacity-60"> @{{ 'dev' }} </span>
+        {{ t('reden.footer.are_both_free_software') }}
         <br />
         {{ new Date().getFullYear() }} — <b>RedenMC</b>
       </v-col>
     </div>
     <div class="bottom-right text-capitalize">
-      {{ $t('reden.footer.mojang_disclaimer') }}
+      {{ t('reden.footer.mojang_disclaimer') }}
     </div>
     <div class="text-right last-line">
       <a
@@ -177,7 +176,7 @@ const appStore = useAppStore();
         <v-menu :close-on-content-click="true" activator="parent">
           <v-list color="primary">
             <v-list-item
-              v-for="locale in $i18n.availableLocales"
+              v-for="locale in availableLocales"
               :key="`locale-${locale}`"
               :to="switchLocalePath(locale)"
             >
