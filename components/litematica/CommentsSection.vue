@@ -173,15 +173,26 @@ async function submitComment() {
   try {
     submittingComment.value = true;
 
-    await doFetchPost(`/api/mc-services/yisibite/${props.machineId}/comments`, {
-      content: newCommentContent.value.trim(),
-    });
+    const resp = await doFetchPost(
+      `/api/mc-services/yisibite/${props.machineId}/comments`,
+      {
+        content: newCommentContent.value.trim(),
+      },
+    );
 
-    newCommentContent.value = '';
-    toast.success(t('comments.comment_posted'));
+    if (resp.ok) {
+      newCommentContent.value = '';
+      toast.success(t('comments.comment_posted'));
 
-    // 重新加载评论
-    await loadComments(1);
+      // 重新加载评论
+      await loadComments(1);
+    } else {
+      let error: string | undefined;
+      try {
+        error = (await resp.json())?.error;
+      } catch (e) {}
+      toast.error(t(error ?? 'comments.submit_error'));
+    }
   } catch (error) {
     console.error('Failed to submit comment:', error);
     toast.error(t('comments.submit_error'));
