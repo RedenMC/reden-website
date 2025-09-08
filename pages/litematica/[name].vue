@@ -17,6 +17,7 @@ import RedenRouter from '~/components/RedenRouter.vue';
 import { toast } from 'vuetify-sonner';
 import RedenPostStatusChip from '~/components/litematica/RedenPostStatusChip.vue';
 import TransferOwnershipDialog from '~/components/litematica/TransferOwnershipDialog.vue';
+import CommentsSection from '~/components/litematica/CommentsSection.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -732,6 +733,11 @@ watch(tabs, (newTabs) => {
           </div>
         </v-col>
       </v-row>
+    </div>
+
+    <!-- 评论区 -->
+    <div v-if="selected" class="mt-8">
+      <comments-section :machine-id="machineId" />
     </div>
 
     <bottom-bar-ad />

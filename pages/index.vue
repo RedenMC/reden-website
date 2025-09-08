@@ -1054,11 +1054,7 @@ watch(homepageData, (data) => {
 }
 
 .tech-card {
-  background: linear-gradient(
-    135deg,
-    rgba(17, 24, 39, 0.8),
-    rgba(31, 41, 55, 0.8)
-  );
+  background: linear-gradient(135deg, #111827cc, #1f2937cc);
   border: 1px solid rgba(75, 85, 99, 0.3);
   border-radius: 16px;
   overflow: hidden;

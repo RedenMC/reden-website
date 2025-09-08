@@ -121,7 +121,7 @@ async function applyForEarningPlan() {
             <div class="result-amount">
               <Vue3Countup
                 class="income-value"
-                :number="downloads * 0.03889349"
+                :number="downloads * 0.03149349"
                 :more-options="{ suffix: '元', decimalPlaces: 2 }"
               />
             </div>

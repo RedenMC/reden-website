@@ -34,6 +34,31 @@
     }
   },
   "also_try_our_other_online_services:": "快来试试我们的其他在线服务：",
+  "comments": {
+    "comment_posted": "评论发表成功",
+    "comments": "条评论",
+    "load_error": "加载评论失败",
+    "load_more": "加载更多",
+    "load_more_replies": "查看更多 {count} 条回复",
+    "login": "登录",
+    "login_to_comment": "登录后即可发表评论",
+    "no_comments": "暂无评论，快来抢沙发吧！",
+    "post_comment": "发表评论",
+    "post_reply": "发表回复",
+    "reply": "回复",
+    "reply_posted": "回复发表成功",
+    "submit_error": "发表失败，请稍后重试",
+    "time": {
+      "days_ago": "{count} 天前",
+      "hours_ago": "{count} 小时前",
+      "just_now": "刚刚",
+      "minutes_ago": "{count} 分钟前"
+    },
+    "title": "评论",
+    "vote_error": "投票失败，请稍后重试",
+    "write_comment": "写下你的评论...",
+    "write_reply": "写下你的回复..."
+  },
   "common": {
     "and": "和",
     "back": "返回",

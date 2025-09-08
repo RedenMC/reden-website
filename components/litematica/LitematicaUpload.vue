@@ -7,6 +7,7 @@ import selectableModels from '~/utils/litematica/models_selectable.json';
 import { useAppStore } from '~/store/app';
 import type { VForm } from 'vuetify/components';
 import TagSelector from '~/components/litematica/TagSelector.vue';
+import { isDevelopment } from 'std-env';
 
 const appStore = useAppStore();
 
@@ -885,7 +886,7 @@ const handlePictureChange = (event: Event) => {
           </v-card-text>
           <v-card-actions>
             <v-btn
-              :disabled="!tagsWithName.length"
+              :disabled="!tagsWithName.length && !isDevelopment"
               class="text-none"
               color="primary"
               rounded="lg"
