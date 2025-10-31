@@ -1,7 +1,3 @@
-<!--
-显示自己上传的投影。
-可以进入其中的一项进行编辑。
--->
 <script lang="ts" setup>
 import type {
   ListLitematicaResponse,
@@ -10,13 +6,13 @@ import type {
 import RedenPostStatusChip from '~/components/litematica/RedenPostStatusChip.vue';
 
 const page = useRouteQuery<number>('page', 1);
-let totalPages = ref(100);
+const totalItems = ref(100);
 const { data, status } = useFetch<ListLitematicaResponse>(
   () => `/api/mc-services/yisibite/me?page=${page.value}&pageSize=10`,
 );
 watch(data, (value) => {
   if (value) {
-    totalPages.value = Math.ceil(value.count / 10);
+    totalItems.value = value.count;
   }
 });
 
@@ -25,6 +21,8 @@ const currentLoadedData = ref<string>();
 </script>
 
 <template>
+  <h1>投稿管理</h1>
+  <p>在这里可以查看您的所有投稿</p>
   <v-data-table-server
     v-model:page="page"
     :headers="[
@@ -37,7 +35,7 @@ const currentLoadedData = ref<string>();
       { title: '状态', key: 'status' },
     ]"
     :items="data?.d"
-    :items-length="totalPages"
+    :items-length="totalItems"
     :items-per-page-options="[10]"
     :loading="status === 'pending'"
   >
