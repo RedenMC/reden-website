@@ -81,7 +81,9 @@
     "privacy_policy": "隐私政策",
     "save": "保存",
     "summary": "简介",
-    "supported_version": "支持版本"
+    "supported_version": "支持版本",
+    "edit": "编辑",
+    "delete": "删除"
   },
   "en": "English",
   "litematica_generator": {

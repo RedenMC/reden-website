@@ -291,15 +291,20 @@ function savePreferences() {
         </v-col>
         <v-col>
           <div class="d-flex justify-center flex-column align-center">
-            <v-avatar :image="user.avatarUrl" size="96"></v-avatar>
+            <v-avatar :image="user.avatarUrl" size="24"></v-avatar>
             <div class="d-flex mt-2">
-              <v-btn icon="mdi-pencil" size="small" @click="editAvatar"></v-btn>
+              <v-btn @click="editAvatar" class="text-capitalize">
+                <v-icon>mdi-pencil</v-icon>
+                {{ t('common.edit') }}
+              </v-btn>
               <v-btn
                 v-if="user.avatarUrl"
-                icon="mdi-delete"
-                size="small"
                 @click="deleteAvatar"
-              ></v-btn>
+                class="text-capitalize"
+              >
+                <v-icon>mdi-delete</v-icon>
+                {{ t('common.delete') }}
+              </v-btn>
             </div>
           </div>
           <input

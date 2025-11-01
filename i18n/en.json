@@ -53,7 +53,9 @@
     "privacy_policy": "Privacy Policy",
     "save": "Save",
     "summary": "Summary",
-    "supported_version": "Supported version"
+    "supported_version": "Supported version",
+    "edit": "Edit",
+    "delete": "Delete"
   },
   "comments": {
     "phone_verification_required_title": "Phone Verification Required",
