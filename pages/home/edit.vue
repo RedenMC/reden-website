@@ -3,6 +3,7 @@ import {
   type Captcha,
   doFetchDelete,
   doFetchPost,
+  doFetchPut,
   fetchUser,
   isStrongPassword,
   type Profile,
@@ -15,6 +16,61 @@ import { toast } from 'vuetify-sonner';
 import { useI18n } from 'vue-i18n';
 import CommonCaptcha from '@/components/CommonCaptcha.vue';
 import { useRouter } from 'vue-router';
+import BindPhoneNumberCard from '~/components/profile/BindPhoneNumberCard.vue';
+
+const bindPhoneNumberDialog = ref(false);
+
+const uploader = ref<HTMLInputElement>();
+const avatarUploading = ref(false);
+
+function editAvatar() {
+  uploader.value?.click();
+}
+
+function fileSelected() {
+  const file = uploader.value?.files?.item(0);
+  if (!file) return;
+  if (file.size > 2 * 1024 * 1024) {
+    toastError(
+      {
+        error: 'File too large',
+      },
+      'Failed to update avatar',
+    );
+    return;
+  }
+  avatarUploading.value = true;
+  doFetchPut('/api/account/avatar', file)
+    .then((response) => {
+      if (response.ok) {
+        toast.success('Success', {
+          description: 'Avatar updated',
+        });
+        // Refresh user data to show new avatar
+        fetchUser(user);
+      } else {
+        return Promise.reject(response);
+      }
+    })
+    .catch((e) => toastError(e, 'Failed to update avatar'))
+    .finally(() => (avatarUploading.value = false));
+}
+
+function deleteAvatar() {
+  doFetchDelete('/api/account/avatar')
+    .then((response) => {
+      if (response.ok) {
+        toast.success('Success', {
+          description: 'Avatar deleted',
+        });
+        // Refresh user data
+        fetchUser(user);
+      } else {
+        return Promise.reject(response);
+      }
+    })
+    .catch((e) => toastError(e, 'Failed to delete avatar'));
+}
 
 const router = useRouter();
 const localePath = useLocalePath();
@@ -226,6 +282,40 @@ function savePreferences() {
         {{ t('reden.title.edit_profile') }}
       </h1>
     </div>
+    <v-card border class="setting-section-card section" rounded="lg">
+      <h3 class="setting-section-title">Avatar</h3>
+        <v-row>
+          <v-col>
+            <p class="setting-label">Avatar</p>
+            <p class="setting-description">Update your avatar here.</p>
+          </v-col>
+          <v-col>
+            <div class="d-flex justify-center">
+            <v-hover>
+              <template #default="{ isHovering, props }">
+                <div v-bind="props" style="position: relative">
+                  <div
+                    v-if="isHovering"
+                    class="edit-avatar-overlay d-flex justify-center align-center"
+                  >
+                    <v-btn icon="mdi-pencil" @click="editAvatar"></v-btn>
+                    <v-btn v-if="user.avatarUrl" icon="mdi-delete" @click="deleteAvatar"></v-btn>
+                  </div>
+                  <v-avatar :image="user.avatarUrl" size="128"></v-avatar>
+                </div>
+              </template>
+            </v-hover>
+            </div>
+            <input
+              ref="uploader"
+              accept="image/*"
+              class="d-none"
+              type="file"
+              @change="fileSelected"
+            />
+          </v-col>
+        </v-row>
+    </v-card>
     <v-card
       v-if="user"
       border
@@ -249,6 +339,27 @@ function savePreferences() {
           <v-btn class="text-capitalize setting-button" color="primary">
             {{ t('profile.edit.changeEmail') }}
           </v-btn>
+        </div>
+      </v-row>
+      <v-row>
+        <v-col>
+          <p class="setting-label">Phone Number</p>
+          <p class="setting-description">
+            Used for verification and login.
+          </p>
+        </v-col>
+        <div>
+          <span class="setting-button" v-if="user.phoneNumber">
+            {{ user.phoneNumber }}
+          </span>
+          <v-dialog v-model="bindPhoneNumberDialog" max-width="500px">
+            <template v-slot:activator="{ props }">
+              <v-btn class="text-capitalize setting-button" color="primary" v-bind="props">
+                {{ user.phoneNumber ? 'Change' : 'Bind' }}
+              </v-btn>
+            </template>
+            <BindPhoneNumberCard @close="bindPhoneNumberDialog = false; fetchUser(user);" />
+          </v-dialog>
         </div>
       </v-row>
       <v-row>

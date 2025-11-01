@@ -57,6 +57,7 @@ function login() {
     .then(async (response) => {
       if (!response.ok) {
         resetCaptcha();
+        captcha.value = undefined;
         return Promise.reject(response);
       }
       const data: LoginResponse = await response.json();
