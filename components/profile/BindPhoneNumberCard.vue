@@ -1,6 +1,12 @@
 <template>
   <v-card>
-    <v-card-title>{{ t('reden.profile.bind_phone_number') }}</v-card-title>
+    <div v-if="showLegalMessage">
+      <v-card-title class="text-h5">{{ $t('comments.phone_verification_required_title') }}</v-card-title>
+      <v-card-text>
+        {{ $t('comments.phone_verification_required_message') }}
+      </v-card-text>
+    </div>
+    <v-card-title v-else>{{ t('reden.profile.bind_phone_number') }}</v-card-title>
     <v-card-text>
       <v-text-field
         v-model="phoneNumber"
@@ -42,6 +48,12 @@ import { useI18n } from 'vue-i18n';
 import CommonCaptcha from '~/components/CommonCaptcha.vue';
 import { type Captcha, doFetchPost, toastError } from '~/utils/constants';
 import { toast } from 'vuetify-sonner';
+
+const props = withDefaults(defineProps<{
+  showLegalMessage?: boolean;
+}>(), {
+  showLegalMessage: false,
+});
 
 const { t } = useI18n();
 const emit = defineEmits<{

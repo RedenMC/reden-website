@@ -75,6 +75,9 @@
         </v-btn>
       </div>
     </div>
+        <v-dialog v-model="showPhoneVerificationDialog" max-width="500px">
+      <BindPhoneNumberCard :show-legal-message="true" @close="showPhoneVerificationDialog = false" />
+    </v-dialog>
   </div>
 </template>
 
@@ -84,6 +87,7 @@ import { useI18n } from 'vue-i18n';
 import { useAppStore } from '~/store/app';
 import { toast } from 'vuetify-sonner';
 import CommentItem from './CommentItem.vue';
+import BindPhoneNumberCard from '~/components/profile/BindPhoneNumberCard.vue';
 
 interface RedenUser {
   id: string;
@@ -129,6 +133,7 @@ const pageSize = 12;
 
 const newCommentContent = ref('');
 const submittingComment = ref(false);
+const showPhoneVerificationDialog = ref(false);
 
 async function loadComments(page = 1, append = false) {
   try {
@@ -187,11 +192,19 @@ async function submitComment() {
       // 重新加载评论
       await loadComments(1);
     } else {
-      let error: string | undefined;
+      let errorJson: any;
       try {
-        error = (await resp.json())?.error;
-      } catch (e) {}
-      toast.error(t(error ?? 'comments.submit_error'));
+        errorJson = await resp.json();
+      } catch (e) {
+        toast.error(t('comments.submit_error'));
+        return;
+      }
+
+      if (errorJson?.error === 'phone_verification_required') {
+        showPhoneVerificationDialog.value = true;
+      } else {
+        toast.error(t(errorJson?.error ?? 'comments.submit_error'));
+      }
     }
   } catch (error) {
     console.error('Failed to submit comment:', error);

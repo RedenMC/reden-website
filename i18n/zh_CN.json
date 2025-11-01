@@ -35,6 +35,9 @@
   },
   "also_try_our_other_online_services:": "快来试试我们的其他在线服务：",
   "comments": {
+    "phone_verification_required_title": "需要手机验证",
+    "phone_verification_required_message": "根据相关法律法规，您需要绑定手机号才能发表评论。",
+    "go_to_bind": "立即绑定",
     "comment_posted": "评论发表成功",
     "comments": "条评论",
     "load_error": "加载评论失败",
