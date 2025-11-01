@@ -2,6 +2,7 @@
 import { discordInvite, githubLink, zh_cn } from '~/utils/constants';
 import RedenRouter from '~/components/RedenRouter.vue';
 import { useAppStore } from '~/store/app';
+import gitHash from '~/assets/hash.json';
 
 const localePath = useLocalePath();
 const switchLocalePath = useSwitchLocalePath();
@@ -118,7 +119,7 @@ const appStore = useAppStore();
         <reden-router to="https://github.com/RedenMC/reden-website"
           >{{ t('reden.footer.this_website') }}
         </reden-router>
-        <span v-if="false" class="text-caption opacity-60"> @{{ 'dev' }} </span>
+        <span class="text-caption opacity-60"> @{{ gitHash }} </span>
         {{ t('reden.footer.are_both_free_software') }}
         <br />
         {{ new Date().getFullYear() }} — <b>RedenMC</b>
