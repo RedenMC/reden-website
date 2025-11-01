@@ -283,11 +283,11 @@ function savePreferences() {
       </h1>
     </div>
     <v-card border class="setting-section-card section" rounded="lg">
-      <h3 class="setting-section-title">Avatar</h3>
+      <h3 class="setting-section-title">{{ t('profile.edit.avatar_title') }}</h3>
       <v-row>
         <v-col>
           <p class="setting-label">Avatar</p>
-          <p class="setting-description">Update your avatar here.</p>
+          <p class="setting-description">{{ t('profile.edit.avatar_desc') }}</p>
         </v-col>
         <v-col>
           <div class="d-flex justify-center">
@@ -348,7 +348,7 @@ function savePreferences() {
       <v-row>
         <v-col>
           <p class="setting-label">Phone Number</p>
-          <p class="setting-description">Used for verification and login.</p>
+          <p class="setting-description">{{ t('profile.edit.phone_number_desc') }}</p>
         </v-col>
         <div>
           <span class="setting-button" v-if="user.phoneNumber">

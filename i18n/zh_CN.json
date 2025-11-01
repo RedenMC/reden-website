@@ -225,9 +225,11 @@
       "third_party_accounts": "第三方账号",
       "username": "用户名",
       "username_desc": "这是你用来登录的用户名，你每48小时只可以修改一次。",
-      "username_timer": "你可以在{0}小时后修改用户名"
-    },
-    "editProfile": "编辑个人资料",
+            "username_timer": "你可以在{0}小时后修改用户名",
+            "avatar_desc": "更新你的头像",
+            "phone_number_desc": "用于登录和验证",
+            "avatar_title": "头像"
+          },    "editProfile": "编辑个人资料",
     "generate_access_token": "生成个人密钥",
     "link_now": "点击链接",
     "logout": "退出登录",

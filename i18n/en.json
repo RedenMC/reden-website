@@ -200,7 +200,10 @@
       "third_party_accounts": "Third Party Accounts",
       "username": "Username",
       "username_desc": "This is the username you use to login. You can change it once every 48 hours.",
-      "username_timer": "You can change your username again in {0} hours"
+      "username_timer": "You can change your username again in {0} hours",
+      "avatar_desc": "Update your avatar here.",
+      "phone_number_desc": "Used for verification and login.",
+      "avatar_title": "Avatar"
     },
     "editProfile": "Edit Profile",
     "generate_access_token": "Generate Access Token",
