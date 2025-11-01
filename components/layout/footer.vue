@@ -73,16 +73,9 @@ const appStore = useAppStore();
           </reden-router>
         </div>
         <template v-if="locale == 'zh_cn'">
-          <div class="footer-list-title">
-            <b>友站链接</b>
-          </div>
           <div class="footer-list-item">
-            <reden-router to="https://www.mcimg.com">
-              <img
-                height="24"
-                src="https://www.mcimg.com/wp-content/uploads/2025/07/2025073103571217.png"
-                style="vertical-align: middle"
-              />投影工坊</reden-router
+            <reden-router to="/zh_cn/litematica/earning">
+              投影激励计划</reden-router
             >
           </div>
         </template>
