@@ -8,6 +8,39 @@ import { useAppStore } from '~/store/app';
 import type { VForm } from 'vuetify/components';
 import TagSelector from '~/components/litematica/TagSelector.vue';
 import { isDevelopment } from 'std-env';
+import VueSimplemde from 'vue-simplemde';
+import 'simplemde/dist/simplemde.min.css'; // Import SimpleMDE CSS
+
+const simplemdeOptions = ref({
+  spellChecker: false,
+  forceSync: true,
+  hideIcons: ['side-by-side', 'fullscreen', 'guide'],
+  showIcons: ['code', 'table'],
+  toolbar: [
+    'bold', 'italic', 'heading', '|', 'quote', 'unordered-list', 'ordered-list', '|',
+    'link', 'image', '|', 'preview', 'fullscreen', 'guide'
+  ],
+  uploadImage: true,
+  imageUploadFunction: async (file: File, onSuccess: (url: string) => void, onError: (error: string) => void) => {
+    const formData = new FormData();
+    formData.append('image', file);
+    try {
+      const response = await fetch('/api/mc-services/yisibite/upload/markdown-image', {
+        method: 'POST',
+        body: formData,
+      });
+      if (response.ok) {
+        const data = await response.json();
+        onSuccess(data.url);
+      } else {
+        const errorData = await response.json();
+        onError(errorData.error || 'Image upload failed');
+      }
+    } catch (error: any) {
+      onError(error.message || 'Image upload failed');
+    }
+  },
+});
 
 const appStore = useAppStore();
 
@@ -747,8 +780,9 @@ const handlePictureChange = (event: Event) => {
                   </v-chip>
                 </template>
               </v-select>
-              <v-textarea
+              <VueSimplemde
                 v-model="getLocalizedData(language).description"
+                :configs="simplemdeOptions"
                 :label="t('common.description')"
                 color="primary"
                 hide-details
