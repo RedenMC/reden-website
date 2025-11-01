@@ -172,6 +172,13 @@
   },
   "profile": {
     "account_not_linked": "未链接账号",
+    "bind_phone_number": "绑定手机号",
+    "phone_number": "手机号",
+    "verification_code": "验证码",
+    "send_code": "发送验证码",
+    "bind": "绑定",
+    "phone_not_bound": "未绑定手机号",
+    "bind_now": "立即绑定",
     "edit": {
       "back": "返回个人资料页",
       "basic_information": "基本信息",
@@ -237,6 +244,13 @@
     "your_timezone": "（相同时区）"
   },
   "reden": {
+    "profile": {
+      "bind_phone_number": "绑定手机号",
+      "phone_number": "手机号",
+      "verification_code": "验证码",
+      "send_code": "发送验证码",
+      "bind": "绑定"
+    },
     "card": {
       "author": "作者",
       "downloads": "下载量",

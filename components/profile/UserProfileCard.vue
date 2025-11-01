@@ -8,8 +8,11 @@ import {
 } from '~/utils/constants';
 import UserBadges from '~/components/UserBadges.vue';
 import VerifyMinecraft from '~/components/profile/VerifyMinecraft.vue';
+import BindPhoneNumberCard from '~/components/profile/BindPhoneNumberCard.vue';
 import { toast } from 'vuetify-sonner';
 import { getTimezone } from 'countries-and-timezones';
+
+const bindPhoneNumberDialog = ref(false);
 
 const props = withDefaults(
   defineProps<{
@@ -155,6 +158,19 @@ function deleteAvatar() {
           <a :href="'mailto:' + user?.email">
             {{ user?.email }}
           </a>
+        </p>
+        <p class="phone-number">
+          <v-icon class="profile-item-icon">mdi-phone</v-icon>
+          <span v-if="user.phoneNumber">{{ user.phoneNumber }}</span>
+          <template v-else>
+            {{ $t('profile.phone_not_bound') }}
+            <v-dialog v-model="bindPhoneNumberDialog" max-width="500">
+              <template v-slot:activator="{ props }">
+                <a v-if="canEdit" class="router" v-bind="props">{{ $t('profile.bind_now') }}</a>
+              </template>
+              <BindPhoneNumberCard @close="bindPhoneNumberDialog = false" />
+            </v-dialog>
+          </template>
         </p>
         <p v-if="!applyPreference || user.preference.showMC" class="minecraft">
           <v-icon class="profile-item-icon">mdi-minecraft</v-icon>

@@ -145,6 +145,13 @@
   },
   "profile": {
     "account_not_linked": "Account not linked",
+    "bind_phone_number": "Bind Phone Number",
+    "phone_number": "Phone Number",
+    "verification_code": "Verification Code",
+    "send_code": "Send Code",
+    "bind": "Bind",
+    "phone_not_bound": "Phone number not bound.",
+    "bind_now": "Bind now",
     "edit": {
       "back": "Back to Your Profile",
       "basic_information": "Basic Information",
@@ -210,6 +217,13 @@
     "your_timezone": "(Your timezone)"
   },
   "reden": {
+    "profile": {
+      "bind_phone_number": "Bind Phone Number",
+      "phone_number": "Phone Number",
+      "verification_code": "Verification Code",
+      "send_code": "Send Code",
+      "bind": "Bind"
+    },
     "card": {
       "author": "author",
       "downloads": "downloads",
