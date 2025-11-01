@@ -29,6 +29,10 @@ const props = defineProps<{
   forceCn?: boolean;
 }>();
 
+watch(model, (newVal) => {
+  console.log('Captcha model changed:', newVal);
+});
+
 const appStore = useAppStore();
 const china = ref(props.forceCn || (await appStore.isInChina()));
 onMounted(async () => {
@@ -76,11 +80,12 @@ if (china.value) {
 </script>
 
 <template>
-  <v-btn v-if="china" @click="china = false" variant="outlined">
-    切换成 Cloudflare 验证码
-  </v-btn>
   <template v-if="china">
-    <div ref="vaptcha" />
+    <AliyunCaptcha v-if="!model?.token" @captcha-token="s => model = {
+      provider: 'aliyun',
+      token: s,
+      server: null,
+    }" />
   </template>
   <template v-else>
     <vue-turnstile

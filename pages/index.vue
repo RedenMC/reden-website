@@ -73,9 +73,9 @@ function getRankIcon(index: number) {
 
 // Stats data for hero section
 const stats = ref([
-  { number: '900+', label: t('reden.home.stats.redstone_machines') },
-  { number: '180.4K+', label: t('reden.home.stats.total_downloads') },
-  { number: '9300+', label: t('reden.home.stats.users') },
+  { number: '1000+', label: t('reden.home.stats.redstone_machines') },
+  { number: '258.4K+', label: t('reden.home.stats.total_downloads') },
+  { number: '10600+', label: t('reden.home.stats.users') },
   { number: '24/7', label: t('reden.home.stats.online_service') },
 ]);
 
