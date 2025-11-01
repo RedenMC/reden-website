@@ -118,7 +118,7 @@
               :machine-id="machineId"
               :is-child="true"
               @reply="$emit('reply', $event, replyContent)"
-              @vote="$emit('vote', $event.commentId, $event.vote)"
+              @vote="(id, action) => $emit('vote', id, action)"
             />
           </div>
 
@@ -156,7 +156,7 @@ import RedenPostStatusChip from '~/components/litematica/RedenPostStatusChip.vue
 import { PostStatus } from '~/utils/constants';
 
 interface RedenUser {
-  id: string;
+  id: number;
   username: string;
   avatarUrl?: string;
 }
