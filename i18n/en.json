@@ -58,7 +58,8 @@
   "comments": {
     "phone_verification_required_title": "Phone Verification Required",
     "phone_verification_required_message": "According to local laws and regulations, you must bind a phone number to your account before you can post a comment.",
-    "go_to_bind": "Bind Now",
+    "go_to_bind": "Bind Now"
+  },
   "en": "English",
   "litematica_generator": {
     "by": {
