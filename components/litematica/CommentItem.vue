@@ -44,7 +44,13 @@
               :color="comment.myVote === 'up' ? 'primary' : 'default'"
               :variant="comment.myVote === 'up' ? 'elevated' : 'text'"
               size="small"
-              @click="$emit('vote', comment.id, comment.myVote === 'up' ? 'cancel' : 'up')"
+              @click="
+                $emit(
+                  'vote',
+                  comment.id,
+                  comment.myVote === 'up' ? 'cancel' : 'up',
+                )
+              "
             >
               <v-icon size="16">mdi-thumb-up-outline</v-icon>
               <span class="ml-1">{{ comment.upVotes }}</span>
@@ -55,7 +61,13 @@
               :color="comment.myVote === 'down' ? 'primary' : 'default'"
               :variant="comment.myVote === 'down' ? 'elevated' : 'text'"
               size="small"
-              @click="$emit('vote', comment.id, comment.myVote === 'down' ? 'cancel' : 'down')"
+              @click="
+                $emit(
+                  'vote',
+                  comment.id,
+                  comment.myVote === 'down' ? 'cancel' : 'down',
+                )
+              "
             >
               <v-icon size="16">mdi-thumb-down-outline</v-icon>
             </v-btn>

@@ -180,7 +180,7 @@ async function cancelApproval() {
   const isAdmin =
     appStore.userCache?.id !== selected.value?.author?.id &&
     (!!appStore.userCache?.roles?.includes('archiver') ||
-    !!appStore.userCache?.roles?.includes('staff'));
+      !!appStore.userCache?.roles?.includes('staff'));
   const response = isAdmin
     ? await doFetchPost(`/api/mc-services/yisibite/${machineId}/reject`, {
         reason: `${removeReason.value} by ${appStore.userCache?.username}`,

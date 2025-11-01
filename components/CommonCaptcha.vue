@@ -81,11 +81,17 @@ if (china.value) {
 
 <template>
   <template v-if="china">
-    <AliyunCaptcha v-if="!model?.token" @captcha-token="s => model = {
-      provider: 'aliyun',
-      token: s,
-      server: null,
-    }" />
+    <AliyunCaptcha
+      v-if="!model?.token"
+      @captcha-token="
+        (s) =>
+          (model = {
+            provider: 'aliyun',
+            token: s,
+            server: null,
+          })
+      "
+    />
   </template>
   <template v-else>
     <vue-turnstile

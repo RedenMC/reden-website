@@ -166,7 +166,9 @@ function deleteAvatar() {
             {{ $t('profile.phone_not_bound') }}
             <v-dialog v-model="bindPhoneNumberDialog" max-width="500">
               <template v-slot:activator="{ props }">
-                <a v-if="canEdit" class="router" v-bind="props">{{ $t('profile.bind_now') }}</a>
+                <a v-if="canEdit" class="router" v-bind="props">{{
+                  $t('profile.bind_now')
+                }}</a>
               </template>
               <BindPhoneNumberCard @close="bindPhoneNumberDialog = false" />
             </v-dialog>

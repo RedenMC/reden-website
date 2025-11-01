@@ -1,12 +1,16 @@
 <template>
   <v-card>
     <div v-if="showLegalMessage">
-      <v-card-title class="text-h5">{{ $t('comments.phone_verification_required_title') }}</v-card-title>
+      <v-card-title class="text-h5">{{
+        $t('comments.phone_verification_required_title')
+      }}</v-card-title>
       <v-card-text>
         {{ $t('comments.phone_verification_required_message') }}
       </v-card-text>
     </div>
-    <v-card-title v-else>{{ t('reden.profile.bind_phone_number') }}</v-card-title>
+    <v-card-title v-else>{{
+      t('reden.profile.bind_phone_number')
+    }}</v-card-title>
     <v-card-text>
       <v-text-field
         v-model="phoneNumber"
@@ -31,11 +35,7 @@
     </v-card-text>
     <v-card-actions>
       <v-spacer></v-spacer>
-      <v-btn
-        color="primary"
-        :loading="loading"
-        @click="bindPhoneNumber"
-      >
+      <v-btn color="primary" :loading="loading" @click="bindPhoneNumber">
         {{ $t('reden.profile.bind') }}
       </v-btn>
     </v-card-actions>
@@ -49,11 +49,14 @@ import CommonCaptcha from '~/components/CommonCaptcha.vue';
 import { type Captcha, doFetchPost, toastError } from '~/utils/constants';
 import { toast } from 'vuetify-sonner';
 
-const props = withDefaults(defineProps<{
-  showLegalMessage?: boolean;
-}>(), {
-  showLegalMessage: false,
-});
+const props = withDefaults(
+  defineProps<{
+    showLegalMessage?: boolean;
+  }>(),
+  {
+    showLegalMessage: false,
+  },
+);
 
 const { t } = useI18n();
 const emit = defineEmits<{

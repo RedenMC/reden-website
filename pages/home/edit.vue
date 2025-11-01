@@ -284,13 +284,13 @@ function savePreferences() {
     </div>
     <v-card border class="setting-section-card section" rounded="lg">
       <h3 class="setting-section-title">Avatar</h3>
-        <v-row>
-          <v-col>
-            <p class="setting-label">Avatar</p>
-            <p class="setting-description">Update your avatar here.</p>
-          </v-col>
-          <v-col>
-            <div class="d-flex justify-center">
+      <v-row>
+        <v-col>
+          <p class="setting-label">Avatar</p>
+          <p class="setting-description">Update your avatar here.</p>
+        </v-col>
+        <v-col>
+          <div class="d-flex justify-center">
             <v-hover>
               <template #default="{ isHovering, props }">
                 <div v-bind="props" style="position: relative">
@@ -299,22 +299,26 @@ function savePreferences() {
                     class="edit-avatar-overlay d-flex justify-center align-center"
                   >
                     <v-btn icon="mdi-pencil" @click="editAvatar"></v-btn>
-                    <v-btn v-if="user.avatarUrl" icon="mdi-delete" @click="deleteAvatar"></v-btn>
+                    <v-btn
+                      v-if="user.avatarUrl"
+                      icon="mdi-delete"
+                      @click="deleteAvatar"
+                    ></v-btn>
                   </div>
                   <v-avatar :image="user.avatarUrl" size="128"></v-avatar>
                 </div>
               </template>
             </v-hover>
-            </div>
-            <input
-              ref="uploader"
-              accept="image/*"
-              class="d-none"
-              type="file"
-              @change="fileSelected"
-            />
-          </v-col>
-        </v-row>
+          </div>
+          <input
+            ref="uploader"
+            accept="image/*"
+            class="d-none"
+            type="file"
+            @change="fileSelected"
+          />
+        </v-col>
+      </v-row>
     </v-card>
     <v-card
       v-if="user"
@@ -344,9 +348,7 @@ function savePreferences() {
       <v-row>
         <v-col>
           <p class="setting-label">Phone Number</p>
-          <p class="setting-description">
-            Used for verification and login.
-          </p>
+          <p class="setting-description">Used for verification and login.</p>
         </v-col>
         <div>
           <span class="setting-button" v-if="user.phoneNumber">
@@ -354,11 +356,20 @@ function savePreferences() {
           </span>
           <v-dialog v-model="bindPhoneNumberDialog" max-width="500px">
             <template v-slot:activator="{ props }">
-              <v-btn class="text-capitalize setting-button" color="primary" v-bind="props">
+              <v-btn
+                class="text-capitalize setting-button"
+                color="primary"
+                v-bind="props"
+              >
                 {{ user.phoneNumber ? 'Change' : 'Bind' }}
               </v-btn>
             </template>
-            <BindPhoneNumberCard @close="bindPhoneNumberDialog = false; fetchUser(user);" />
+            <BindPhoneNumberCard
+              @close="
+                bindPhoneNumberDialog = false;
+                fetchUser(user);
+              "
+            />
           </v-dialog>
         </div>
       </v-row>

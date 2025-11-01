@@ -75,8 +75,11 @@
         </v-btn>
       </div>
     </div>
-        <v-dialog v-model="showPhoneVerificationDialog" max-width="500px">
-      <BindPhoneNumberCard :show-legal-message="true" @close="showPhoneVerificationDialog = false" />
+    <v-dialog v-model="showPhoneVerificationDialog" max-width="500px">
+      <BindPhoneNumberCard
+        :show-legal-message="true"
+        @close="showPhoneVerificationDialog = false"
+      />
     </v-dialog>
   </div>
 </template>
@@ -268,13 +271,13 @@ async function handleVote(commentId: string, vote: 'up' | 'down' | 'cancel') {
   }
 
   try {
-    await $fetch(
+    const res = await doFetchPost(
       `/api/mc-services/yisibite/${props.machineId}/comments/${commentId}/vote`,
-      {
-        method: 'POST',
-        body: { vote },
-      },
+      { vote },
     );
+    if (!res.ok) {
+      throw { status: res.status };
+    }
   } catch (error: any) {
     // Revert on error
     comment.myVote = originalVote;
@@ -285,7 +288,10 @@ async function handleVote(commentId: string, vote: 'up' | 'down' | 'cancel') {
   }
 }
 
-function findComment(comments: CommentDto[], commentId: string): CommentDto | undefined {
+function findComment(
+  comments: CommentDto[],
+  commentId: string,
+): CommentDto | undefined {
   for (const comment of comments) {
     if (comment.id === commentId) {
       return comment;
