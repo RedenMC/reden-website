@@ -290,25 +290,17 @@ function savePreferences() {
           <p class="setting-description">{{ t('profile.edit.avatar_desc') }}</p>
         </v-col>
         <v-col>
-          <div class="d-flex justify-center">
-            <v-hover>
-              <template #default="{ isHovering, props }">
-                <div v-bind="props" style="position: relative">
-                  <div
-                    v-if="isHovering"
-                    class="edit-avatar-overlay d-flex justify-center align-center"
-                  >
-                    <v-btn icon="mdi-pencil" @click="editAvatar"></v-btn>
-                    <v-btn
-                      v-if="user.avatarUrl"
-                      icon="mdi-delete"
-                      @click="deleteAvatar"
-                    ></v-btn>
-                  </div>
-                  <v-avatar :image="user.avatarUrl" size="128"></v-avatar>
-                </div>
-              </template>
-            </v-hover>
+          <div class="d-flex justify-center flex-column align-center">
+            <v-avatar :image="user.avatarUrl" size="96"></v-avatar>
+            <div class="d-flex mt-2">
+              <v-btn icon="mdi-pencil" size="small" @click="editAvatar"></v-btn>
+              <v-btn
+                v-if="user.avatarUrl"
+                icon="mdi-delete"
+                size="small"
+                @click="deleteAvatar"
+              ></v-btn>
+            </div>
           </div>
           <input
             ref="uploader"
