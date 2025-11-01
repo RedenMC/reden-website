@@ -119,7 +119,8 @@
     "oauth": "Or login with",
     "or": "Or",
     "register": "Register",
-    "title": "Login to Reden"
+    "title": "Login to Reden",
+    "username_or_email_or_phone": "Username, Email, or Phone"
   },
   "message": {
     "all": "All",

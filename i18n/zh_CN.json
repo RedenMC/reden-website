@@ -146,7 +146,8 @@
     "oauth": "或使用以下方式登录",
     "or": "或者",
     "register": "去注册",
-    "title": "登录 Reden"
+    "title": "登录 Reden",
+    "username_or_email_or_phone": "用户名、邮箱或手机号"
   },
   "message": {
     "all": "全部",

@@ -92,7 +92,7 @@ function login() {
       <v-form>
         <v-text-field
           v-model="username"
-          :label="t('profile.username')"
+          :label="t('login.username_or_email_or_phone')"
           autocomplete="username"
           required
         >
