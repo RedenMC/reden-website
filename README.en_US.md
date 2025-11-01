@@ -33,17 +33,20 @@ Reden is a comprehensive platform for Minecraft redstone enthusiasts, providing 
 #### Installation
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/RedenMC/reden-website.git
 cd reden-website
 ```
 
 2. Install dependencies:
+
 ```bash
 yarn
 ```
 
 3. Run the development server:
+
 ```bash
 yarn dev
 ```

@@ -10,7 +10,7 @@ import type {
   Machine,
   MachineDef,
 } from '~/pages/litematica/index.vue';
-import { number2text, parseBVID } from '~/utils/constants';
+import { doFetchDelete, number2text, parseBVID } from '~/utils/constants';
 import BottomBarAd from '~/components/ads/BottomBarAd.vue';
 import { parseCondition } from '~/utils/conditionParser';
 import RedenRouter from '~/components/RedenRouter.vue';
@@ -177,12 +177,14 @@ async function approve() {
 }
 
 async function cancelApproval() {
-  const response = await doFetchPost(
-    `/api/mc-services/yisibite/${machineId}/reject`,
-    {
-      reason: `${removeReason.value} by ${appStore.userCache?.username}`,
-    },
-  );
+  const isAdmin =
+    appStore.userCache?.roles?.includes('archiver') ||
+    appStore.userCache?.roles?.includes('staff');
+  const response = isAdmin
+    ? await doFetchPost(`/api/mc-services/yisibite/${machineId}/reject`, {
+        reason: `${removeReason.value} by ${appStore.userCache?.username}`,
+      })
+    : await doFetchDelete(`/api/mc-services/yisibite/${machineId}`);
   if (response.ok) {
     toast.success('下架成功');
     router.back();

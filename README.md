@@ -33,17 +33,20 @@ Reden 是一个专为 Minecraft 红石爱好者打造的综合平台，提供工
 #### 安装步骤
 
 1. 克隆仓库:
+
 ```bash
 git clone https://github.com/RedenMC/reden-website.git
 cd reden-website
 ```
 
 2. 安装依赖:
+
 ```bash
 yarn
 ```
 
 3. 启动开发服务器:
+
 ```bash
 yarn dev
 ```
