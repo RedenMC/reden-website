@@ -106,6 +106,7 @@ interface CommentDto {
   upVotes: number;
   childrenCount: number;
   children: CommentDto[];
+  myVote?: 'up' | 'down';
 }
 
 interface CommentsResponse {
@@ -236,6 +237,36 @@ async function handleReply(commentId: string, content: string) {
 }
 
 async function handleVote(commentId: string, vote: 'up' | 'down' | 'cancel') {
+  const comment = findComment(comments.value, commentId);
+  if (!comment) return;
+
+  const originalVote = comment.myVote;
+  const originalUpVotes = comment.upVotes;
+
+  // Optimistic update
+  if (vote === 'cancel') {
+    comment.myVote = undefined;
+    if (originalVote === 'up') {
+      comment.upVotes--;
+    } else if (originalVote === 'down') {
+      comment.upVotes++;
+    }
+  } else if (vote === 'up') {
+    if (originalVote === 'down') {
+      comment.upVotes += 2;
+    } else if (originalVote !== 'up') {
+      comment.upVotes++;
+    }
+    comment.myVote = 'up';
+  } else if (vote === 'down') {
+    if (originalVote === 'up') {
+      comment.upVotes -= 2;
+    } else if (originalVote !== 'down') {
+      comment.upVotes--;
+    }
+    comment.myVote = 'down';
+  }
+
   try {
     await $fetch(
       `/api/mc-services/yisibite/${props.machineId}/comments/${commentId}/vote`,
@@ -244,13 +275,29 @@ async function handleVote(commentId: string, vote: 'up' | 'down' | 'cancel') {
         body: { vote },
       },
     );
-
-    // 重新加载评论以更新投票数
-    await loadComments(1);
-  } catch (error) {
+  } catch (error: any) {
+    // Revert on error
+    comment.myVote = originalVote;
+    comment.upVotes = originalUpVotes;
+    const errorMessage = error.data?.message || t('comments.vote_error');
+    toast.error(errorMessage);
     console.error('Failed to vote:', error);
-    toast.error(t('comments.vote_error'));
   }
+}
+
+function findComment(comments: CommentDto[], commentId: string): CommentDto | undefined {
+  for (const comment of comments) {
+    if (comment.id === commentId) {
+      return comment;
+    }
+    if (comment.children) {
+      const found = findComment(comment.children, commentId);
+      if (found) {
+        return found;
+      }
+    }
+  }
+  return undefined;
 }
 
 async function loadChildren(commentId: string) {

@@ -40,32 +40,22 @@
           <!-- 操作按钮 -->
           <div class="d-flex align-center" style="gap: 8px">
             <v-btn
-              :color="comment.ud?.vote === true ? 'primary' : 'default'"
-              :variant="comment.ud?.vote === true ? 'elevated' : 'text'"
+              :disabled="appStore.uid === comment.user.id"
+              :color="comment.myVote === 'up' ? 'primary' : 'default'"
+              :variant="comment.myVote === 'up' ? 'elevated' : 'text'"
               size="small"
-              @click="
-                $emit(
-                  'vote',
-                  comment.id,
-                  comment.ud?.vote === true ? 'cancel' : 'up',
-                )
-              "
+              @click="$emit('vote', comment.id, comment.myVote === 'up' ? 'cancel' : 'up')"
             >
               <v-icon size="16">mdi-thumb-up-outline</v-icon>
               <span class="ml-1">{{ comment.upVotes }}</span>
             </v-btn>
 
             <v-btn
-              :color="comment.ud?.vote === false ? 'primary' : 'default'"
-              :variant="comment.ud?.vote === false ? 'elevated' : 'text'"
+              :disabled="appStore.uid === comment.user.id"
+              :color="comment.myVote === 'down' ? 'primary' : 'default'"
+              :variant="comment.myVote === 'down' ? 'elevated' : 'text'"
               size="small"
-              @click="
-                $emit(
-                  'vote',
-                  comment.id,
-                  comment.ud?.vote === false ? 'cancel' : 'down',
-                )
-              "
+              @click="$emit('vote', comment.id, comment.myVote === 'down' ? 'cancel' : 'down')"
             >
               <v-icon size="16">mdi-thumb-down-outline</v-icon>
             </v-btn>
@@ -171,9 +161,7 @@ interface CommentDto {
   upVotes: number;
   childrenCount: number;
   children?: CommentDto[];
-  ud?: {
-    vote?: boolean;
-  };
+  myVote?: 'up' | 'down';
 }
 
 interface Props {
