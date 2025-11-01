@@ -290,16 +290,17 @@ function savePreferences() {
           <p class="setting-description">{{ t('profile.edit.avatar_desc') }}</p>
         </v-col>
         <v-col>
-          <div class="d-flex justify-center flex-column align-center">
-            <v-avatar :image="user.avatarUrl" size="24"></v-avatar>
+          <div class="d-flex justify-center flex-row align-center">
+            <v-avatar :image="user.avatarUrl" size="56"></v-avatar>
             <div class="d-flex mt-2">
-              <v-btn @click="editAvatar" class="text-capitalize">
+              <v-btn @click="editAvatar" color="primary" class="text-capitalize">
                 <v-icon>mdi-pencil</v-icon>
                 {{ t('common.edit') }}
               </v-btn>
               <v-btn
                 v-if="user.avatarUrl"
                 @click="deleteAvatar"
+                color="error"
                 class="text-capitalize"
               >
                 <v-icon>mdi-delete</v-icon>
