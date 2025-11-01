@@ -97,13 +97,29 @@ const bindPhoneNumber = async () => {
       phoneNumber: phoneNumber.value,
       code: code.value,
     });
-    if (!response.ok) {
-      return Promise.reject(response);
+    if (response.ok) {
+      toast.success('成功', {
+        description: '手机号绑定成功',
+      });
+      refreshNuxtData().then(() => emit('close'));
+    } else {
+      if (response.status === 409) {
+        toast.error('绑定失败', {
+          description: '该手机号已被其他账号绑定',
+        });
+      } else {
+        try {
+          const data = await response.json();
+          toast.error('绑定失败', {
+            description: data.error_description || response.statusText,
+          });
+        } catch (e) {
+          toast.error('绑定失败', {
+            description: response.statusText,
+          });
+        }
+      }
     }
-    toast.success('成功', {
-      description: '手机号绑定成功',
-    });
-    refreshNuxtData().then(() => emit('close'));
   } catch (error) {
     toastError(error, 'Failed to bind phone number');
   } finally {
