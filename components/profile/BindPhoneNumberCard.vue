@@ -1,15 +1,15 @@
 <template>
   <v-card>
-    <v-card-title>{{ $t('reden.profile.bind_phone_number') }}</v-card-title>
+    <v-card-title>{{ t('reden.profile.bind_phone_number') }}</v-card-title>
     <v-card-text>
       <v-text-field
         v-model="phoneNumber"
-        :label="$t('reden.profile.phone_number')"
+        :label="t('reden.profile.phone_number')"
         :disabled="loading"
       ></v-text-field>
       <v-text-field
         v-model="code"
-        :label="$t('reden.profile.verification_code')"
+        :label="t('reden.profile.verification_code')"
         :disabled="loading"
       >
         <template v-slot:append>
@@ -17,7 +17,7 @@
             :disabled="loading || countdown > 0 || !captcha?.token"
             @click="sendCode"
           >
-            {{ countdown > 0 ? `${countdown}s` : $t('reden.profile.send_code') }}
+            {{ countdown > 0 ? `${countdown}s` : t('reden.profile.send_code') }}
           </v-btn>
         </template>
       </v-text-field>
@@ -44,6 +44,9 @@ import { type Captcha, doFetchPost, toastError } from '~/utils/constants';
 import { toast } from 'vuetify-sonner';
 
 const { t } = useI18n();
+const emit = defineEmits<{
+  close: [];
+}>();
 
 const phoneNumber = ref('');
 const code = ref('');
@@ -85,10 +88,10 @@ const bindPhoneNumber = async () => {
     if (!response.ok) {
       return Promise.reject(response);
     }
-    toast.success('Success', {
-      description: 'Phone number bound successfully.',
+    toast.success('成功', {
+      description: '手机号绑定成功',
     });
-    // Handle success, e.g., show a success message and close the dialog.
+    refreshNuxtData().then(() => emit('close'));
   } catch (error) {
     toastError(error, 'Failed to bind phone number');
   } finally {
