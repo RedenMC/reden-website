@@ -118,9 +118,8 @@
               :machine-id="machineId"
               :is-child="true"
               @reply="$emit('reply', $event, replyContent)"
+              @vote="$emit('vote', $event.commentId, $event.vote)"
             />
-
-            <!--            @vote="$emit('vote', $event.commentId, $event.vote)"-->
           </div>
 
           <!-- 加载更多子评论 -->
