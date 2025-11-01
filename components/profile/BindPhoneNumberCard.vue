@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card min-width="500">
     <div v-if="showLegalMessage">
       <v-card-title class="text-h5">{{
         $t('comments.phone_verification_required_title')

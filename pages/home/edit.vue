@@ -352,7 +352,7 @@ function savePreferences() {
           <span class="setting-button" v-if="user.phoneNumber">
             {{ user.phoneNumber }}
           </span>
-          <v-dialog v-model="bindPhoneNumberDialog" max-width="500px">
+          <v-dialog v-model="bindPhoneNumberDialog" max-width="800px">
             <template v-slot:activator="{ props }">
               <v-btn
                 class="text-capitalize setting-button"
