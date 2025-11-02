@@ -877,7 +877,7 @@ const handlePictureChange = (event: Event) => {
       </v-card>
     </v-card-text>
 
-    <v-card-actions class="px-6">
+    <v-card-actions class="px-6 py-6">
       <v-btn :disabled="!availableSteps.includes('image')" :loading="uploading" class="text-none" color="primary"
         rounded="lg" variant="flat" @click="doUploadAll">
         {{
