@@ -41,7 +41,8 @@
     "next": "下一步",
     "save": "儲存",
     "summary": "簡介",
-    "supported_version": "支持版本"
+    "supported_version": "支持版本",
+    "ok": "好"
   },
   "en": "English",
   "litematica_generator": {
@@ -312,6 +313,12 @@
       "auto_filled_id": "從名稱自動填寫ID",
       "auto_filled_name": "從文件名自動填充名稱",
       "max_file_number": "上傳的文件不能超過{count}個。"
+    },
+    "markdown": {
+      "introduction_markdown_editor": {
+        "title": "歡迎使用Reden Markdown編輯器！",
+        "content": "Markdown是一種國際通用的文本格式，可以編寫帶有格式的文本。<br />Reden提供了一個Markdown編輯器，左側是編輯區，右侧是繪製後的結果，供您預覽。<br />如果您想詳細學習Markdown語法，可以<a href=\"https://markdown.tw/\" target=_blank>點擊連結</a>。 "
+      }
     }
   },
   "user": {

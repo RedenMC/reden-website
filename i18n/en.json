@@ -574,7 +574,7 @@
     "markdown": {
       "introduction_markdown_editor": {
         "title": "Welcome to use Reden Markdown Editor! ",
-        "content": "Markdown is an international text format for writing styled texts. <br />Reden provides you with a Markdown editor, where you can edit on the left side and preview the rendered content on the right side. <br />If you want to learn more about Markdown, <a href=\"https://www.geeksforgeeks.org/html/introduction-to-markdown/\">Click Here</a>. "
+        "content": "Markdown is an international text format for writing styled texts. <br />Reden provides you with a Markdown editor, where you can edit on the left side and preview the rendered content on the right side. <br />If you want to learn more about Markdown, <a href=\"https://www.geeksforgeeks.org/html/introduction-to-markdown/\" target=_blank>Click Here</a>. "
       }
     }
 
