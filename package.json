@@ -18,6 +18,7 @@
     "@nuxtjs/mdc": "0.13.3",
     "@nuxtjs/sitemap": "7.4.0",
     "@pinia/nuxt": "^0.5.4",
+    "@vavt/cm-extension": "^1.11.2",
     "@vite-pwa/nuxt": "^0.10.6",
     "@vueuse/core": "^10.9.0",
     "@vueuse/router": "^12.8.2",

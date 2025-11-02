@@ -11,6 +11,9 @@ import { isDevelopment } from 'std-env';
 import { config as mdConfig, MdEditor } from 'md-editor-v3';
 import 'md-editor-v3/lib/style.css';
 import { EditorView } from '@codemirror/view';
+import { localeToIso } from '~/i18n/i18n.config';
+import MDEDITOR_ZH_TW from '@vavt/cm-extension/dist/locale/zh-TW';
+import MDEDITOR_RU from '@vavt/cm-extension/dist/locale/ru';
 
 const uploadImage = async (files: Array<File>, callback: (urls: string[] | { url: string; alt: string; title: string }[]) => void) => {
   let result = [];
@@ -268,6 +271,12 @@ onMounted(() => {
           }),
         },
       ];
+    },
+    editorConfig: {
+      languageUserDefined: {
+        'zh-TW': MDEDITOR_ZH_TW,
+        'ru': MDEDITOR_RU,
+      }
     },
   });
   // 页面加载后清除input的值，防止重复上传相同文件不触发change事件
@@ -765,7 +774,7 @@ const handlePictureChange = (event: Event) => {
                 :theme="appStore.theme === 'light' ? 'light' : 'dark'"
                 :toolbars="['bold', 'italic', 'title', '-', 'quote', 'unorderedList', 'orderedList', '-', 'link', 'image', '-', 'preview']"
                 :toolbars-exclude="['pageFullscreen', 'fullscreen']"
-                :language="language"
+                :language="localeToIso[language] !== undefined ? localeToIso[language] : 'en-US'"
                 @on-upload-img="uploadImage"
                 />
               <v-text-field

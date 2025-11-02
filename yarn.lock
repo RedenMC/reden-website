@@ -3764,6 +3764,11 @@
     hookable "^5.5.3"
     unhead "2.0.14"
 
+"@vavt/cm-extension@^1.11.2":
+  version "1.11.2"
+  resolved "https://registry.yarnpkg.com/@vavt/cm-extension/-/cm-extension-1.11.2.tgz#1e5e6676350d2ef5c7555a1386cbbcbe220b53fc"
+  integrity sha512-fgjXxZ+HvJz/mBXd1Cpo8PWd/a1kMD3RysM/4O16uyXG+pleBUdUoYcuM5hl4GfFt8CZu5QJMji+Gbl9wL0bmw==
+
 "@vavt/copy2clipboard@^1.0.1":
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/@vavt/copy2clipboard/-/copy2clipboard-1.0.3.tgz#eae77af8e83835cae5d932c3dc025e8838bb4c12"
