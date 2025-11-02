@@ -83,7 +83,8 @@
     "summary": "简介",
     "supported_version": "支持版本",
     "edit": "编辑",
-    "delete": "删除"
+    "delete": "删除",
+    "ok": "好"
   },
   "en": "English",
   "litematica_generator": {
@@ -583,6 +584,12 @@
       "auto_filled_id": "从名称自动填写ID",
       "auto_filled_name": "从文件名自动填充名称",
       "max_file_number": "上传的文件不能超过 {count} 个。"
+    },
+    "markdown": {
+      "introduction_markdown_editor": {
+        "title": "欢迎使用Reden Markdown编辑器！",
+        "content": "Markdown是一种国际通用的文本格式，可以编写带有格式的文本。<br />Reden提供了一个Markdown编辑器，左侧是编辑区，右侧是渲染后的结果，供您预览。<br />如果您想详细学习Markdown语法，可以<a href=\"https://www.runoob.com/markdown/md-tutorial.html\" target=_blank>点击链接</a>。 "
+      }
     }
   },
   "user": {
