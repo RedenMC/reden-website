@@ -770,14 +770,16 @@ const handlePictureChange = (event: Event) => {
                   </v-chip>
                 </template>
               </v-select>
-              <MdEditor
-                v-model="getLocalizedData(language).description"
-                :theme="globalTheme"
-                :toolbars="['bold', 'italic', 'title', '-', 'quote', 'unorderedList', 'orderedList', '-', 'link', 'image', '-', 'preview']"
-                :toolbars-exclude="['pageFullscreen', 'fullscreen']"
-                :language="localeToIso[language] !== undefined ? localeToIso[language] : 'en-US'"
-                @on-upload-img="uploadImage"
+              <client-only>
+                <MdEditor
+                  v-model="getLocalizedData(language).description"
+                  :theme="globalTheme"
+                  :toolbars="['bold', 'italic', 'title', '-', 'quote', 'unorderedList', 'orderedList', '-', 'link', 'image', '-', 'preview']"
+                  :toolbars-exclude="['pageFullscreen', 'fullscreen']"
+                  :language="localeToIso[language] !== undefined ? localeToIso[language] : 'en-US'"
+                  @on-upload-img="uploadImage"
                 />
+              </client-only>
               <v-text-field
                 v-model="getLocalizedData(language).link"
                 :label="t('common.link')"
