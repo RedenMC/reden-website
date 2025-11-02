@@ -8,20 +8,13 @@ import { useAppStore } from '~/store/app';
 import type { VForm } from 'vuetify/components';
 import TagSelector from '~/components/litematica/TagSelector.vue';
 import { isDevelopment } from 'std-env';
-import VueSimplemde from 'vue-simplemde';
-import 'simplemde/dist/simplemde.min.css'; // Import SimpleMDE CSS
+import { config as mdConfig, MdEditor } from 'md-editor-v3';
+import 'md-editor-v3/lib/style.css';
+import { EditorView } from '@codemirror/view';
 
-const simplemdeOptions = ref({
-  spellChecker: false,
-  forceSync: true,
-  hideIcons: ['side-by-side', 'fullscreen', 'guide'],
-  showIcons: ['code', 'table'],
-  toolbar: [
-    'bold', 'italic', 'heading', '|', 'quote', 'unordered-list', 'ordered-list', '|',
-    'link', 'image', '|', 'preview', 'fullscreen', 'guide'
-  ],
-  uploadImage: true,
-  imageUploadFunction: async (file: File, onSuccess: (url: string) => void, onError: (error: string) => void) => {
+const uploadImage = async (files: Array<File>, callback: (urls: string[] | { url: string; alt: string; title: string }[]) => void) => {
+  let result = [];
+  for (const file of files) {
     const formData = new FormData();
     formData.append('image', file);
     try {
@@ -31,16 +24,18 @@ const simplemdeOptions = ref({
       });
       if (response.ok) {
         const data = await response.json();
-        onSuccess(data.url);
+        result.push(data.url);
       } else {
-        const errorData = await response.json();
-        onError(errorData.error || 'Image upload failed');
+        toastError(response, "Image upload failed");
+        throw new Error("Image upload failed");
       }
     } catch (error: any) {
-      onError(error.message || 'Image upload failed');
+      toastError(error, "Image upload failed");
+      throw error;
     }
-  },
-});
+  }
+  callback(result);
+};
 
 const appStore = useAppStore();
 
@@ -254,42 +249,27 @@ const triggerPictureInput = () => {
   }
 };
 
-// const handlePictureChange = (event: Event) => {
-//   const target = event.target as HTMLInputElement;
-//   const files = target.files;
-//
-//   if (!files) return;
-//
-//   if (selectedPictures.value.length + files.length > 5) {
-//     pictureStepError.value = '最多只能上传5张图片';
-//     return;
-//   }
-//   pictureStepError.value = undefined;
-//
-//   for (let i = 0; i < files.length; i++) {
-//     const file = files[i];
-//     if (file.size > 2 * 1024 * 1024) {
-//       pictureStepError.value = '图片大小不能超过2MB';
-//       selectedPictures.value = [];
-//       return;
-//     }
-//   }
-//   Array.from(files).forEach((file) =>
-//     selectedPictures.value.push({
-//       name: file.name,
-//       file,
-//       url: URL.createObjectURL(file),
-//       fileType: 'uploading',
-//     }),
-//   );
-// };
-
 const removePicture = (index: number) => {
   const splice = selectedPictures.value.splice(index, 1);
   URL.revokeObjectURL(splice[0].url);
 };
 
 onMounted(() => {
+  mdConfig({
+    codeMirrorExtensions(extensions) {
+      return [
+        ...extensions,
+        {
+          'type': 'font',
+          extension: EditorView.theme({
+            '.cm-content': {
+              fontFamily: "JetBrains Mono, Liberation Mono, Mizuki Mono, monospace",
+            }
+          }),
+        },
+      ];
+    },
+  });
   // 页面加载后清除input的值，防止重复上传相同文件不触发change事件
   if (fileInput.value) {
     fileInput.value.value = '';
@@ -780,15 +760,14 @@ const handlePictureChange = (event: Event) => {
                   </v-chip>
                 </template>
               </v-select>
-              <VueSimplemde
+              <MdEditor
                 v-model="getLocalizedData(language).description"
-                :configs="simplemdeOptions"
-                :label="t('common.description')"
-                color="primary"
-                hide-details
-                outlined
-                variant="underlined"
-              />
+                :theme="appStore.theme === 'light' ? 'light' : 'dark'"
+                :toolbars="['bold', 'italic', 'title', '-', 'quote', 'unorderedList', 'orderedList', '-', 'link', 'image', '-', 'preview']"
+                :toolbars-exclude="['pageFullscreen', 'fullscreen']"
+                :language="language"
+                @on-upload-img="uploadImage"
+                />
               <v-text-field
                 v-model="getLocalizedData(language).link"
                 :label="t('common.link')"
