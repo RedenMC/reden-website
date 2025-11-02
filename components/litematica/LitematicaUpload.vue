@@ -14,6 +14,7 @@ import { EditorView } from '@codemirror/view';
 import { localeToIso } from '~/i18n/i18n.config';
 import MDEDITOR_ZH_TW from '@vavt/cm-extension/dist/locale/zh-TW';
 import MDEDITOR_RU from '@vavt/cm-extension/dist/locale/ru';
+import { globalTheme } from '~/utils/constants';
 
 const uploadImage = async (files: Array<File>, callback: (urls: string[] | { url: string; alt: string; title: string }[]) => void) => {
   let result = [];
@@ -771,7 +772,7 @@ const handlePictureChange = (event: Event) => {
               </v-select>
               <MdEditor
                 v-model="getLocalizedData(language).description"
-                :theme="appStore.theme === 'light' ? 'light' : 'dark'"
+                :theme="globalTheme"
                 :toolbars="['bold', 'italic', 'title', '-', 'quote', 'unorderedList', 'orderedList', '-', 'link', 'image', '-', 'preview']"
                 :toolbars-exclude="['pageFullscreen', 'fullscreen']"
                 :language="localeToIso[language] !== undefined ? localeToIso[language] : 'en-US'"
