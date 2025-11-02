@@ -43,6 +43,8 @@ const uploadImage = async (files: Array<File>, callback: (urls: string[] | { url
 
 const appStore = useAppStore();
 
+const mdFirstUseNotification = ref(false);
+
 const props = defineProps<{
   editMode?: boolean;
   /**
@@ -68,6 +70,13 @@ const state = ref<State>('upload');
 watch(state, (newState) => {
   if (!availableSteps.value.includes(newState)) {
     availableSteps.value.push(newState);
+  }
+
+  if (newState === 'translation') {
+    if (localStorage.getItem('md-introduction-read') === null) {
+      mdFirstUseNotification.value = true;
+      localStorage.setItem('md-introduction-read', 'random value');
+    }
   }
 });
 const refreshProps = () => {
@@ -1076,6 +1085,25 @@ const handlePictureChange = (event: Event) => {
       }}
     </v-btn>
   </v-card-actions>
+<v-dialog
+      #default="{ isActive }"
+      :model-value="mdFirstUseNotification"
+      max-width="600"
+      @close="mdFirstUseNotification"
+    >
+      <v-card>
+        <v-card-title>{{ t('upload.markdown.introduction_markdown_editor.title') }}</v-card-title>
+        <v-card-text v-html="t('upload.markdown.introduction_markdown_editor.content')"></v-card-text>
+        <v-card-actions>
+          <v-btn
+            color="primary"
+            @click="mdFirstUseNotification = false"
+          >
+          {{ t('common.ok') }}
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 </template>
 
 <style scoped>

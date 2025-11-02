@@ -55,7 +55,8 @@
     "summary": "Summary",
     "supported_version": "Supported version",
     "edit": "Edit",
-    "delete": "Delete"
+    "delete": "Delete",
+    "ok": "OK"
   },
   "comments": {
     "phone_verification_required_title": "Phone Verification Required",
@@ -569,7 +570,14 @@
       "auto_filled_id": "Auto-filled ID from name",
       "auto_filled_name": "Auto-filled name from file name",
       "max_file_number": "Cannot upload more than {count} files."
+    },
+    "markdown": {
+      "introduction_markdown_editor": {
+        "title": "Welcome to use Reden Markdown Editor! ",
+        "content": "Markdown is an international text format for writing styled texts. <br />Reden provides you with a Markdown editor, where you can edit on the left side and preview the rendered content on the right side. <br />If you want to learn more about Markdown, <a href=\"https://www.geeksforgeeks.org/html/introduction-to-markdown/\">Click Here</a>. "
+      }
     }
+
   },
   "user": {
     "archiver": "Archiver",
