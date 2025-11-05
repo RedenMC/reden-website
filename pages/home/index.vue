@@ -148,7 +148,9 @@ const { data: machines } = useFetch<ListLitematicaResponse>(
 
     <v-row class="d-flex flex-wrap flex-row ma-1">
       <v-col class="user-card-wrap" cols="12" md="3">
-        <v-skeleton-loader v-show="loading" type="card-avatar" width="300" />
+        <client-only>
+          <v-skeleton-loader v-if="loading" type="card-avatar" width="300" />
+        </client-only>
         <UserProfileCard
           v-show="!loading"
           :apply-preference="false"

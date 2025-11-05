@@ -104,7 +104,9 @@ function isBanned(user: Profile) {
     @update:options="loadItems"
   >
     <template v-slot:loading>
-      <v-skeleton-loader type="table-row@10"></v-skeleton-loader>
+      <client-only>
+        <v-skeleton-loader type="table-row@10"></v-skeleton-loader>
+      </client-only>
     </template>
     <template #top>
       <v-card border elevation="0">
