@@ -408,7 +408,6 @@ const isHovering = useElementHover(ad);
             status === 'error'
           "
         >
-          <client-only>
           <v-row v-for="key in [1, 2, 3]" :key="key">
             <v-col
               v-for="col in Array.from({ length: itemsPerRow }, (_, i) => i)"
@@ -416,10 +415,9 @@ const isHovering = useElementHover(ad);
               :key="col"
               justify="center"
             >
-                <v-skeleton-loader type="card" />
+              <v-skeleton-loader type="card"></v-skeleton-loader>
             </v-col>
           </v-row>
-        </client-only>
         </template>
         <template v-else>
           <v-row>

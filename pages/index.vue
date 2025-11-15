@@ -19,7 +19,6 @@ import type { MachineDef } from '~/pages/litematica/index.vue';
 const appStore = useAppStore();
 const introContent = ref<HTMLElement | null>(null);
 const localePath = useLocalePath();
-const router = useRouter();
 
 const { t, locale } = useI18n();
 useHead({
@@ -34,6 +33,7 @@ const backendInfo = useBackendMeta();
 
 const {
   data: homepageData,
+  refresh,
   status,
 } = await useFetch<{
   posts: MachineDef[];
@@ -41,9 +41,13 @@ const {
   totalDownloads: number;
   totalPosts: number;
   totalUsers: number;
-}>(`/api/mc-services/litematica/homepage-profiles?lang=${locale.value}`, {
+}>(`api/mc-services/litematica/homepage-profiles?lang=${locale.value}`, {
   dedupe: 'cancel',
 });
+if (import.meta.client && status.value !== 'pending' && !homepageData.value) {
+  // load failure, refresh
+  refresh();
+}
 
 // 排行榜相关方法
 function getRankClass(index: number) {
@@ -69,16 +73,16 @@ function getRankIcon(index: number) {
 
 // Stats data for hero section
 const stats = ref([
-  { number: `${homepageData.value?.totalPosts ?? '500'}+`, label: t('reden.home.stats.redstone_machines') },
-  { number: `${(homepageData.value?.totalDownloads ?? 124000) / 1000}K+`, label: t('reden.home.stats.total_downloads') },
-  { number: `${homepageData.value?.totalUsers ?? 8000}+`, label: t('reden.home.stats.users') },
+  { number: '1000+', label: t('reden.home.stats.redstone_machines') },
+  { number: '258.4K+', label: t('reden.home.stats.total_downloads') },
+  { number: '10600+', label: t('reden.home.stats.users') },
   { number: '24/7', label: t('reden.home.stats.online_service') },
 ]);
 
 // Dashboard metrics data
 const dashboardMetrics = ref([
   {
-    value: stats.value[0]?.number,
+    value: stats.value[0].number,
     label: t('reden.home.stats.redstone_machines'),
     icon: 'mdi-cube-outline',
     color: 'blue-lighten-4',
@@ -88,7 +92,7 @@ const dashboardMetrics = ref([
     trendColor: 'green',
   },
   {
-    value: stats.value[1]?.number,
+    value: stats.value[1].number,
     label: t('reden.home.stats.total_downloads'),
     icon: 'mdi-download',
     color: 'green-lighten-4',
@@ -98,7 +102,7 @@ const dashboardMetrics = ref([
     trendColor: 'green',
   },
   {
-    value: stats.value[2]?.number,
+    value: stats.value[2].number,
     label: t('reden.home.stats.active_users'),
     icon: 'mdi-account-group',
     color: 'purple-lighten-4',
@@ -118,6 +122,14 @@ const dashboardMetrics = ref([
     trendColor: 'green',
   },
 ]);
+watch(homepageData, (data) => {
+  stats.value[0].number = `${data?.totalPosts ?? '500'}+`;
+  dashboardMetrics.value[0].value = stats.value[0].number;
+  stats.value[1].number = `${(data?.totalDownloads ?? 124000) / 1000}K+`;
+  dashboardMetrics.value[1].value = stats.value[1].number;
+  stats.value[2].number = `${data?.totalUsers ?? 8000}+`;
+  dashboardMetrics.value[2].value = stats.value[2].number;
+});
 </script>
 
 <template>
@@ -388,14 +400,12 @@ const dashboardMetrics = ref([
             </div>
             <div class="card-content">
               <div class="machine-grid">
-                <client-only>
-                  <v-skeleton-loader
-                    v-for="i in [0, 1, 2, 3, 4, 5]"
-                    v-if="status === 'pending'"
-                    type="card"
-                    class="machine-item"
-                  />
-                </client-only>
+                <v-skeleton-loader
+                  v-for="i in [0, 1, 2, 3, 4, 5]"
+                  v-if="status === 'pending'"
+                  type="card"
+                  class="machine-item"
+                />
                 <div
                   v-for="(post, index) in homepageData?.posts?.slice(0, 6)"
                   :key="index"
@@ -451,13 +461,11 @@ const dashboardMetrics = ref([
             </div>
             <div class="card-content">
               <div class="creators-list">
-                <client-only>
-                  <v-skeleton-loader
-                    v-if="status === 'pending'"
-                    v-for="i in [2, 0, 0, 6]"
-                    type="list-item-avatar"
-                  />
-                </client-only>
+                <v-skeleton-loader
+                  v-if="status === 'pending'"
+                  v-for="i in [2, 0, 0, 6]"
+                  type="list-item-avatar"
+                />
                 <div
                   v-for="(item, index) in homepageData?.profiles?.slice(0, 8)"
                   :key="index"
@@ -466,7 +474,7 @@ const dashboardMetrics = ref([
                   @click="
                     () => {
                       if (item && item.author) {
-                        router.push(localePath(`/@${item.author.username}`));
+                        $router.push(localePath(`/@${item.author.username}`));
                       }
                     }
                   "
