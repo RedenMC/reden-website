@@ -27,19 +27,10 @@ type Machine = MachineDef & {
   conditions: { [key: string]: ((v: number) => any)[] };
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const min = (size: number) => (v: number) =>
-  v >= size || t('litematica_generator.size_min', { size });
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const max = (size: number) => (v: number) =>
-  v <= size || t('litematica_generator.size_max', { size });
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const mod = (mod: number, rem: number) => (v: number) =>
-  v % mod === rem || t('litematica_generator.size_mod', { mod, rem });
 
 const names = ref<{ [key: string]: Machine }>({
   'yisibite-world-eater': {
-    name: '无沟世吞 by 火弦月',
+    name: '无沟世吞v3 by 火弦月',
     conditions: {},
   },
   'yisibite-nether-eater': {
@@ -69,12 +60,17 @@ const names = ref<{ [key: string]: Machine }>({
   },
 });
 
-if (import.meta.client) {
+onMounted(async () => {
   for (const key in names.value) {
     const machine = names.value[key];
-    machine.conditions = (await (await fetch(`https://redenmc.com/api/mc-services/yisibite/${key}/info/zh_cn`)).json())?.d?.[0]?.conditions;
+    const conditions: Record<string, string[]> = (await (await fetch(`/api/mc-services/yisibite/${key}/info/zh_cn`)).json()).d[0].conditions
+    machine.conditions = {
+      x: conditions.x?.map(val => parseCondition(val, t)),
+      y: conditions.y?.map(val => parseCondition(val, t)),
+      z: conditions.z?.map(val => parseCondition(val, t)),
+    };
   }
-}
+});
 
 function submit(e: SubmitEventPromise) {
   e.preventDefault();
@@ -124,15 +120,15 @@ watch(name, () => {
           {{ item.title }}
         </template>
       </v-select>
-      <v-row>
-        <v-col>
-          <p>
-            机器的 x, y, z 尺寸。对于世界吞噬者，z 尺寸是出发站和返回站之间的距离。
-          </p>
-        </v-col>
-      </v-row>
     </v-row>
-    <v-row v-show="names[name]?.hasX">
+    <v-row>
+      <v-col>
+        <p>
+          机器的 x, y, z 尺寸。对于世界吞噬者，z 尺寸是出发站和返回站之间的距离。
+        </p>
+      </v-col>
+    </v-row>
+    <v-row v-show="names[name]?.conditions?.x?.length">
       <v-col>
         x 方向尺寸
       </v-col>
@@ -141,7 +137,7 @@ watch(name, () => {
         :rules="[...(names[name]?.conditions?.x || [])]"
       />
     </v-row>
-    <v-row v-show="names[name]?.hasY">
+    <v-row v-show="names[name]?.conditions?.y?.length">
       <v-col>
         y 方向尺寸
       </v-col>
@@ -150,7 +146,7 @@ watch(name, () => {
         :rules="[...(names[name]?.conditions?.y || [])]"
       />
     </v-row>
-    <v-row v-if="names[name]?.hasZ">
+    <v-row v-if="names[name]?.conditions?.z?.length">
       <v-col>
         z 方向尺寸
       </v-col>
