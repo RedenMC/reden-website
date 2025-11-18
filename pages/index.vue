@@ -72,7 +72,7 @@ const names = ref<{ [key: string]: Machine }>({
 if (import.meta.client) {
   for (const key in names.value) {
     const machine = names.value[key];
-    machine.conditions =  await ((await fetch(`https://redenmc.com/api/mc-services/yisibite/${key}/info/zh_cn`)).json())?.d?.[0]?.conditions;
+    machine.conditions = (await (await fetch(`https://redenmc.com/api/mc-services/yisibite/${key}/info/zh_cn`)).json())?.d?.[0]?.conditions;
   }
 }
 
