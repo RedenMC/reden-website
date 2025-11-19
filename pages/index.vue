@@ -90,7 +90,7 @@ watch(name, () => {
 </script>
 
 <template>
-  <v-form class="content-common" @submit="submit" fast-fail>
+  <v-form class="content-common pa-5" @submit="submit" fast-fail>
     <v-row>
       <v-col>
         <h1>
@@ -108,19 +108,19 @@ watch(name, () => {
       <v-col style="min-width: 200px">
         今天你想生成什么？
       </v-col>
-      <v-select
-        v-model="name"
-        :item-title="(item) => names[item]?.name"
-        :item-value="(item) => item"
-        :items="Object.keys(names)"
-        autofocus
-        @update:model-value="router.replace({ query: { m: name } })"
-      >
-        <template #selection="{ item }">
-          {{ item.title }}
-        </template>
-      </v-select>
     </v-row>
+    <v-select
+      v-model="name"
+      :item-title="(item) => names[item]?.name"
+      :item-value="(item) => item"
+      :items="Object.keys(names)"
+      autofocus
+      @update:model-value="router.replace({ query: { m: name } })"
+    >
+      <template #selection="{ item }">
+        {{ item.title }}
+      </template>
+    </v-select>
     <v-row>
       <v-col>
         <p>
@@ -165,6 +165,9 @@ watch(name, () => {
       >
         下载
       </v-btn>
+    </v-row>
+    <v-row>
+      备案号： 京ICP备2021010288号-6
     </v-row>
   </v-form>
 </template>
