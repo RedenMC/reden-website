@@ -33,6 +33,10 @@ const names = ref<{ [key: string]: Machine }>({
     name: '无沟世吞v3 by 火弦月',
     conditions: {},
   },
+  'yisibite-world-eater-v4': {
+    name: '无沟世吞v4 by 火弦月',
+    conditions: {},
+  },
   'yisibite-nether-eater': {
     name: '16高无沟地吞 by 火弦月',
     conditions: {
