@@ -122,13 +122,18 @@ const appStore = useAppStore();
       {{ t('reden.footer.mojang_disclaimer') }}
     </div>
     <div class="text-right last-line">
-      <a
-        v-if="locale == zh_cn"
+      <span
         class="bottom-right"
-        href="https://beian.miit.gov.cn/"
+        v-if="locale == zh_cn"
       >
-        备案号： 京ICP备2021010288号-6
-      </a>
+        <img src="/image/gwab.png" alt="备案图标" style="height: 14px; vertical-align: middle" />
+        <a href="https://beian.mps.gov.cn/#/query/webSearch?code=11010602201981" rel="noreferrer" target="_blank">京公网安备11010602201981号</a>
+        <a
+          href="https://beian.miit.gov.cn/"
+        >
+          备案号： 京ICP备2021010288号-6
+        </a>
+      </span>
       <span class="bottom-right">
         <a
           href="javascript:void(0)"
