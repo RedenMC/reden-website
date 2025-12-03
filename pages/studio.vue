@@ -1,3 +1,4 @@
+
 <script lang="ts" setup>
 import {
   Identifier,
@@ -17,6 +18,8 @@ type Tool = 'replace_blocks' | 'convert_version';
 const tools: Tool[] = ['replace_blocks', 'convert_version'];
 const currentTool = ref<Tool>('replace_blocks');
 const { t } = useI18n();
+const blockSearch = ref('');
+const replacementSearch = ref('');
 const versionToDataVersion = {
   '1.12': 1343,
   '1.13': 1631,
@@ -296,9 +299,10 @@ function downloadBlob(_blob: Blob) {
                 <template #[`item.item`]="{ index }" class="px-2">
                   <v-combobox
                     v-model="replacements[index].block"
-                    :item-title="(id) => translateMinecraft(id)"
-                    :item-value="(id) => id"
+                    v-model:search="blockSearch"
                     :items="existingBlocks"
+                    :return-object="false"
+                    clear-on-select
                     color="secondary"
                     density="compact"
                     hide-details
@@ -321,9 +325,10 @@ function downloadBlob(_blob: Blob) {
                 <template #[`item.replace`]="{ index }" class="px-2">
                   <v-combobox
                     v-model="replacements[index].replacement"
-                    :item-title="(id) => translateMinecraft(id)"
-                    :item-value="(id) => id"
+                    v-model:search="replacementSearch"
                     :items="selectableModels"
+                    :return-object="false"
+                    clear-on-select
                     color="secondary"
                     density="compact"
                     hide-details
