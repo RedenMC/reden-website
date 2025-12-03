@@ -2,7 +2,7 @@
 import { discordInvite, githubLink, zh_cn } from '~/utils/constants';
 import RedenRouter from '~/components/RedenRouter.vue';
 import { useAppStore } from '~/store/app';
-
+import gitHash from '~/assets/hash.json';
 const localePath = useLocalePath();
 const switchLocalePath = useSwitchLocalePath();
 
