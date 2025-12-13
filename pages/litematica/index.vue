@@ -195,10 +195,7 @@ const itemsPerRow = computed(() => {
   if (width.value < 1300) {
     return 3;
   }
-  if (width.value < 1900) {
-    return 4;
-  }
-  return 6;
+  return 4;
 });
 const itemDisplayCols = computed(() => {
   const cols: { def?: MachineDef[] }[] = [];
