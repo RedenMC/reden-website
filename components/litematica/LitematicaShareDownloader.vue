@@ -38,7 +38,7 @@ async function loadBlob(index: number, bypassLimit: boolean = false) {
     previewing.value = index;
     blob.value[index] = await (
       await fetch(
-        url.startsWith('https://reden.oss-cn-shanghai.aliyuncs.com/')
+        url.startsWith('https://static.redenmc.com/')
           ? url
           : `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
       )
