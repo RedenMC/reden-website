@@ -62,6 +62,12 @@ const { data: machines } = useFetch<ListLitematicaResponse>(
           :can-edit="user.id === appStore.uid"
           :user="user"
         />
+        <!-- Achievements Panel -->
+        <profile-achievements-panel 
+          v-if="user"
+          :user-id="user.id" 
+          class="mt-4"
+        />
       </v-col>
       <v-col v-if="machines">
         <UserContentPanel

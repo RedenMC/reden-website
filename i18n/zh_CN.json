@@ -87,6 +87,68 @@
     "ok": "好"
   },
   "en": "English",
+  "follow": {
+    "follow": "关注",
+    "unfollow": "取消关注",
+    "followers": "粉丝",
+    "following": "关注",
+    "success": "关注成功",
+    "unfollowSuccess": "已取消关注",
+    "error": "操作失败",
+    "noUsers": "暂无用户"
+  },
+  "achievements": {
+    "title": "成就",
+    "progress": "进度",
+    "unlocked": "解锁于",
+    "showAll": "显示所有成就",
+    "showLess": "收起",
+    "locked": "未解锁",
+    "categories": {
+      "all": "全部",
+      "upload": "上传",
+      "social": "社交",
+      "impact": "影响力",
+      "special": "特殊"
+    }
+  },
+  "monitoring": {
+    "title": "用户留存监控",
+    "autoRefreshOn": "自动刷新: 开",
+    "autoRefreshOff": "自动刷新: 关",
+    "activeUsers": "活跃用户",
+    "newToday": "今日新增",
+    "retentionRate": "留存率",
+    "totalNotifications": "总通知数",
+    "last24Hours": "过去24小时",
+    "followStats": "关注统计",
+    "totalFollows": "总关注数",
+    "todayFollows": "今日新增",
+    "weekFollows": "本周新增",
+    "achievementStats": "成就统计",
+    "totalUnlocks": "总解锁数",
+    "todayUnlocks": "今日解锁",
+    "popularAchievements": "热门成就",
+    "milestoneStats": "里程碑统计",
+    "totalMilestones": "总里程碑",
+    "todayMilestones": "今日达成",
+    "byType": "按类型分布",
+    "notificationStats": "通知统计",
+    "likeNotifications": "点赞通知",
+    "followNotifications": "关注通知",
+    "commentNotifications": "评论通知",
+    "totalSent": "总发送量"
+  },
+  "notifications": {
+    "title": "通知",
+    "markAllRead": "全部已读",
+    "empty": "暂无通知",
+    "newFollower": "新粉丝",
+    "newLike": "有人赞了你的作品",
+    "newComment": "你的作品收到了新评论",
+    "achievementUnlocked": "成就解锁",
+    "milestone": "达成里程碑"
+  },
   "litematica_generator": {
     "by": {
       "author": "作者",
@@ -228,11 +290,12 @@
       "third_party_accounts": "第三方账号",
       "username": "用户名",
       "username_desc": "这是你用来登录的用户名，你每48小时只可以修改一次。",
-            "username_timer": "你可以在{0}小时后修改用户名",
-            "avatar_desc": "更新你的头像",
-            "phone_number_desc": "用于登录和验证",
-            "avatar_title": "头像"
-          },    "editProfile": "编辑个人资料",
+      "username_timer": "你可以在{0}小时后修改用户名",
+      "avatar_desc": "更新你的头像",
+      "phone_number_desc": "用于登录和验证",
+      "avatar_title": "头像"
+    },
+    "editProfile": "编辑个人资料",
     "generate_access_token": "生成个人密钥",
     "link_now": "点击链接",
     "logout": "退出登录",

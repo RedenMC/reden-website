@@ -23,6 +23,7 @@ const useRemoteBackend =
       ? false
       : !isProd && !isPrerender;
 console.log('useRemoteBackend=', useRemoteBackend);
+const isDev = process.env.DEV === 'true';
 const sitemap = await (
   await fetch('https://api.redenmc.com/api/mc-services/yisibite/nuxt-sitemap')
 ).json();
@@ -125,9 +126,11 @@ export default defineNuxtConfig({
     },
     server: {
       proxy: {
-        '/api': useRemoteBackend
-          ? 'https://api.redenmc.com'
-          : 'http://api:10005',
+        '/api': isDev
+          ? 'http://localhost:10005'
+          : useRemoteBackend
+            ? 'https://api.redenmc.com'
+            : 'http://api:10005',
       },
     },
   },
@@ -167,9 +170,11 @@ export default defineNuxtConfig({
       },
     },
     '/api/**': {
-      proxy: useRemoteBackend
-        ? 'https://api.redenmc.com/api/**'
-        : 'http://api:10005/api/**',
+      proxy: isDev
+        ? 'http://localhost:10005/api/**'
+        : useRemoteBackend
+          ? 'https://api.redenmc.com/api/**'
+          : 'http://api:10005/api/**',
     },
   },
   sitemap: {

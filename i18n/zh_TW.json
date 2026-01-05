@@ -91,6 +91,41 @@
     "mark_as_read": "標記為已讀",
     "unread": "未讀"
   },
+  "follow": {
+    "follow": "關注",
+    "unfollow": "取消關注",
+    "followers": "粉絲",
+    "following": "關注",
+    "success": "關注成功",
+    "unfollowSuccess": "已取消關注",
+    "error": "操作失敗",
+    "noUsers": "暫無使用者"
+  },
+  "achievements": {
+    "title": "成就",
+    "progress": "進度",
+    "unlocked": "解鎖於",
+    "showAll": "顯示所有成就",
+    "showLess": "收起",
+    "locked": "未解鎖",
+    "categories": {
+      "all": "全部",
+      "upload": "上傳",
+      "social": "社交",
+      "impact": "影響力",
+      "special": "特殊"
+    }
+  },
+  "notifications": {
+    "title": "通知",
+    "markAllRead": "全部已讀",
+    "empty": "暫無通知",
+    "newFollower": "新粉絲",
+    "newLike": "有人讚了你的作品",
+    "newComment": "你的作品收到了新評論",
+    "achievementUnlocked": "成就解鎖",
+    "milestone": "達成里程碑"
+  },
   "page404": {
     "back": "返回上一頁",
     "evolving": "你要找的頁面並不存在，我們的網站正在進化中……",

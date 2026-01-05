@@ -283,7 +283,9 @@ function savePreferences() {
       </h1>
     </div>
     <v-card border class="setting-section-card section" rounded="lg">
-      <h3 class="setting-section-title">{{ t('profile.edit.avatar_title') }}</h3>
+      <h3 class="setting-section-title">
+        {{ t('profile.edit.avatar_title') }}
+      </h3>
       <v-row>
         <v-col>
           <p class="setting-label">Avatar</p>
@@ -293,7 +295,11 @@ function savePreferences() {
           <div class="d-flex justify-center flex-row align-center">
             <v-avatar :image="user.avatarUrl" size="56"></v-avatar>
             <div class="d-flex mt-2">
-              <v-btn @click="editAvatar" color="primary" class="text-capitalize">
+              <v-btn
+                @click="editAvatar"
+                color="primary"
+                class="text-capitalize"
+              >
                 <v-icon>mdi-pencil</v-icon>
                 {{ t('common.edit') }}
               </v-btn>
@@ -346,7 +352,9 @@ function savePreferences() {
       <v-row>
         <v-col>
           <p class="setting-label">Phone Number</p>
-          <p class="setting-description">{{ t('profile.edit.phone_number_desc') }}</p>
+          <p class="setting-description">
+            {{ t('profile.edit.phone_number_desc') }}
+          </p>
         </v-col>
         <div>
           <span class="setting-button" v-if="user.phoneNumber">

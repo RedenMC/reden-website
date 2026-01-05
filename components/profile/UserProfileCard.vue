@@ -11,8 +11,15 @@ import VerifyMinecraft from '~/components/profile/VerifyMinecraft.vue';
 import BindPhoneNumberCard from '~/components/profile/BindPhoneNumberCard.vue';
 import { toast } from 'vuetify-sonner';
 import { getTimezone } from 'countries-and-timezones';
+import { useAppStore } from '~/store/app';
+import { useI18n } from 'vue-i18n';
 
 const bindPhoneNumberDialog = ref(false);
+const appStore = useAppStore();
+const { t } = useI18n();
+
+const isFollowing = ref(false);
+const followLoading = ref(false);
 
 const props = withDefaults(
   defineProps<{
@@ -43,7 +50,6 @@ function editAvatar() {
 function fileSelected() {
   const file = uploader.value?.files?.item(0);
   selectedFile.value = file;
-  console.log(file);
   if (!file) return;
   if (file.size > 2 * 1024 * 1024) {
     toastError(
@@ -58,7 +64,6 @@ function fileSelected() {
   doFetchPut('/api/account/avatar', file)
     .then((response) => {
       if (response.ok) {
-        console.log('avatar updated');
         toast.success('Success', {
           description: 'Avatar updated',
           duration: 3e4,
@@ -76,7 +81,6 @@ function deleteAvatar() {
   doFetchDelete('/api/account/avatar')
     .then((response) => {
       if (response.ok) {
-        console.log('avatar deleted');
         toast.success('Success', {
           description: 'Avatar deleted',
           duration: 3e4,
@@ -88,6 +92,48 @@ function deleteAvatar() {
     })
     .catch((e) => toastError(e, 'Failed to delete avatar'));
 }
+
+async function toggleFollow() {
+  if (!user.value || followLoading.value) return;
+  
+  followLoading.value = true;
+  try {
+    const method = isFollowing.value ? 'DELETE' : 'POST';
+    const response = await fetch(`/api/user/follow/${user.value.id}`, { method });
+    
+    if (response.ok) {
+      isFollowing.value = !isFollowing.value;
+      if (user.value.followers !== undefined) {
+        user.value.followers += isFollowing.value ? 1 : -1;
+      }
+      toast.success(isFollowing.value ? t('follow.success') : t('follow.unfollowSuccess'));
+    } else {
+      throw await response.json();
+    }
+  } catch (e) {
+    toastError(e, t('follow.error'));
+  } finally {
+    followLoading.value = false;
+  }
+}
+
+async function fetchFollowStatus() {
+  if (!user.value || !appStore.uid || user.value.id === appStore.uid) return;
+  
+  try {
+    const response = await fetch(`/api/user/follow/stats/${user.value.id}`);
+    if (response.ok) {
+      const data = await response.json();
+      isFollowing.value = data.isFollowing || false;
+    }
+  } catch (e) {
+    console.error('Failed to fetch follow status:', e);
+  }
+}
+
+onMounted(() => {
+  fetchFollowStatus();
+});
 </script>
 <template>
   <v-card :elevation="4" :min-width="minWidth" border>
@@ -216,15 +262,32 @@ function deleteAvatar() {
         </p>
       </div>
 
+      <!-- Follow button for other users -->
+      <v-btn
+        v-if="user && appStore.uid && user.id !== appStore.uid"
+        :color="isFollowing ? 'default' : 'primary'"
+        :loading="followLoading"
+        block
+        class="my-3"
+        @click="toggleFollow"
+      >
+        <v-icon :icon="isFollowing ? 'mdi-account-check' : 'mdi-account-plus'" start />
+        {{ isFollowing ? $t('follow.unfollow') : $t('follow.follow') }}
+      </v-btn>
+
       <!-- followers and following and following projects -->
       <div>
-        <p class="user-followers">
+        <p class="user-followers clickable-stat">
           <v-icon class="profile-item-icon">mdi-account-group</v-icon>
-          <span>{{ user?.followers || 0 }} {{ $t('common.followers') }} </span>
+          <NuxtLink :to="`/user/${user?.id}/followers`" class="stat-link">
+            <span>{{ user?.followers || 0 }} {{ $t('common.followers') }} </span>
+          </NuxtLink>
         </p>
-        <p class="user-following">
+        <p class="user-following clickable-stat">
           <v-icon class="profile-item-icon">mdi-account-group-outline</v-icon>
-          <span>{{ user?.following || 0 }} {{ $t('common.following') }} </span>
+          <NuxtLink :to="`/user/${user?.id}/following`" class="stat-link">
+            <span>{{ user?.following || 0 }} {{ $t('common.following') }} </span>
+          </NuxtLink>
         </p>
         <p class="user-following-projects">
           <v-icon class="profile-item-icon">mdi-source-branch</v-icon>
@@ -297,5 +360,20 @@ a:hover {
 .user-details-list {
   margin-top: 12px;
   margin-bottom: 12px;
+}
+
+.clickable-stat {
+  cursor: pointer;
+}
+
+.stat-link {
+  color: inherit;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+.stat-link:hover {
+  color: rgb(var(--v-theme-primary));
+  text-decoration: none;
 }
 </style>

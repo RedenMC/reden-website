@@ -87,6 +87,68 @@
     "write_reply": "Write your reply..."
   },
   "en": "English",
+  "follow": {
+    "follow": "Follow",
+    "unfollow": "Unfollow",
+    "followers": "Followers",
+    "following": "Following",
+    "success": "Followed successfully",
+    "unfollowSuccess": "Unfollowed successfully",
+    "error": "Failed to follow/unfollow",
+    "noUsers": "No users found"
+  },
+  "achievements": {
+    "title": "Achievements",
+    "progress": "Progress",
+    "unlocked": "Unlocked on",
+    "showAll": "Show All Achievements",
+    "showLess": "Show Less",
+    "locked": "Locked",
+    "categories": {
+      "all": "All",
+      "upload": "Upload",
+      "social": "Social",
+      "impact": "Impact",
+      "special": "Special"
+    }
+  },
+  "monitoring": {
+    "title": "User Retention Monitoring",
+    "autoRefreshOn": "Auto Refresh: On",
+    "autoRefreshOff": "Auto Refresh: Off",
+    "activeUsers": "Active Users",
+    "newToday": "New Today",
+    "retentionRate": "Retention Rate",
+    "totalNotifications": "Total Notifications",
+    "last24Hours": "Last 24 Hours",
+    "followStats": "Follow Stats",
+    "totalFollows": "Total Follows",
+    "todayFollows": "New Today",
+    "weekFollows": "New This Week",
+    "achievementStats": "Achievement Stats",
+    "totalUnlocks": "Total Unlocks",
+    "todayUnlocks": "Unlocked Today",
+    "popularAchievements": "Popular Achievements",
+    "milestoneStats": "Milestone Stats",
+    "totalMilestones": "Total Milestones",
+    "todayMilestones": "Reached Today",
+    "byType": "Distribution by Type",
+    "notificationStats": "Notification Stats",
+    "likeNotifications": "Like Notifications",
+    "followNotifications": "Follow Notifications",
+    "commentNotifications": "Comment Notifications",
+    "totalSent": "Total Sent"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "markAllRead": "Mark All as Read",
+    "empty": "No notifications yet",
+    "newFollower": "New follower",
+    "newLike": "Someone liked your post",
+    "newComment": "New comment on your post",
+    "achievementUnlocked": "Achievement unlocked",
+    "milestone": "Milestone reached"
+  },
   "litematica_generator": {
     "by": {
       "author": "Author",
@@ -577,7 +639,6 @@
         "content": "Markdown is an international text format for writing styled texts. <br />Reden provides you with a Markdown editor, where you can edit on the left side and preview the rendered content on the right side. <br />If you want to learn more about Markdown, <a href=\"https://www.geeksforgeeks.org/html/introduction-to-markdown/\" target=_blank>Click Here</a>. "
       }
     }
-
   },
   "user": {
     "archiver": "Archiver",

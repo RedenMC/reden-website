@@ -53,6 +53,22 @@
                     {{ t('reden.header.my_profile') }}
                   </v-list-item-title>
                 </v-list-item>
+                <v-list-item :to="localePath('/achievements')">
+                  <template #prepend>
+                    <v-icon>mdi-trophy</v-icon>
+                  </template>
+                  <v-list-item-title>
+                    {{ t('achievements.title') }}
+                  </v-list-item-title>
+                </v-list-item>
+                <v-list-item :to="localePath('/notifications')">
+                  <template #prepend>
+                    <v-icon>mdi-bell</v-icon>
+                  </template>
+                  <v-list-item-title>
+                    {{ t('notifications.title') }}
+                  </v-list-item-title>
+                </v-list-item>
               </template>
               <template v-else>
                 <v-list-item :to="localePath('/login')">
@@ -167,11 +183,64 @@
         </v-menu>
       </v-btn>
       <client-only>
-        <v-btn
-          :to="localePath(useAppStore().logined ? '/home' : '/login')"
-          icon="mdi-account"
-          title="Account"
-        />
+        <v-btn icon="mdi-account" title="Account">
+          <v-icon>mdi-account</v-icon>
+          <v-menu activator="parent">
+            <v-list v-if="useAppStore().logined">
+              <v-list-item :to="localePath('/home')">
+                <template #prepend>
+                  <v-icon>mdi-account</v-icon>
+                </template>
+                <v-list-item-title>
+                  {{ t('reden.header.my_profile') }}
+                </v-list-item-title>
+              </v-list-item>
+              <v-list-item :to="localePath('/achievements')">
+                <template #prepend>
+                  <v-icon>mdi-trophy</v-icon>
+                </template>
+                <v-list-item-title>
+                  {{ t('achievements.title') }}
+                </v-list-item-title>
+              </v-list-item>
+              <v-list-item :to="localePath('/notifications')">
+                <template #prepend>
+                  <v-icon>mdi-bell</v-icon>
+                </template>
+                <v-list-item-title>
+                  {{ t('notifications.title') }}
+                </v-list-item-title>
+              </v-list-item>
+              <v-divider />
+              <v-list-item @click="$router.push(localePath('/logout'))">
+                <template #prepend>
+                  <v-icon>mdi-logout</v-icon>
+                </template>
+                <v-list-item-title>
+                  {{ t('reden.header.logout') }}
+                </v-list-item-title>
+              </v-list-item>
+            </v-list>
+            <v-list v-else>
+              <v-list-item :to="localePath('/login')">
+                <template #prepend>
+                  <v-icon>mdi-login</v-icon>
+                </template>
+                <v-list-item-title>
+                  {{ t('login.button.login') }}
+                </v-list-item-title>
+              </v-list-item>
+              <v-list-item :to="localePath('/register')">
+                <template #prepend>
+                  <v-icon>mdi-account-plus</v-icon>
+                </template>
+                <v-list-item-title>
+                  {{ t('register.button.register') }}
+                </v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </v-btn>
       </client-only>
       <v-btn
         v-if="!mobile"
