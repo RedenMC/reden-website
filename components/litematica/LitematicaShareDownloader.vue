@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import type { Machine } from '~/pages/litematica/index.vue';
 import { size2text, timeSince } from '~/utils/constants';
@@ -7,6 +7,7 @@ import { useAppStore } from '~/store/app';
 import { toast } from 'vuetify-sonner';
 import * as localforage from 'localforage';
 import { useRouter } from 'vue-router';
+import QuarkVerificationDialog from '~/components/litematica/QuarkVerificationDialog.vue';
 
 const props = defineProps<{
   selected: Machine;
@@ -18,6 +19,12 @@ const appStore = useAppStore();
 const previewing = ref(-1);
 const blob = ref<Blob[]>([]);
 const localeRoute = useLocaleRoute();
+const showVerificationDialog = ref(false);
+const showReminderDialog = ref(false);
+
+const hasNoQuarkRole = computed(() => {
+  return appStore.userCache?.roles?.includes('no-quark') ?? false;
+});
 
 async function loadBlob(index: number, bypassLimit: boolean = false) {
   if (blob.value[index]) {
@@ -77,6 +84,41 @@ async function editLitematica(index: number) {
     );
   }
 }
+
+function checkQuarkPermission() {
+  if (!hasNoQuarkRole.value) {
+    const reminded = localStorage.getItem('quark-download-reminded');
+    if (!reminded) {
+      showReminderDialog.value = true;
+      return false;
+    }
+  }
+  return true;
+}
+
+function handleDownloadClick(event: Event) {
+  if (!checkQuarkPermission()) {
+    event.preventDefault();
+  }
+}
+
+function closeReminderDialog() {
+  localStorage.setItem('quark-download-reminded', 'true');
+  showReminderDialog.value = false;
+}
+
+function openVerificationDialog() {
+  showReminderDialog.value = false;
+  showVerificationDialog.value = true;
+}
+
+function closeVerificationDialog() {
+  showVerificationDialog.value = false;
+}
+
+function onVerified() {
+  // Verification completed, user now has no-quark role
+}
 </script>
 
 <template>
@@ -119,6 +161,7 @@ async function editLitematica(index: number) {
             rounded
             target="_blank"
             variant="elevated"
+            @click="handleDownloadClick"
           >
             {{ t('litematica_generator.download') }}
           </v-btn>
@@ -201,5 +244,51 @@ async function editLitematica(index: number) {
         </v-list-item-action>
       </v-list-item>
     </v-list>
+
+    <!-- Quark Verification Button -->
+    <v-card border class="mt-4">
+      <v-card-text>
+        <v-btn
+          block
+          class="text-none"
+          color="cyan-darken-1"
+          prepend-icon="custom:QuarkCloud"
+          variant="tonal"
+          @click="showVerificationDialog = true"
+        >
+          完成夸克验证一次，终身免夸克直接下载！（该功能测试中，可能不稳定）
+        </v-btn>
+        <div class="text-caption text-center text-medium-emphasis mt-2">
+          我们的网站通过夸克获得收益并维护网站，下载收益由本站和投影作者五五分成，感谢支持。
+        </div>
+      </v-card-text>
+    </v-card>
+
+    <!-- Reminder Dialog -->
+    <v-dialog v-model="showReminderDialog" max-width="500px">
+      <v-card>
+        <v-card-title class="text-h6">提示</v-card-title>
+        <v-card-text class="text-body-1">
+          进行一次夸克验证码验证可获得免夸克直接下载特权，是否认证？
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn variant="outlined" @click="closeReminderDialog">
+            {{ t('common.cancel') }}
+          </v-btn>
+          <v-btn color="primary" @click="openVerificationDialog">
+            {{ t('common.ok') }}
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <!-- Quark Verification Dialog -->
+    <QuarkVerificationDialog
+      v-if="showVerificationDialog"
+      :machine-key="selected.key"
+      @close="closeVerificationDialog"
+      @verified="onVerified"
+    />
   </v-no-ssr>
 </template>
