@@ -6,6 +6,10 @@ import { doFetchGet, doFetchPost, toastError } from '@/utils/constants';
 import { toast } from 'vuetify-sonner';
 import QRCode from 'qrcode';
 
+const props = defineProps<{
+  machineKey?: string;
+}>();
+
 const { t } = useI18n();
 const appStore = useAppStore();
 
@@ -52,7 +56,13 @@ async function getVerificationCode() {
 
   loading.value = true;
   try {
-    const response = await doFetchGet('/api/revenue/verify-quark-account');
+    // Build URL with from parameter if machineKey is provided
+    let url = '/api/revenue/verify-quark-account';
+    if (props.machineKey) {
+      url += `?from=${encodeURIComponent(props.machineKey)}`;
+    }
+    
+    const response = await doFetchGet(url);
     if (!response.ok) {
       return toastError(response);
     }

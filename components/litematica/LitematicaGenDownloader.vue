@@ -135,10 +135,10 @@ defineExpose({ xSize, ySize, zSize, formRef });
           variant="tonal"
           @click="openVerificationDialog"
         >
-          完成夸克验证一次，终身免夸克直接下载！
+          完成夸克验证一次，终身免夸克直接下载！（该功能测试中，可能不稳定）
         </v-btn>
         <div class="text-caption text-center text-medium-emphasis">
-          我们的网站通过夸克获得收益，下载收益由本站和投影作者五五分成，感谢支持。
+          我们的网站通过夸克获得收益并维护网站，下载收益由本站和投影作者五五分成，感谢支持。
         </div>
       </v-col>
     </v-row>
@@ -154,6 +154,7 @@ defineExpose({ xSize, ySize, zSize, formRef });
     <!-- Quark Verification Dialog -->
     <QuarkVerificationDialog
       v-if="showVerificationDialog"
+      :machine-key="selected.key"
       @close="closeVerificationDialog"
       @verified="onVerified"
     />
