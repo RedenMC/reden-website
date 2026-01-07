@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import type { Machine } from '~/pages/litematica/index.vue';
 import SizeInput from '~/components/litematica/SizeInput.vue';
+import QuarkVerificationDialog from '~/components/litematica/QuarkVerificationDialog.vue';
 import type { VForm } from 'vuetify/components';
 import type { SubmitEventPromise } from 'vuetify';
 
@@ -17,6 +18,7 @@ const xSize = ref(0);
 const ySize = ref(0);
 const zSize = ref(0);
 const loading = ref(false);
+const showVerificationDialog = ref(false);
 const { t } = useI18n();
 const formRef = useTemplateRef<VForm>('formRef');
 
@@ -54,6 +56,18 @@ async function openMaterials() {
       }
     }
   });
+}
+
+function openVerificationDialog() {
+  showVerificationDialog.value = true;
+}
+
+function closeVerificationDialog() {
+  showVerificationDialog.value = false;
+}
+
+function onVerified() {
+  emits('download');
 }
 
 defineExpose({ xSize, ySize, zSize, formRef });
@@ -109,6 +123,26 @@ defineExpose({ xSize, ySize, zSize, formRef });
         {{ t('litematica_generator.download') }}
       </v-btn>
     </v-row>
+
+    <!-- Quark Verification Button -->
+    <v-row>
+      <v-col>
+        <v-btn
+          block
+          class="text-none mb-2"
+          color="cyan-darken-1"
+          prepend-icon="custom:QuarkCloud"
+          variant="tonal"
+          @click="openVerificationDialog"
+        >
+          完成夸克验证一次，终身免夸克直接下载！
+        </v-btn>
+        <div class="text-caption text-center text-medium-emphasis">
+          我们的网站通过夸克获得收益，下载收益由本站和投影作者五五分成，感谢支持。
+        </div>
+      </v-col>
+    </v-row>
+
     <v-row>
       <v-col>
         <h3>FAQ</h3>
@@ -116,5 +150,12 @@ defineExpose({ xSize, ySize, zSize, formRef });
         <p>17x16=272，272的大小包含了两边各一格的铁砧墙宽度。</p>
       </v-col>
     </v-row>
+
+    <!-- Quark Verification Dialog -->
+    <QuarkVerificationDialog
+      v-if="showVerificationDialog"
+      @close="closeVerificationDialog"
+      @verified="onVerified"
+    />
   </v-form>
 </template>

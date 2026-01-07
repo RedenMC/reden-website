@@ -32,7 +32,7 @@ onMounted(() => {
     script.crossOrigin = 'anonymous';
     script.async = true;
     document.head.appendChild(script);
-  })();
+  });
   function microsoftAnalytics() {
     const script = document.createElement('script');
     script.src = 'https://www.clarity.ms/tag/psoi8pwdek';
