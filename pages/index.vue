@@ -73,9 +73,9 @@ function getRankIcon(index: number) {
 
 // Stats data for hero section
 const stats = ref([
-  { number: '1000+', label: t('reden.home.stats.redstone_machines') },
-  { number: '258.4K+', label: t('reden.home.stats.total_downloads') },
-  { number: '10600+', label: t('reden.home.stats.users') },
+  { number: '1.1k+', label: t('reden.home.stats.redstone_machines') },
+  { number: '345.6k+', label: t('reden.home.stats.total_downloads') },
+  { number: '11.8k+', label: t('reden.home.stats.users') },
   { number: '24/7', label: t('reden.home.stats.online_service') },
 ]);
 
@@ -123,11 +123,11 @@ const dashboardMetrics = ref([
   },
 ]);
 watch(homepageData, (data) => {
-  stats.value[0].number = `${data?.totalPosts ?? '500'}+`;
+  stats.value[0].number = `${(data?.totalPosts ?? 124000) / 1000}K+`;
   dashboardMetrics.value[0].value = stats.value[0].number;
   stats.value[1].number = `${(data?.totalDownloads ?? 124000) / 1000}K+`;
   dashboardMetrics.value[1].value = stats.value[1].number;
-  stats.value[2].number = `${data?.totalUsers ?? 8000}+`;
+  stats.value[2].number = `${(data?.totalUsers ?? 124000) / 1000}K+`;
   dashboardMetrics.value[2].value = stats.value[2].number;
 });
 </script>
