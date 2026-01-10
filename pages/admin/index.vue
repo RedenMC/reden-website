@@ -28,6 +28,12 @@ definePageMeta({
         </v-card>
       </v-col>
       <v-col>
+        <v-card :to="localePath('/admin/device-clients')" min-width="200">
+          <v-card-title> Device Flow Clients </v-card-title>
+          <v-card-text> Manage 3rd party app authentication </v-card-text>
+        </v-card>
+      </v-col>
+      <v-col>
         <v-card :to="localePath('/litematica/review')" min-width="200">
           <v-card-title> 投影审核后台 </v-card-title>
         </v-card>
