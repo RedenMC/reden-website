@@ -51,7 +51,7 @@ async function loadClients() {
   loading.value = true;
   try {
     const response = await doFetchGet('/api/admin/device-flow/list-clients');
-    clients.value = response;
+    clients.value = await (response.json());
   } catch (e: any) {
     toastError(e);
   } finally {
@@ -71,11 +71,11 @@ async function createClient() {
       client_name: newClientName.value.trim(),
     });
 
-    newCredentials.value = response;
+    newCredentials.value = await response.json();
     createDialog.value = false;
     credentialsDialog.value = true;
     newClientName.value = '';
-    
+
     toast.success('Client created successfully!');
     await loadClients();
   } catch (e: any) {
@@ -88,10 +88,10 @@ async function createClient() {
 async function toggleClientStatus(client: DeviceFlowClient) {
   processingClientId.value = client.client_id;
   try {
-    const endpoint = client.enabled 
+    const endpoint = client.enabled
       ? '/api/admin/device-flow/disable-client'
       : '/api/admin/device-flow/enable-client';
-    
+
     await doFetchPost(endpoint, {
       client_id: client.client_id,
     });
@@ -111,7 +111,16 @@ function copyToClipboard(text: string) {
 }
 
 function formatDate(timestamp: number) {
-  return new Date(timestamp).toLocaleString();
+  if (!timestamp || timestamp === 0) return 'N/A';
+  try {
+    const date = new Date(timestamp);
+    // Check if date is valid
+    if (isNaN(date.getTime())) return 'Invalid Date';
+    return date.toLocaleString();
+  } catch (e) {
+    console.error('Error formatting date:', timestamp, e);
+    return 'Error';
+  }
 }
 
 function closeCredentialsDialog() {
@@ -150,11 +159,11 @@ onMounted(() => {
               :loading="loading"
               class="elevation-1"
             >
-              <template #item.created_at="{ item }">
+              <template #[`item.created_at`]="{ item }">
                 {{ formatDate(item.created_at) }}
               </template>
 
-              <template #item.enabled="{ item }">
+              <template #[`item.enabled`]="{ item }">
                 <v-chip
                   :color="item.enabled ? 'success' : 'error'"
                   size="small"
@@ -164,7 +173,7 @@ onMounted(() => {
                 </v-chip>
               </template>
 
-              <template #item.client_id="{ item }">
+              <template #[`item.client_id`]="{ item }">
                 <div class="d-flex align-center">
                   <code class="mr-2">{{ item.client_id }}</code>
                   <v-btn
@@ -176,7 +185,7 @@ onMounted(() => {
                 </div>
               </template>
 
-              <template #item.actions="{ item }">
+              <template #[`item.actions`]="{ item }">
                 <v-btn
                   :color="item.enabled ? 'error' : 'success'"
                   :loading="processingClientId === item.client_id"
@@ -218,7 +227,7 @@ onMounted(() => {
             :rules="[v => !!v || 'Client name is required']"
             @keyup.enter="createClient"
           />
-          
+
           <v-alert type="info" variant="tonal" class="mt-4">
             <p class="text-body-2">
               This will create a new third-party application that can authenticate users via device flow.
@@ -244,8 +253,8 @@ onMounted(() => {
     </v-dialog>
 
     <!-- Credentials Dialog -->
-    <v-dialog 
-      v-model="credentialsDialog" 
+    <v-dialog
+      v-model="credentialsDialog"
       max-width="700"
       persistent
     >
@@ -259,7 +268,7 @@ onMounted(() => {
           <v-alert type="warning" variant="tonal" class="mb-4">
             <div class="text-h6 mb-2">⚠️ Important Security Notice</div>
             <p class="text-body-2">
-              The <strong>auth_key</strong> will only be shown once. 
+              The <strong>auth_key</strong> will only be shown once.
               Please copy and securely store these credentials now.
               You will not be able to retrieve the auth_key again.
             </p>
