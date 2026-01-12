@@ -20,6 +20,7 @@ const clientInfo = ref<{
   status: string;
   created_at: number;
   expires_at: number;
+  error?: string;
 } | null>(null);
 const error = ref<string>('');
 
@@ -49,7 +50,9 @@ onMounted(async () => {
     clientInfo.value = await response.json();
 
     if (clientInfo.value?.status !== 'pending') {
-      error.value = `This authorization request has already been ${clientInfo.value?.status}`;
+      error.value =
+        clientInfo.value?.error ||
+        `This authorization request has already been ${clientInfo.value?.status}`;
     }
   } catch (e: any) {
     error.value = e.message || 'Failed to load authorization request';
@@ -99,7 +102,7 @@ function formatDate(timestamp: number) {
 </script>
 
 <template>
-  <div class="device-auth-page">
+  <div class="">
     <v-container class="fill-height" fluid>
       <v-row justify="center" align="center">
         <v-col cols="12" sm="8" md="6" lg="5" xl="4">
@@ -243,11 +246,6 @@ function formatDate(timestamp: number) {
 </template>
 
 <style scoped>
-.device-auth-page {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
-
 .authorization-details ul {
   list-style-position: inside;
   padding-left: 0;
