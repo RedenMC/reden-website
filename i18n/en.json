@@ -153,6 +153,34 @@
     "title": "Login to Reden",
     "username_or_email_or_phone": "Username, Email, or Phone"
   },
+  "device_authorization": {
+    "title": "Device Authorization",
+    "loading": "Loading authorization request...",
+    "error": {
+      "missing_token": "Missing authorization token",
+      "already_processed": "This authorization request has already been {status}",
+      "load_failed": "Failed to load authorization request"
+    },
+    "login_required": "You need to log in first to authorize this device.",
+    "request_details": "Authorization Request",
+    "application": "Application",
+    "requested_at": "Requested At",
+    "is_requesting": "is requesting access to your Reden account. By authorizing, you allow this application to:",
+    "warning": {
+      "access_profile": "Access your profile information",
+      "perform_actions": "Perform actions on your behalf",
+      "trust_notice": "Only authorize if you trust this application."
+    },
+    "button": {
+      "deny": "Deny",
+      "authorize": "Authorize",
+      "go_home": "Go to Home"
+    },
+    "success": {
+      "authorized": "Device authorized successfully!",
+      "denied": "Device authorization denied"
+    }
+  },
   "message": {
     "all": "All",
     "all_read": "All Read",

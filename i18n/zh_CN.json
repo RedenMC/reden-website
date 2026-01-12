@@ -155,6 +155,34 @@
     "title": "登录 Reden",
     "username_or_email_or_phone": "用户名、邮箱或手机号"
   },
+  "device_authorization": {
+    "title": "设备授权",
+    "loading": "正在加载授权请求...",
+    "error": {
+      "missing_token": "缺少授权令牌",
+      "already_processed": "此授权请求已被{status}",
+      "load_failed": "加载授权请求失败"
+    },
+    "login_required": "您需要先登录才能授权此设备。",
+    "request_details": "授权请求",
+    "application": "应用程序",
+    "requested_at": "请求时间",
+    "is_requesting": "正在请求访问您的 Reden 账户。授权后，此应用程序将能够：",
+    "warning": {
+      "access_profile": "访问您的个人资料信息",
+      "perform_actions": "代表您执行操作",
+      "trust_notice": "仅在您信任此应用程序时进行授权。"
+    },
+    "button": {
+      "deny": "拒绝",
+      "authorize": "授权",
+      "go_home": "前往首页"
+    },
+    "success": {
+      "authorized": "设备授权成功！",
+      "denied": "已拒绝设备授权"
+    }
+  },
   "message": {
     "all": "全部",
     "all_read": "全部已读",

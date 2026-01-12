@@ -25,20 +25,20 @@ const clientInfo = ref<{
 const error = ref<string>('');
 
 useHead({
-  title: 'Device Authorization',
+  title: t('device_authorization.title'),
   titleTemplate: '%s - Reden',
 });
 
 useSeoMeta({
-  ogTitle: 'Device Authorization',
-  description: 'Authorize device access to your Reden account.',
+  ogTitle: t('device_authorization.title'),
+  description: t('device_authorization.login_required'),
 });
 
 onMounted(async () => {
   token.value = (route.query.token as string) || '';
 
   if (!token.value) {
-    error.value = 'Missing authorization token';
+    error.value = t('device_authorization.error.missing_token');
     loading.value = false;
     return;
   }
@@ -52,10 +52,12 @@ onMounted(async () => {
     if (clientInfo.value?.status !== 'pending') {
       error.value =
         clientInfo.value?.error ||
-        `This authorization request has already been ${clientInfo.value?.status}`;
+        t('device_authorization.error.already_processed', {
+          status: clientInfo.value?.status,
+        });
     }
   } catch (e: any) {
-    error.value = e.message || 'Failed to load authorization request';
+    error.value = e.message || t('device_authorization.error.load_failed');
   } finally {
     loading.value = false;
   }
@@ -82,8 +84,8 @@ async function handleConsent(approve: boolean) {
     toast.success(
       data.message ||
         (approve
-          ? 'Device authorized successfully!'
-          : 'Device authorization denied'),
+          ? t('device_authorization.success.authorized')
+          : t('device_authorization.success.denied')),
     );
 
     setTimeout(() => {
@@ -109,7 +111,7 @@ function formatDate(timestamp: number) {
           <v-card class="elevation-12">
             <v-card-title class="text-h5 text-center pa-6">
               <v-icon icon="mdi-devices" size="48" class="mr-2" />
-              Device Authorization
+              {{ t('device_authorization.title') }}
             </v-card-title>
 
             <v-divider />
@@ -117,7 +119,9 @@ function formatDate(timestamp: number) {
             <v-card-text class="pa-6">
               <div v-if="loading" class="text-center py-8">
                 <v-progress-circular indeterminate color="primary" size="64" />
-                <p class="mt-4 text-body-1">Loading authorization request...</p>
+                <p class="mt-4 text-body-1">
+                  {{ t('device_authorization.loading') }}
+                </p>
               </div>
 
               <div v-else-if="error" class="text-center py-8">
@@ -129,7 +133,7 @@ function formatDate(timestamp: number) {
                   class="mt-4"
                   variant="flat"
                 >
-                  Go to Home
+                  {{ t('device_authorization.button.go_home') }}
                 </v-btn>
               </div>
 
@@ -140,18 +144,22 @@ function formatDate(timestamp: number) {
                   variant="tonal"
                   class="mb-4"
                 >
-                  You need to log in first to authorize this device.
+                  {{ t('device_authorization.login_required') }}
                 </v-alert>
 
                 <div class="authorization-details">
-                  <p class="text-h6 mb-4">Authorization Request</p>
+                  <p class="text-h6 mb-4">
+                    {{ t('device_authorization.request_details') }}
+                  </p>
 
                   <v-list lines="two" class="bg-transparent">
                     <v-list-item>
                       <template #prepend>
                         <v-icon icon="mdi-application" />
                       </template>
-                      <v-list-item-title>Application</v-list-item-title>
+                      <v-list-item-title>{{
+                        t('device_authorization.application')
+                      }}</v-list-item-title>
                       <v-list-item-subtitle>{{
                         clientInfo.client_name
                       }}</v-list-item-subtitle>
@@ -159,47 +167,32 @@ function formatDate(timestamp: number) {
 
                     <v-list-item>
                       <template #prepend>
-                        <v-icon icon="mdi-identifier" />
-                      </template>
-                      <v-list-item-title>Client ID</v-list-item-title>
-                      <v-list-item-subtitle>{{
-                        clientInfo.client_id
-                      }}</v-list-item-subtitle>
-                    </v-list-item>
-
-                    <v-list-item>
-                      <template #prepend>
                         <v-icon icon="mdi-clock-outline" />
                       </template>
-                      <v-list-item-title>Requested At</v-list-item-title>
+                      <v-list-item-title>{{
+                        t('device_authorization.requested_at')
+                      }}</v-list-item-title>
                       <v-list-item-subtitle>{{
                         formatDate(clientInfo.created_at)
-                      }}</v-list-item-subtitle>
-                    </v-list-item>
-
-                    <v-list-item>
-                      <template #prepend>
-                        <v-icon icon="mdi-clock-alert-outline" />
-                      </template>
-                      <v-list-item-title>Expires At</v-list-item-title>
-                      <v-list-item-subtitle>{{
-                        formatDate(clientInfo.expires_at)
                       }}</v-list-item-subtitle>
                     </v-list-item>
                   </v-list>
 
                   <v-alert type="warning" variant="tonal" class="mt-4 mb-4">
                     <p class="text-body-2">
-                      <strong>{{ clientInfo.client_name }}</strong> is
-                      requesting access to your Reden account. By authorizing,
-                      you allow this application to:
+                      <strong>{{ clientInfo.client_name }}</strong>
+                      {{ t('device_authorization.is_requesting') }}
                     </p>
                     <ul class="mt-2">
-                      <li>Access your profile information</li>
-                      <li>Perform actions on your behalf</li>
+                      <li>
+                        {{ t('device_authorization.warning.access_profile') }}
+                      </li>
+                      <li>
+                        {{ t('device_authorization.warning.perform_actions') }}
+                      </li>
                     </ul>
                     <p class="mt-2 text-body-2">
-                      Only authorize if you trust this application.
+                      {{ t('device_authorization.warning.trust_notice') }}
                     </p>
                   </v-alert>
                 </div>
