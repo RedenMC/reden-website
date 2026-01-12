@@ -35,19 +35,21 @@ useSeoMeta({
 
 onMounted(async () => {
   token.value = (route.query.token as string) || '';
-  
+
   if (!token.value) {
     error.value = 'Missing authorization token';
     loading.value = false;
     return;
   }
-  
+
   try {
-    const response = await doFetchGet(`/api/auth/device/info?token=${token.value}`);
-    clientInfo.value = response;
-    
-    if (response.status !== 'pending') {
-      error.value = `This authorization request has already been ${response.status}`;
+    const response = await doFetchGet(
+      `/api/auth/device/info?token=${token.value}`,
+    );
+    clientInfo.value = await response.json();
+
+    if (clientInfo.value?.status !== 'pending') {
+      error.value = `This authorization request has already been ${clientInfo.value?.status}`;
     }
   } catch (e: any) {
     error.value = e.message || 'Failed to load authorization request';
@@ -57,22 +59,30 @@ onMounted(async () => {
 });
 
 async function handleConsent(approve: boolean) {
-  if (!useAppStore().loggedIn) {
+  if (!useAppStore().logined) {
     const redirectUrl = `/auth/device?token=${token.value}`;
-    await router.push(localePath(`/login?redirect=${encodeURIComponent(redirectUrl)}`));
+    await router.push(
+      localePath(`/login?redirect=${encodeURIComponent(redirectUrl)}`),
+    );
     return;
   }
-  
+
   processing.value = true;
-  
+
   try {
     const response = await doFetchPost('/api/auth/device/consent', {
       token: token.value,
       approve: approve,
     });
-    
-    toast.success(response.message || (approve ? 'Device authorized successfully!' : 'Device authorization denied'));
-    
+    const data = await response.json();
+
+    toast.success(
+      data.message ||
+        (approve
+          ? 'Device authorized successfully!'
+          : 'Device authorization denied'),
+    );
+
     setTimeout(() => {
       router.push(localePath('/home'));
     }, 2000);
@@ -98,83 +108,88 @@ function formatDate(timestamp: number) {
               <v-icon icon="mdi-devices" size="48" class="mr-2" />
               Device Authorization
             </v-card-title>
-            
+
             <v-divider />
-            
+
             <v-card-text class="pa-6">
               <div v-if="loading" class="text-center py-8">
                 <v-progress-circular indeterminate color="primary" size="64" />
                 <p class="mt-4 text-body-1">Loading authorization request...</p>
               </div>
-              
+
               <div v-else-if="error" class="text-center py-8">
                 <v-icon icon="mdi-alert-circle" color="error" size="64" />
                 <p class="mt-4 text-h6 text-error">{{ error }}</p>
-                <v-btn 
-                  :to="localePath('/home')" 
-                  color="primary" 
+                <v-btn
+                  :to="localePath('/home')"
+                  color="primary"
                   class="mt-4"
                   variant="flat"
                 >
                   Go to Home
                 </v-btn>
               </div>
-              
+
               <div v-else-if="clientInfo">
-                <v-alert 
-                  v-if="!useAppStore().loggedIn" 
-                  type="info" 
+                <v-alert
+                  v-if="!useAppStore().logined"
+                  type="info"
                   variant="tonal"
                   class="mb-4"
                 >
                   You need to log in first to authorize this device.
                 </v-alert>
-                
+
                 <div class="authorization-details">
                   <p class="text-h6 mb-4">Authorization Request</p>
-                  
+
                   <v-list lines="two" class="bg-transparent">
                     <v-list-item>
                       <template #prepend>
                         <v-icon icon="mdi-application" />
                       </template>
                       <v-list-item-title>Application</v-list-item-title>
-                      <v-list-item-subtitle>{{ clientInfo.client_name }}</v-list-item-subtitle>
+                      <v-list-item-subtitle>{{
+                        clientInfo.client_name
+                      }}</v-list-item-subtitle>
                     </v-list-item>
-                    
+
                     <v-list-item>
                       <template #prepend>
                         <v-icon icon="mdi-identifier" />
                       </template>
                       <v-list-item-title>Client ID</v-list-item-title>
-                      <v-list-item-subtitle>{{ clientInfo.client_id }}</v-list-item-subtitle>
+                      <v-list-item-subtitle>{{
+                        clientInfo.client_id
+                      }}</v-list-item-subtitle>
                     </v-list-item>
-                    
+
                     <v-list-item>
                       <template #prepend>
                         <v-icon icon="mdi-clock-outline" />
                       </template>
                       <v-list-item-title>Requested At</v-list-item-title>
-                      <v-list-item-subtitle>{{ formatDate(clientInfo.created_at) }}</v-list-item-subtitle>
+                      <v-list-item-subtitle>{{
+                        formatDate(clientInfo.created_at)
+                      }}</v-list-item-subtitle>
                     </v-list-item>
-                    
+
                     <v-list-item>
                       <template #prepend>
                         <v-icon icon="mdi-clock-alert-outline" />
                       </template>
                       <v-list-item-title>Expires At</v-list-item-title>
-                      <v-list-item-subtitle>{{ formatDate(clientInfo.expires_at) }}</v-list-item-subtitle>
+                      <v-list-item-subtitle>{{
+                        formatDate(clientInfo.expires_at)
+                      }}</v-list-item-subtitle>
                     </v-list-item>
                   </v-list>
-                  
-                  <v-alert 
-                    type="warning" 
-                    variant="tonal"
-                    class="mt-4 mb-4"
-                  >
+
+                  <v-alert type="warning" variant="tonal" class="mt-4 mb-4">
                     <p class="text-body-2">
-                      <strong>{{ clientInfo.client_name }}</strong> is requesting access to your Reden account.
-                      By authorizing, you allow this application to:
+                      <strong>{{ clientInfo.client_name }}</strong> is
+                      requesting access to your Reden account. By authorizing,
+                      you allow this application to:
                     </p>
                     <ul class="mt-2">
                       <li>Access your profile information</li>
@@ -187,10 +202,13 @@ function formatDate(timestamp: number) {
                 </div>
               </div>
             </v-card-text>
-            
+
             <v-divider v-if="clientInfo && !error" />
-            
-            <v-card-actions v-if="clientInfo && !error" class="pa-6 justify-space-between">
+
+            <v-card-actions
+              v-if="clientInfo && !error"
+              class="pa-6 justify-space-between"
+            >
               <v-btn
                 color="error"
                 variant="outlined"
@@ -203,12 +221,12 @@ function formatDate(timestamp: number) {
                 <v-icon start icon="mdi-close-circle" />
                 Deny
               </v-btn>
-              
+
               <v-btn
                 color="success"
                 variant="flat"
                 size="large"
-                :disabled="processing || !useAppStore().loggedIn"
+                :disabled="processing || !useAppStore().logined"
                 :loading="processing"
                 @click="handleConsent(true)"
                 class="flex-grow-1 ml-2"
