@@ -3,7 +3,6 @@ import MinecraftFarmCard from '~/components/litematica/MinecraftFarmCard.vue';
 import { useDisplay, useGoTo } from 'vuetify';
 import SidebarAd from '~/components/ads/SidebarAd.vue';
 import BottomBarAd from '~/components/ads/BottomBarAd.vue';
-import { useElementHover } from '@vueuse/core';
 import { useAppStore } from '~/store/app';
 import { toast } from 'vuetify-sonner';
 import EarningBanner from '~/components/litematica/EarningBanner.vue';
@@ -101,6 +100,18 @@ watch(sortType, () => {
 export type Machine = MachineDef & {
   conditions: { [key: string]: ((v: number) => any)[] };
 };
+type AdvertisementFormat = 'image';
+type AdvertisementImagePayload = {
+  url: string;
+  clickUrl?: string | null;
+};
+type AdvertisementDto = {
+  id: string;
+  title: string;
+  format: AdvertisementFormat;
+  payload: AdvertisementImagePayload;
+  isActive: boolean;
+};
 export type ListLitematicaResponse = {
   d: (MachineDef & {
     conditions?: {
@@ -179,6 +190,26 @@ if (import.meta.client) {
   }
 }
 
+const { data: featuredAd } = useFetch<AdvertisementDto>('/api/ads/featured', {
+  dedupe: 'defer',
+});
+const featuredAdImage = computed(() => {
+  const ad = featuredAd.value;
+  if (!ad || ad.format !== 'image') return null;
+  return ad.payload?.url ?? null;
+});
+const featuredAdTitle = computed(() => featuredAd.value?.title ?? '');
+const featuredAdClickUrl = computed(() => {
+  const ad = featuredAd.value;
+  if (!ad || ad.format !== 'image') return null;
+  return ad.payload?.clickUrl ?? null;
+});
+const isAdVisible = ref(true);
+const handleAdClick = () => {
+  if (!featuredAd.value) return;
+  fetch(`/api/ads/${featuredAd.value.id}/click`, { method: 'POST' }).catch(() => {});
+};
+
 const isClient = import.meta.client;
 const notification = ref<boolean>(false);
 const maintaining = false;
@@ -210,24 +241,41 @@ const itemDisplayCols = computed(() => {
   }
   return cols;
 });
-const ad = useTemplateRef<HTMLParagraphElement>('ad');
-const isHovering = useElementHover(ad);
 </script>
 <template>
   <div>
     <EarningBanner />
-    <p ref="ad" class="w-100 text-center opacity-60">
-      <template v-if="isHovering">
-        广告位招租！<br />
-        如果您想借助本站的流量推广您的服务器、VPS出租或任何其他服务，请在微信
-        Scanmenge 或 QQ 1284588550 联系我，注明来意。
-        <p style="font-weight: bold">为什么我要在这里放广告？</p>
-        所有广告收入将用于支付服务器费用，剩余利润将会对半分给网站协作开发者，以及机器设计者。<br />
-        投影生成器和夸克网盘下载是因为我和机器作者有另外的合作和分成关系(这是我个人从此网站获利的主要方式)。<br />
-        所以希望你禁用自己的广告屏蔽器！
-      </template>
-      <span v-else style="font-size: 0.6rem">广告位招租！</span>
-    </p>
+    <div v-if="isAdVisible" class="advertisement-banner w-100 text-center">
+      <button class="ad-close" type="button" @click="isAdVisible = false">
+        广告 ×
+      </button>
+      <div v-if="featuredAdImage" class="advertisement-content">
+        <a
+          v-if="featuredAdClickUrl"
+          :href="featuredAdClickUrl"
+          target="_blank"
+          rel="noopener"
+          @click="handleAdClick"
+        >
+          <img
+            :src="featuredAdImage"
+            :alt="featuredAdTitle || '广告'"
+            class="advertisement-image"
+            loading="lazy"
+          />
+        </a>
+        <img
+          v-else
+          :src="featuredAdImage"
+          :alt="featuredAdTitle || '广告'"
+          class="advertisement-image"
+          loading="lazy"
+        />
+      </div>
+      <div v-else class="ad-placeholder">
+        广告位招租！如需推广请联系微信 Scanmenge 或 QQ 1284588550（请注明来意）
+      </div>
+    </div>
     <v-btn
       class="position-fixed z-10 right-0"
       color="primary"
@@ -471,6 +519,43 @@ const isHovering = useElementHover(ad);
   .v-col {
     padding: 0 !important;
   }
+}
+
+.advertisement-banner {
+  position: relative;
+  border: 1px dashed rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+}
+
+.ad-close {
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  border: none;
+  background: transparent;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+.advertisement-image :hover {
+  transform: scale(1.02);
+  transition: transform 0.3s;
+}
+
+.advertisement-image {
+  max-height: 150px;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+
+.ad-placeholder {
+  font-size: 0.85rem;
+  opacity: 0.7;
+  line-height: 1.5;
 }
 
 .my-ads {
