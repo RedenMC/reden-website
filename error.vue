@@ -45,7 +45,7 @@ useHead({
     <v-empty-state
       v-else
       :headline="String(error?.statusCode)"
-      :title="error?.message"
+      :title="'如果你看到了这个页面，请加QQ群截图反馈：708842363，谢谢！' + error?.message"
       height="500px"
     >
       <template #text>
