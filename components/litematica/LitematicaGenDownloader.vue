@@ -61,6 +61,21 @@ function onVerified() {
   emits('download');
 }
 
+const customPrompt = computed(() => {
+  if (props.selected.key === 'sj-mid1') {
+    const efficiency =
+      27000 *
+      Math.max(
+        0,
+        Math.floor((xSize.value - 13) / 3) * 2 +
+          Math.floor((zSize.value - 16) / 3),
+      );
+    return `这个打包机预计可以打包攻击 <span style="color: #66ccff">${efficiency / 1e4}</span> 万物品 / 小时。`;
+  } else {
+    return t('litematica_generator.size_description');
+  }
+});
+
 defineExpose({ xSize, ySize, zSize, formRef });
 </script>
 
@@ -72,8 +87,7 @@ defineExpose({ xSize, ySize, zSize, formRef });
           v-if="selected?.hasX || selected?.hasY || selected?.hasZ"
           border
         >
-          <v-card-subtitle class="text-wrap pa-3">
-            {{ t('litematica_generator.size_description') }}
+          <v-card-subtitle class="text-wrap pa-3" v-html="customPrompt">
           </v-card-subtitle>
           <v-card-text>
             <SizeInput
