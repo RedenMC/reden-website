@@ -70,7 +70,14 @@ const customPrompt = computed(() => {
         Math.floor((xSize.value - 13) / 3) * 2 +
           Math.floor((zSize.value - 16) / 3),
       );
-    return `这个打包机预计可以打包攻击 <span style="color: #66ccff">${efficiency / 1e4}</span> 万物品 / 小时。`;
+    const badEfficiency =
+      20000 *
+      Math.max(
+        0,
+        Math.floor((xSize.value - 13) / 3) * 2 +
+          Math.floor((zSize.value - 16) / 3),
+      );
+    return `这个打包机预计可以打包 <span style="color: #66ccff">${efficiency / 1e4}</span> 万物品 / 小时（极限速度），在实际情况中，由于物品流速不均匀，可能仅可以打包 <span style="color: #ee7777">${badEfficiency / 1e4}</span> 万物品 / 小时，请以实际情况为准，建议留有冗余。`;
   } else {
     return t('litematica_generator.size_description');
   }
