@@ -57,10 +57,6 @@ async function openMaterials() {
   });
 }
 
-function onVerified() {
-  emits('download');
-}
-
 const customPrompt = computed(() => {
   if (props.selected.key === 'sj-mid1') {
     const badEfficiency =
