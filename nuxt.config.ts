@@ -65,6 +65,7 @@ export default defineNuxtConfig({
   content: {
     // cause OOM
     // documentDriven: true,
+    watch: false,
     highlight: {
       theme: {
         dark: 'github-dark',
@@ -123,7 +124,24 @@ export default defineNuxtConfig({
         transformAssetUrls,
       },
     },
+    optimizeDeps: {
+      exclude: ['fsevents'],
+    },
     server: {
+      watch: {
+        usePolling: true,
+        interval: 1000,
+        ignored: [
+          '**/node_modules/**',
+          '**/.git/**',
+          '**/dist/**',
+          '**/.nuxt/**',
+          '**/.output/**',
+          '**/coverage/**',
+          '**/.vscode/**',
+          '**/.idea/**',
+        ],
+      },
       proxy: {
         '/api': useRemoteBackend
           ? 'https://api.redenmc.com'
@@ -160,12 +178,6 @@ export default defineNuxtConfig({
     //   prerender: true,
     //   cache: {},
     // },
-    '/**': {
-      swr: 60 * 5, // 5 minutes
-      cache: {
-        maxAge: 60 * 60 * 24, // 1 day
-      },
-    },
     '/api/**': {
       proxy: useRemoteBackend
         ? 'https://api.redenmc.com/api/**'

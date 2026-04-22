@@ -67,6 +67,8 @@ const customPrompt = computed(() => {
           Math.floor((zSize.value - 16) / 3),
       );
     return `在实际情况中，由于物品流速不均匀，这个打包机预计可以打包 <span style="color: #66ccff">${badEfficiency / 1e4}</span> 万物品 / 小时，请以实际情况为准，建议留有冗余。`;
+  } else if (props.selected.key === 'sj-sma') {
+    return '最小值9时效率是3.2w/h，每加1效率就加0.8w';
   } else {
     return t('litematica_generator.size_description');
   }

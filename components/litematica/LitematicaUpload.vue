@@ -14,7 +14,7 @@ import { EditorView } from '@codemirror/view';
 import { localeToIso } from '~/i18n/i18n.config';
 import MDEDITOR_ZH_TW from '@vavt/cm-extension/dist/locale/zh-TW';
 import MDEDITOR_RU from '@vavt/cm-extension/dist/locale/ru';
-import { globalTheme } from '~/utils/constants';
+import { globalTheme, groupMinecraftVersions } from '~/utils/constants';
 
 
 const mdCustomTooltip = ref({
@@ -431,6 +431,14 @@ const formatFileSize = (bytes: number): string => {
 const { t, availableLocales, locale } = useI18n();
 const language = ref<string>(locale.value);
 const selectedVersions = ref<string[]>([]);
+const { data: allMinecraftVersions } = useFetch<string[]>('/api/mc-services/litematica/all-versions', {
+  dedupe: 'defer',
+  default: () => [],
+  transform: (value) => Array.isArray(value) ? value : [],
+});
+const versionGrouped = computed(() =>
+  groupMinecraftVersions([...new Set(allMinecraftVersions.value ?? [])]),
+);
 const selectableVersions = computed(() => {
   const ret: (
     | string
@@ -439,15 +447,22 @@ const selectableVersions = computed(() => {
       title: string;
     }
   )[] = [];
-  for (const version of Object.keys(versionGrouped).toReversed()) {
+  const knownValues = new Set(allMinecraftVersions.value ?? []);
+  const knownWildcards = new Set(Object.keys(versionGrouped.value).map(version => version + '.x'));
+  for (const version of Object.keys(versionGrouped.value).toReversed()) {
     ret.push(version + '.x');
     if (!selectedVersions.value.includes(version + '.x')) {
-      for (const child of versionGrouped[version]) {
+      for (const child of versionGrouped.value[version]) {
         ret.push({
           value: child,
           title: '↳ ' + child,
         });
       }
+    }
+  }
+  for (const selected of selectedVersions.value) {
+    if (!knownValues.has(selected) && !knownWildcards.has(selected)) {
+      ret.unshift(selected);
     }
   }
   return ret;
