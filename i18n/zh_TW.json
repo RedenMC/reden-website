@@ -305,9 +305,20 @@
     },
     "step": {
       "image": "上傳圖像",
+      "tags": "分類和標籤",
       "translation": "基本資訊",
       "under-review": "等待審核",
       "upload": "上傳"
+    },
+    "tags": {
+      "create_failed": "建立標籤失敗",
+      "create_hint": "沒有現有標籤與它 normalize 後完全相同。",
+      "create_success": "標籤已建立並選取",
+      "create_tag": "新增「{name}」",
+      "empty_code": "標籤代碼不能為空",
+      "input_label": "搜尋標籤",
+      "search_failed": "搜尋標籤失敗",
+      "strict_no_match": "沒有標籤在 normalize 後與目前關鍵字嚴格匹配。你可以新增一個標籤。"
     },
     "toast": {
       "auto_filled_id": "從名稱自動填寫ID",

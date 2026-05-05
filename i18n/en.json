@@ -594,6 +594,16 @@
       "under-review": "Under Review",
       "upload": "Upload"
     },
+    "tags": {
+      "create_failed": "Failed to create tag",
+      "create_hint": "No existing tag has the same normalized name.",
+      "create_success": "Tag created and selected",
+      "create_tag": "Create \"{name}\"",
+      "empty_code": "Tag code cannot be empty",
+      "input_label": "Search tags",
+      "search_failed": "Failed to search tags",
+      "strict_no_match": "No tag strictly matches this keyword after normalization. You can create a new tag."
+    },
     "toast": {
       "auto_filled_id": "Auto-filled ID from name",
       "auto_filled_name": "Auto-filled name from file name",

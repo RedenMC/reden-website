@@ -608,6 +608,16 @@
       "under-review": "等待审核",
       "upload": "上传"
     },
+    "tags": {
+      "create_failed": "创建标签失败",
+      "create_hint": "没有现有标签与它 normalize 后完全相同。",
+      "create_success": "标签已创建并选中",
+      "create_tag": "新建“{name}”",
+      "empty_code": "标签代码不能为空",
+      "input_label": "搜索标签",
+      "search_failed": "搜索标签失败",
+      "strict_no_match": "没有标签在 normalize 后与当前关键词严格匹配。你可以新建一个标签。"
+    },
     "toast": {
       "auto_filled_id": "从名称自动填写ID",
       "auto_filled_name": "从文件名自动填充名称",
