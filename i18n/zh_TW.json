@@ -149,6 +149,11 @@
       "unlink_account": "取消連接"
     },
     "password": "密碼",
+    "sort": {
+      "createdAt": "最新發布",
+      "downloads": "最多下載",
+      "sort_by": "排序方式："
+    },
     "username": "使用者名稱"
   },
   "reden": {

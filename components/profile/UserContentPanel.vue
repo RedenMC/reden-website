@@ -10,6 +10,7 @@ const props = defineProps<{
   machines?: any[];
   page?: number;
   totalPages: number;
+  sort?: ProfilePostSort;
 }>();
 
 const { width } = useDisplay();
@@ -18,7 +19,16 @@ const page = ref(props.page || 1);
 
 const emits = defineEmits<{
   'update:page': [number];
+  'update:sort': [ProfilePostSort];
 }>();
+
+type ProfilePostSort = 'createdAt' | 'downloads';
+
+const sortTypes: ProfilePostSort[] = ['createdAt', 'downloads'];
+const sortType = computed<ProfilePostSort>({
+  get: () => props.sort ?? 'createdAt',
+  set: (value) => emits('update:sort', value),
+});
 
 const displayedMachines = computed(() => {
   return props.machines || [];
@@ -51,8 +61,24 @@ const itemDisplayCols = computed<Column[]>(() => {
 <template>
   <v-card :elevation="4" border>
     <div class="profile-card-content">
-      <v-card-title>
+      <v-card-title class="profile-posts-title">
         <h2>{{ t('profile.posts') }}</h2>
+        <div class="sort-actions">
+          <span class="sort-label">
+            {{ t('profile.sort.sort_by') }}
+          </span>
+          <v-btn
+            v-for="sort in sortTypes"
+            :key="sort"
+            :active="sortType === sort"
+            class="text-none"
+            color="secondary"
+            variant="text"
+            @click="sortType = sort"
+          >
+            {{ t(`profile.sort.${sort}`) }}
+          </v-btn>
+        </div>
       </v-card-title>
       <v-card-text>
         <v-row justify="center">
@@ -101,3 +127,25 @@ const itemDisplayCols = computed<Column[]>(() => {
     </div>
   </v-card>
 </template>
+
+<style scoped>
+.profile-posts-title {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  justify-content: space-between;
+}
+
+.sort-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.sort-label {
+  font-size: 0.875rem;
+  line-height: 36px;
+}
+</style>

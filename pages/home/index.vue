@@ -111,10 +111,14 @@ function getPersonalToken() {
 }
 
 const page = ref(1);
+const sortType = ref<'createdAt' | 'downloads'>('createdAt');
+watch(sortType, () => {
+  page.value = 1;
+});
 
 const { data: machines } = useFetch<ListLitematicaResponse>(
   () =>
-    `/api/mc-services/litematica/by-author?author=${user.value?.username}&pageSize=12&page=${page.value}`,
+    `/api/mc-services/litematica/by-author?author=${user.value?.username}&pageSize=12&page=${page.value}&order=${sortType.value}`,
 );
 </script>
 
@@ -307,6 +311,7 @@ const { data: machines } = useFetch<ListLitematicaResponse>(
         <UserContentPanel
           v-if="machines"
           v-model:page="page"
+          v-model:sort="sortType"
           :machines="machines.d"
           :totalPages="Math.ceil(machines.count / 12)"
           class="mt-4"

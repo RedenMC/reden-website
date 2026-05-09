@@ -276,6 +276,11 @@
     "post_management": "投稿管理",
     "post_management_desc": "管理您的投稿，编辑投稿，还可以查看还在审核中的投稿",
     "posts": "投稿列表",
+    "sort": {
+      "createdAt": "最新发布",
+      "downloads": "最多下载",
+      "sort_by": "排序方式："
+    },
     "username": "用户名",
     "verified_minecraft": "已认证的 Minecraft 账号",
     "your_timezone": "（相同时区）"

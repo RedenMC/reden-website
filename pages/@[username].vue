@@ -32,10 +32,14 @@ useHead({
 
 const goto = useGoTo();
 const page = ref(1);
+const sortType = useRouteQuery<'createdAt' | 'downloads'>('sort', 'createdAt');
 watch(page, () => goto(0));
+watch(sortType, () => {
+  page.value = 1;
+});
 const { data: machines } = useFetch<ListLitematicaResponse>(
   () =>
-    `/api/mc-services/litematica/by-author?author=${user.value?.username}&pageSize=12&page=${page.value}`,
+    `/api/mc-services/litematica/by-author?author=${user.value?.username}&pageSize=12&page=${page.value}&order=${sortType.value}`,
 );
 </script>
 
@@ -66,6 +70,7 @@ const { data: machines } = useFetch<ListLitematicaResponse>(
       <v-col v-if="machines">
         <UserContentPanel
           v-model:page="page"
+          v-model:sort="sortType"
           :machines="machines.d"
           :totalPages="Math.ceil(machines.count / 12)"
         />

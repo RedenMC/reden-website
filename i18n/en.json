@@ -275,6 +275,11 @@
     "post_management": "Post Management",
     "post_management_desc": "View & edit your posts, including posts under review",
     "posts": "Posts",
+    "sort": {
+      "createdAt": "Latest",
+      "downloads": "Most Downloads",
+      "sort_by": "Sort by:"
+    },
     "username": "Username",
     "verified_minecraft": "Verified minecraft account",
     "your_timezone": "(Your timezone)"

@@ -148,6 +148,11 @@
       "unlink_account": "Отвязать аккаунт"
     },
     "password": "Пароль",
+    "sort": {
+      "createdAt": "Новые",
+      "downloads": "Больше загрузок",
+      "sort_by": "Сортировать:"
+    },
     "username": "Имя пользователя"
   },
   "reden": {
