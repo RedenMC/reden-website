@@ -8,13 +8,17 @@ type TagPageData = {
   posts: MachineDef[];
 };
 
+type TagPostSort = 'downloads' | 'createdAt';
+
 const route = useRoute();
 const router = useRouter();
 const tagName = computed(() => route.params.tag_name as string);
 const page = useRouteQuery('page', 1, { transform: Number });
+const sortType = useRouteQuery<TagPostSort>('sort', 'downloads');
 const pageSize = 12;
 const localePath = useLocalePath();
 const { t } = useI18n();
+const sortTypes: TagPostSort[] = ['downloads', 'createdAt'];
 
 const {
   data: pageData,
@@ -22,7 +26,7 @@ const {
   error,
 } = await useFetch<TagPageData>(
   () =>
-    `/api/mc-services/tags/${encodeURIComponent(tagName.value)}/posts?page=${page.value}&pageSize=${pageSize}`,
+    `/api/mc-services/tags/${encodeURIComponent(tagName.value)}/posts?page=${page.value}&pageSize=${pageSize}&order=${sortType.value}`,
   { dedupe: 'cancel' },
 );
 
@@ -53,12 +57,20 @@ watch(tagName, () => {
   page.value = 1;
 });
 
+watch(sortType, () => {
+  page.value = 1;
+});
+
 function postHref(post: MachineDef) {
   return localePath(`/litematica/${post.key}`);
 }
 
 function authorHref(post: MachineDef) {
   return post.author?.username ? localePath(`/@${post.author.username}`) : '';
+}
+
+function sortIcon(sort: TagPostSort) {
+  return sort === 'downloads' ? 'mdi-download' : 'mdi-clock-outline';
 }
 </script>
 
@@ -97,6 +109,23 @@ function authorHref(post: MachineDef) {
 
       <section class="tag-toolbar">
         <h2>{{ t('tag.posts_with_tag', { tag: tag?.name || tagName }) }}</h2>
+        <v-btn-toggle
+          v-model="sortType"
+          class="tag-sort-toggle"
+          color="primary"
+          density="comfortable"
+          divided
+          mandatory
+          rounded="lg"
+          variant="tonal"
+        >
+          <v-btn v-for="sort in sortTypes" :key="sort" :value="sort">
+            <v-icon size="18">{{ sortIcon(sort) }}</v-icon>
+            <span class="tag-sort-label">
+              {{ t(`litematica_generator.sort.${sort}`) }}
+            </span>
+          </v-btn>
+        </v-btn-toggle>
       </section>
 
       <div v-if="status === 'pending'" class="tag-post-grid">
@@ -290,6 +319,24 @@ function authorHref(post: MachineDef) {
   font-size: 0.86rem;
 }
 
+.tag-sort-toggle {
+  flex: 0 0 auto;
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: rgba(15, 23, 42, 0.36);
+}
+
+.tag-sort-toggle :deep(.v-btn) {
+  min-width: 112px;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.tag-sort-label {
+  margin-left: 6px;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
 .tag-post-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -454,6 +501,7 @@ function authorHref(post: MachineDef) {
 
   .tag-toolbar {
     align-items: flex-start;
+    flex-direction: column;
   }
 
   .tag-post-grid {
