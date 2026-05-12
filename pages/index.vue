@@ -571,10 +571,11 @@ watch(homepageData, (data) => {
                   v-for="i in [0, 1, 2, 3, 4, 5]"
                   type="list-item"
                 />
-                <div
+                <NuxtLink
                   v-for="(tag, index) in homepageData?.topTags?.slice(0, 8)"
                   :key="tag.tag"
-                  class="trend-item"
+                  :to="localePath(`/tag/${encodeURIComponent(tag.tag)}`)"
+                  class="trend-item trend-link"
                 >
                   <span class="trend-rank" :class="getRankClass(index)">
                     {{ index + 1 }}
@@ -593,7 +594,7 @@ watch(homepageData, (data) => {
                     <v-icon size="small">mdi-cube-outline</v-icon>
                     {{ formatCompactCount(tag.count) }}
                   </span>
-                </div>
+                </NuxtLink>
               </div>
             </div>
           </div>
@@ -1493,6 +1494,17 @@ watch(homepageData, (data) => {
   background: rgba(55, 65, 81, 0.5);
   border-color: rgba(45, 212, 191, 0.32);
   transform: translateY(-1px);
+}
+
+.trend-link {
+  color: inherit;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.trend-link:focus-visible {
+  outline: 2px solid rgba(45, 212, 191, 0.72);
+  outline-offset: 2px;
 }
 
 .trend-rank {
