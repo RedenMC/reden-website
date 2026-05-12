@@ -385,6 +385,12 @@
         "title": "Popular Redstone Machines",
         "view_all": "View All"
       },
+      "top_tags": {
+        "title": "Top Tags"
+      },
+      "top_versions": {
+        "title": "Top Versions"
+      },
       "stats": {
         "active_users": "Active Users",
         "change_this_month": "This Month",

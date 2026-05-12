@@ -8,6 +8,7 @@ import {
   discordInvite,
   doFetchGet,
   githubLink,
+  type Profile,
   toastError,
 } from '@/utils/constants';
 import '@/assets/main.css';
@@ -38,6 +39,8 @@ const {
 } = await useFetch<{
   posts: MachineDef[];
   profiles: { author: Profile; totalDownloads: number; totalVoteUps: number }[];
+  topTags: { tag: string; name: string; description: string; count: number }[];
+  topVersions: { version: string; count: number }[];
   totalDownloads: number;
   totalPosts: number;
   totalUsers: number;
@@ -71,11 +74,23 @@ function getRankIcon(index: number) {
   return '';
 }
 
+function formatCompactCount(value?: number) {
+  return new Intl.NumberFormat(locale.value.replace('_', '-'), {
+    notation: 'compact',
+    maximumFractionDigits: 1,
+  }).format(value ?? 0);
+}
+
+function getRankShare(count: number, items?: { count: number }[]) {
+  const max = Math.max(1, ...(items ?? []).map((item) => item.count));
+  return `${Math.max(8, (count / max) * 100)}%`;
+}
+
 // Stats data for hero section
 const stats = ref([
-  { number: '1.1K+', label: t('reden.home.stats.redstone_machines') },
-  { number: '348.2K+', label: t('reden.home.stats.total_downloads') },
-  { number: '12.1K+', label: t('reden.home.stats.users') },
+  { number: '1.2K+', label: t('reden.home.stats.redstone_machines') },
+  { number: '485.5K+', label: t('reden.home.stats.total_downloads') },
+  { number: '15.2K+', label: t('reden.home.stats.users') },
   { number: '24/7', label: t('reden.home.stats.online_service') },
 ]);
 
@@ -401,13 +416,13 @@ watch(homepageData, (data) => {
             <div class="card-content">
               <div class="machine-grid">
                 <v-skeleton-loader
-                  v-for="i in [0, 1, 2, 3, 4, 5]"
+                  v-for="i in [0, 1, 2, 3, 4, 5, 6, 7, 8]"
                   v-if="status === 'pending'"
                   type="card"
                   class="machine-item"
                 />
                 <div
-                  v-for="(post, index) in homepageData?.posts?.slice(0, 6)"
+                  v-for="(post, index) in homepageData?.posts?.slice(0, 9)"
                   :key="index"
                   class="machine-item"
                 >
@@ -419,6 +434,16 @@ watch(homepageData, (data) => {
                       class="machine-image"
                     />
                     <div class="machine-overlay">
+                      <div class="machine-hover-stats">
+                        <span>
+                          <v-icon size="small">mdi-download</v-icon>
+                          {{ formatCompactCount(post.downloads) }}
+                        </span>
+                        <span>
+                          <v-icon size="small">mdi-heart</v-icon>
+                          {{ formatCompactCount(post.upVotes) }}
+                        </span>
+                      </div>
                       <v-btn
                         :to="localePath(`/litematica/${post.key}`)"
                         icon="mdi-eye"
@@ -430,16 +455,21 @@ watch(homepageData, (data) => {
                   </div>
                   <div class="machine-info">
                     <h4 class="machine-title">{{ post.name }}</h4>
-                    <div class="machine-stats">
-                      <span class="stat">
-                        <v-icon size="small" color="blue">mdi-download</v-icon>
-                        {{ post.downloads }}
-                      </span>
-                      <span class="stat">
-                        <v-icon size="small" color="red">mdi-heart</v-icon>
-                        {{ post.upVotes }}
-                      </span>
-                    </div>
+                    <NuxtLink
+                      v-if="post.author?.username"
+                      :to="localePath(`/@${post.author.username}`)"
+                      class="machine-author-link"
+                    >
+                      <v-avatar size="22" class="machine-author-avatar">
+                        <v-img
+                          v-if="post.author.avatarUrl"
+                          :src="post.author.avatarUrl"
+                          :alt="post.author.username"
+                        />
+                        <v-icon v-else size="14">mdi-account</v-icon>
+                      </v-avatar>
+                      <span>{{ post.author.username }}</span>
+                    </NuxtLink>
                   </div>
                 </div>
               </div>
@@ -518,6 +548,99 @@ watch(homepageData, (data) => {
                       class="creator-action"
                     />
                   </template>
+                </div>
+              </div>
+            </div>
+          </div>
+        </v-col>
+      </v-row>
+
+      <v-row class="mb-8 ranking-row">
+        <v-col cols="12" md="6">
+          <div class="tech-card compact-rank-card">
+            <div class="card-header">
+              <h3 class="card-title">
+                <v-icon class="mr-2" color="teal">mdi-tag-multiple</v-icon>
+                {{ t('reden.home.top_tags.title') }}
+              </h3>
+            </div>
+            <div class="card-content">
+              <div class="trend-list">
+                <v-skeleton-loader
+                  v-if="status === 'pending'"
+                  v-for="i in [0, 1, 2, 3, 4, 5]"
+                  type="list-item"
+                />
+                <div
+                  v-for="(tag, index) in homepageData?.topTags?.slice(0, 8)"
+                  :key="tag.tag"
+                  class="trend-item"
+                >
+                  <span class="trend-rank" :class="getRankClass(index)">
+                    {{ index + 1 }}
+                  </span>
+                  <div class="trend-main">
+                    <div class="trend-name">{{ tag.name }}</div>
+                    <div class="trend-bar">
+                      <span
+                        :style="{
+                          width: getRankShare(tag.count, homepageData?.topTags),
+                        }"
+                      ></span>
+                    </div>
+                  </div>
+                  <span class="trend-count">
+                    <v-icon size="small">mdi-cube-outline</v-icon>
+                    {{ formatCompactCount(tag.count) }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </v-col>
+        <v-col cols="12" md="6">
+          <div class="tech-card compact-rank-card">
+            <div class="card-header">
+              <h3 class="card-title">
+                <v-icon class="mr-2" color="light-blue">mdi-layers-triple</v-icon>
+                {{ t('reden.home.top_versions.title') }}
+              </h3>
+            </div>
+            <div class="card-content">
+              <div class="trend-list">
+                <v-skeleton-loader
+                  v-if="status === 'pending'"
+                  v-for="i in [0, 1, 2, 3, 4, 5]"
+                  type="list-item"
+                />
+                <div
+                  v-for="(version, index) in homepageData?.topVersions?.slice(
+                    0,
+                    8
+                  )"
+                  :key="version.version"
+                  class="trend-item"
+                >
+                  <span class="trend-rank" :class="getRankClass(index)">
+                    {{ index + 1 }}
+                  </span>
+                  <div class="trend-main">
+                    <div class="trend-name">{{ version.version }}</div>
+                    <div class="trend-bar version-bar">
+                      <span
+                        :style="{
+                          width: getRankShare(
+                            version.count,
+                            homepageData?.topVersions
+                          ),
+                        }"
+                      ></span>
+                    </div>
+                  </div>
+                  <span class="trend-count">
+                    <v-icon size="small">mdi-cube-outline</v-icon>
+                    {{ formatCompactCount(version.count) }}
+                  </span>
                 </div>
               </div>
             </div>
@@ -1110,8 +1233,11 @@ watch(homepageData, (data) => {
 
 .machine-image {
   width: 100%;
-  height: 120px;
+  height: 128px;
   object-fit: cover;
+  transition:
+    transform 0.3s ease,
+    filter 0.3s ease;
 }
 
 .machine-overlay {
@@ -1120,7 +1246,12 @@ watch(homepageData, (data) => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.08) 0%,
+    rgba(0, 0, 0, 0.18) 42%,
+    rgba(0, 0, 0, 0.72) 100%
+  );
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1128,8 +1259,33 @@ watch(homepageData, (data) => {
   transition: opacity 0.3s ease;
 }
 
+.machine-item:hover .machine-image {
+  transform: scale(1.04);
+  filter: saturate(1.12);
+}
+
 .machine-item:hover .machine-overlay {
   opacity: 1;
+}
+
+.machine-hover-stats {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 9px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: white;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8);
+}
+
+.machine-hover-stats span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .machine-info {
@@ -1140,7 +1296,7 @@ watch(homepageData, (data) => {
   font-size: 0.875rem;
   font-weight: 600;
   color: white;
-  margin: 0 0 8px 0;
+  margin: 0 0 10px 0;
   line-height: 1.3;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -1149,16 +1305,36 @@ watch(homepageData, (data) => {
   overflow: hidden;
 }
 
-.machine-stats {
-  display: flex;
-  gap: 12px;
-}
-
-.stat {
+.machine-author-link {
   display: flex;
   align-items: center;
-  gap: 4px;
-  font-size: 0.75rem;
+  gap: 7px;
+  min-height: 24px;
+  width: fit-content;
+  max-width: 100%;
+  color: rgba(255, 255, 255, 0.66);
+  font-size: 0.76rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.machine-author-link:hover {
+  color: white;
+  transform: translateX(1px);
+}
+
+.machine-author-link span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.machine-author-avatar {
+  flex: 0 0 22px;
+  background: rgba(148, 163, 184, 0.18);
   color: rgba(255, 255, 255, 0.7);
 }
 
@@ -1285,6 +1461,99 @@ watch(homepageData, (data) => {
   opacity: 1;
 }
 
+.ranking-row {
+  align-items: stretch;
+}
+
+.compact-rank-card .card-header {
+  padding-bottom: 18px;
+}
+
+.trend-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.trend-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: rgba(55, 65, 81, 0.32);
+  border: 1px solid rgba(75, 85, 99, 0.22);
+  border-radius: 12px;
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.trend-item:hover {
+  background: rgba(55, 65, 81, 0.5);
+  border-color: rgba(45, 212, 191, 0.32);
+  transform: translateY(-1px);
+}
+
+.trend-rank {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 26px;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 700;
+  background: rgba(148, 163, 184, 0.18);
+}
+
+.trend-main {
+  min-width: 0;
+  flex: 1;
+}
+
+.trend-name {
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.trend-bar {
+  height: 4px;
+  margin-top: 7px;
+  background: rgba(148, 163, 184, 0.16);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.trend-bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #14b8a6, #60a5fa);
+}
+
+.version-bar span {
+  background: linear-gradient(90deg, #60a5fa, #f59e0b);
+}
+
+.trend-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  min-width: 64px;
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
 /* 移动端适配 */
 @media (max-width: 768px) {
   .hero-content {
@@ -1330,6 +1599,10 @@ watch(homepageData, (data) => {
 
   .card-content {
     padding: 16px;
+  }
+
+  .trend-item {
+    padding: 11px 12px;
   }
 }
 

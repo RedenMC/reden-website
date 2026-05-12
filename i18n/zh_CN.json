@@ -386,6 +386,12 @@
         "title": "热门红石机器",
         "view_all": "查看全部"
       },
+      "top_tags": {
+        "title": "热门标签"
+      },
+      "top_versions": {
+        "title": "热门版本"
+      },
       "stats": {
         "active_users": "活跃用户",
         "change_this_month": "本月",
