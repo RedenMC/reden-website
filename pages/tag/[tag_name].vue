@@ -1,91 +1,463 @@
 <script setup lang="ts">
-import { useRoute } from '#vue-router';
-import { useI18n } from 'vue-i18n';
-import { useAppStore } from '~/store/app';
-import { ref } from 'vue';
+import { number2text } from '@/utils/constants';
 import type { MachineDef, Tag } from '~/pages/litematica/index.vue';
+
+type TagPageData = {
+  total: number;
+  tag: Tag;
+  posts: MachineDef[];
+};
 
 const route = useRoute();
 const router = useRouter();
-const tagName = route.params.tag_name as string;
-const { t, locale } = useI18n();
+const tagName = computed(() => route.params.tag_name as string);
+const page = useRouteQuery('page', 1, { transform: Number });
+const pageSize = 12;
 const localePath = useLocalePath();
-const appStore = useAppStore();
+const { t } = useI18n();
 
 const {
   data: pageData,
   status,
   error,
-} = useFetch<{
-  tag: Tag;
-  posts: MachineDef[];
-}>(`/api/mc-services/tags/${tagName}/posts`);
+} = await useFetch<TagPageData>(
+  () =>
+    `/api/mc-services/tags/${encodeURIComponent(tagName.value)}/posts?page=${page.value}&pageSize=${pageSize}`,
+  { dedupe: 'cancel' },
+);
+
+const tag = computed(() => pageData.value?.tag);
+const posts = computed(() => pageData.value?.posts ?? []);
+const total = computed(() => pageData.value?.total ?? 0);
+const totalPages = computed(() =>
+  Math.max(1, Math.ceil(total.value / pageSize)),
+);
+
+useHead(() => ({
+  title: tag.value ? `#${tag.value.name}` : `#${tagName.value}`,
+  titleTemplate: '%s - Reden',
+}));
+
+function openPost(post: MachineDef) {
+  router.push(postHref(post));
+}
+
+function openPostByKeyboard(event: KeyboardEvent, post: MachineDef) {
+  if (event.key === 'Enter' || event.key === ' ') {
+    event.preventDefault();
+    openPost(post);
+  }
+}
+
+watch(tagName, () => {
+  page.value = 1;
+});
+
+function postHref(post: MachineDef) {
+  return localePath(`/litematica/${post.key}`);
+}
+
+function authorHref(post: MachineDef) {
+  return post.author?.username ? localePath(`/@${post.author.username}`) : '';
+}
 </script>
 
 <template>
-  <div v-if="error && status === 'error'" class="text-center">
-    <div v-if="error.statusCode === 404">
-      <h1 class="text-2xl font-bold">{{ t('tag.not_found') }}</h1>
+  <v-container class="tag-page py-10 py-md-12">
+    <div v-if="error && status === 'error'" class="tag-state-card">
+      <v-icon size="42" color="red-lighten-2">mdi-tag-off-outline</v-icon>
+      <h1>{{ t('tag.not_found') }}</h1>
       <p>{{ t('tag.not_found_description', { tag: tagName }) }}</p>
-      <v-btn rounded="lg" :to="localePath('/')" class="mt-4">
-        {{ t('common.back_to_home') }}
+      <v-btn
+        :to="localePath('/litematica')"
+        color="primary"
+        prepend-icon="mdi-arrow-left"
+        variant="tonal"
+      >
+        {{ t('reden.home.go_litematica') }}
       </v-btn>
     </div>
-  </div>
-  <div v-else-if="status === 'success'">
-    <div v-if="pageData && pageData.tag" class="max-w-4xl mx-auto">
-      <h1 class="text-4xl font-extrabold mb-4">#{{ pageData.tag.name }}</h1>
-      <p class="mb-6 text-gray-600 dark:text-gray-400">
-        {{ t('tag.tag_associated', { count: pageData.posts.length }) }}
-      </p>
 
-      <h2 class="text-3xl font-bold mb-2">
-        {{ t('tag.posts_with_tag', { tag: pageData.tag.name }) }}
-      </h2>
-      <p class="mb-4 text-gray-600 dark:text-gray-400">
-        {{ pageData.tag.description }}
-      </p>
-      <v-divider class="my-4"></v-divider>
-      <div v-if="pageData.posts.length > 0" class="space-y-4">
-        <div
-          v-for="post in pageData.posts"
-          :key="post.key"
-          class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg"
-        >
-          <h2 class="text-xl font-semibold mb-2">
-            <router-link
-              :to="localePath(`/litematica/${post.key}`)"
-              style="color: initial"
-              class="text-blue-600 dark:text-blue-400 hover:underline"
-            >
-              {{ post.name }}
-            </router-link>
-          </h2>
-          <p
-            class="text-gray-700 dark:text-gray-300 mb-2"
-            style="max-height: 180px"
-          >
-            {{ post.description }}
-          </p>
-          <div class="text-sm text-gray-500 dark:text-gray-400">
-            {{ t('litematica_generator.by.author') }}:
-            <router-link
-              :to="localePath(`/@${post.author?.username}`)"
-              class="text-blue-600 dark:text-blue-400 hover:underline"
-            >
-              {{ post.author!.username }}
-            </router-link>
+    <template v-else>
+      <section class="tag-hero">
+        <div class="tag-hero-bg"></div>
+        <div class="tag-hero-content">
+          <div>
+            <div class="tag-kicker">
+              <v-icon size="18">mdi-tag-multiple</v-icon>
+              <span>{{ tag?.tag || tagName }}</span>
+            </div>
+            <h1>#{{ tag?.name || tagName }}</h1>
+            <p>
+              {{ tag?.description || t('tag.loading') }}
+            </p>
           </div>
         </div>
+      </section>
+
+      <section class="tag-toolbar">
+        <h2>{{ t('tag.posts_with_tag', { tag: tag?.name || tagName }) }}</h2>
+      </section>
+
+      <div v-if="status === 'pending'" class="tag-post-grid">
+        <v-skeleton-loader
+          v-for="i in pageSize"
+          :key="i"
+          class="tag-post-card"
+          type="image, article"
+        />
       </div>
-      <div v-else class="text-center text-gray-600 dark:text-gray-400">
-        {{ t('tag.no_posts_with_tag', { tag: pageData.tag.name }) }}
+
+      <div v-else-if="posts.length > 0" class="tag-post-grid">
+        <article
+          v-for="post in posts"
+          :key="post.key"
+          class="tag-post-card"
+          role="link"
+          tabindex="0"
+          @click="openPost(post)"
+          @keydown="openPostByKeyboard($event, post)"
+        >
+          <div class="tag-post-preview">
+            <v-img
+              :src="post.thumbnailUrl || '/image/default-preview.png'"
+              aspect-ratio="16/9"
+              class="tag-post-image"
+              cover
+            />
+            <div class="tag-post-overlay">
+              <span>
+                <v-icon size="small">mdi-download</v-icon>
+                {{ number2text(post.downloads ?? 0) }}
+              </span>
+              <span>
+                <v-icon size="small">mdi-heart</v-icon>
+                {{ number2text(post.upVotes ?? 0) }}
+              </span>
+            </div>
+          </div>
+          <div class="tag-post-body">
+            <h3>{{ post.name }}</h3>
+            <NuxtLink
+              v-if="post.author?.username"
+              :to="authorHref(post)"
+              class="tag-author"
+              @click.stop
+            >
+              <v-avatar size="22" class="tag-author-avatar">
+                <v-img
+                  v-if="post.author.avatarUrl"
+                  :src="post.author.avatarUrl"
+                  :alt="post.author.username"
+                />
+                <v-icon v-else size="14">mdi-account</v-icon>
+              </v-avatar>
+              <span>{{ post.author.username }}</span>
+            </NuxtLink>
+          </div>
+        </article>
       </div>
-    </div>
-    <div v-else class="text-center text-gray-600 dark:text-gray-400">
-      {{ t('tag.loading') }}
-    </div>
-  </div>
+
+      <div v-else class="tag-state-card">
+        <v-icon size="42" color="cyan">mdi-tag-hidden</v-icon>
+        <h2>{{ t('tag.no_posts_with_tag', { tag: tag?.name || tagName }) }}</h2>
+      </div>
+
+      <div v-if="totalPages > 1" class="tag-pagination">
+        <v-pagination
+          v-model="page"
+          :length="totalPages"
+          density="comfortable"
+          rounded="circle"
+          total-visible="7"
+        />
+      </div>
+    </template>
+  </v-container>
 </template>
 
-<style scoped></style>
+<style scoped>
+.tag-page {
+  color: white;
+}
+
+.tag-hero {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(75, 85, 99, 0.34);
+  border-radius: 16px;
+  background: linear-gradient(135deg, #111827e6, #1f2937e6);
+  box-shadow: 0 16px 44px rgba(15, 23, 42, 0.18);
+}
+
+.tag-hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 14% 24%, rgba(20, 184, 166, 0.18), transparent 34%),
+    radial-gradient(circle at 88% 12%, rgba(96, 165, 250, 0.18), transparent 36%),
+    linear-gradient(45deg, transparent 42%, rgba(148, 163, 184, 0.06) 50%, transparent 58%);
+}
+
+.tag-hero-content {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 32px;
+}
+
+.tag-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+  margin-bottom: 14px;
+  color: rgba(125, 211, 252, 0.86);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.tag-kicker span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tag-hero h1 {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 4.2rem);
+  font-weight: 800;
+  line-height: 1;
+}
+
+.tag-hero p {
+  max-width: 760px;
+  margin: 16px 0 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 1rem;
+  line-height: 1.75;
+}
+
+.tag-hero-metrics {
+  flex: 0 0 auto;
+}
+
+.tag-metric {
+  min-width: 132px;
+  padding: 16px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.42);
+  backdrop-filter: blur(10px);
+}
+
+.tag-metric strong {
+  display: block;
+  margin-top: 8px;
+  color: white;
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.tag-metric span {
+  display: block;
+  margin-top: 6px;
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 0.75rem;
+}
+
+.tag-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 28px 0 18px;
+  backdrop-filter: blur(10px);
+}
+
+.tag-toolbar h2 {
+  margin: 0;
+  color: white;
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+.tag-toolbar p {
+  margin: 5px 0 0;
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 0.86rem;
+}
+
+.tag-post-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 18px;
+}
+
+.tag-post-card {
+  overflow: hidden;
+  border: 1px solid rgba(75, 85, 99, 0.28);
+  border-radius: 14px;
+  background: rgba(31, 41, 55, 0.78);
+  color: inherit;
+  cursor: pointer;
+  text-decoration: none;
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.tag-post-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(45, 212, 191, 0.35);
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.24);
+}
+
+.tag-post-card:focus-visible {
+  outline: 2px solid rgba(45, 212, 191, 0.72);
+  outline-offset: 3px;
+}
+
+.tag-post-preview {
+  position: relative;
+  overflow: hidden;
+}
+
+.tag-post-image {
+  height: 150px;
+  transition:
+    transform 0.3s ease,
+    filter 0.3s ease;
+}
+
+.tag-post-card:hover .tag-post-image {
+  transform: scale(1.04);
+  filter: saturate(1.12);
+}
+
+.tag-post-overlay {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 9px;
+  display: flex;
+  gap: 12px;
+  color: white;
+  font-size: 0.78rem;
+  font-weight: 700;
+  opacity: 0;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8);
+  transition: opacity 0.25s ease;
+}
+
+.tag-post-card:hover .tag-post-overlay {
+  opacity: 1;
+}
+
+.tag-post-overlay span,
+.tag-author {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.tag-post-body {
+  padding: 14px;
+}
+
+.tag-post-body h3 {
+  display: -webkit-box;
+  min-height: 42px;
+  margin: 0 0 12px;
+  overflow: hidden;
+  color: white;
+  font-size: 0.98rem;
+  font-weight: 700;
+  line-height: 1.35;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+.tag-author {
+  max-width: 100%;
+  color: rgba(255, 255, 255, 0.66);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.tag-author:hover {
+  color: white;
+}
+
+.tag-author span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tag-author-avatar {
+  flex: 0 0 22px;
+  background: rgba(148, 163, 184, 0.18);
+}
+
+.tag-state-card {
+  display: flex;
+  min-height: 320px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 32px;
+  border: 1px solid rgba(75, 85, 99, 0.3);
+  border-radius: 16px;
+  background: linear-gradient(135deg, #111827cc, #1f2937cc);
+  color: white;
+  text-align: center;
+}
+
+.tag-state-card h1,
+.tag-state-card h2 {
+  margin: 0;
+  font-size: 1.6rem;
+}
+
+.tag-state-card p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.tag-pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 28px;
+}
+
+@media (max-width: 760px) {
+  .tag-hero-content {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 24px;
+  }
+
+  .tag-hero-metrics {
+    width: 100%;
+  }
+
+  .tag-metric {
+    min-width: 0;
+  }
+
+  .tag-toolbar {
+    align-items: flex-start;
+  }
+
+  .tag-post-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>

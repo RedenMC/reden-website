@@ -524,6 +524,8 @@
     "toolbox": "Toolbox"
   },
   "tag": {
+    "loading": "Loading tag",
+    "no_posts_with_tag": "No posts with {tag} yet",
     "not_found": "Tag not Found",
     "not_found_description": "This tag is not found, please ensure the tag is correct.",
     "posts_with_tag": "Posts with This Tag",

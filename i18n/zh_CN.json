@@ -525,6 +525,8 @@
     "toolbox": "工具箱"
   },
   "tag": {
+    "loading": "正在加载标签",
+    "no_posts_with_tag": "还没有与 {tag} 相关的投稿",
     "not_found": "找不到标签",
     "not_found_description": "没有找到这个标签。",
     "posts_with_tag": "相关投稿",
