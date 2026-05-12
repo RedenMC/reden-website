@@ -68,6 +68,7 @@ const rejectReason = ref<string>();
         { title: 'Name', key: 'name' },
         { title: 'Author', key: 'author' },
         { title: 'Type', key: 'type' },
+        { title: 'Tags', key: 'featureTags' },
         { title: t('common.description'), key: 'description' },
         { title: t('litematica_generator.updated_at'), key: 'updatedAt' },
         { title: 'Actions', key: 'edit', minWidth: '180px' },
@@ -78,6 +79,14 @@ const rejectReason = ref<string>();
       :items-per-page-options="[10]"
       :loading="queryStatus === 'pending'"
     >
+      <template #[`item.featureTags`]="{ value }">
+        <div v-if="value?.length" class="d-flex align-center">
+          <v-chip size="small">
+            {{ value[0].name }}
+          </v-chip>
+          <span v-if="value.length > 1" class="ml-1">...</span>
+        </div>
+      </template>
       <template #[`item.description`]="{ value }">
         <div
           style="
