@@ -106,7 +106,6 @@ export default defineNuxtConfig({
       { code: 'en', language: 'en' },
       { code: 'zh_cn', language: 'zh-CN' },
       { code: 'zh_tw', language: 'zh-TW' },
-      { code: 'ru', language: 'ru' },
     ],
     detectBrowserLanguage: {
       useCookie: true,
@@ -145,7 +144,7 @@ export default defineNuxtConfig({
       proxy: {
         '/api': useRemoteBackend
           ? 'https://api.redenmc.com'
-          : 'http://api:10005',
+          : `http://${apiHost}:10005`,
       },
     },
   },
@@ -181,7 +180,7 @@ export default defineNuxtConfig({
     '/api/**': {
       proxy: useRemoteBackend
         ? 'https://api.redenmc.com/api/**'
-        : 'http://api:10005/api/**',
+        : `http://${apiHost}:10005/api/**`,
     },
   },
   sitemap: {
