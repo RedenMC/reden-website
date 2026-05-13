@@ -10,6 +10,7 @@ import {
 import UserBadges from '~/components/UserBadges.vue';
 import VerifyMinecraft from '~/components/profile/VerifyMinecraft.vue';
 import BindPhoneNumberCard from '~/components/profile/BindPhoneNumberCard.vue';
+import AdminEditUserDialogContent from '~/components/admin/AdminEditUserDialogContent.vue';
 import { toast } from 'vuetify-sonner';
 import { getTimezone } from 'countries-and-timezones';
 import { useAppStore } from '~/store/app';
@@ -44,13 +45,22 @@ const avatarUploading = ref(false);
 const followLoading = ref(false);
 const listLoading = ref(false);
 const followDialog = ref(false);
+const adminEditDialog = ref(false);
+const adminEditDirty = ref(false);
 const followDialogTitle = ref('');
 const followDialogTotal = ref(0);
-const followUsers = ref<Pick<Profile, 'id' | 'username' | 'avatarUrl' | 'isStaff'>[]>([]);
+const followUsers = ref<
+  Pick<Profile, 'id' | 'username' | 'avatarUrl' | 'isStaff'>[]
+>([]);
 
 const isSelf = computed(() => !!user.value && appStore.uid === user.value.id);
 const canToggleFollow = computed(() => !!user.value && !isSelf.value);
-const canOpenFollowers = computed(() => !!user.value && isSelf.value);
+const canAdminEditUser = computed(
+  () => !!user.value && appStore.userCache?.isStaff === true,
+);
+const canOpenFollowers = computed(
+  () => !!user.value && (isSelf.value || appStore.userCache?.isStaff === true),
+);
 const canOpenFollowing = computed(() => !!user.value);
 
 type FollowListResponse = {
@@ -152,7 +162,11 @@ async function openFollowList(kind: 'followers' | 'following') {
 
   followDialog.value = true;
   followDialogTitle.value = t(
-    kind === 'followers' ? 'profile.my_followers' : 'profile.following_list',
+    kind === 'followers'
+      ? isSelf.value
+        ? 'profile.my_followers'
+        : 'common.followers'
+      : 'profile.following_list',
   );
   listLoading.value = true;
   followUsers.value = [];
@@ -160,7 +174,9 @@ async function openFollowList(kind: 'followers' | 'following') {
 
   const endpoint =
     kind === 'followers'
-      ? '/api/account/followers'
+      ? isSelf.value
+        ? '/api/account/followers'
+        : `/api/users/${encodeURIComponent(user.value.username)}/followers`
       : isSelf.value
         ? '/api/account/following'
         : `/api/users/${encodeURIComponent(user.value.username)}/following`;
@@ -252,6 +268,31 @@ async function openFollowList(kind: 'followers' | 'following') {
             user?.followedByMe ? $t('profile.unfollow') : $t('profile.follow')
           }}
         </v-btn>
+      </div>
+      <div v-if="canAdminEditUser && user" class="admin-edit-action">
+        <v-dialog
+          v-model="adminEditDialog"
+          max-width="500"
+          :persistent="adminEditDirty"
+        >
+          <template #activator="{ props }">
+            <v-btn
+              v-bind="props"
+              block
+              color="primary"
+              prepend-icon="mdi-account-edit"
+              rounded="lg"
+              variant="tonal"
+            >
+              {{ $t('common.edit') }}
+            </v-btn>
+          </template>
+          <AdminEditUserDialogContent
+            :item="user"
+            @close="adminEditDialog = false"
+            @update:dirty="adminEditDirty = $event"
+          />
+        </v-dialog>
       </div>
 
       <div v-if="user" class="user-details-list">
@@ -459,6 +500,10 @@ a:hover {
 }
 
 .follow-action {
+  margin: 12px 0;
+}
+
+.admin-edit-action {
   margin: 12px 0;
 }
 

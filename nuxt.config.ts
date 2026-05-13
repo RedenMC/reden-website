@@ -1,4 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+// noinspection HttpUrlsUsage
+
 import vuetify from 'vite-plugin-vuetify';
 import { createResolver } from '@nuxt/kit';
 import transformAssetUrls = vuetify.transformAssetUrls;
@@ -22,6 +24,7 @@ const useRemoteBackend =
     : process.env.REMOTE === 'false'
       ? false
       : !isProd && !isPrerender;
+const apiHost = isProd ? 'api' : 'localhost';
 console.log('useRemoteBackend=', useRemoteBackend);
 const sitemap = await (
   await fetch('https://api.redenmc.com/api/mc-services/yisibite/nuxt-sitemap')

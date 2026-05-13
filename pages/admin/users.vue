@@ -8,7 +8,7 @@ import {
   zh_cn,
 } from '~/utils/constants';
 import UserBadges from '~/components/UserBadges.vue';
-import AdminEditUserButton from '~/components/admin/AdminEditUserButton.vue';
+import AdminEditUserDialogContent from '~/components/admin/AdminEditUserDialogContent.vue';
 import AdminBanUserButton from '~/components/admin/AdminBanUserButton.vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
@@ -34,6 +34,7 @@ const totalItems = ref(10000000); // use a very large number to avoid reload
 const serverItems = ref<Profile[]>([]);
 const loading = ref(false);
 const search = ref(query.search || '');
+const editDirty = ref(false);
 const { locale } = useI18n();
 
 async function loadItems(options: {
@@ -162,7 +163,23 @@ function isBanned(user: Profile) {
       </router-link>
     </template>
     <template #[`item.actions`]="{ item }">
-      <AdminEditUserButton :item="item" />
+      <v-btn
+        color="surface-variant"
+        icon="mdi-pencil"
+        text="Open Dialog"
+        variant="flat"
+      >
+        <v-icon icon="mdi-pencil" />
+        <v-dialog max-width="500" activator="parent" :persistent="editDirty">
+          <template #default="{ isActive }">
+            <AdminEditUserDialogContent
+              :item="item"
+              @close="isActive.value = false"
+              @update:dirty="editDirty = $event"
+            />
+          </template>
+        </v-dialog>
+      </v-btn>
       <AdminBanUserButton :item="item" />
     </template>
   </v-data-table-server>
