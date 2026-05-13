@@ -534,6 +534,14 @@
     "toolbox": "工具箱"
   },
   "tag": {
+    "edit_request": {
+      "action": "申请编辑",
+      "applied": "标签已更新",
+      "submit": "提交申请",
+      "submit_failed": "提交标签编辑申请失败",
+      "submitted": "编辑申请已提交，等待审核",
+      "title": "申请编辑此标签"
+    },
     "loading": "正在加载标签",
     "no_posts_with_tag": "还没有与 {tag} 相关的投稿",
     "not_found": "找不到标签",

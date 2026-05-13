@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { number2text } from '@/utils/constants';
+import { doFetchPost, number2text, toastError } from '@/utils/constants';
+import { toast } from 'vuetify-sonner';
 import type { MachineDef, Tag } from '~/pages/litematica/index.vue';
+import { useAppStore } from '~/store/app';
 
 type TagPageData = {
   total: number;
@@ -12,13 +14,21 @@ type TagPostSort = 'downloads' | 'createdAt';
 
 const route = useRoute();
 const router = useRouter();
+const appStore = useAppStore();
 const tagName = computed(() => route.params.tag_name as string);
 const page = useRouteQuery('page', 1, { transform: Number });
 const sortType = useRouteQuery<TagPostSort>('sort', 'downloads');
 const pageSize = 12;
 const localePath = useLocalePath();
-const { t } = useI18n();
+const { t, locale } = useI18n();
 const sortTypes: TagPostSort[] = ['downloads', 'createdAt'];
+const editDialog = ref(false);
+const editSaving = ref(false);
+const editFormValid = ref(false);
+const editForm = ref({
+  name: '',
+  description: '',
+});
 
 const {
   data: pageData,
@@ -72,6 +82,61 @@ function authorHref(post: MachineDef) {
 function sortIcon(sort: TagPostSort) {
   return sort === 'downloads' ? 'mdi-download' : 'mdi-clock-outline';
 }
+
+function openTagEditDialog() {
+  if (!appStore.logined) {
+    router.push(localePath('/login'));
+    return;
+  }
+  editForm.value = {
+    name: tag.value?.name || '',
+    description: tag.value?.description || '',
+  };
+  editDialog.value = true;
+}
+
+function apiLanguage() {
+  const code = String(locale.value).toLowerCase();
+  if (code.startsWith('zh_tw')) return 'zh_tw';
+  if (code.startsWith('zh')) return 'zh_cn';
+  if (code.startsWith('ru')) return 'ru';
+  if (code.startsWith('es')) return 'es';
+  return 'en';
+}
+
+async function submitTagEditRequest() {
+  if (!tag.value || !editFormValid.value) return;
+  if (!appStore.logined) {
+    await router.push(localePath('/login'));
+    return;
+  }
+  editSaving.value = true;
+  try {
+    const response = await doFetchPost(
+      `/api/mc-services/tags/${encodeURIComponent(tag.value.tag)}/localization-edit-request`,
+      {
+        language: apiLanguage(),
+        name: editForm.value.name,
+        description: editForm.value.description,
+      },
+    );
+    if (!response.ok) {
+      await toastError(response, t('tag.edit_request.submit_failed'));
+      return;
+    }
+    editDialog.value = false;
+    const responseBody = await response.json().catch(() => null);
+    toast.success(
+      responseBody?.requiresReview
+        ? t('tag.edit_request.submitted')
+        : t('tag.edit_request.applied'),
+    );
+  } catch (error) {
+    await toastError(error, t('tag.edit_request.submit_failed'));
+  } finally {
+    editSaving.value = false;
+  }
+}
 </script>
 
 <template>
@@ -103,6 +168,17 @@ function sortIcon(sort: TagPostSort) {
             <p>
               {{ tag?.description || t('tag.loading') }}
             </p>
+          </div>
+          <div class="tag-hero-actions">
+            <v-btn
+              color="cyan"
+              prepend-icon="mdi-pencil-outline"
+              variant="flat"
+              :disabled="!tag"
+              @click="openTagEditDialog"
+            >
+              {{ t('tag.edit_request.action') }}
+            </v-btn>
           </div>
         </div>
       </section>
@@ -201,6 +277,44 @@ function sortIcon(sort: TagPostSort) {
           total-visible="7"
         />
       </div>
+
+      <v-dialog v-model="editDialog" max-width="620">
+        <v-card class="tag-edit-dialog">
+          <v-card-title>{{ t('tag.edit_request.title') }}</v-card-title>
+          <v-card-text>
+            <v-form v-model="editFormValid" @submit.prevent="submitTagEditRequest">
+              <v-text-field
+                v-model="editForm.name"
+                :label="t('common.name')"
+                :rules="[(value) => !!value || t('tags.form.required')]"
+                maxlength="255"
+                counter
+                variant="outlined"
+              />
+              <v-textarea
+                v-model="editForm.description"
+                :label="t('common.description')"
+                rows="5"
+                variant="outlined"
+              />
+            </v-form>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer />
+            <v-btn variant="text" @click="editDialog = false">
+              {{ t('common.cancel') }}
+            </v-btn>
+            <v-btn
+              color="primary"
+              :disabled="!editFormValid"
+              :loading="editSaving"
+              @click="submitTagEditRequest"
+            >
+              {{ t('tag.edit_request.submit') }}
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </template>
   </v-container>
 </template>
@@ -271,6 +385,12 @@ function sortIcon(sort: TagPostSort) {
 
 .tag-hero-metrics {
   flex: 0 0 auto;
+}
+
+.tag-hero-actions {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: flex-end;
 }
 
 .tag-metric {
@@ -492,6 +612,14 @@ function sortIcon(sort: TagPostSort) {
   }
 
   .tag-hero-metrics {
+    width: 100%;
+  }
+
+  .tag-hero-actions {
+    width: 100%;
+  }
+
+  .tag-hero-actions :deep(.v-btn) {
     width: 100%;
   }
 

@@ -533,6 +533,14 @@
     "toolbox": "Toolbox"
   },
   "tag": {
+    "edit_request": {
+      "action": "Request edit",
+      "applied": "Tag updated",
+      "submit": "Submit request",
+      "submit_failed": "Failed to submit tag edit",
+      "submitted": "Edit request submitted for review",
+      "title": "Request tag edit"
+    },
     "loading": "Loading tag",
     "no_posts_with_tag": "No posts with {tag} yet",
     "not_found": "Tag not Found",
