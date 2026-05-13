@@ -279,12 +279,13 @@ async function openFollowList(kind: 'followers' | 'following') {
             <v-btn
               v-bind="props"
               block
+              class="text-capitalize"
               color="primary"
               prepend-icon="mdi-account-edit"
               rounded="lg"
               variant="tonal"
             >
-              {{ $t('common.edit') }}
+              {{ $t('common.edit') }} (Admin)
             </v-btn>
           </template>
           <AdminEditUserDialogContent
