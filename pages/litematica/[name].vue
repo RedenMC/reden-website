@@ -10,7 +10,15 @@ import type {
   Machine,
   MachineDef,
 } from '~/pages/litematica/index.vue';
-import { doFetchDelete, number2text, parseBVID } from '~/utils/constants';
+import {
+  doFetchDelete,
+  doFetchGet,
+  doFetchPut,
+  number2text,
+  parseBVID,
+  type Profile,
+  toastError,
+} from '~/utils/constants';
 import BottomBarAd from '~/components/ads/BottomBarAd.vue';
 import { parseCondition } from '~/utils/conditionParser';
 import RedenRouter from '~/components/RedenRouter.vue';
@@ -27,6 +35,8 @@ const localePath = useLocalePath();
 const appStore = useAppStore();
 const openEditDialog = ref(false);
 const openTransferDialog = ref(false);
+const authorFollowProfile = ref<Partial<Profile> | null>(null);
+const authorFollowLoading = ref(false);
 const backUrl = route.query.backUrl as string;
 const { data: localizedData } = useNuxtData<Record<string, MachineDef>>(
   `edit-${machineId}`,
@@ -88,6 +98,89 @@ const selected = computed<Machine | null>(() =>
       }
     : (console.log('加载失败，serverResponse.value is null, err=', error.value),
       null),
+);
+const authorFollowUser = computed<Partial<Profile> | null>(
+  () => authorFollowProfile.value ?? selected.value?.author ?? null,
+);
+const canToggleAuthorFollow = computed(
+  () =>
+    selected.value?.source !== 'minemev' &&
+    !!selected.value?.author?.username &&
+    selected.value.author.id !== appStore.uid,
+);
+
+async function loadAuthorFollowProfile() {
+  authorFollowProfile.value = selected.value?.author ?? null;
+  if (
+    !import.meta.client ||
+    !appStore.logined ||
+    selected.value?.source === 'minemev' ||
+    !selected.value?.author?.username
+  ) {
+    return;
+  }
+
+  const requestedUsername = selected.value.author.username;
+  authorFollowLoading.value = true;
+  try {
+    const response = await doFetchGet(
+      `/api/users/${encodeURIComponent(selected.value.author.username)}`,
+    );
+    if (!response.ok) {
+      await Promise.reject(response);
+    }
+    const profile: Profile = await response.json();
+    if (selected.value?.author?.username === requestedUsername) {
+      authorFollowProfile.value = profile;
+    }
+  } catch (e) {
+    await toastError(e, t('profile.follow_list_failed'));
+  } finally {
+    authorFollowLoading.value = false;
+  }
+}
+
+async function toggleAuthorFollow() {
+  if (!selected.value?.author?.username || authorFollowLoading.value) return;
+  if (!appStore.logined) {
+    await router.push(localePath('/login'));
+    return;
+  }
+
+  authorFollowLoading.value = true;
+  const target = encodeURIComponent(selected.value.author.username);
+  const request = authorFollowUser.value?.followedByMe
+    ? doFetchDelete(`/api/account/following/${target}`)
+    : doFetchPut(`/api/account/following/${target}`, {});
+  try {
+    const response = await request;
+    if (!response.ok) {
+      await Promise.reject(response);
+    }
+    const updated: Profile = await response.json();
+    authorFollowProfile.value = updated;
+    toast.success(
+      updated.followedByMe ? t('profile.followed') : t('profile.unfollowed'),
+      { duration: 1800 },
+    );
+  } catch (e) {
+    await toastError(e, t('profile.follow_failed'));
+  } finally {
+    authorFollowLoading.value = false;
+  }
+}
+
+watch(
+  () => [
+    selected.value?.author?.username,
+    selected.value?.source,
+    appStore.logined,
+    appStore.uid,
+  ],
+  () => {
+    loadAuthorFollowProfile();
+  },
+  { immediate: true },
 );
 
 // workaround
@@ -532,21 +625,44 @@ watch(tabs, (newTabs) => {
                       : t('litematica_generator.by.uploader')
                   }}
                 </div>
-                <reden-router
-                  v-if="selected.author"
-                  :to="
-                    selected.source === 'minemev'
-                      ? `https://minemev.com/u/${selected.author.username}`
-                      : localePath(`/@${selected.author.username}`)
-                  "
-                  class="d-flex flex-row router"
-                  style="line-height: 32px"
-                >
-                  <v-avatar v-if="selected.author.avatarUrl" size="32">
-                    <v-img :src="selected.author.avatarUrl" />
-                  </v-avatar>
-                  {{ selected.author.username }}
-                </reden-router>
+                <div v-if="selected.author" class="author-summary-content">
+                  <reden-router
+                    :to="
+                      selected.source === 'minemev'
+                        ? `https://minemev.com/u/${selected.author.username}`
+                        : localePath(`/@${selected.author.username}`)
+                    "
+                    class="author-link d-flex flex-row router"
+                  >
+                    <v-avatar v-if="selected.author.avatarUrl" size="32">
+                      <v-img :src="selected.author.avatarUrl" />
+                    </v-avatar>
+                    {{ selected.author.username }}
+                  </reden-router>
+                  <v-btn
+                    v-if="canToggleAuthorFollow"
+                    :color="
+                      authorFollowUser?.followedByMe ? undefined : 'primary'
+                    "
+                    :loading="authorFollowLoading"
+                    :prepend-icon="
+                      authorFollowUser?.followedByMe
+                        ? 'mdi-account-check'
+                        : 'mdi-account-plus'
+                    "
+                    class="author-follow-action text-capitalize"
+                    rounded="lg"
+                    size="small"
+                    variant="tonal"
+                    @click="toggleAuthorFollow()"
+                  >
+                    {{
+                      authorFollowUser?.followedByMe
+                        ? $t('profile.unfollow')
+                        : $t('profile.follow')
+                    }}
+                  </v-btn>
+                </div>
               </div>
               <div class="d-flex mt-3">
                 <div class="w-33 align-content-center">
@@ -782,6 +898,26 @@ p {
 .lm-main-content {
   max-width: 1280px;
   margin: 0 auto;
+}
+
+.author-summary-content {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  min-width: 0;
+}
+
+.author-link {
+  gap: 8px;
+  align-items: center;
+  min-width: 0;
+  line-height: 32px;
+}
+
+.author-follow-action {
+  flex: 0 0 auto;
 }
 
 #description p {
