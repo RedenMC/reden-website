@@ -28,6 +28,12 @@ definePageMeta({
         </v-card>
       </v-col>
       <v-col>
+        <v-card :to="localePath('/admin/comments')" min-width="200">
+          <v-card-title> 评论管理 </v-card-title>
+          <v-card-text> 查看全站评论 </v-card-text>
+        </v-card>
+      </v-col>
+      <v-col>
         <v-card :to="localePath('/admin/device-clients')" min-width="200">
           <v-card-title> Device Flow Clients </v-card-title>
           <v-card-text> Manage 3rd party app authentication </v-card-text>
