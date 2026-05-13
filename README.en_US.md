@@ -28,7 +28,7 @@ Reden is a comprehensive platform for Minecraft redstone enthusiasts, providing 
 #### Prerequisites
 
 - Node.js 18.x or higher
-- yarn package manager
+- pnpm package manager
 
 #### Installation
 
@@ -42,23 +42,23 @@ cd reden-website
 2. Install dependencies:
 
 ```bash
-yarn
+pnpm install
 ```
 
 3. Run the development server:
 
 ```bash
-yarn dev
+pnpm dev
 ```
 
 4. Open your browser and visit `http://localhost:3000`
 
 #### Available Scripts
 
-- `yarn dev` - Start development server
-- `yarn build` - Build for production
-- `yarn generate` - Generate static site
-- `yarn preview` - Preview production build
+- `pnpm dev` - Start development server
+- `pnpm build` - Build for production
+- `pnpm generate` - Generate static site
+- `pnpm preview` - Preview production build
 
 ### 📁 Project Structure
 

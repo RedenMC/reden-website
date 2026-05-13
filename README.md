@@ -28,7 +28,7 @@ Reden 是一个专为 Minecraft 红石爱好者打造的综合平台，提供工
 #### 环境要求
 
 - Node.js 18.x 或更高版本
-- yarn 包管理器
+- pnpm 包管理器
 
 #### 安装步骤
 
@@ -42,23 +42,23 @@ cd reden-website
 2. 安装依赖:
 
 ```bash
-yarn
+pnpm install
 ```
 
 3. 启动开发服务器:
 
 ```bash
-yarn dev
+pnpm dev
 ```
 
 4. 打开浏览器访问 `http://localhost:3000`
 
 #### 可用脚本
 
-- `yarn dev` - 启动开发服务器
-- `yarn build` - 生产环境构建
-- `yarn generate` - 生成静态站点
-- `yarn preview` - 预览生产构建
+- `pnpm dev` - 启动开发服务器
+- `pnpm build` - 生产环境构建
+- `pnpm generate` - 生成静态站点
+- `pnpm preview` - 预览生产构建
 
 ### 📁 项目结构
 

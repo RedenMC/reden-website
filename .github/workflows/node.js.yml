@@ -16,17 +16,21 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: 'yarn'
+          cache: 'pnpm'
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
       - name: Set up git hash
         run: echo \"$(git rev-parse --short HEAD)\" > assets/hash.json
       - name: Build project
-        run: yarn build
+        run: pnpm build
       - name: Post check build ID
         run: |
           cat .output/public/index.html | grep builds/meta
@@ -34,6 +38,6 @@ jobs:
 
       # 你可以添加更多步骤，例如：
       # - name: Lint code
-      #   run: yarn lint
+      #   run: pnpm lint
       # - name: Deploy (if applicable)
-      #   run: yarn deploy
+      #   run: pnpm deploy
