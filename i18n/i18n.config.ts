@@ -11,7 +11,6 @@ export const localeToIso: Record<string, string> = {
   en: 'en',
   zh_cn: 'zh-CN',
   zh_tw: 'zh-TW',
-  ru: 'ru',
 };
 
 const messages = {
@@ -26,10 +25,6 @@ const messages = {
   zh_tw: {
     ...zh_tw,
     minecraft: mcZhTw,
-  },
-  ru: {
-    ...ru,
-    minecraft: mcRu,
   },
 };
 export default defineI18nConfig(() => ({
