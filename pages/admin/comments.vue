@@ -18,6 +18,13 @@ type AdminComment = {
   status: PostStatus;
   upVotes: number;
   childrenCount: number;
+  replyComment?: {
+    id: string;
+    user: Pick<Profile, 'id' | 'username' | 'avatarUrl' | 'isStaff'>;
+    content: string;
+    time: number;
+    status: PostStatus;
+  } | null;
 };
 
 type LoadOptions = {
@@ -200,8 +207,23 @@ async function reload() {
         {{ item.source.key }} · #{{ item.source.id }}
       </div>
     </template>
-    <template #[`item.content`]="{ value }">
-      <div class="comment-excerpt">{{ value }}</div>
+    <template #[`item.content`]="{ item }">
+      <div class="comment-excerpt">{{ item.content }}</div>
+      <div v-if="item.replyComment" class="reply-context">
+        <div class="reply-meta">
+          回复
+          <router-link
+            :to="localePath(`/@${item.replyComment.user.username}`)"
+            class="reply-user"
+          >
+            {{ item.replyComment.user.username }}
+          </router-link>
+          · {{ new Date(item.replyComment.time).toLocaleString() }}
+        </div>
+        <div class="reply-content">
+          {{ item.replyComment.content }}
+        </div>
+      </div>
     </template>
     <template #[`item.actions`]="{ item }">
       <v-btn icon size="small" title="查看详情" variant="text">
@@ -246,6 +268,17 @@ async function reload() {
                     readonly
                     rows="6"
                   />
+                </v-col>
+                <v-col v-if="item.replyComment" cols="12">
+                  <div class="dialog-reply-context">
+                    <div class="reply-meta">
+                      被回复评论 · {{ item.replyComment.user.username }} ·
+                      {{ new Date(item.replyComment.time).toLocaleString() }}
+                    </div>
+                    <div class="reply-content">
+                      {{ item.replyComment.content }}
+                    </div>
+                  </div>
                 </v-col>
               </v-row>
             </v-card-text>
@@ -293,6 +326,37 @@ async function reload() {
 .comment-excerpt {
   max-width: 520px;
   overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.reply-context,
+.dialog-reply-context {
+  max-width: 520px;
+  margin-top: 8px;
+  border-inline-start: 3px solid rgba(var(--v-theme-primary), 0.65);
+  padding: 6px 10px;
+  background: rgba(var(--v-theme-surface-variant), 0.45);
+}
+
+.dialog-reply-context {
+  max-width: none;
+}
+
+.reply-meta {
+  color: rgba(var(--v-theme-on-surface), 0.62);
+  font-size: 0.78rem;
+}
+
+.reply-user {
+  color: currentColor;
+}
+
+.reply-content {
+  margin-top: 2px;
+  overflow: hidden;
+  color: rgba(var(--v-theme-on-surface), 0.82);
+  font-size: 0.88rem;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
