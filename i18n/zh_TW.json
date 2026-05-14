@@ -89,7 +89,9 @@
     "all_read": "全部已讀",
     "list_title": "我的消息",
     "mark_as_read": "標記為已讀",
-    "unread": "未讀"
+    "no_notifications": "暫無通知",
+    "unread": "未讀",
+    "view_all": "查看全部"
   },
   "page404": {
     "back": "返回上一頁",

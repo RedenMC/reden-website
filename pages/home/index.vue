@@ -279,6 +279,15 @@ const { data: machines } = useFetch<ListLitematicaResponse>(
             {{ t('profile.my_backup') }}
           </v-btn>
           <v-btn
+            :to="localePath('/home/notifications')"
+            class="text-none"
+            color="secondary"
+            rounded="lg"
+            variant="outlined"
+          >
+            {{ t('message.list_title') }}
+          </v-btn>
+          <v-btn
             :to="localePath('/litematica/edit')"
             class="text-none"
             color="secondary"

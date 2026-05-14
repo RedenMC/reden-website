@@ -53,6 +53,23 @@
                     {{ t('reden.header.my_profile') }}
                   </v-list-item-title>
                 </v-list-item>
+                <v-list-item :to="localePath('/home/notifications')">
+                  <template #prepend>
+                    <v-badge
+                      v-if="useMessageStore().unreadCount > 0"
+                      :content="useMessageStore().unreadCount"
+                      :max="99"
+                      color="error"
+                      floating
+                    >
+                      <v-icon>mdi-bell</v-icon>
+                    </v-badge>
+                    <v-icon v-else>mdi-bell</v-icon>
+                  </template>
+                  <v-list-item-title>
+                    {{ t('message.list_title') }}
+                  </v-list-item-title>
+                </v-list-item>
               </template>
               <template v-else>
                 <v-list-item :to="localePath('/login')">
@@ -152,6 +169,9 @@
         <slot name="desktop-append" />
       </template>
       <slot name="common-append" />
+      <client-only>
+        <NotificationBell v-if="useAppStore().logined" />
+      </client-only>
       <v-btn icon="mdi-translate" title="Language">
         <v-icon icon="mdi-translate" />
         <v-menu :close-on-content-click="true" activator="parent">
@@ -191,6 +211,8 @@
 <script lang="ts" setup>
 import { useDisplay } from 'vuetify';
 import { useAppStore } from '~/store/app';
+import { useMessageStore } from '~/store/message';
+import NotificationBell from '~/components/notification/NotificationBell.vue';
 
 const router = useRouter();
 const localePath = useLocalePath();
