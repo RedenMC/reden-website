@@ -3,8 +3,6 @@ import { number2text, timeSince } from '@/utils/constants';
 import { useDisplay } from 'vuetify';
 import type { MachineDef, Tag } from '~/pages/litematica/index.vue';
 
-const currentRoute = useRoute();
-
 const props = defineProps<{
   item: Partial<MachineDef>;
   maxWidth?: number;
@@ -33,10 +31,7 @@ const tags = computed(
     }"
     :max-width="maxWidth"
     :min-width="maxWidth"
-    :to="
-      localePath(`/litematica/${item.key}`) +
-      `?backUrl=${encodeURIComponent(currentRoute.fullPath)}`
-    "
+    :to="localePath(`/litematica/${item.key}`)"
     border
     class="mx-auto"
     elevation="4"

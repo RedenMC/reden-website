@@ -76,7 +76,7 @@ useSeoMeta({
 });
 const goto = useGoTo({});
 const localePath = useLocalePath();
-const switchLocalePath = useSwitchLocalePath();
+
 const router = useRouter();
 if (router.currentRoute.value.query.m) {
   router.push(localePath(`/litematica/${router.currentRoute.value.query.m}`));
@@ -556,7 +556,6 @@ const itemDisplayCols = computed(() => {
               <MinecraftFarmCard
                 v-for="item in col.def"
                 :key="item.key"
-                :back-url="switchLocalePath(locale)"
                 :item="item"
                 class="mt-4"
               >

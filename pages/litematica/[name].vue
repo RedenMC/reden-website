@@ -37,7 +37,7 @@ const openEditDialog = ref(false);
 const openTransferDialog = ref(false);
 const authorFollowProfile = ref<Partial<Profile> | null>(null);
 const authorFollowLoading = ref(false);
-const backUrl = route.query.backUrl as string;
+const { referrer } = useReferrer();
 const { data: localizedData } = useNuxtData<Record<string, MachineDef>>(
   `edit-${machineId}`,
 );
@@ -327,7 +327,7 @@ watch(tabs, (newTabs) => {
     </div>
     <div class="ma-4 d-flex flex-wrap" style="gap: 12px">
       <v-btn
-        :to="backUrl ?? localePath('/litematica')"
+        :to="referrer ?? localePath('/litematica')"
         class="text-capitalize"
         prepend-icon="mdi-arrow-left"
         variant="tonal"
