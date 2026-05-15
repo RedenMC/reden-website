@@ -5,7 +5,6 @@ import SidebarAd from '~/components/ads/SidebarAd.vue';
 import BottomBarAd from '~/components/ads/BottomBarAd.vue';
 import { useAppStore } from '~/store/app';
 import { toast } from 'vuetify-sonner';
-import EarningBanner from '~/components/litematica/EarningBanner.vue';
 
 export type Tag = {
   tag: string;
@@ -244,7 +243,6 @@ const itemDisplayCols = computed(() => {
 </script>
 <template>
   <div>
-    <EarningBanner />
     <div v-if="isAdVisible" class="advertisement-banner w-100 text-center">
       <button class="ad-close" type="button" @click="isAdVisible = false">
         广告 ×
