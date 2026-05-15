@@ -125,6 +125,7 @@
       "random-extra": "探索队列（随机）",
       "sort_by": "排序方式："
     },
+    "version_filter": "MC版本：",
     "status": "当前状态",
     "suggested_values": "建议选择：",
     "suggestion_notice": "建议值仅供参考，可能无法正确生成有效投影",

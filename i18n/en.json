@@ -125,6 +125,7 @@
       "random-extra": "Explore (Random)",
       "sort_by": "Sort by:"
     },
+    "version_filter": "MC Version:",
     "status": "Visibility",
     "suggested_values": "Suggested Values: ",
     "suggestion_notice": "These suggested values are for your reference only",

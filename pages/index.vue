@@ -18,6 +18,7 @@ import { useAppStore } from '~/store/app';
 import type { MachineDef } from '~/pages/litematica/index.vue';
 
 const appStore = useAppStore();
+const router = useRouter();
 const introContent = ref<HTMLElement | null>(null);
 const localePath = useLocalePath();
 
@@ -620,7 +621,8 @@ watch(homepageData, (data) => {
                     8
                   )"
                   :key="version.version"
-                  class="trend-item"
+                  class="trend-item trend-item-clickable"
+                  @click="router.push(localePath(`/litematica?version=${version.version}`))"
                 >
                   <span class="trend-rank" :class="getRankClass(index)">
                     {{ index + 1 }}
@@ -1494,6 +1496,10 @@ watch(homepageData, (data) => {
   background: rgba(55, 65, 81, 0.5);
   border-color: rgba(45, 212, 191, 0.32);
   transform: translateY(-1px);
+}
+
+.trend-item-clickable {
+  cursor: pointer;
 }
 
 .trend-link {

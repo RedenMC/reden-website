@@ -85,6 +85,7 @@ const page = useRouteQuery('page', 1, { transform: Number });
 const pageSize = ref(18);
 const search = useRouteQuery<string>('q', '');
 const sortType = useRouteQuery<SortType>('sort', 'downloads');
+const versionFilter = useRouteQuery<string>('version', '');
 // const totalPages = computed(() =>
 //   Math.ceil((serverResponse.value?.count ?? 2006) / pageSize.value),
 // );
@@ -93,6 +94,9 @@ watch(page, () => {
   return goto(0);
 });
 watch(sortType, () => {
+  return (page.value = 1);
+});
+watch(versionFilter, () => {
   return (page.value = 1);
 });
 
@@ -132,9 +136,15 @@ export type LitematicaAuthorProfile = {
 const { locale } = useI18n();
 const isDev = import.meta.dev;
 const url = computed(() => {
+  let v = versionFilter.value;
+  // Convert "1.20" → "1.20.x" for API filter
+  if (v && v.split('.').length === 2 && !v.endsWith('.x')) {
+    v = v + '.x';
+  }
+  const versionParam = v ? `&version=${encodeURIComponent(v)}` : '';
   return search.value
-    ? `/api/mc-services/litematica/search?q=${search.value}&lang=${locale.value}&page=${Math.round(page.value)}&pageSize=${pageSize.value}`
-    : `/api/mc-services/yisibite/?lang=${locale.value}&page=${Math.round(page.value)}&pageSize=${pageSize.value}&order=${sortType.value}`;
+    ? `/api/mc-services/litematica/search?q=${search.value}&lang=${locale.value}&page=${Math.round(page.value)}&pageSize=${pageSize.value}${versionParam}`
+    : `/api/mc-services/yisibite/?lang=${locale.value}&page=${Math.round(page.value)}&pageSize=${pageSize.value}&order=${sortType.value}${versionParam}`;
 });
 const {
   data: serverResponse,
@@ -174,6 +184,26 @@ watch(serverResponse, (data) => {
     totalDownloads.value = data.downloads;
   }
 });
+
+const { data: allVersions } = useFetch<string[]>('/api/mc-services/litematica/all-versions');
+const versionChips = computed(() => {
+  if (!allVersions.value) return [];
+  const groups = new Map<string, number>();
+  for (const v of allVersions.value) {
+    const parts = v.split('.');
+    if (parts.length >= 2) {
+      const major = parts[0] + '.' + parts[1];
+      groups.set(major, (groups.get(major) ?? 0) + 1);
+    }
+  }
+  return Array.from(groups.entries())
+    .map(([major]) => major)
+    .reverse();
+});
+const versionChipsExpanded = ref(false);
+const visibleVersionChips = computed(() =>
+  versionChipsExpanded.value ? versionChips.value : versionChips.value.slice(0, 3),
+);
 
 // if (error.value?.statusCode) {
 //   throw error.value;
@@ -428,6 +458,60 @@ const itemDisplayCols = computed(() => {
             @click="sortType = sort"
           >
             {{ t(`litematica_generator.sort.${sort}`) }}
+          </v-btn>
+        </div>
+        <div class="d-flex flex-wrap flex-row mb-4 align-center" style="gap: 8px">
+          <span style="line-height: 36px" class="text-grey-lighten-1">
+            {{ t('litematica_generator.version_filter') }}
+          </span>
+          <v-btn
+            :active="!versionFilter"
+            class="text-none"
+            color="secondary"
+            size="small"
+            variant="tonal"
+            @click="versionFilter = ''"
+          >
+            All
+          </v-btn>
+          <v-btn
+            v-for="ver in visibleVersionChips"
+            :key="ver"
+            :active="versionFilter === ver || `${ver}.x` === versionFilter"
+            class="text-none"
+            color="secondary"
+            size="small"
+            variant="tonal"
+            @click="versionFilter = ver"
+          >
+            {{ ver }}
+          </v-btn>
+          <v-btn
+            v-if="!versionChipsExpanded && versionChips.length > 3"
+            class="text-none"
+            color="secondary"
+            size="small"
+            variant="tonal"
+            @click="versionChipsExpanded = true"
+          >
+            …
+          </v-btn>
+          <v-btn
+            v-if="versionFilter && !versionChips.includes(versionFilter)"
+            :active="true"
+            class="text-none"
+            color="primary"
+            size="small"
+            variant="tonal"
+          >
+            {{ versionFilter }}
+            <v-icon
+              end
+              size="small"
+              @click.stop="versionFilter = ''"
+            >
+              mdi-close
+            </v-icon>
           </v-btn>
         </div>
 
