@@ -24,3 +24,5 @@ logs
 .env
 .env.*
 !.env.example
+reden-*.tar.gz
+.playwright-cli/

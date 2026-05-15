@@ -448,6 +448,18 @@ export function groupMinecraftVersions(versions: string[]) {
   return grouped;
 }
 
+export function compareMinecraftVersions(a: string, b: string): number {
+  const aParts = a.split('.').map(Number);
+  const bParts = b.split('.').map(Number);
+  const len = Math.max(aParts.length, bParts.length);
+  for (let i = 0; i < len; i++) {
+    const aVal = aParts[i] ?? 0;
+    const bVal = bParts[i] ?? 0;
+    if (aVal !== bVal) return bVal - aVal;
+  }
+  return 0;
+}
+
 export function size2text(val: number) {
   const kb = val / 1024;
   const mb = kb / 1024;

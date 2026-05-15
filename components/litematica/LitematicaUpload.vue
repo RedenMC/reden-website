@@ -14,7 +14,7 @@ import { EditorView } from '@codemirror/view';
 import { localeToIso } from '~/i18n/i18n.config';
 import MDEDITOR_ZH_TW from '@vavt/cm-extension/dist/locale/zh-TW';
 import MDEDITOR_RU from '@vavt/cm-extension/dist/locale/ru';
-import { globalTheme, groupMinecraftVersions } from '~/utils/constants';
+import { globalTheme, groupMinecraftVersions, compareMinecraftVersions } from '~/utils/constants';
 
 
 const mdCustomTooltip = ref({
@@ -449,7 +449,8 @@ const selectableVersions = computed(() => {
   )[] = [];
   const knownValues = new Set(allMinecraftVersions.value ?? []);
   const knownWildcards = new Set(Object.keys(versionGrouped.value).map(version => version + '.x'));
-  for (const version of Object.keys(versionGrouped.value).toReversed()) {
+  const sortedKeys = Object.keys(versionGrouped.value).sort(compareMinecraftVersions);
+  for (const version of sortedKeys) {
     ret.push(version + '.x');
     if (!selectedVersions.value.includes(version + '.x')) {
       for (const child of versionGrouped.value[version]) {
