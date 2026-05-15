@@ -147,6 +147,10 @@ const refreshProps = () => {
         }) as MyFile,
     ) ?? [];
   selectedVersions.value = machine?.versions ?? [];
+  const featureTags = machine?.featureTags ?? [];
+  const categoryTag = machine?.categoryTag;
+  const allTags = categoryTag ? [categoryTag, ...featureTags] : featureTags;
+  tagsWithName.value = allTags.map((t) => ({ name: t.name, code: t.tag }));
 };
 const availableSteps = ref<State[]>(
   props.editMode ? ['upload', 'translation', 'tags', 'image'] : ['upload'],
