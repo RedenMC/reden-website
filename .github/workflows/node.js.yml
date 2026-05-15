@@ -31,6 +31,8 @@ jobs:
         run: echo \"$(git rev-parse --short HEAD)\" > assets/hash.json
       - name: Build project
         run: pnpm build
+        env:
+          NODE_OPTIONS: --max-old-space-size=8192
       - name: Post check build ID
         run: |
           cat .output/public/index.html | grep builds/meta
