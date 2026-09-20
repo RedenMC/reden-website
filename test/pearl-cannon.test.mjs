@@ -133,11 +133,15 @@ test('integration targets only the pearl cannon and preserves the legacy downloa
     new URL('../pages/litematica/[name].vue', import.meta.url),
     'utf8',
   );
-  assert.ok(
-    page.includes(
-      "machineId === '91tvzzp1' && selected?.type === 'LitematicaGen'",
+  const downloader = await readFile(
+    new URL(
+      '../components/litematica/LitematicaGenDownloader.vue',
+      import.meta.url,
     ),
+    'utf8',
   );
+  assert.ok(downloader.includes("selected.key === '91tvzzp1'"));
+  assert.ok(!page.includes('<PearlCannonGenerator'));
   assert.ok(page.includes('<LitematicaGenDownloader'));
   assert.ok(page.includes('<LitematicaShareDownloader'));
 });
