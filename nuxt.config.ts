@@ -27,7 +27,7 @@ const useRemoteBackend =
 const apiHost = isProd ? 'api' : 'localhost';
 console.log('useRemoteBackend=', useRemoteBackend);
 const sitemap = await (
-  await fetch('https://api.redenmc.com/api/mc-services/yisibite/nuxt-sitemap')
+  await fetch('https://redenmc.com/api/mc-services/yisibite/nuxt-sitemap')
 ).json();
 
 export default defineNuxtConfig({
