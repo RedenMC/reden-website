@@ -26,7 +26,6 @@ import { toast } from 'vuetify-sonner';
 import RedenPostStatusChip from '~/components/litematica/RedenPostStatusChip.vue';
 import TransferOwnershipDialog from '~/components/litematica/TransferOwnershipDialog.vue';
 import CommentsSection from '~/components/litematica/CommentsSection.vue';
-import PearlCannonGenerator from '~/components/litematica/PearlCannonGenerator.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -454,10 +453,6 @@ watch(tabs, (newTabs) => {
     </div>
 
     <div class="ma-4">
-      <PearlCannonGenerator
-        v-if="machineId === '91tvzzp1' && selected?.type === 'LitematicaGen'"
-        class="mb-4"
-      />
       <v-row v-if="selected">
         <v-col cols="12" md="8" style="height: min-content">
           <!-- 预览 -->
@@ -847,7 +842,13 @@ watch(tabs, (newTabs) => {
                 ])
               }}
             </div>
-            <v-row v-if="!useAppStore().logined" class="text-sm-body-1">
+            <v-row
+              v-if="
+                !useAppStore().logined &&
+                !(machineId === '91tvzzp1' && selected.type === 'LitematicaGen')
+              "
+              class="text-sm-body-1"
+            >
               <v-col>
                 <reden-router :to="localePath('/login')">
                   {{ t('litematica_generator.not_logged_in') }}
