@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>生电刷怪场专用投影生成器</title>
+<style>
+/*__STYLE__*/
+</style>
+</head>
+<body>
+<noscript><div class="noscript">这个程序需要浏览器启用 JavaScript。请使用桌面版 Edge、Chrome 或 Firefox 打开本文件。</div></noscript>
+<div class="shell">
+<header class="brand"><div class="brandleft"><div class="logo" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M4 5h24v22H4z" fill="currentColor"/><path d="M8 9h16v14H8z" fill="#c1d6ab"/><path d="M10 12h4v4h-4zm8 0h4v4h-4zm-4 7h4v3h-4z" fill="#396540"/></svg></div><div><h1>生电刷怪场专用投影生成器</h1></div></div><div class="badges"><span class="badge live">离线运行 · 种子不上传</span><span class="badge" id="versionBadge">v1.12.3 · Java</span></div><div class="yueyue"><span id="yueyueGreeting" class="yueyue-greeting" role="status" aria-live="polite"></span><button id="yueyueButton" type="button" aria-label="和月月打招呼" title="点一下，和月月打招呼"><img src="__YUEYUE_IMAGE__" alt="长粉发、红眼、金色弦月发饰的 Q 版月月" width="112" height="120" draggable="false"></button></div></header>
+<section class="card toolnav"><label for="toolMode">选择功能</label><select id="toolMode"><option value="farm">自动生成大史莱姆农场投影</option><option value="slime">自动寻找最大的连史莱姆块</option><option value="nonSlime">自动寻找最大的无史莱姆区块块</option><option value="hut">搜寻最多连女巫小屋</option><option value="monument">搜寻最多连海底神殿</option></select></section>
+<div id="farmPage">
+<section class="hero"><div><h2>史莱姆农场投影</h2><p>按种子定位史莱姆区块，逐格求出最佳挂机位置。相邻区块自动合并，圆弧边缘逐方块裁切。</p></div><div class="formula">24² &lt; ΔX² + ΔZ² ≤ 128²</div></section>
+<main class="workspace">
+<aside class="card"><div class="cardhead"><h3>世界与生成参数</h3></div><div class="cardbody">
+<div class="field"><label class="title" for="version">Java 版版本</label><select id="version" aria-describedby="versionHelp"></select><span class="help" id="versionHelp">Java 原版史莱姆区块算法；不适用于基岩版或更改区块算法的服务器。</span></div>
+<div class="field"><label class="title" for="seed">世界种子</label><input id="seed" type="text" placeholder="粘贴 /seed 的完整数字" autocomplete="off" spellcheck="false"><span class="help" id="seedHint">支持完整 64 位种子，负数不会丢失精度。</span></div>
+<div class="row2"><div class="field"><label class="title" for="range">搜索范围 ±</label><input id="range" type="number" min="1" max="108000" step="1" value="4000"><span class="help">X、Z 各向正负延伸；大范围搜索需要更久。</span></div><div class="field"><label class="title" for="baseY" data-y-label>Y1 地板高度</label><input id="baseY" type="number" min="-64" max="38" step="1" value="-64"><span class="help" id="heightHint">Y-63 门块和堆肥桶</span></div></div>
+<div class="field"><label class="title">世界存档群系</label><button type="button" id="importZone">导入存档文件</button><input id="worldFiles" class="hidden" type="file" accept=".mca,.dat" multiple><span class="help">点击可多选主世界 region 文件夹里的 r.x.z.mca 和存档根目录的 level.dat；也可把世界或 region 文件夹拖到按钮上。只导入 level.dat 可核对种子和版本，但没有群系；只导入 .mca 可读取已保存区块的群系和记录的古城范围。文件只在本机读取，不会上传。</span><span class="help">当前程序用种子计算史莱姆区块，但尚未接入逐版本的种子群系和古城生成算法。未导入 .mca 时，面积只按史莱姆区块计算；导入后，未保存或未选中的区块仍暂按可刷计，并显示未覆盖格数。</span><div id="importVersionHelp"><p><strong>1.16～1.18.2：</strong>若有对应版本的世界生成配置，可从种子推算群系，辅助判断下雪风险；不是每个补丁版本都有独立配置。本程序目前不做这项种子推算，世界升降级后也不能把种子推算结果当作旧区块的实际群系。</p><p><strong>1.19～1.21.4：</strong>其中有配置可推算深暗之域群系和古城候选位置；古城候选中心不等于完整结构范围，不能据此精确扣除每一格刷怪面积。本程序导入存档后读取实际保存的群系和古城结构整体包围盒，仍不是逐方块的古城结构图。</p><p><strong>1.21.5～1.21.11、26.1～26.3：</strong>核对的 Cubiomes 主项目版本表未列出这些版本的配置，不能直接套用旧版结果。26.3 新增“斑驳森林”群系，正说明旧版群系配置可能遗漏新内容；本程序同样不声称能仅凭种子重建这些版本的群系。</p></div><span class="help">若存档经过升降级、魔改区块等原因，实际群系可能与种子推算不同，请导入存档。存档只能反映已保存的区块；降雪是否落在施工方块上，还需结合露天情况和天气现场核对。</span><div class="help" id="biomeStatus">尚未导入；仅按史莱姆区块几何面积搜索，未校验实际群系和古城。</div></div>
+<div class="field"><label class="title">投影类型</label>
+<label class="typechoice"><input type="radio" name="farmType" value="checker" checked><strong>棋盘门版</strong><em>已实现</em></label>
+<label class="typechoice"><input type="radio" name="farmType" value="stripe"><span>长条门版</span><em>已实现</em></label>
+<label class="typechoice"><input type="radio" name="farmType" value="uncut"><span>不切门版</span><em>已实现</em></label>
+<label class="typechoice"><input type="radio" name="farmType" value="theory"><span>理论最高效率（试用中）</span><em>估算模型</em></label><span class="help">理论版采用棋盘门间隔排列，遇到极少数边缘漏门格才补门。中型和大型史莱姆在方块中心生成时均会触及周围 3×3 的方块；每个可刷怪地板格都按此范围检查。最低层刷怪起点无门块列的 Y 命中率按 1/2、有门块列按 1/3。刷怪游走热图显示刷怪尝试阶段的水平位置访问期望；“出生碰门覆盖”区分仅中/大型碰门与小/中/大型都碰门。小时产量仅为条件试算：小型史莱姆未立即碰门时的滞留时间、70 怪物上限影响和施工存活尚未可靠量化，不能据此认定为实际最高效率。</span>
+</div>
+<button class="btn primary wide" id="searchBtn">寻找最大刷怪区域</button>
+<button class="btn danger wide hidden" style="margin-top:8px" id="stopBtn">停止本次搜索</button>
+<div class="progress"><div class="progressbar" id="progressBar"></div></div><div class="status" id="status" role="status" aria-live="polite">输入种子后开始。程序在本机计算，无需安装依赖或连接服务器。</div>
+<div id="error" class="notebox error hidden" role="alert"></div>
+<details><summary>手动指定挂机点</summary><p>用于对照游戏或查看其他位置。手动结果不标记为最大值。</p><div class="row2"><input id="manualX" aria-label="手动挂机方块 X" type="number" step="1" value="0"><input id="manualZ" aria-label="手动挂机方块 Z" type="number" step="1" value="0"></div><button class="btn wide" id="manualBtn" style="margin-top:9px">查看这个位置</button></details>
+<div class="notebox">范围约束的是<strong>挂机方块坐标</strong>，例如 −4000～4000；玩家水平位置取该方块中心（+0.5）。边缘刷怪圆允许伸出搜索方框，仍完整统计。</div>
+</div></aside>
+<div class="rightcol">
+<section class="stats" aria-label="搜索结果摘要"><div class="stat"><div class="label">有效史莱姆地板面积</div><div class="value accent" id="areaValue">—</div><div class="sub" id="areaSub">单层 · 平方格</div></div><div class="stat"><div class="label">挂机方块 X / Z</div><div class="value small" id="pValue">— / —</div><div class="sub" id="pSub">P 位于方块的水平中心</div></div><div class="stat"><div class="label">覆盖史莱姆区块</div><div class="value" id="chunksValue">—</div><div class="sub" id="chunksSub">完整区块 + 圆弧裁切部分</div></div></section>
+<div class="notebox hidden" id="theorySummary"></div>
+<section class="card"><div class="cardhead"><h3>分布与投影预览</h3><div class="tabs"><button class="tab active" data-view="distribution">区块分布</button><button class="tab" data-view="base" data-y-label>Y1 地板</button><button class="tab" data-view="top" data-y-label>Y2 门</button><button class="tab hidden" data-view="heat">刷怪游走期望热图</button><button class="tab hidden" data-view="contact">出生碰门覆盖</button><button class="tab extra-layer hidden" data-view="layer2" data-y-label>Y3 门</button><button class="tab extra-layer hidden" data-view="layer3" data-y-label>Y4 门</button><button class="tab extra-layer hidden" data-view="layer4" data-y-label>Y5 顶框</button><button class="tab extra-layer hidden" data-view="layer5" data-y-label>Y6 半砖</button></div></div>
+<div class="maptoolbar"><span class="help" style="margin:0">滚轮缩放 · 拖拽平移 · 悬停读坐标</span><div class="actionrow"><button class="btn" id="localBtn">回到农场</button><button class="btn" id="overviewBtn" disabled>整个搜索范围</button><button class="btn" id="pngBtn" disabled>保存图片</button></div></div>
+<div class="mapwrap" id="mapwrap"><canvas id="map" aria-label="史莱姆区块分布及棋盘门投影俯视图"></canvas><div class="mapinfo" id="mapInfo">北 ↑ −Z　东 → +X</div><div class="mapempty" id="mapEmpty"><div><svg viewBox="0 0 56 56" fill="none" aria-hidden="true"><path d="M8 8h40v40H8zM8 21h40M8 35h40M21 8v40M35 8v40" stroke="currentColor" stroke-width="1"/><path d="M21 21h14v14H21z" fill="currentColor"/><circle cx="28" cy="28" r="22" stroke="currentColor" stroke-width="1" stroke-dasharray="3 3"/></svg><strong>从一个世界种子开始</strong><p>左侧输入种子并搜索，或手动指定挂机点。</p></div></div></div>
+<div class="legend"><span><i class="swatch" style="background:#4aa68f"></i>史莱姆区块</span><span><i class="swatch" style="background:#3c345e"></i>黑曜石</span><span><i class="swatch" style="background:#e69058"></i>岩浆块</span><span><i class="swatch" id="fillSwatch" style="background:#41657d"></i><span id="fillLegend">普通玻璃</span></span><span><i class="swatch" style="background:#ba8aff"></i>门块（X 轴）</span><span><i class="swatch" style="background:#55cde6"></i>门块（Z 轴）</span><span><i class="swatch dot" style="background:#ffde89"></i>P / 堆肥桶</span></div></section>
+<section class="details">
+<div class="card"><div class="cardhead"><h3>投影与放置坐标</h3></div><div class="cardbody"><div class="kv"><span>投影尺寸</span><strong id="sizeValue">321 × 2 × 321</strong></div><div class="kv"><span>摆放旋转 / 镜像</span><strong>不旋转 / 不镜像</strong></div><div class="help">在 Litematica 的“放置配置”中填写以下原点：</div><div class="coord" id="originValue">X: —　Y: —　Z: —</div><div class="help" id="originHelp" data-y-label>原点 = 挂机方块 X−160、Y1、挂机方块 Z−160。不可任意平移到别的区块。</div><div class="help">做收集的话请把地狱门开下以下这些范围</div><div class="coord" id="netherRange">X: —　Z: —</div><div class="help" id="netherRangeHelp">按主世界门块 X/Z ÷8 和地狱侧水平 ±16 格求交；Y 不缩放，地狱侧其他门会参与三维最近距离比较。</div><div class="actionrow export"><button id="exportBtn" class="btn primary" disabled>生成并下载 .litematic</button><button id="copyOriginBtn" class="btn" disabled>复制原点</button><button id="reportBtn" class="btn" disabled>结果 JSON</button><button id="guideBtn" class="btn" disabled>放置说明</button></div><div class="notebox warn">这是<strong>目标方块布局</strong>，不切门版含完整门框；其余两版是切门成品布局。投影不会替你完成切门工序，也不包含地狱侧运输、处死或收集系统。候选范围不是同一出口的保证：需清除或检查竞争地狱门，并实测史莱姆传送。</div></div></div>
+<div class="card"><div class="cardhead"><h3>材料与搜索校验</h3></div><div class="cardbody"><div class="field"><label class="title" for="fillMaterial" data-y-label>替换 Y1 的玻璃填充</label><select id="fillMaterial"></select><span class="help" id="fillHelp">选择后直接更新预览、统计和导出；版本不支持的方块不会列出。</span></div><div class="field hidden" id="topWalkField"><label class="title" for="topWalk">是否需要顶部游走</label><select id="topWalk"><option value="no">否</option><option value="yes">是</option></select><span class="help">选“是”保留顶层向外扩五格；选“否”只在全部顶框黑曜石及外侧黑曜石柱正上方铺下半砖。</span></div><div class="field hidden" id="roofField"><label class="title" for="roofMaterial">不切门版顶层填充</label><select id="roofMaterial"></select><span class="help" id="roofHelp">可选各种下半砖、玻璃和空气；原版是平滑石下半砖。</span></div><div class="notebox warn hidden" id="roofAirWarning">警告：不切门版顶层填充选择空气会留下可刷怪的黑曜石表面；满足刷怪条件时，黑曜石上面会刷怪。请做好防刷怪处理。</div><div class="kv"><span>黑曜石</span><strong id="countObsidian">—</strong></div><div class="kv"><span>岩浆块</span><strong id="countMagma">—</strong></div><div class="kv"><span id="fillCountLabel">普通玻璃</span><strong id="countGlass">—</strong></div><div class="kv"><span id="roofCountLabel">顶层平滑石下半砖</span><strong id="countSlab">—</strong></div><div class="kv"><span>传送门方块 / 堆肥桶</span><strong id="countPortal">— / 1</strong></div><div class="notebox warn hidden" id="snowWarning">已导入的范围有可能积雪的群系；切门投影施工前请检查天气和露天方块。</div><div class="notebox" id="proof">未搜索。最大面积是几何候选面积，不是每小时产量估计。</div><details><summary>参与区域的区块清单</summary><div class="chunklist"><table><thead><tr><th>区块 X</th><th>区块 Z</th><th>有效格数</th><th>门方向</th></tr></thead><tbody id="chunkRows"></tbody></table></div></details></div></div>
+</section>
+</div></main>
+<section class="card sectionbottom"><div class="cardhead"><h3>计算口径与重要说明</h3></div><div class="cardbody">
+<h4>搜索的“最大”具体是什么？</h4><p>对范围内每个挂机方块的水平中心 P，统计满足 <code>24² &lt; ΔX²+ΔZ² ≤ 128²</code> 的史莱姆区块内方块中心数量。24 格边界不计入，128 格边界计入。不按整区块估算，不只采样区块中心。通过严格上界排除不可能更优的区域，再逐格精查；同面积时优先距离世界原点近的位置，再按 X、Z 排序。这个结论不覆盖任意小数偏移的挂机点。</p>
+<h4>四种投影如何排列？</h4><p data-y-label>棋盘门保持原样。长条门与棋盘门的 Y1 相同，Y2 沿所选方向隔行排满门块；连续长度最多 21 格，超长时留一格空气。不切门 Y1 不放岩浆；Y2～Y4 是三格高门，Y5 为黑曜石顶框，Y6 默认平滑石下半砖。开启顶部游走时，顶层在地板外扩五格；关闭时只覆盖所有顶框黑曜石及刷怪地板外侧的黑曜石柱。超长不切门插入黑曜石柱。长条门与不切门会按相邻史莱姆区块组成的连通区域选择 X 或 Z：仅 X 向相邻时改为 Z，仅 Z 向相邻时保持 X；两个方向都有时，门沿相邻连接数更多方向的垂直方向排列，相同则取 X。每个区域各自选方向。P 的 Y2 放空堆肥桶。</p>
+<h4>版本与真实刷怪的边界</h4><p>提供 Java 1.16～26.3 的目标版本选项，使用 Java 传统史莱姆区块公式。1.18 前地板 Y 默认 0，之后默认 −64；版本还约束可选材料，Litematic v5 的 MinecraftDataVersion 取自所选正式版服务端。导入主世界存档后，按刷怪高度排除已保存区块中的深暗之域与古城范围；未保存区域仍按可刷计，结果会标出覆盖缺口。降雪文字是施工风险提示，需检查露天方块与实际天气。地狱门换算使用主世界 X/Z ÷8、Y 不缩放；本机 1.21.10 服务端确认地狱侧横向搜索半径 16，选门计入 Y。</p>
+<p data-y-label>按你的要求使用单层水平圆环，暂不计玩家脚部和刷怪脚部的高差；堆肥桶站位会带来微小高差，严格球形边界可能相差少量格子。Y2（刷怪脚部层）须低于 40。真实自然生成还取决于主世界、地形和生物群系、出生空间、世界出生点、其他玩家、模拟距离、难度及怪物上限；本程序只读取用户选择的存档群系与古城结构，不读取地形方块，也不会把面积当成保证产量。建造前请在备份或测试存档中核验区块与切门状态。</p>
+<details><summary>算法来源与开发说明</summary><p>Java 随机数实现参考 Oracle Java Random 文档；史莱姆种子混合与自然生成条件参考 Minecraft 的 WorldgenRandom、Slime、NaturalSpawner 对应源码。三种门的排布来自提供的对应参考投影。独立源码、验证脚本和测试结果随完整工程包提供。</p><p><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Random.html" target="_blank" rel="noopener">Oracle Random</a> · <a href="https://raw.githubusercontent.com/mahtomedi/minecraft/main/src/main/java/net/minecraft/world/level/levelgen/WorldgenRandom.java" target="_blank" rel="noopener">WorldgenRandom</a> · <a href="https://raw.githubusercontent.com/mahtomedi/minecraft/main/src/main/java/net/minecraft/world/level/NaturalSpawner.java" target="_blank" rel="noopener">NaturalSpawner</a> · <a href="https://github.com/maruohon/litematica" target="_blank" rel="noopener">Litematica</a></p></details>
+</div></section>
+ </div>
+<section id="clusterPage" class="hidden">
+<section class="hero"><div><h2 id="clusterTitle">自动寻找最大的连史莱姆块</h2><p>按 Java 原版史莱姆区块算法，穷举范围内的完整区块形状或四向相连的区块群。</p></div><div class="formula">16 × 16 / 区块</div></section>
+<div class="clusterwrap">
+<aside class="card"><div class="cardhead"><h3>搜索参数</h3></div><div class="cardbody">
+<div class="field"><label class="title" for="clusterVersion">Java 版版本</label><select id="clusterVersion"></select><span class="help">所列 Java 版本使用相同的传统史莱姆区块公式；此页面不按地形过滤。无史莱姆区块页面会按导入存档的群系筛选。</span></div>
+<div class="field"><label class="title" for="clusterSeed">世界种子</label><input id="clusterSeed" type="text" placeholder="粘贴 /seed 的完整数字" autocomplete="off" spellcheck="false"><span class="help" id="clusterSeedHint">支持完整 64 位数字或文字种子。</span></div>
+<div class="field"><label class="title" for="clusterRange">搜索范围 ±</label><input id="clusterRange" type="number" min="1" max="108000" step="1" value="4000"><span class="help">正方形、矩形、无限制：搜索与方块 X/Z ∈ [−R,+R] 相交的区块，边界区块整块参与；刷怪范围内：逐个检查该范围的挂机方块中心。</span></div>
+<div class="field"><label class="title">形状</label><div class="shapechoices"><label><input type="radio" name="clusterShape" value="square" checked> 正方形</label><label><input type="radio" name="clusterShape" value="rectangle"> 矩形</label><label id="unrestrictedChoice"><input type="radio" name="clusterShape" value="unrestricted"> 无限制</label><label id="spawnRangeChoice" class="hidden"><input type="radio" name="clusterShape" value="spawnRange"> 刷怪范围内</label></div><span class="help" id="clusterShapeHelp">正方形、矩形要求形状内每个区块都符合目标；无限制指上下左右相连，允许凹形与空洞。</span></div>
+<div id="clusterBiomeFields"><div id="nonSlimeBiomeOptions" class="hidden"><div class="notebox">史莱姆区块会略微降低其他怪效率，所以这最适合用来找做刷怪塔！仅当史莱姆能够在附近生成并占用刷怪上限时才会产生这种影响。</div><div class="field" style="margin-top:17px"><label class="title" for="clusterBiome">目标群系</label><select id="clusterBiome"><option value="desert">沙漠</option><option value="snowy">雪原</option><option value="other" selected>其它</option></select><span class="help">沙漠群系普通僵尸刷出比例会降低，别的怪相对比例可能提高；雪原则是普通骷髅比例降低。原版同时加入尸壳、流浪者；它们的自然生成还要求露天，实际收益取决于塔的结构。</span></div></div><div class="field"><label class="title" for="clusterBiomeY">计划刷怪层脚部 Y</label><input id="clusterBiomeY" type="number" min="-64" max="319" step="1" value="64"><span class="help">存档群系按这个高度读取；改动高度后需要重新导入。目标“雪原”只指 snowy_plains，冰刺之地等归入“其它”；降雪提醒则覆盖已读取到的各种可降雪群系。</span></div><div class="field"><label class="title">世界存档群系</label><button type="button" id="clusterImportZone" class="btn wide">导入存档文件</button><input id="clusterWorldFiles" class="hidden" type="file" accept=".mca,.dat" multiple><span class="help">选择主世界 region 文件夹中的 r.x.z.mca，可同时选 level.dat 核对种子；也可拖入世界或 region 文件夹。连史莱姆块搜索可只用种子，导入存档后增加古城、降雪提醒。无史莱姆块的群系筛选必须导入存档：正方形和矩形要求每个目标区块的 16 个群系采样都匹配；“刷怪范围内”要求圆环中每个非史莱姆方块的群系采样都匹配。未保存区域不猜测群系；范围未覆盖完整时提醒也可能不完整。若存档经过升降级或改动区块，实际可能与种子有出入。</span><div class="help" id="clusterBiomeStatus">尚未导入主世界存档群系。</div></div></div>
+<button class="btn primary wide" id="clusterSearchBtn">开始寻找</button><button class="btn danger wide hidden" id="clusterStopBtn" style="margin-top:8px">停止搜索</button><div class="progress"><div class="progressbar" id="clusterProgressBar"></div></div><div class="status" id="clusterStatus">尚未搜索。</div><div class="notebox error hidden" id="clusterError"></div>
+</div></aside>
+<div class="clusterresult"><div class="clusterstats"><div class="stat"><div class="label" id="clusterCountLabel">最多连续区块</div><div class="value accent" id="clusterCount">—</div><div class="sub" id="clusterCountSub">—</div></div><div class="stat"><div class="label" id="clusterSizeLabel">形状尺寸（区块）</div><div class="value small" id="clusterSize">—</div><div class="sub" id="clusterSizeSub">—</div></div><div class="stat"><div class="label" id="clusterTotalLabel">搜索区块总数</div><div class="value" id="clusterTotal">—</div><div class="sub" id="clusterTotalSub">完整穷举</div></div></div>
+<section class="card"><div class="cardhead"><h3>最佳区域</h3></div><div class="cardbody"><div id="clusterGeometry"><div class="help">区块坐标范围（X / Z）</div><div class="coord" id="clusterChunkCoords">—</div><div class="help">对应方块坐标范围（X / Z）</div><div class="coord" id="clusterBlockCoords">—</div><canvas id="clusterCanvas" class="clusterpreview" width="600" height="400" aria-label="最佳区块区域预览"></canvas></div><div class="coord hidden" id="clusterSpawnResult"></div><div class="help" id="clusterProof">搜索完成后显示区块区域；此功能不生成投影。</div><div class="notebox warn" id="clusterRisk">未导入存档，无法判断古城与降雪风险。</div><details id="clusterListDetails" class="hidden"><summary>查看相连区块坐标清单</summary><div class="chunklist" id="clusterList"></div></details></div></section></div>
+</div></section>
+<section id="structurePage" class="hidden">
+<section class="hero"><div><h2 id="structureTitle">搜寻最多连女巫小屋</h2><p>用种子预测结构，再寻找能让预测刷怪范围全部落入有效球壳的挂机点。</p></div><div class="formula">24 &lt; 三维距离 ≤ 128</div></section>
+<div class="clusterlayout"><aside class="card"><div class="cardhead"><h3>搜索参数</h3></div><div class="cardbody">
+<div class="field"><label class="title" for="structureVersion">Java 版版本</label><select id="structureVersion"></select><span class="help">按所选版本对应的种子生成配置预测；部分相邻补丁版本共用已核对配置。升降级旧区块和魔改生成可能不同。</span></div>
+<div class="field"><label class="title" for="structureSeed">世界种子</label><input id="structureSeed" type="text" placeholder="粘贴 /seed 的完整数字" autocomplete="off" spellcheck="false"><span class="help" id="structureSeedHint">支持完整 64 位数字或文字种子。</span></div>
+<div class="field"><label class="title" for="structureRange">挂机点搜索范围 ±</label><input id="structureRange" type="number" min="1" max="108000" step="1" value="4000"><span class="help">挂机点 X/Z 在 [−R,+R]，Y 在所选版本的世界高度内。程序自动寻找整数 X/Y/Z。</span></div>
+<div class="field"><label class="title">结构存档记录</label><button type="button" id="structureImportZone">导入存档文件</button><input id="structureWorldFiles" class="hidden" type="file" accept=".mca,.dat" multiple><button type="button" id="structureClearSave">清除已导入记录</button><span class="help">选择主世界 region/r.x.z.mca，可同时选存档根目录 level.dat；也可拖入世界或 region 文件夹。导入后优先使用已保存的结构记录；只导入 level.dat 不能读取结构。未导入的区域不参与存档模式最大值比较。</span><div class="help" id="structureImportStatus">尚未导入；当前按种子预测。</div></div>
+<button class="btn primary wide" id="structureSearchBtn">开始寻找</button><button class="btn danger wide hidden" id="structureStopBtn" style="margin-top:8px">停止搜索</button><div class="progress"><div class="progressbar" id="structureProgressBar"></div></div><div class="status" id="structureStatus">尚未搜索。</div><div class="notebox error hidden" id="structureError"></div>
+</div></aside><div class="clusterresult"><div class="clusterstats"><div class="stat"><div class="label">最多同时覆盖</div><div class="value accent" id="structureCount">—</div><div class="sub" id="structureCountSub">座结构</div></div><div class="stat"><div class="label">已核验结构总数</div><div class="value small" id="structureTotal">—</div><div class="sub">搜索范围附近</div></div><div class="stat"><div class="label">离世界原点距离</div><div class="value small" id="structureDistance">—</div><div class="sub">相同数量时取最近</div></div></div>
+<section class="card"><div class="cardhead"><h3>最佳挂机点</h3></div><div class="cardbody"><div class="coord" id="structureCoords">—</div><div class="help" id="structureProof">搜索完成后显示坐标；此功能不生成投影。</div><details id="structureListDetails" class="hidden"><summary>查看同时覆盖的结构可刷范围</summary><div class="chunklist" id="structureList"></div></details><div class="notebox warn" id="structureBoundaryNote">种子模式按预测范围计算：女巫小屋暂用生成前 Y64～70；海底神殿按 Y39～61、58×58 格，部分版本群系校验使用近似海底高度。导入存档后会改用已保存的小屋部件与神殿整体包围盒。这里的可刷范围指结构允许该怪生成的范围；范围内仍需自行修建刷怪平台。</div></div></section></div></div>
+</section>
+<aside class="feedback-callout" aria-labelledby="feedbackTitle"><h2 id="feedbackTitle">反馈与建议</h2><p>反馈 BUG 或修改建议，可在 UP 主对应视频的评论区留言。有更多需求，也可私聊 UP 主。</p></aside>
+<footer>生电刷怪场专用投影生成器 v1.12.3 · 所有计算在本机浏览器执行 · 没有遥测、外部脚本或在线依赖</footer>
+</div><div id="toast" class="hidden" role="status"></div>
+<script id="core-code">
+/*__CORE__*/
+</script>
+<script id="biome-code">
+/*__BIOMES__*/
+</script>
+<script id="structure-engine-code" type="text/plain">
+/*__STRUCTURE_ENGINE__*/
+</script>
+<script id="structure-search-code" type="text/plain">
+/*__STRUCTURES__*/
+</script>
+<script>
+'use strict';
+const $=id=>document.getElementById(id),fmt=n=>Number(n).toLocaleString('zh-CN');
+// Organize controls by the stage at which they affect the user's work.
+const searchPanel=document.querySelector('.workspace > aside');searchPanel.classList.add('search-panel');searchPanel.querySelector('h3').textContent='搜索设置';
+const worldFields=document.createElement('div');worldFields.className='worldfields';const versionField=$('version').closest('.field'),seedField=$('seed').closest('.field');versionField.before(worldFields);worldFields.append(versionField,seedField);
+const importField=$('importZone').closest('.field');importField.classList.add('importfield');
+const importNotes=document.createElement('details');importNotes.className='fieldnotes';importNotes.innerHTML='<summary>文件、版本与覆盖范围说明</summary>';
+for(const el of [...importField.children])if(el.matches('span.help,#importVersionHelp'))importNotes.append(el);
+const importShort=document.createElement('span');importShort.className='help';importShort.textContent='读取 .mca 校验群系；level.dat 可核对种子。';$('worldFiles').after(importShort);$('biomeStatus').before(importNotes);
+const oldBiomeStatus=document.createElement('p');oldBiomeStatus.textContent=$('biomeStatus').textContent;importNotes.append(oldBiomeStatus);$('biomeStatus').textContent='未导入：仅按种子计算。';importField.querySelector('label.title').textContent='存档校验（可选）';
+const parameterNotes=document.createElement('details');parameterNotes.className='fieldnotes parameter-notes';parameterNotes.innerHTML='<summary>参数与适用版本说明</summary>';parameterNotes.append($('versionHelp'));
+const rangeHelp=$('range').closest('.field').querySelector('.help');if(rangeHelp)parameterNotes.append(rangeHelp);
+const searchBody=searchPanel.querySelector('.cardbody');const boundsNote=searchBody.querySelector(':scope > .notebox:not([id])');if(boundsNote)parameterNotes.append(boundsNote);
+const typeChoices=[...document.querySelectorAll('.typechoice')],typeField=typeChoices[0].parentElement,typeGrid=document.createElement('div');typeGrid.className='typegrid';typeChoices[0].before(typeGrid);typeChoices.forEach(el=>typeGrid.append(el));
+const theoryHelp=document.createElement('details');theoryHelp.id='theoryOptionsHelp';theoryHelp.className='fieldnotes hidden';theoryHelp.innerHTML='<summary>试用模型说明</summary>';const theoryCopy=typeField.querySelector(':scope > span.help');if(theoryCopy)theoryHelp.append(theoryCopy);typeField.append(theoryHelp);
+// World data belongs before search. Keep its long reference text below the action.
+typeField.after(importField);$('error').after(parameterNotes,importNotes);
+const oldNotes=document.querySelector('.sectionbottom'),allNotes=document.createElement('details');allNotes.className='card sectionbottom';allNotes.innerHTML='<summary>计算口径与重要说明</summary>';allNotes.append(oldNotes.querySelector('.cardbody'));oldNotes.replaceWith(allNotes);
+for(const el of [...document.querySelectorAll('.field > span.help:not([id])')]){
+ if(el.textContent.length<180||importField.contains(el))continue;
+ const notes=document.createElement('details');notes.className='fieldnotes';notes.innerHTML='<summary>查看详细说明</summary>';el.before(notes);notes.append(el);
+}
+const resultActions=document.createElement('section');resultActions.id='resultActions';resultActions.className='result-actions hidden';resultActions.innerHTML='<div class="result-config"></div><div class="result-buttons"></div><div class="action-state" id="actionState" role="status"></div>';
+const resultConfig=resultActions.querySelector('.result-config'),materialNotes=document.createElement('details');materialNotes.className='fieldnotes material-notes';materialNotes.innerHTML='<summary>材料与顶层说明</summary>';
+for(const field of [$('fillMaterial').closest('.field'),$('topWalkField'),$('roofField')]){resultConfig.append(field);for(const help of [...field.querySelectorAll('.help')])materialNotes.append(help);}
+resultActions.querySelector('.result-buttons').append($('copyOriginBtn'),$('exportBtn'));resultActions.append(materialNotes,$('roofAirWarning'));
+document.querySelector('.rightcol > .stats').after(resultActions);
+const materialCard=$('countObsidian').closest('.card');materialCard.querySelector('h3').textContent='材料清单与搜索校验';
+const resultDetails=document.querySelector('.rightcol > .details');resultDetails.classList.add('result-details');
+const resultPrompt=document.createElement('p');resultPrompt.className='result-prompt';resultPrompt.id='resultPrompt';resultPrompt.textContent='搜索完成后，在这里选择材料、复制放置坐标并下载投影。';resultDetails.before(resultPrompt);
+
+const yLabelTemplates=[...document.querySelectorAll('[data-y-label]')].map(el=>[el,el.textContent]);
+function updateYLabels(){const raw=$('baseY').value,base=raw!==''?Number(raw):NaN;for(const [el,template] of yLabelTemplates)el.textContent=template.replace(/Y([1-6])(?!\d)/g,(_,level)=>'Y'+(Number.isInteger(base)?base+Number(level)-1:'—'));$('heightHint').textContent=Number.isInteger(base)?`Y${base+1} 门块和堆肥桶`:'请输入整数地板高度';}
+updateYLabels();
+const versions=['1.16','1.16.1','1.16.2','1.16.3','1.16.4','1.16.5','1.17','1.17.1','1.18','1.18.1','1.18.2','1.19','1.19.1','1.19.2','1.19.3','1.19.4','1.20','1.20.1','1.20.2','1.20.3','1.20.4','1.20.5','1.20.6','1.21','1.21.1','1.21.2','1.21.3','1.21.4','1.21.5','1.21.6','1.21.7','1.21.8','1.21.9','1.21.10','1.21.11','26.1','26.2','26.3'];
+for(const v of versions){const o=document.createElement('option');o.value=v;o.textContent=v;$('version').append(o);}$('version').value='1.21.10';
+for(const v of versions){const o=document.createElement('option');o.value=v;o.textContent='Java '+v;$('clusterVersion').append(o);}$('clusterVersion').value=$('version').value;
+for(const v of versions){const o=document.createElement('option');o.value=v;o.textContent='Java '+v;$('structureVersion').append(o);}$('structureVersion').value=$('version').value;
+function updateMaterials(){const old=$('fillMaterial').value,oldRoof=$('roofMaterial').value,version=$('version').value;for(const [id,roof] of [['fillMaterial',false],['roofMaterial',true]]){let group=null;$(id).replaceChildren();for(const m of SlimeFarm.MATERIALS){try{SlimeFarm.material(m.id,version);}catch{continue;}if(roof&&!['空气','玻璃','染色玻璃','下半砖'].includes(m.group))continue;if(roof&&getType()==='uncut'&&$('topWalk').value==='no'&&m.group!=='下半砖')continue;if(!group||group.label!==m.group){group=document.createElement('optgroup');group.label=m.group;$(id).append(group);}const option=document.createElement('option');option.value=m.id;option.textContent=m.label;group.append(option);}}$('fillMaterial').value=[...$('fillMaterial').options].some(o=>o.value===old)?old:'glass';$('roofMaterial').value=[...$('roofMaterial').options].some(o=>o.value===oldRoof)?oldRoof:'smooth_stone_slab';updateMaterialDisplay();}
+function updateRoofMode(){const uncut=getType()==='uncut';$('theoryOptionsHelp').classList.toggle('hidden',getType()!=='theory');$('topWalkField').classList.toggle('hidden',!uncut);$('roofField').classList.toggle('hidden',!uncut);$('roofHelp').textContent=uncut&&$('topWalk').value==='no'?'仅可选各种下半砖，铺在顶框黑曜石及外侧黑曜石柱正上方。':'可选各种下半砖、玻璃和空气；原版是平滑石下半砖。';updateMaterials();}
+function updateMaterialDisplay(){const m=SlimeFarm.material($('fillMaterial').value,$('version').value),roof=SlimeFarm.roofState($('roofMaterial').value,$('version').value);$('fillCountLabel').textContent=m.label;$('fillLegend').textContent=m.label;$('fillSwatch').style.background=m.color;$('roofCountLabel').textContent='顶层'+SlimeFarm.material($('roofMaterial').value,$('version').value).label;updateUncutAirWarning();if(currentLayout)draw();}
+let worker=null,biomeWorker=null,worldBiomes=null,saveInfo=null,current=null,currentLayout=null,view='distribution',busy=false,dirty=false,runningConfig=null;
+function updateUncutAirWarning(){const air=getType()==='uncut'&&$('topWalk').value==='yes'&&$('roofMaterial').value==='air';$('roofAirWarning').classList.toggle('hidden',!air);}
+updateMaterials();
+let toastTimer,hover=null,drag=null,mapMode='local',camera={x:0.5,z:0.5,span:350};
+const canvas=$('map'),ctx=canvas.getContext('2d');let cw=800,ch=505;
+const layerCanvas=document.createElement('canvas');layerCanvas.width=321;layerCanvas.height=321;
+function showError(e){$('error').textContent=e instanceof Error?e.message:String(e);$('error').classList.remove('hidden');}
+function clearError(){$('error').classList.add('hidden');$('error').textContent='';}
+function toast(s){$('toast').textContent=s;$('toast').classList.remove('hidden');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.add('hidden'),3500);}
+function download(bytes,name,type='application/octet-stream'){const blob=bytes instanceof Blob?bytes:new Blob([bytes],{type});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),20000);}
+function getType(){return document.querySelector('input[name=farmType]:checked').value;}
+let previousFarmType='checker',savedFloorHeight=null;
+function syncTheoryHeight(){const type=getType(),input=$('baseY'),old=input.value,min=/^1\.(16|17)(\.|$)/.test($('version').value)?0:-64;
+ if(type==='theory'&&previousFarmType!=='theory')savedFloorHeight=old;
+ if(type==='theory'){input.value=String(min);input.disabled=true;}
+ else if(previousFarmType==='theory'){input.value=savedFloorHeight!==null&&Number(savedFloorHeight)>=min?savedFloorHeight:String(min);input.disabled=false;}
+ previousFarmType=type;updateYLabels();
+ if(input.value!==old){if(worldBiomes){worldBiomes=null;$('biomeStatus').textContent='地板高度已变，请重新导入存档群系。';}markDirty();return true;}
+ return false;
+}
+function setBusy(value){busy=value;$('searchBtn').disabled=value;$('manualBtn').disabled=value;$('stopBtn').classList.toggle('hidden',!value);for(const id of ['version','seed','range','baseY','importZone','worldFiles'])$(id).disabled=value;$('baseY').disabled=value||getType()==='theory';refreshButtons();}
+function refreshButtons(){const ok=!!current&&!busy&&!dirty;document.body.classList.toggle('has-result',!!current);$('resultActions').classList.toggle('hidden',!current);$('actionState').textContent=busy?'搜索中…':dirty?'参数已更改，请重新搜索后下载。':'材料更改会立即更新预览与导出。';for(const id of ['fillMaterial','topWalk','roofMaterial'])$(id).disabled=!ok;for(const id of ['reportBtn','guideBtn','copyOriginBtn','pngBtn'])$(id).disabled=!ok;$('exportBtn').disabled=!ok;$('overviewBtn').disabled=!ok||!current.grid;}
+function heightConfig(){const version=$('version').value,baseY=Number($('baseY').value),min=/^1\.(16|17)(\.|$)/.test(version)?0:-64;$('baseY').min=min;if($('baseY').value===''||!Number.isInteger(baseY)||baseY<min||baseY>38)throw new Error(`Java ${version} 的地板 Y 坐标必须是 ${min}～38 的整数。`);return {version,baseY};}
+function config(){const parsed=SlimeFarm.parseSeed($('seed').value);if(saveInfo?.seed&&parsed.seed!==saveInfo.seed)throw new Error(`输入种子 ${parsed.seed} 与导入存档的种子 ${saveInfo.seed} 不一致。请检查是否选错世界。`);$('seedHint').textContent=parsed.text?`文字种子按 Java hashCode 转为：${parsed.seed}`:`实际使用种子：${parsed.seed}`;const h=heightConfig();const range=Number($('range').value);if(!Number.isInteger(range)||range<1||range>108000)throw new Error('搜索范围必须是 1～108000 的整数。');return {...h,...parsed,range};}
+function activeBiomes(){return worldBiomes?.y===Number($('baseY').value)+1?worldBiomes:null;}
+async function importWorldData(items){
+  clearError();const entries=[...items].map(v=>v.file?v:{file:v,path:v.webkitRelativePath||v.name});
+  const selected=entries.filter(({file,path})=>/^r\.-?\d+\.-?\d+\.mca$/i.test(file.name)&&(!path.includes('/')||/(^|\/)region\/r\.-?\d+\.-?\d+\.mca$/i.test(path))&&!/(^|\/)(DIM-1|DIM1)(\/|$)/i.test(path)).map(v=>v.file);
+  const levelFile=entries.find(({file,path})=>file.name==='level.dat'&&!/(^|\/)(DIM-1|DIM1)(\/|$)/i.test(path)&&/^(?:[^/]+\/)?level\.dat$/i.test(path))?.file||null;
+  if(!selected.length&&!levelFile){showError('没有找到主世界 region/r.x.z.mca 或 level.dat。');return;}
+  if(biomeWorker)biomeWorker.terminate();worldBiomes=null;saveInfo=null;markDirty();
+  const y=heightConfig().baseY+1,source=$('biome-code').textContent+'\nself.onmessage=async e=>{try{const result=await SlimeBiomes.readRegions(e.data.files,e.data.y,p=>self.postMessage({kind:"progress",...p}),e.data.levelFile);self.postMessage({kind:"result",result});}catch(error){self.postMessage({kind:"error",message:error.message});}};';
+  const url=URL.createObjectURL(new Blob([source],{type:'text/javascript'}));biomeWorker=new Worker(url);URL.revokeObjectURL(url);
+  $('biomeStatus').textContent=selected.length?`正在读取 ${selected.length} 个 region 文件的 Y=${y} 群系…`:'正在读取 level.dat…';
+  biomeWorker.onmessage=e=>{const m=e.data;if(m.kind==='progress')$('biomeStatus').textContent=`正在读 ${m.file}：${fmt(m.chunks)} 个区块，跳过 ${fmt(m.unsupported)} 个`;else if(m.kind==='error'){showError(m.message);$('biomeStatus').textContent='世界数据导入失败';biomeWorker.terminate();biomeWorker=null;}else if(m.kind==='result'){worldBiomes=selected.length?m.result:null;saveInfo=m.result.saveInfo;if(saveInfo?.seed&&!$('seed').value.trim())$('seed').value=saveInfo.seed;const mismatch=saveInfo?.seed&&SlimeFarm.parseSeed($('seed').value).seed!==saveInfo.seed;$('biomeStatus').textContent=`${selected.length?`Y=${y} 已导入 ${fmt(m.result.read)} 个区块、${m.result.boxes.length} 个古城范围；跳过 ${fmt(m.result.unsupported)} 个区块。`:'仅导入 level.dat；尚无区块群系。'}${saveInfo?`存档版本 ${saveInfo.version}、种子 ${saveInfo.seed??'未知'}。`:''}${mismatch?'输入种子与存档不同，请核对。':selected.length?'重新搜索后生效。':''}`;biomeWorker.terminate();biomeWorker=null;}};
+  biomeWorker.onerror=e=>{showError('群系读取线程失败：'+e.message);biomeWorker.terminate();biomeWorker=null;};
+  biomeWorker.postMessage({files:selected,y,levelFile});
+}
+async function collectDroppedFiles(dataTransfer){
+  const out=[];
+  async function walk(entry,path){
+    if(entry.isFile){if(!/^(level\.dat|r\.-?\d+\.-?\d+\.mca)$/i.test(entry.name))return;const file=await new Promise((resolve,reject)=>entry.file(resolve,reject));out.push({file,path:path+entry.name});return;}
+    if(entry.isDirectory){const reader=entry.createReader();for(;;){const batch=await new Promise((resolve,reject)=>reader.readEntries(resolve,reject));if(!batch.length)break;for(const child of batch)await walk(child,path+entry.name+'/');}}
+  }
+  const entries=[...dataTransfer.items].filter(item=>item.kind==='file');
+  if(entries.length){for(const item of entries){const entry=item.webkitGetAsEntry?.();if(entry)await walk(entry,'');else{const file=item.getAsFile();if(file)out.push({file,path:file.name});}}}
+  else for(const file of dataTransfer.files)out.push({file,path:file.webkitRelativePath||file.name});
+  return out;
+}
+function cleanupWorker(){if(worker){worker.terminate();worker=null;}}
+function setStatus(text,progress){$('status').textContent=text;if(progress!==undefined)$('progressBar').style.width=(progress*100)+'%';}
+function startSearch(){clearError();let c;try{c=config();}catch(e){showError(e);return;}cleanupWorker();runningConfig=c;setBusy(true);setStatus('准备离线计算…',0);try{
+ const source=$('core-code').textContent+'\nself.onmessage=e=>{try {const result=SlimeFarm.search(e.data.seed,e.data.range,p=>self.postMessage({kind:"progress",...p}),e.data.biomes,e.data.spawnY);self.postMessage({kind:"result",result},[result.grid.buffer]);}catch(error){self.postMessage({kind:"error",message:error.message,stack:error.stack});}};';
+ const url=URL.createObjectURL(new Blob([source],{type:'text/javascript'}));worker=new Worker(url);URL.revokeObjectURL(url);
+ worker.onmessage=e=>{const m=e.data;if(m.kind==='progress'){setStatus(m.message,m.progress);}else if(m.kind==='error'){showError(m.message);setStatus('本次搜索失败；修正后可直接重试。',0);cleanupWorker();setBusy(false);}else if(m.kind==='result'){cleanupWorker();setBusy(false);try{applyResult({...m.result,version:c.version,baseY:c.baseY,original:c.original});setStatus(`搜索完成：${fmt(m.result.totalCenters)} 个候选中心，已知群系口径面积 ${fmt(m.result.score)} 格${m.result.biome?.unknownAtBest?'；存档仍有未覆盖区域':''}。`,1);}catch(err){showError(err);}}};
+ worker.onerror=e=>{e.preventDefault();showError('计算线程启动或执行失败：'+e.message+'。请用桌面版 Edge、Chrome 或 Firefox 打开文件后重试。');cleanupWorker();setBusy(false);setStatus('搜索未完成，未声明任何最优结果。',0);};worker.postMessage({seed:c.seed,range:c.range,biomes:activeBiomes(),spawnY:c.baseY+1});
+ }catch(e){cleanupWorker();setBusy(false);showError(e);}}
+function manual(){clearError();let c;try{c=config();const x=Number($('manualX').value),z=Number($('manualZ').value);if($('manualX').value===''||$('manualZ').value===''||!Number.isInteger(x)||!Number.isInteger(z)||Math.abs(x)>29999000||Math.abs(z)>29999000)throw new Error('手动 X、Z 须为整数，并预留世界边界空间。');applyResult({...c,x,z,exact:false});setStatus('已加载手动位置；此结果没有全局最优证明。',0);}catch(e){showError(e);}}
+function applyResult(r){const biomes=activeBiomes(),l=SlimeFarm.layout(r.seed,r.x,r.z,getType(),biomes,Number($('baseY').value)+1,$('topWalk').value==='yes');if(r.exact&&r.score!==l.floorArea)throw new Error('内部校验失败：搜索面积与生成地板数不一致，已拒绝导出。');if(!r.biome&&biomes)r.biome={used:true,excludedAtBest:l.geometricArea-l.floorArea,unknownAtBest:l.unknownSpawnArea,knownAtBest:l.floorArea-l.unknownSpawnArea,importedChunks:biomes.read};current=r;currentLayout=l;dirty=false;$('areaValue').textContent=fmt(l.floorArea);$('areaSub').textContent=r.exact?(r.biome?.used?`已扣除已知禁刷区 · ${r.biome.unknownAtBest?'有存档未覆盖区域':'当前位置群系已覆盖'}`:'几何面积最大 · 群系未导入'):'手动位置 · 未声明最大';$('pValue').textContent=`${r.x} / ${r.z}`;$('pSub').textContent=`玩家水平中心：${r.x+0.5}，${r.z+0.5}`;$('chunksValue').textContent=l.chunks.length;const full=l.chunks.filter(c=>c.area===256).length;$('chunksSub').textContent=`${full} 个完整 + ${l.chunks.length-full} 个局部`;$('countObsidian').textContent=fmt(l.counts.obsidian);$('countMagma').textContent=fmt(l.counts.magma);$('countGlass').textContent=fmt(l.counts.glass);$('countPortal').textContent=`${fmt(l.counts.portal)} / 1`;$('countSlab').textContent=fmt(l.counts.slab);$('sizeValue').textContent=`321 × ${l.layers.length} × 321`;$('theorySummary').classList.toggle('hidden',!l.theory);$('theorySummary').textContent=l.theory?`棋盘门及边缘补门：${fmt(l.theory.portals)} 个门块，地板 ${fmt(l.floorArea)} 格；边缘补门 ${l.theory.edgePatches} 格，中、大型刚生成漏门格 ${l.theory.nonPortalSpawnCells}。小型史莱姆直接碰门比例约 ${(100*l.theory.immediateSmallMedium).toFixed(1)}%。条件试算约 ${fmt(Math.round(l.theory.ballsPerHour))}～${fmt(Math.round(l.theory.highDifficultyBallsPerHour))} 粘液球/小时；假设门块保持有效、史莱姆成功传送且最终全部收集。小型史莱姆滞留时间、70 怪物上限影响及门块施工尚未可靠量化，不能据此保证实际产量或最高效率。`:'';for(const mode of ['heat','contact'])document.querySelector(`[data-view=${mode}]`).classList.toggle('hidden',l.type!=='theory');document.querySelectorAll('.extra-layer').forEach(b=>b.classList.toggle('hidden',l.type!=='uncut'));$('topWalkField').classList.toggle('hidden',l.type!=='uncut');$('roofField').classList.toggle('hidden',l.type!=='uncut');$('snowWarning').classList.toggle('hidden',l.type==='uncut'||!l.snowRisk);if(l.snowRisk)$('snowWarning').textContent=`注意：投影范围内 ${fmt(l.snowRisk)} 格位于可能降雪的群系；切门投影施工时应检查露天方块和天气。`;if((l.type!=='uncut'&&view.startsWith('layer'))||(l.type!=='theory'&&(view==='heat'||view==='contact')))view='top';syncTabs();$('manualX').value=r.x;$('manualZ').value=r.z;
+ if(l.type!=='uncut'&&(!biomes||l.unknownSpawnArea)){if(!l.snowRisk)$('snowWarning').classList.remove('hidden');const note=biomes?'部分区域没有存档群系，无法完全判断降雪风险。':'未导入主世界群系，无法判断范围内是否会下雪。';$('snowWarning').textContent=l.snowRisk?$('snowWarning').textContent+' '+note:note+'露天施工前请检查。';}
+ const directionInfo=l.type==='checker'||l.type==='theory'?'':`；门方向区域 X=${l.groups.filter(g=>g.axis==='x').length}、Z=${l.groups.filter(g=>g.axis==='z').length}，长条门空气断点 ${l.gaps}，不切门黑曜石柱 ${l.pillars}`;const coverage=r.biome?.used?`；已排除 ${fmt(r.biome.excludedAtBest)} 格禁刷区域，最佳位置有 ${fmt(r.biome.unknownAtBest)} 格未被存档覆盖。未知区域暂按可刷计，因此不是实际世界的完整证明。`:'；未导入存档群系，1.19+ 的深暗之域和古城尚未排除。';$('proof').textContent=r.exact?`全域候选 ${fmt(r.totalCenters)} 个中心；精查 ${fmt(r.evaluated)} 个，其余由严格上界排除。并列最大 ${fmt(r.ties)} 个；面积与地板数量校验通过${directionInfo}${coverage}`:'手动位置，仅统计当前 P。不会把这个结果标为全局最大。'+directionInfo+coverage;
+ $('chunkRows').replaceChildren();for(const c of l.chunks){const tr=document.createElement('tr');for(const v of [c.x,c.z,c.area,c.axis.toUpperCase()]){const td=document.createElement('td');td.textContent=v;tr.append(td);}$('chunkRows').append(tr);}
+ $('mapEmpty').classList.add('hidden');updateUncutAirWarning();updatePosition();refreshButtons();localView();}
+function updatePosition(){if(!current)return;current.baseY=Number($('baseY').value);current.version=$('version').value;$('originValue').textContent=`X: ${current.x-160}　Y: ${current.baseY}　Z: ${current.z-160}`;const p=SlimeFarm.netherPortalRange(currentLayout,current.baseY);$('netherRange').textContent=p.common?`X: ${p.common.minX}～${p.common.maxX}　Y: 无固定搜索界　Z: ${p.common.minZ}～${p.common.maxZ}`:'当前投影门块之间没有共同的地狱侧水平搜索区域';$('netherRangeHelp').textContent=`共 ${fmt(p.portalBlockCount)} 个主世界门块，Y=${p.overworldPortalY?.min??'—'}～${p.overworldPortalY?.max??'—'}；X/Z ÷8 后各搜水平 ±16 格。地狱侧 Y 不缩放，其他门按三维距离参与选门；需要在真实世界实测链接。`;}
+function markDirty(){if(current){dirty=true;$('areaSub').textContent='输入已更改 · 需重新搜索';$('proof').textContent='当前图像保留的是旧参数结果；导出已锁定，请重新搜索或重新加载手动位置。';refreshButtons();}}
+function localView(){mapMode='local';camera={x:current?current.x+0.5:0.5,z:current?current.z+0.5:0.5,span:350};draw();}
+function overview(){if(!current?.grid)return;view='distribution';syncTabs();mapMode='overview';camera={x:0.5,z:0.5,span:(2*current.range+1)*1.06};draw();}
+function syncTabs(){document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===view));}
+function dims(){const scale=Math.min(cw,ch)/camera.span;return {scale,left:camera.x-cw/(2*scale),top:camera.z-ch/(2*scale)};}
+function resize(){const r=$('mapwrap').getBoundingClientRect();cw=r.width;ch=r.height;const dpr=Math.min(window.devicePixelRatio||1,2);canvas.width=Math.round(cw*dpr);canvas.height=Math.round(ch*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);draw();}
+function slimeKnown(cx,cz){if(!current)return false;if(current.grid){const ix=cx-current.gridMin,iz=cz-current.gridMin;if(ix<0||iz<0||ix>=current.gridN||iz>=current.gridN)return null;return !!current.grid[iz*current.gridN+ix];}return SlimeFarm.isSlime(current.seed,cx,cz);}
+function makeLayerImage(){if(!currentLayout)return;const l=currentLayout,d=layerCanvas.getContext('2d'),im=d.createImageData(321,321);const m=SlimeFarm.material($('fillMaterial').value,$('version').value),roof=SlimeFarm.material($('roofMaterial').value,$('version').value),rgb=m.color.match(/[0-9a-f]{2}/gi).map(v=>parseInt(v,16)),roofRgb=roof.color.match(/[0-9a-f]{2}/gi).map(v=>parseInt(v,16));const colors=[[0,0,0,0],[...rgb,m.id==='air'?0:220],[60,52,94,255],[230,144,88,255],[186,138,255,255],[255,222,137,255],[...roofRgb,roof.id==='air'?0:255],[85,205,230,255]];for(let i=0;i<l.base.length;i++){let v=l.base[i];if(view==='top'&&l.top[i])v=l.top[i];if(view.startsWith('layer'))v=l.layers[Number(view.slice(5))][i];if(view==='distribution')v=l.base[i]===2?2:0;const p=i*4;if((view==='heat'&&l.spawnWalkHeatmap)||(view==='contact'&&l.walkHeatmap)){if(l.base[i]===2){const f=view==='heat'?Math.min(1,l.spawnWalkHeatmap[i]/0.03):Math.min(1,l.walkHeatmap[i]/2);im.data[p]=Math.round(55+200*f);im.data[p+1]=Math.round(220-170*f);im.data[p+2]=Math.round(200-120*f);im.data[p+3]=255;}continue;}const c=colors[v];im.data[p]=c[0];im.data[p+1]=c[1];im.data[p+2]=c[2];im.data[p+3]=c[3];}d.putImageData(im,0,0);}
+function draw(){const d=dims(),s=d.scale,wx=x=>(x-d.left)*s,wz=z=>(z-d.top)*s;ctx.clearRect(0,0,cw,ch);ctx.fillStyle='#17251f';ctx.fillRect(0,0,cw,ch);
+ const tiny=s<0.3,step=tiny?Math.max(16,16*2**Math.ceil(Math.log2(24/(16*s)))):16;
+ // Guard manual view from arbitrarily zooming out into millions of BigInt computations.
+ if(current&&(view==='distribution'||s>=0.4)){
+  let minX=Math.floor(d.left/16),maxX=Math.floor((d.left+cw/s)/16),minZ=Math.floor(d.top/16),maxZ=Math.floor((d.top+ch/s)/16);
+  if(current.grid){minX=Math.max(minX,current.gridMin);maxX=Math.min(maxX,current.gridMax);minZ=Math.max(minZ,current.gridMin);maxZ=Math.min(maxZ,current.gridMax);}else{minX=Math.max(minX,Math.floor(current.x/16)-32);maxX=Math.min(maxX,Math.floor(current.x/16)+32);minZ=Math.max(minZ,Math.floor(current.z/16)-32);maxZ=Math.min(maxZ,Math.floor(current.z/16)+32);}
+  ctx.fillStyle=view==='distribution'?'#397e70':'#19322f';
+  const chunkStep=Math.max(1,2**Math.max(0,Math.ceil(Math.log2(0.7/(16*s)))));
+  for(let cz=minZ;cz<=maxZ;cz+=chunkStep)for(let cx=minX;cx<=maxX;cx+=chunkStep)if(slimeKnown(cx,cz)){ctx.fillRect(wx(cx*16),wz(cz*16),16*chunkStep*s,16*chunkStep*s);if(s>3&&view==='distribution'){ctx.fillStyle='#a7dece';ctx.font='10px Segoe UI';ctx.fillText(`${cx},${cz}`,wx(cx*16)+3,wz(cz*16)+12);ctx.fillStyle='#397e70';}}
+ }
+ if(currentLayout){makeLayerImage();ctx.imageSmoothingEnabled=false;ctx.drawImage(layerCanvas,wx(currentLayout.minX),wz(currentLayout.minZ),321*s,321*s);}
+ // Chunk/block grid and coordinate rulers.
+ ctx.strokeStyle=s>2?'#9fbad425':'#52709230';ctx.lineWidth=1;ctx.beginPath();
+ for(let x=Math.ceil(d.left/step)*step;x<=d.left+cw/s;x+=step){ctx.moveTo(wx(x),0);ctx.lineTo(wx(x),ch);}for(let z=Math.ceil(d.top/step)*step;z<=d.top+ch/s;z+=step){ctx.moveTo(0,wz(z));ctx.lineTo(cw,wz(z));}ctx.stroke();
+ if(s>=7){ctx.strokeStyle='#a2b4da18';ctx.beginPath();for(let x=Math.ceil(d.left);x<=d.left+cw/s;x++){ctx.moveTo(wx(x),0);ctx.lineTo(wx(x),ch);}for(let z=Math.ceil(d.top);z<=d.top+ch/s;z++){ctx.moveTo(0,wz(z));ctx.lineTo(cw,wz(z));}ctx.stroke();}
+ if(current){const px=current.x+0.5,pz=current.z+0.5;for(const [r,color,dash] of [[160,'#88adc5',[7,5]],[128,'#a594ee',[]],[24,'#ffd68e',[4,4]]]){ctx.strokeStyle=color;ctx.lineWidth=r===128?1.8:1.2;ctx.setLineDash(dash);ctx.beginPath();ctx.arc(wx(px),wz(pz),r*s,0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);if(r*s>20){ctx.fillStyle=color;ctx.font='11px Segoe UI';ctx.fillText(`${r} 格`,wx(px)+r*s+5,wz(pz)-5);}}
+  ctx.strokeStyle='#ffe2a0';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(wx(px)-9,wz(pz));ctx.lineTo(wx(px)+9,wz(pz));ctx.moveTo(wx(px),wz(pz)-9);ctx.lineTo(wx(px),wz(pz)+9);ctx.stroke();ctx.fillStyle='#ffe2a0';ctx.beginPath();ctx.arc(wx(px),wz(pz),3.5,0,Math.PI*2);ctx.fill();ctx.font='bold 12px Segoe UI';ctx.fillText('P',wx(px)+10,wz(pz)-8);
+  if(current.grid&&view==='distribution'){ctx.strokeStyle='#5db8ac99';ctx.setLineDash([5,5]);ctx.strokeRect(wx(-current.range),wz(-current.range),(2*current.range+1)*s,(2*current.range+1)*s);ctx.setLineDash([]);}
+ }
+ const labelStep=Math.max(16,16*2**Math.max(0,Math.ceil(Math.log2(90/(16*s)))));ctx.font='10px Consolas';ctx.fillStyle='#9aaec8';for(let x=Math.ceil(d.left/labelStep)*labelStep;x<d.left+cw/s;x+=labelStep)ctx.fillText(String(x),wx(x)+3,ch-7);for(let z=Math.ceil(d.top/labelStep)*labelStep;z<d.top+ch/s;z+=labelStep)ctx.fillText(String(z),4,wz(z)-3);
+ ctx.fillStyle='#b9cae0';ctx.font='11px Segoe UI';ctx.fillText('−Z 北 ↑',cw-58,22);ctx.fillText('+X 东 →',cw-62,38);
+ if(hover&&s>=2){const x=Math.floor(hover.x),z=Math.floor(hover.z);ctx.strokeStyle='#ffffffaa';ctx.strokeRect(wx(x),wz(z),s,s);}
+ if(current){const title=view==='distribution'?'史莱姆区块分布':document.querySelector(`[data-view="${view}"]`).textContent;if(!hover)$('mapInfo').textContent=title+' · '+(dirty?'旧参数结果':current.exact?'精确搜索结果':'手动位置');}
+}
+function pointerWorld(e){const r=canvas.getBoundingClientRect(),d=dims();return{x:d.left+(e.clientX-r.left)/d.scale,z:d.top+(e.clientY-r.top)/d.scale};}
+canvas.addEventListener('wheel',e=>{e.preventDefault();const before=pointerWorld(e);camera.span=Math.min(current?.grid?Math.max(700,current.range*2.5):750,Math.max(12,camera.span*Math.exp(e.deltaY*0.001)));const after=pointerWorld(e);camera.x+=before.x-after.x;camera.z+=before.z-after.z;mapMode='custom';draw();},{passive:false});
+canvas.addEventListener('pointerdown',e=>{canvas.setPointerCapture(e.pointerId);drag={x:e.clientX,y:e.clientY,cx:camera.x,cz:camera.z};});
+canvas.addEventListener('pointermove',e=>{if(drag){const s=dims().scale;camera.x=drag.cx-(e.clientX-drag.x)/s;camera.z=drag.cz-(e.clientY-drag.y)/s;mapMode='custom';}hover=pointerWorld(e);if(current){const x=Math.floor(hover.x),z=Math.floor(hover.z),cx=Math.floor(x/16),cz=Math.floor(z/16),v=slimeKnown(cx,cz);let block='';const l=currentLayout,ix=x-l.minX,iz=z-l.minZ;if(ix>=0&&iz>=0&&ix<321&&iz<321){const i=iz*321+ix,n=['air',SlimeFarm.material($('fillMaterial').value,$('version').value).label,'obsidian','magma','portal axis=x','composter',SlimeFarm.material($('roofMaterial').value,$('version').value).label,'portal axis=z'];const layer=view==='base'||view==='distribution'||view==='heat'||view==='contact'?l.base:view==='top'?l.top:l.layers[Number(view.slice(5))];block=view==='heat'&&l.spawnWalkHeatmap?.[i]?` · 刷怪尝试水平访问期望 ${l.spawnWalkHeatmap[i].toFixed(5)} 次/游戏刻（未计 Y 与刷怪规则）`:view==='contact'&&l.walkHeatmap?.[i]?` · ${l.walkHeatmap[i]===2?'小、中、大型':'中、大型'}刚生成即碰门`:' : '+n[layer[i]];}$('mapInfo').textContent=`方块 ${x}, ${z} · 区块 ${cx}, ${cz} · ${v===null?'未缓存':v?'史莱姆':'普通'}${block}`;}draw();});
+for(const name of ['pointerup','pointercancel'])canvas.addEventListener(name,()=>{drag=null;});canvas.addEventListener('pointerleave',()=>{hover=null;draw();});
+async function exportSchematic(){clearError();if(!current||dirty||busy)return;try{const c=heightConfig();$('exportBtn').disabled=true;$('exportBtn').textContent='正在编码投影…';const bytes=SlimeFarm.schematic(currentLayout,c.version,c.baseY,$('fillMaterial').value,$('roofMaterial').value),gz=await SlimeFarm.gzip(bytes);download(gz,`slime_farm_${getType()}_${$('fillMaterial').value}_${getType()==='uncut'?$('roofMaterial').value+'_'+(currentLayout.topWalk?'walk_':'no_walk_'):''}X${current.x}_Y${c.baseY}_Z${current.z}.litematic`);toast('投影已生成。请按页面中的原点放置，不要旋转或镜像。');}catch(e){showError(e);}finally{$('exportBtn').textContent='生成并下载 .litematic';refreshButtons();}}
+function resultReport(){const c=heightConfig();return SlimeFarm.report(current,currentLayout,c.version,c.baseY,$('fillMaterial').value,$('roofMaterial').value);}
+function guideText(){const r=resultReport(),o=r.position.litematicaOrigin,a=r.position.afkBlock,l=currentLayout,p=r.netherPortal;const mode={checker:'棋盘门',stripe:'长条门',uncut:'不切门',theory:'理论最高效率（试用中）'}[l.type];return `生电刷怪场专用投影生成器 v${SlimeFarm.APP_VERSION}
+类型：${mode}　目标 Java：${r.targetJavaVersion}　种子：${current.seed}
+搜索结果：${r.search.optimum}　有效地板面积：${l.floorArea} 格
+
+投影放置原点：X=${o.x}, Y=${o.y}, Z=${o.z}
+旋转 NONE，镜像 NONE；尺寸 321 × ${l.layers.length} × 321。
+堆肥桶：X=${a.x}, Y=${a.y}, Z=${a.z}。
+玩家水平中心：X=${a.x+0.5}, Z=${a.z+0.5}。
+
+地狱侧共同搜索候选门块：${p.common?`X=${p.common.minX}～${p.common.maxX}，Z=${p.common.minZ}～${p.common.maxZ}`:'无共同范围'}。
+主世界门块 Y=${p.overworldPortalY?.min??'—'}～${p.overworldPortalY?.max??'—'}；进入地狱时 Y 不缩放。现有门按三维距离竞争，候选范围本身不保证实际链接，请在游戏中实测。
+
+材料：黑曜石 ${l.counts.obsidian}；岩浆块 ${l.counts.magma}；${r.fillMaterial.label} ${l.counts.glass}；传送门块 ${l.counts.portal}；顶层${r.roofMaterial?.label??'无'} ${l.counts.slab}；堆肥桶 1。
+顶部游走：${l.type==='uncut'?(l.topWalk?'是，顶层向外扩五格。':'否，仅在全部顶框黑曜石和外侧黑曜石柱上方放下半砖。'):'不适用。'}
+${l.theory?`理论版：${l.theory.portals} 个门块，${l.floorArea} 个可刷怪地板格，边缘补门 ${l.theory.edgePatches} 格；中、大型刚生成漏门格 ${l.theory.nonPortalSpawnCells}，小型直接碰门比例 ${(100*l.theory.immediateSmallMedium).toFixed(1)}%。条件试算约 ${Math.round(l.theory.ballsPerHour)}～${Math.round(l.theory.highDifficultyBallsPerHour)} 粘液球/小时。假设所有门块保持有效、成功传送且最终全部收集；小型史莱姆滞留时间及 70 怪物上限影响尚未可靠量化；施工和地狱侧收集未实机验收。`:''}
+群系：${r.biome?.used?`已扣除 ${r.biome.excludedAtBest} 格深暗之域或古城禁刷区；最佳位置仍有 ${r.biome.unknownAtBest} 格存档未覆盖。`:'未导入世界存档；1.19+ 未校验深暗之域和古城。'}${l.type!=='uncut'&&l.snowRisk?`可能降雪的投影区域 ${l.snowRisk} 格，请检查露天施工条件。`:''}
+${l.type==='uncut'&&$('roofMaterial').value==='air'?'警告：不切门版顶层填充选择空气会留下可刷怪的黑曜石表面；满足刷怪条件时，黑曜石上面会刷怪。请做好防刷怪处理。':''}
+规则：${r.geometry.portalRule}。${r.geometry.magmaRule}。
+长条门连续门块最多21格，超长处留空气；不切门的门框外宽最多23格、内部门块最多21格，超长处插入黑曜石柱。每个相邻区块区域选择 X 或 Z 方向。
+
+这是目标方块布局，不包含施工设备或产量保证。不要平移、旋转或镜像投影，否则会错开史莱姆区块。
+`;}
+$('searchBtn').onclick=startSearch;$('stopBtn').onclick=()=>{cleanupWorker();setBusy(false);setStatus('本次搜索已停止，没有把未完成结果当作最大值。',0);};$('manualBtn').onclick=manual;$('exportBtn').onclick=exportSchematic;$('localBtn').onclick=localView;$('overviewBtn').onclick=overview;
+$('reportBtn').onclick=()=>{try{download(JSON.stringify(resultReport(),null,2),`史莱姆农场_X${current.x}_Z${current.z}_结果.json`,'application/json;charset=utf-8');}catch(e){showError(e);}};
+$('guideBtn').onclick=()=>{try{download('\ufeff'+guideText(),`史莱姆农场_X${current.x}_Z${current.z}_放置说明.txt`,'text/plain;charset=utf-8');}catch(e){showError(e);}};
+$('copyOriginBtn').onclick=async()=>{const s=`${current.x-160} ${Number($('baseY').value)} ${current.z-160}`;try{await navigator.clipboard.writeText(s);toast('已复制原点：'+s);}catch(e){const a=document.createElement('textarea');a.value=s;document.body.append(a);a.select();const ok=document.execCommand('copy');a.remove();toast(ok?'已复制原点：'+s:'请手动复制：'+s);}};
+$('pngBtn').onclick=()=>canvas.toBlob(blob=>{if(blob)download(blob,`史莱姆农场_${view}_X${current.x}_Z${current.z}.png`);else showError('图片导出失败，请重试。');},'image/png');
+document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{view=b.dataset.view;syncTabs();if(view!=='distribution')localView();else draw();});
+document.querySelectorAll('[name=farmType]').forEach(r=>r.onchange=()=>{const heightChanged=syncTheoryHeight();updateRoofMode();if(current&&!busy&&!heightChanged&&!dirty)applyResult(current);else{$('theorySummary').classList.add('hidden');for(const mode of ['heat','contact'])document.querySelector(`[data-view=${mode}]`).classList.add('hidden');if(view==='heat'||view==='contact'){view='top';syncTabs();draw();}refreshButtons();}updateUncutAirWarning();});
+$('topWalk').onchange=()=>{updateRoofMode();if(current&&!busy&&!dirty)applyResult(current);else refreshButtons();};
+$('seed').oninput=markDirty;$('range').oninput=markDirty;$('seed').onkeydown=e=>{if(e.key==='Enter'&&!busy)startSearch();};
+$('version').onchange=()=>{const old=/^1\.(16|17)(\.|$)/.test($('version').value);$('baseY').min=old?0:-64;$('baseY').value=old?0:-64;updateYLabels();if(worldBiomes&&worldBiomes.y!==Number($('baseY').value)+1){worldBiomes=null;$('biomeStatus').textContent='目标高度已变，请重新导入存档群系。';}updateMaterials();markDirty();updatePosition();refreshButtons();};
+$('baseY').oninput=()=>{updateYLabels();if(worldBiomes&&worldBiomes.y!==Number($('baseY').value)+1){worldBiomes=null;$('biomeStatus').textContent='地板高度已变，请重新导入存档群系。';markDirty();}updatePosition();};
+$('fillMaterial').onchange=()=>{updateMaterialDisplay();refreshButtons();};
+$('roofMaterial').onchange=()=>{updateMaterialDisplay();refreshButtons();};
+$('importZone').onclick=()=>$('worldFiles').click();
+$('worldFiles').onchange=()=>{const files=[...$('worldFiles').files];$('worldFiles').value='';if(files.length)importWorldData(files).catch(showError);};
+for(const eventName of ['dragenter','dragover'])$('importZone').addEventListener(eventName,e=>{e.preventDefault();if(!busy)$('importZone').classList.add('dragging');});
+$('importZone').addEventListener('dragleave',e=>{if(!e.currentTarget.contains(e.relatedTarget))$('importZone').classList.remove('dragging');});
+$('importZone').addEventListener('drop',e=>{e.preventDefault();$('importZone').classList.remove('dragging');if(busy)return;$('biomeStatus').textContent='正在检查拖入的世界文件…';collectDroppedFiles(e.dataTransfer).then(importWorldData).catch(showError);});
+let clusterWorker=null,clusterResult=null,clusterBiomeWorker=null,clusterBiomes=null,clusterSaveInfo=null;
+async function importClusterWorldData(items){
+  $('clusterError').classList.add('hidden');
+  const entries=[...items].map(v=>v.file?v:{file:v,path:v.webkitRelativePath||v.name});
+  const selected=entries.filter(({file,path})=>/^r\.-?\d+\.-?\d+\.mca$/i.test(file.name)&&(!path.includes('/')||/(^|\/)region\/r\.-?\d+\.-?\d+\.mca$/i.test(path))&&!/(^|\/)(DIM-1|DIM1)(\/|$)/i.test(path)).map(v=>v.file);
+  const levelFile=entries.find(({file,path})=>file.name==='level.dat'&&!/(^|\/)(DIM-1|DIM1)(\/|$)/i.test(path)&&/^(?:[^/]+\/)?level\.dat$/i.test(path))?.file||null;
+  if(!selected.length){$('clusterError').textContent='请选择主世界 region 文件夹中的 .mca 文件；只有 level.dat 无法筛选群系。';$('clusterError').classList.remove('hidden');return;}
+  const y=Number($('clusterBiomeY').value),old=/^1\.(16|17)(\.|$)/.test($('clusterVersion').value),min=old?0:-64,max=old?255:319;
+  if($('clusterBiomeY').value===''||!Number.isInteger(y)||y<min||y>max){$('clusterError').textContent=`计划刷怪高度必须是 ${min}～${max} 的整数。`;$('clusterError').classList.remove('hidden');return;}
+  if(clusterBiomeWorker)clusterBiomeWorker.terminate();clusterBiomes=null;clusterSaveInfo=null;clearClusterResult();
+  const source=$('biome-code').textContent+'\nself.onmessage=async e=>{try{const result=await SlimeBiomes.readRegions(e.data.files,e.data.y,p=>self.postMessage({kind:"progress",...p}),e.data.levelFile,SlimeBiomes.clusterCategory);self.postMessage({kind:"result",result});}catch(error){self.postMessage({kind:"error",message:error.message});}};';
+  const url=URL.createObjectURL(new Blob([source],{type:'text/javascript'}));clusterBiomeWorker=new Worker(url);URL.revokeObjectURL(url);
+  $('clusterBiomeStatus').textContent=`正在读取 ${selected.length} 个主世界 region 文件的 Y${y} 群系…`;
+  clusterBiomeWorker.onmessage=e=>{const m=e.data;if(m.kind==='progress')$('clusterBiomeStatus').textContent=`正在读取 ${m.file}：${fmt(m.chunks)} 个区块，跳过 ${fmt(m.unsupported)} 个`;else if(m.kind==='error'){$('clusterError').textContent=m.message;$('clusterError').classList.remove('hidden');$('clusterBiomeStatus').textContent='导入失败。';clusterBiomeWorker.terminate();clusterBiomeWorker=null;}else if(m.kind==='result'){clusterBiomes=m.result;clusterSaveInfo=m.result.saveInfo;if(clusterSaveInfo?.seed&&!$('clusterSeed').value.trim())$('clusterSeed').value=clusterSaveInfo.seed;$('clusterBiomeStatus').textContent=`Y${y} 已读取 ${fmt(m.result.read)} 个区块；跳过 ${fmt(m.result.unsupported)} 个。${clusterSaveInfo?`存档版本 ${clusterSaveInfo.version}、种子 ${clusterSaveInfo.seed??'未知'}。`:'未提供 level.dat，无法核对输入种子。'}只有已导入区块会参与群系筛选。`;clusterBiomeWorker.terminate();clusterBiomeWorker=null;}};
+  clusterBiomeWorker.onerror=e=>{$('clusterError').textContent='群系读取线程失败：'+e.message;$('clusterError').classList.remove('hidden');clusterBiomeWorker.terminate();clusterBiomeWorker=null;};
+  clusterBiomeWorker.postMessage({files:selected,y,levelFile});
+}
+function clusterMode(){return $('toolMode').value;}
+function clusterShape(){return document.querySelector('[name=clusterShape]:checked').value;}
+function clusterBusy(value){for(const id of ['clusterVersion','clusterSeed','clusterRange','clusterSearchBtn','clusterBiome','clusterBiomeY','clusterImportZone','clusterWorldFiles'])$(id).disabled=value;document.querySelectorAll('[name=clusterShape]').forEach(v=>v.disabled=value);$('clusterStopBtn').classList.toggle('hidden',!value);}
+function stopCluster(){if(clusterWorker){clusterWorker.terminate();clusterWorker=null;}clusterBusy(false);}
+function clearClusterResult(){clusterResult=null;for(const id of ['clusterCount','clusterSize','clusterTotal','clusterChunkCoords','clusterBlockCoords'])$(id).textContent='—';$('clusterCountLabel').textContent=clusterShape()==='spawnRange'?'最少史莱姆面积':'最多连续区块';$('clusterSizeLabel').textContent=clusterShape()==='spawnRange'?'非史莱姆面积':'形状尺寸（区块）';$('clusterTotalLabel').textContent=clusterShape()==='spawnRange'?'搜索挂机点总数':'搜索区块总数';$('clusterCountSub').textContent='—';$('clusterSizeSub').textContent='—';$('clusterTotalSub').textContent='—';$('clusterProof').textContent='搜索完成后显示区块区域；此功能不生成投影。';$('clusterSpawnResult').classList.add('hidden');$('clusterGeometry').classList.remove('hidden');$('clusterRisk').textContent='未导入存档，无法判断古城与降雪风险。';$('clusterListDetails').classList.add('hidden');$('clusterList').replaceChildren();const c=$('clusterCanvas'),ctx=c.getContext('2d');ctx.clearRect(0,0,c.width,c.height);}
+function showClusterRisks(r){
+ if(!clusterBiomes){$('clusterRisk').textContent='未导入存档，无法判断古城与降雪风险。';return;}
+ const chosen=new Set();
+ if(r.shape==='spawnRange'&&r.found){for(const [dx,dz] of SlimeFarm.kernels().points)chosen.add(Math.floor((r.x+dx)/16)+','+Math.floor((r.z+dz)/16));}
+ else if(r.found){if(r.coordinates)for(const [x,z] of r.coordinates)chosen.add(x+','+z);else for(let z=r.chunks.minZ;z<=r.chunks.maxZ;z++)for(let x=r.chunks.minX;x<=r.chunks.maxX;x++)chosen.add(x+','+z);}
+ if(!chosen.size){$('clusterRisk').textContent='没有符合条件的区域；无法对具体位置判断古城与降雪。';return;}
+ let snowy=0,unknown=0,ancient=0;
+ for(const key of chosen){const [cx,cz]=key.split(',').map(Number);if(!clusterBiomes.chunks.has(key))unknown++;if(clusterBiomes.snowChunks?.has(key))snowy++;if(clusterBiomes.boxes?.some(b=>cx*16<=b[3]&&cx*16+15>=b[0]&&cz*16<=b[5]&&cz*16+15>=b[2]))ancient++;}
+ const messages=[];
+ if(ancient)messages.push(`存档记录的古城结构范围与所选区域相交（${fmt(ancient)} 个区块）；请在计划 Y 层核对实际方块。`);
+ if(snowy)messages.push(`已读取到 ${fmt(snowy)} 个可能降雪的群系区块；露天施工请检查天气和积雪。`);
+ if(unknown)messages.push(`还有 ${fmt(unknown)} 个所选区域区块未导入，古城和降雪提醒可能不完整。`);
+ $('clusterRisk').textContent=messages.length?messages.join(' '):'已导入的所选区域没有发现古城结构记录或可降雪群系；仍需核对实际环境。';
+}
+function drawCluster(r){const c=$('clusterCanvas'),ctx=c.getContext('2d');ctx.clearRect(0,0,c.width,c.height);ctx.fillStyle='#17251f';ctx.fillRect(0,0,c.width,c.height);if(!r.found)return;const w=r.width,h=r.height,scale=Math.min((c.width-32)/w,(c.height-32)/h),left=(c.width-w*scale)/2,top=(c.height-h*scale)/2;ctx.fillStyle='#75eccb';if(r.coordinates){for(const [x,z] of r.coordinates)ctx.fillRect(left+(x-r.chunks.minX)*scale,top+(z-r.chunks.minZ)*scale,Math.max(1,scale),Math.max(1,scale));}else ctx.fillRect(left,top,w*scale,h*scale);ctx.strokeStyle='#b6a0ff';ctx.lineWidth=2;ctx.strokeRect(left,top,w*scale,h*scale);if(scale>=14){ctx.lineWidth=1;ctx.strokeStyle='#0a142266';for(let x=1;x<w;x++){ctx.beginPath();ctx.moveTo(left+x*scale,top);ctx.lineTo(left+x*scale,top+h*scale);ctx.stroke();}for(let z=1;z<h;z++){ctx.beginPath();ctx.moveTo(left,top+z*scale);ctx.lineTo(left+w*scale,top+z*scale);ctx.stroke();}}}
+function showCluster(r){
+ if(r.shape==='spawnRange'){
+   clusterResult=r;$('clusterGeometry').classList.add('hidden');$('clusterSpawnResult').classList.remove('hidden');$('clusterTotal').textContent=fmt(r.totalCenters);$('clusterTotalSub').textContent='已检查挂机方块中心';
+   $('clusterCount').textContent=r.found?fmt(r.slimeArea):'—';$('clusterCountSub').textContent='圆环内史莱姆区块面积（方块）';$('clusterSize').textContent=r.found?fmt(r.kernelArea-r.slimeArea):'—';$('clusterSizeSub').textContent='圆环内非史莱姆区块面积（方块）';
+   $('clusterSpawnResult').textContent=r.found?`挂机方块中心 X ${r.x}　Z ${r.z}`:'导入存档中没有找到圆环内全部非史莱姆方块均符合所选群系的挂机点。';
+   $('clusterProof').textContent=`Java ${$('clusterVersion').value}；已按 24² < ΔX² + ΔZ² ≤ 128² 精确检查搜索范围内的挂机方块中心。${r.found?`最少 ${fmt(r.slimeArea)} 格史莱姆区块面积；同面积按离世界原点最近的位置选择。`:'未发现符合所选群系且存档覆盖完整的圆环。'}用时 ${(r.elapsedMs/1000).toFixed(1)} 秒。此功能不生成投影。`;
+   showClusterRisks(r);return;
+ }
+ clusterResult=r;$('clusterTotal').textContent=fmt(r.gridChunks);$('clusterTotalSub').textContent=r.biome?(r.biome.complete?'存档群系完整覆盖':'已计算种子；存档群系未覆盖全部区块'):'种子区块完整穷举';
+ const coverage=r.biome?`存档在 Y${r.biome.y} 已记录 ${fmt(r.biome.known)} / ${fmt(r.biome.nonSlime)} 个范围内非史莱姆区块，符合所选群系 ${fmt(r.biome.matched)} 个。${r.biome.complete?'群系覆盖完整。':'未覆盖区块未参与比较，因此只确认已导入数据中的最大值。'}`:'';
+ if(!r.found){$('clusterCount').textContent='0';$('clusterCountSub').textContent=r.biome?.unknown?'已导入范围内没有符合条件的区块。':'范围内没有符合条件的区块。';$('clusterProof').textContent=`已检查 ${fmt(r.gridChunks)} 个区块。${coverage}`;drawCluster(r);showClusterRisks(r);return;}
+ $('clusterCount').textContent=fmt(r.count);$('clusterCountSub').textContent=r.target==='slime'?'史莱姆区块':`${{desert:'沙漠',snowy:'雪原',other:'其它'}[r.biome.category]}非史莱姆区块`;
+ $('clusterSize').textContent=`${fmt(r.width)} × ${fmt(r.height)}`;$('clusterSizeSub').textContent=r.shape==='unrestricted'?'外接框；内部可有空洞':'形状内部全部符合目标';$('clusterChunkCoords').textContent=`X ${r.chunks.minX} ～ ${r.chunks.maxX}　Z ${r.chunks.minZ} ～ ${r.chunks.maxZ}`;$('clusterBlockCoords').textContent=`X ${r.blocks.minX} ～ ${r.blocks.maxX}　Z ${r.blocks.minZ} ～ ${r.blocks.maxZ}`;
+ $('clusterProof').textContent=`Java ${$('clusterVersion').value}；已计算 ${fmt(r.gridChunks)} 个区块。${coverage}结果为${r.biome?.complete||!r.biome?'整个搜索范围':'已导入群系范围'}中所选形状的最大区块数。相同数量时按最北、再最西的位置确定唯一展示结果。用时 ${(r.elapsedMs/1000).toFixed(1)} 秒。此功能不生成投影。`;
+ drawCluster(r);$('clusterListDetails').classList.toggle('hidden',!r.coordinates);$('clusterList').textContent=r.coordinates?r.coordinates.map(([x,z])=>`(${x}, ${z})`).join('　'):'';showClusterRisks(r);
+}
+function startCluster(){
+ stopCluster();clearClusterResult();$('clusterError').classList.add('hidden');let seed,range,biomes=null;
+ try{
+   seed=SlimeFarm.parseSeed($('clusterSeed').value);range=Number($('clusterRange').value);
+   if(!Number.isInteger(range)||range<1||range>108000)throw new Error('搜索范围必须是 1～108000 的整数。');
+   if(clusterBiomes&&clusterSaveInfo?.seed&&clusterSaveInfo.seed!==seed.seed)throw new Error(`输入种子 ${seed.seed} 与存档种子 ${clusterSaveInfo.seed} 不一致。`);
+   if(clusterMode()==='nonSlime'){
+     const y=Number($('clusterBiomeY').value);
+     if(!clusterBiomes||clusterBiomes.y!==y)throw new Error('请先导入计划刷怪高度对应的主世界 .mca 存档群系。');
+     if(!clusterBiomes.read)throw new Error(`导入文件在 Y${y} 没有可读取的群系，请检查高度和存档文件。`);
+     biomes={...clusterBiomes,category:$('clusterBiome').value};
+   }
+ }catch(e){$('clusterError').textContent=e.message;$('clusterError').classList.remove('hidden');return;}
+ $('clusterSeedHint').textContent=seed.text?`文字种子按 Java hashCode 转为：${seed.seed}`:`实际使用种子：${seed.seed}`;
+ const target=clusterMode(),shape=clusterShape();clusterBusy(true);$('clusterStatus').textContent=shape==='spawnRange'?'正在计算圆环面积…':'正在计算区块…';$('clusterProgressBar').style.width='0%';
+ try{
+   const source=$('core-code').textContent+'\nself.onmessage=e=>{try{const result=e.data.shape==="spawnRange"?SlimeFarm.searchLeastSlime(e.data.seed,e.data.range,p=>self.postMessage({kind:"progress",...p}),e.data.biomes):SlimeFarm.searchChunkCluster(e.data.seed,e.data.range,e.data.target,e.data.shape,p=>self.postMessage({kind:"progress",...p}),e.data.biomes);if(e.data.shape==="spawnRange")result.shape="spawnRange";self.postMessage({kind:"result",result});}catch(error){self.postMessage({kind:"error",message:error.message});}};';
+   const url=URL.createObjectURL(new Blob([source],{type:'text/javascript'}));clusterWorker=new Worker(url);URL.revokeObjectURL(url);
+   clusterWorker.onmessage=e=>{const m=e.data;if(m.kind==='progress'){$('clusterStatus').textContent=m.message;$('clusterProgressBar').style.width=(100*m.progress)+'%';}else if(m.kind==='error'){$('clusterError').textContent=m.message;$('clusterError').classList.remove('hidden');$('clusterStatus').textContent='搜索失败。';stopCluster();}else if(m.kind==='result'){stopCluster();showCluster(m.result);$('clusterStatus').textContent=shape==='spawnRange'?(m.result.found?`搜索完成：最少 ${fmt(m.result.slimeArea)} 格史莱姆区块面积。`:'搜索完成：没有符合群系及存档覆盖条件的挂机点。'):`搜索完成：最多 ${fmt(m.result.count||0)} 个区块。`;$('clusterProgressBar').style.width='100%';}};
+   clusterWorker.onerror=e=>{e.preventDefault();$('clusterError').textContent='计算线程失败：'+e.message;$('clusterError').classList.remove('hidden');$('clusterStatus').textContent='搜索失败。';stopCluster();};
+   clusterWorker.postMessage({seed:seed.seed,range,target,shape,biomes});
+ }catch(e){stopCluster();$('clusterError').textContent=e.message;$('clusterError').classList.remove('hidden');}
+}
+let structureWorker=null,structureImportWorker=null,structureSave=null;
+function stopStructure(){if(structureWorker){structureWorker.terminate();structureWorker=null;}for(const id of ['structureVersion','structureSeed','structureRange','structureSearchBtn','structureImportZone','structureClearSave'])$(id).disabled=false;$('structureStopBtn').classList.add('hidden');}
+function clearStructureResult(){for(const id of ['structureCount','structureTotal','structureDistance','structureCoords'])$(id).textContent='—';$('structureProof').textContent='搜索完成后显示坐标；此功能不生成投影。';$('structureListDetails').classList.add('hidden');$('structureList').replaceChildren();}
+function showStructure(r){
+  const saved=r.source==='save';$('structureCountSub').textContent=saved?'座已导入结构':'座预测结构';
+  $('structureBoundaryNote').textContent=saved?'按存档记录计算：女巫小屋使用实际部件包围盒，海底神殿使用结构整体包围盒。这里的可刷范围指结构允许该怪生成的范围；范围内仍需自行修建刷怪平台。结果只在已导入记录中取最大，缺失或未生成的区域没有被证明不存在结构。':'种子模式按预测范围计算：女巫小屋暂用生成前 Y64～70；海底神殿按 Y39～61、58×58 格，部分版本群系校验使用近似海底高度。导入存档后会改用已保存的小屋部件与神殿整体包围盒。这里的可刷范围指结构允许该怪生成的范围；范围内仍需自行修建刷怪平台。';
+  $('structureTotal').textContent=fmt(r.structureCount);
+  if(!r.found){$('structureCount').textContent='0';$('structureCoords').textContent='未搜到';$('structureProof').textContent=`Java ${r.version}；种子 ${r.seed}；搜索范围 ±${fmt(r.range)}。${saved?'已导入的存档记录中':'种子预测中'}未找到可完整落入有效球壳的${r.type==='hut'?'女巫小屋':'海底神殿'}。${saved?'未导入区域不在结论内。':'实际生成情况仍需存档核对。'}用时 ${(r.elapsedMs/1000).toFixed(1)} 秒。`;return;}
+  $('structureCount').textContent=fmt(r.count);$('structureDistance').textContent=r.distanceToOrigin.toFixed(1);$('structureCoords').textContent=`挂机方块中心 X ${r.x}　Y ${r.y}　Z ${r.z}`;
+  $('structureProof').textContent=`Java ${r.version}；种子 ${r.seed}；搜索范围 ±${fmt(r.range)}。已对${saved?'存档记录':'预测'}中的整座结构可刷范围精确检查整数挂机点；相同数量时选择离世界原点最近的位置。${saved?'这是已导入记录中的最大值，未导入区域不在结论内。':'小屋实际 Y 和神殿海底高度可能改变结果。'}用时 ${(r.elapsedMs/1000).toFixed(1)} 秒。此功能不生成投影。`;
+  $('structureList').textContent=r.structures.map((b,i)=>`${i+1}. X ${b[0]}～${b[3]}　Y ${b[1]}～${b[4]}　Z ${b[2]}～${b[5]}`).join('\n');$('structureListDetails').classList.remove('hidden');
+}
+function startStructure(){
+  stopStructure();clearStructureResult();$('structureError').classList.add('hidden');let seed,range;
+  try{seed=SlimeFarm.parseSeed($('structureSeed').value);range=Number($('structureRange').value);if(!Number.isInteger(range)||range<1||range>108000)throw new Error('搜索范围必须是 1～108000 的整数。');if(structureSave?.saveInfo?.seed&&seed.seed!==structureSave.saveInfo.seed)throw new Error(`输入种子 ${seed.seed} 与存档种子 ${structureSave.saveInfo.seed} 不一致。`);if(structureImportWorker)throw new Error('存档仍在读取，请等待读取完成。');}
+  catch(e){$('structureError').textContent=e.message;$('structureError').classList.remove('hidden');return;}
+  $('structureSeedHint').textContent=seed.text?`文字种子按 Java hashCode 转为：${seed.seed}`:`实际使用种子：${seed.seed}`;
+  for(const id of ['structureVersion','structureSeed','structureRange','structureSearchBtn','structureImportZone','structureClearSave'])$(id).disabled=true;$('structureStopBtn').classList.remove('hidden');$('structureStatus').textContent=structureSave?'正在核验存档结构…':'正在核验种子结构…';$('structureProgressBar').style.width='0%';
+  const source=$('structure-engine-code').textContent+'\n'+$('structure-search-code').textContent+'\nself.onmessage=async e=>{try{const d=e.data;const progress=p=>self.postMessage({kind:"progress",...p});const result=d.boxes?SlimeStructures.searchSaved(d.boxes,d.seed,d.version,d.range,d.type,progress):await SlimeStructures.search(await createStructureEngine(),d.seed,d.version,d.range,d.type,progress);self.postMessage({kind:"result",result});}catch(error){self.postMessage({kind:"error",message:error.message});}};';
+  try{const url=URL.createObjectURL(new Blob([source],{type:'text/javascript'}));structureWorker=new Worker(url);URL.revokeObjectURL(url);
+    structureWorker.onmessage=e=>{const m=e.data;if(m.kind==='progress'){$('structureStatus').textContent=m.message;$('structureProgressBar').style.width=(100*m.progress)+'%';}else if(m.kind==='error'){$('structureError').textContent=m.message;$('structureError').classList.remove('hidden');$('structureStatus').textContent='搜索失败。';stopStructure();}else if(m.kind==='result'){stopStructure();showStructure(m.result);$('structureStatus').textContent=m.result.found?`搜索完成：最多同时覆盖 ${m.result.count} 座。`:'搜索完成：未搜到。';$('structureProgressBar').style.width='100%';}};
+    structureWorker.onerror=e=>{e.preventDefault();$('structureError').textContent='结构计算线程失败：'+e.message;$('structureError').classList.remove('hidden');$('structureStatus').textContent='搜索失败。';stopStructure();};
+    const type=clusterMode();structureWorker.postMessage({seed:seed.seed,version:$('structureVersion').value,range,type,boxes:structureSave?.boxes[type]||null});
+  }catch(e){stopStructure();$('structureError').textContent=e.message;$('structureError').classList.remove('hidden');}
+}
+async function importStructureWorldData(items){
+  if(structureWorker)return;
+  const entries=[...items].map(v=>v.file?v:{file:v,path:v.webkitRelativePath||v.name});
+  const files=entries.filter(({file,path})=>/^r\.-?\d+\.-?\d+\.mca$/i.test(file.name)&&(!path.includes('/')||/(^|\/)region\/r\.-?\d+\.-?\d+\.mca$/i.test(path))&&!/(^|\/)(DIM-1|DIM1)(\/|$)/i.test(path)).map(v=>v.file);
+  const levelFile=entries.find(({file,path})=>file.name==='level.dat'&&!/(^|\/)(DIM-1|DIM1)(\/|$)/i.test(path)&&/^(?:[^/]+\/)?level\.dat$/i.test(path))?.file||null;
+  if(!files.length&&!levelFile)throw new Error('没有找到主世界 region/r.x.z.mca 或 level.dat。');
+  if(structureImportWorker)structureImportWorker.terminate();structureSave=null;clearStructureResult();$('structureError').classList.add('hidden');
+  const source=$('biome-code').textContent+'\nself.onmessage=async e=>{try{const result=await SlimeBiomes.readSavedStructures(e.data.files,p=>self.postMessage({kind:"progress",...p}),e.data.levelFile);self.postMessage({kind:"result",result});}catch(error){self.postMessage({kind:"error",message:error.message});}};';
+  const url=URL.createObjectURL(new Blob([source],{type:'text/javascript'}));structureImportWorker=new Worker(url);URL.revokeObjectURL(url);
+  $('structureImportStatus').textContent=files.length?`正在读取 ${files.length} 个主世界 region 文件…`:'正在读取 level.dat…';
+  structureImportWorker.onmessage=e=>{const m=e.data;if(m.kind==='progress')$('structureImportStatus').textContent=`正在读 ${m.file}：${fmt(m.chunks)} 个区块，跳过 ${fmt(m.unsupported)} 个`;
+    else if(m.kind==='error'){$('structureImportStatus').textContent='存档读取失败。';$('structureError').textContent=m.message;$('structureError').classList.remove('hidden');structureImportWorker.terminate();structureImportWorker=null;}
+    else if(m.kind==='result'){structureImportWorker.terminate();structureImportWorker=null;structureSave=files.length?m.result:null;if(m.result.saveInfo?.seed&&!$('structureSeed').value.trim())$('structureSeed').value=m.result.saveInfo.seed;
+      $('structureImportStatus').textContent=files.length?`已读 ${fmt(m.result.chunks)} 个区块：女巫小屋 ${m.result.boxes.hut.length} 座、海底神殿 ${m.result.boxes.monument.length} 座；缺失包围盒 ${m.result.incomplete}，读取失败 ${m.result.unsupported}。${m.result.saveInfo?`存档 ${m.result.saveInfo.version}，种子 ${m.result.saveInfo.seed??'未知'}。`:''}仅在已导入记录中寻找。`:'仅导入 level.dat，尚无结构记录；仍按种子预测。';}};
+  structureImportWorker.onerror=e=>{e.preventDefault();$('structureError').textContent='存档读取线程失败：'+e.message;$('structureError').classList.remove('hidden');$('structureImportStatus').textContent='存档读取失败。';structureImportWorker.terminate();structureImportWorker=null;};
+  structureImportWorker.postMessage({files,levelFile});
+}
+let previousToolMode='farm';
+function setToolMode(){
+  const mode=clusterMode(),isCluster=mode==='slime'||mode==='nonSlime',isStructure=mode==='hut'||mode==='monument';
+  if(clusterWorker)stopCluster();if(structureWorker)stopStructure();if(mode!=='farm'&&busy){cleanupWorker();setBusy(false);setStatus('已停止投影搜索。',0);}
+  if(mode!=='farm'&&previousToolMode==='farm'){
+    if(isCluster){if(!$('clusterSeed').value.trim())$('clusterSeed').value=$('seed').value;$('clusterVersion').value=$('version').value;if($('clusterRange').value==='4000')$('clusterRange').value=$('range').value;}
+    if(isStructure){if(!$('structureSeed').value.trim())$('structureSeed').value=$('seed').value;$('structureVersion').value=$('version').value;if($('structureRange').value==='4000')$('structureRange').value=$('range').value;}
+  }
+  $('farmPage').classList.toggle('hidden',mode!=='farm');$('clusterPage').classList.toggle('hidden',!isCluster);$('structurePage').classList.toggle('hidden',!isStructure);
+  if(isCluster){$('clusterTitle').textContent=mode==='slime'?'自动寻找最大的连史莱姆块':'自动寻找最大的无史莱姆区块块';$('nonSlimeBiomeOptions').classList.toggle('hidden',mode!=='nonSlime');$('unrestrictedChoice').classList.toggle('hidden',mode==='nonSlime');$('spawnRangeChoice').classList.toggle('hidden',mode!=='nonSlime');if(mode==='nonSlime'&&clusterShape()==='unrestricted'||mode==='slime'&&clusterShape()==='spawnRange')document.querySelector('[name=clusterShape][value=square]').checked=true;$('clusterShapeHelp').textContent=mode==='slime'?'正方形、矩形要求内部全部是史莱姆区块；无限制按上下左右相邻，允许凹形与空洞。可导入存档查看古城和雪原风险。':'正方形、矩形要求内部全部不是史莱姆区块；刷怪范围内寻找圆环内史莱姆面积最小的挂机点，且圆环内所有非史莱姆方块都须符合所选群系。';clearClusterResult();$('clusterStatus').textContent='尚未搜索。';}
+  if(isStructure){$('structureTitle').textContent=mode==='hut'?'搜寻最多连女巫小屋':'搜寻最多连海底神殿';clearStructureResult();$('structureStatus').textContent='尚未搜索。';}
+  previousToolMode=mode;
+}
+$('toolMode').onchange=setToolMode;$('clusterSearchBtn').onclick=startCluster;$('clusterStopBtn').onclick=()=>{stopCluster();$('clusterStatus').textContent='已停止搜索；没有把未完成结果当作最大值。';$('clusterProgressBar').style.width='0%';};
+$('structureSearchBtn').onclick=startStructure;$('structureStopBtn').onclick=()=>{stopStructure();$('structureStatus').textContent='已停止搜索；未完成结果不会显示为最大值。';$('structureProgressBar').style.width='0%';};
+$('structureImportZone').onclick=()=>$('structureWorldFiles').click();
+$('structureWorldFiles').onchange=()=>{const files=[...$('structureWorldFiles').files];$('structureWorldFiles').value='';if(files.length)importStructureWorldData(files).catch(e=>{$('structureError').textContent=e.message;$('structureError').classList.remove('hidden');});};
+for(const eventName of ['dragenter','dragover'])$('structureImportZone').addEventListener(eventName,e=>e.preventDefault());
+$('structureImportZone').addEventListener('drop',e=>{e.preventDefault();collectDroppedFiles(e.dataTransfer).then(importStructureWorldData).catch(err=>{$('structureError').textContent=err.message;$('structureError').classList.remove('hidden');});});
+$('structureClearSave').onclick=()=>{if(structureImportWorker){structureImportWorker.terminate();structureImportWorker=null;}structureSave=null;$('structureImportStatus').textContent='已清除存档记录；当前按种子预测。';clearStructureResult();$('structureStatus').textContent='数据来源已改变，请重新搜索。';};
+for(const id of ['structureVersion','structureSeed','structureRange'])$(id).oninput=()=>{clearStructureResult();$('structureStatus').textContent='参数已改变，请重新搜索。';};
+$('structureSeed').onkeydown=e=>{if(e.key==='Enter'&&!structureWorker)startStructure();};
+for(const id of ['clusterVersion','clusterSeed','clusterRange','clusterBiome'])$(id).oninput=()=>{if(!clusterWorker){clearClusterResult();$('clusterStatus').textContent='参数已改变，请重新搜索。';}};
+$('clusterBiomeY').oninput=()=>{if(clusterBiomeWorker){clusterBiomeWorker.terminate();clusterBiomeWorker=null;}clusterBiomes=null;clusterSaveInfo=null;$('clusterBiomeStatus').textContent='高度已改变，请重新导入存档群系。';clearClusterResult();};
+document.querySelectorAll('[name=clusterShape]').forEach(el=>el.onchange=()=>{clearClusterResult();$('clusterStatus').textContent='形状已改变，请重新搜索。';});$('clusterSeed').onkeydown=e=>{if(e.key==='Enter'&&!clusterWorker)startCluster();};
+$('clusterImportZone').onclick=()=>$('clusterWorldFiles').click();
+$('clusterWorldFiles').onchange=()=>{const files=[...$('clusterWorldFiles').files];$('clusterWorldFiles').value='';if(files.length)importClusterWorldData(files).catch(e=>{$('clusterError').textContent=e.message;$('clusterError').classList.remove('hidden');});};
+for(const eventName of ['dragenter','dragover'])$('clusterImportZone').addEventListener(eventName,e=>e.preventDefault());
+$('clusterImportZone').addEventListener('drop',e=>{e.preventDefault();if(clusterWorker)return;$('clusterBiomeStatus').textContent='正在检查拖入的世界文件…';collectDroppedFiles(e.dataTransfer).then(importClusterWorldData).catch(err=>{$('clusterError').textContent=err.message;$('clusterError').classList.remove('hidden');});});
+new ResizeObserver(resize).observe($('mapwrap'));resize();
+// Deliberately exposed for offline regression tests; not a remote API.
+window.SlimeFarmUI={get result(){return current;},get layout(){return currentLayout;},startSearch,manual,draw,guideText};
+</script>
+<script>
+(()=>{
+  const mascot=document.getElementById('yueyueButton');
+  const greeting=document.getElementById('yueyueGreeting');
+  let timer;
+  const sayHello=()=>{
+    clearTimeout(timer);
+    mascot.classList.remove('is-greeting');
+    void mascot.offsetWidth;
+    mascot.classList.add('is-greeting');
+    greeting.textContent='你好呀！';
+    greeting.classList.add('is-visible');
+    timer=setTimeout(()=>{
+      mascot.classList.remove('is-greeting');
+      greeting.classList.remove('is-visible');
+      greeting.textContent='';
+    },1600);
+  };
+  mascot.addEventListener('click',sayHello);
+})();
+</script>
+</body></html>
+
+
+
+
+

@@ -26,9 +26,15 @@ const useRemoteBackend =
       : !isProd && !isPrerender;
 const apiHost = isProd ? 'api' : 'localhost';
 console.log('useRemoteBackend=', useRemoteBackend);
-const sitemap = await (
-  await fetch('https://redenmc.com/api/mc-services/yisibite/nuxt-sitemap')
-).json();
+const sitemap = await fetch('https://redenmc.com/api/mc-services/yisibite/nuxt-sitemap')
+  .then((response) => {
+    if (!response.ok) throw new Error(`Sitemap request failed: ${response.status}`);
+    return response.json();
+  })
+  .catch((error) => {
+    console.warn('Sitemap source unavailable during config loading:', error);
+    return [];
+  });
 
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',

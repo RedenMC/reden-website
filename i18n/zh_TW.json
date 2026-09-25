@@ -45,6 +45,11 @@
     "ok": "好"
   },
   "en": "English",
+  "slime_farm_tool": {
+    "title": "史萊姆農場投影生成器",
+    "description": "依種子搜尋史萊姆區塊、預覽並下載農場投影，也可搜尋區塊群和結構。工具在瀏覽器本機執行，介面為簡體中文。",
+    "open": "開啟工具"
+  },
   "litematica_generator": {
     "chunks": "區塊",
     "contribute": "想要你的機器（例如世界吞噬者）被收錄在這裡？現在就為 Reden 做出貢獻！聯絡我傳送郵件至",

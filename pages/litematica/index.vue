@@ -393,6 +393,15 @@ const itemDisplayCols = computed(() => {
       <v-container>
         <div class="d-flex flex-wrap flex-row mb-4" style="gap: 16px">
           <v-btn
+            href="/slime-farm-generator.html"
+            target="_blank"
+            rel="noopener"
+            color="green"
+            variant="outlined"
+          >
+            {{ t('slime_farm_tool.title') }}
+          </v-btn>
+          <v-btn
             v-if="locale === 'zh_cn'"
             :to="localePath('/litematica/earning')"
             variant="outlined"
