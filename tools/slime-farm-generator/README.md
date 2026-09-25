@@ -6,7 +6,7 @@ This directory is the source for `public/slime-farm-generator.html`. The publish
 
 Run `python tools/slime-farm-generator/build.py` from the repository root. This combines `ui.html`, `ui.css`, the JavaScript modules, the Yueyue image and the compiled structure engine into `public/slime-farm-generator.html`.
 
-`structure_engine.js` contains an embedded WASM module used by seed-only witch hut and ocean monument search. The HTML embeds this JavaScript file; the browser does not load a separate `.wasm` file. The C sources and recompilation script are not part of this website contribution, so `build.py` uses the checked-in engine. Recompiling that engine requires separate C sources and Emscripten. Its Cubiomes dependency came from [xpple/cubiomes](https://github.com/xpple/cubiomes) commit `18edd56575a60fe7129705bf972de0a511437527`; the MIT license is retained in `vendor/LICENSE`.
+`structure_engine.js` contains an embedded WASM module used by seed-only witch hut and ocean monument search. The HTML embeds this JavaScript file; the browser does not load a separate `.wasm` file. Its complete C source is included as `structure_bridge.c` and `vendor/`. To rebuild it on Windows, run `tools/slime-farm-generator/build_structure.ps1 -EmsdkRoot <emsdk path>` with Emscripten, then run `build.py`. Cubiomes came from [xpple/cubiomes](https://github.com/xpple/cubiomes) commit `18edd56575a60fe7129705bf972de0a511437527`; its MIT license is in `vendor/LICENSE`. Rebuilding with the local Emscripten installation produced the checked-in engine byte for byte.
 
 The Yueyue mascot is based on the contributor's character description. `assets/yueyue-prompt.md` records the generation prompts.
 

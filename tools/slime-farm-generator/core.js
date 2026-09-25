@@ -1,7 +1,7 @@
 /* 生电刷怪场专用投影生成器 — 独立计算内核，无外部依赖。 */
 'use strict';
 const SlimeFarm = (() => {
-  const APP_VERSION = '1.12.2';
+  const APP_VERSION = '1.12.3';
   const INNER = 24, OUTER = 128, GLASS = 160, WIDTH = 321;
   const MASK48 = (1n << 48n) - 1n, MULT = 0x5deece66dn;
   const SALT = 987234911n, LONG_MIN = -(1n << 63n), LONG_MAX = (1n << 63n)-1n;

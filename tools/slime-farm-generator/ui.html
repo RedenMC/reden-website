@@ -10,7 +10,7 @@
 <body>
 <noscript><div class="noscript">这个程序需要浏览器启用 JavaScript。请使用桌面版 Edge、Chrome 或 Firefox 打开本文件。</div></noscript>
 <div class="shell">
-<header class="brand"><div class="brandleft"><div class="logo" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M4 5h24v22H4z" fill="currentColor"/><path d="M8 9h16v14H8z" fill="#c1d6ab"/><path d="M10 12h4v4h-4zm8 0h4v4h-4zm-4 7h4v3h-4z" fill="#396540"/></svg></div><div><h1>生电刷怪场专用投影生成器</h1></div></div><div class="badges"><span class="badge live">离线运行 · 种子不上传</span><span class="badge" id="versionBadge">v1.12.2 · Java</span></div><div class="yueyue"><span id="yueyueGreeting" class="yueyue-greeting" role="status" aria-live="polite"></span><button id="yueyueButton" type="button" aria-label="和月月打招呼" title="点一下，和月月打招呼"><img src="__YUEYUE_IMAGE__" alt="长粉发、红眼、金色弦月发饰的 Q 版月月" width="112" height="120" draggable="false"></button></div></header>
+<header class="brand"><div class="brandleft"><div class="logo" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M4 5h24v22H4z" fill="currentColor"/><path d="M8 9h16v14H8z" fill="#c1d6ab"/><path d="M10 12h4v4h-4zm8 0h4v4h-4zm-4 7h4v3h-4z" fill="#396540"/></svg></div><div><h1>生电刷怪场专用投影生成器</h1></div></div><div class="badges"><span class="badge live">离线运行 · 种子不上传</span><span class="badge" id="versionBadge">v1.12.3 · Java</span></div><div class="yueyue"><span id="yueyueGreeting" class="yueyue-greeting" role="status" aria-live="polite"></span><button id="yueyueButton" type="button" aria-label="和月月打招呼" title="点一下，和月月打招呼"><img src="__YUEYUE_IMAGE__" alt="长粉发、红眼、金色弦月发饰的 Q 版月月" width="112" height="120" draggable="false"></button></div></header>
 <section class="card toolnav"><label for="toolMode">选择功能</label><select id="toolMode"><option value="farm">自动生成大史莱姆农场投影</option><option value="slime">自动寻找最大的连史莱姆块</option><option value="nonSlime">自动寻找最大的无史莱姆区块块</option><option value="hut">搜寻最多连女巫小屋</option><option value="monument">搜寻最多连海底神殿</option></select></section>
 <div id="farmPage">
 <section class="hero"><div><h2>史莱姆农场投影</h2><p>按种子定位史莱姆区块，逐格求出最佳挂机位置。相邻区块自动合并，圆弧边缘逐方块裁切。</p></div><div class="formula">24² &lt; ΔX² + ΔZ² ≤ 128²</div></section>
@@ -79,7 +79,7 @@
 <section class="card"><div class="cardhead"><h3>最佳挂机点</h3></div><div class="cardbody"><div class="coord" id="structureCoords">—</div><div class="help" id="structureProof">搜索完成后显示坐标；此功能不生成投影。</div><details id="structureListDetails" class="hidden"><summary>查看同时覆盖的结构可刷范围</summary><div class="chunklist" id="structureList"></div></details><div class="notebox warn" id="structureBoundaryNote">种子模式按预测范围计算：女巫小屋暂用生成前 Y64～70；海底神殿按 Y39～61、58×58 格，部分版本群系校验使用近似海底高度。导入存档后会改用已保存的小屋部件与神殿整体包围盒。这里的可刷范围指结构允许该怪生成的范围；范围内仍需自行修建刷怪平台。</div></div></section></div></div>
 </section>
 <aside class="feedback-callout" aria-labelledby="feedbackTitle"><h2 id="feedbackTitle">反馈与建议</h2><p>反馈 BUG 或修改建议，可在 UP 主对应视频的评论区留言。有更多需求，也可私聊 UP 主。</p></aside>
-<footer>生电刷怪场专用投影生成器 v1.12.2 · 所有计算在本机浏览器执行 · 没有遥测、外部脚本或在线依赖</footer>
+<footer>生电刷怪场专用投影生成器 v1.12.3 · 所有计算在本机浏览器执行 · 没有遥测、外部脚本或在线依赖</footer>
 </div><div id="toast" class="hidden" role="status"></div>
 <script id="core-code">
 /*__CORE__*/
