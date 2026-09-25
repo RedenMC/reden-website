@@ -1,7 +1,7 @@
 /* 生电刷怪场专用投影生成器 — 独立计算内核，无外部依赖。 */
 'use strict';
 const SlimeFarm = (() => {
-  const APP_VERSION = '1.12.1';
+  const APP_VERSION = '1.12.2';
   const INNER = 24, OUTER = 128, GLASS = 160, WIDTH = 321;
   const MASK48 = (1n << 48n) - 1n, MULT = 0x5deece66dn;
   const SALT = 987234911n, LONG_MIN = -(1n << 63n), LONG_MAX = (1n << 63n)-1n;
@@ -417,7 +417,7 @@ const SlimeFarm = (() => {
     onProgress({phase:'complete',progress:1,message:'完成：已用严格下界校验所有挂机方块。'});
     return {seed:String(seed),range,found:true,x:bx,z:bz,slimeArea:best,kernelArea:k.area,ties,exact:true,refined,evaluated,totalCenters:(2*range+1)**2,totalTiles:cn*cn,elapsedMs:performance.now()-started};
   }
-  function layout(seed,px,pz,type='checker',biomeData=null,spawnY=1,topWalk=true) {
+  function layout(seed,px,pz,type='checker',biomeData=null,spawnY=1,topWalk=false) {
     if(!['checker','stripe','uncut','theory'].includes(type)) throw new Error('未知投影类型');
     if(!Number.isInteger(px)||!Number.isInteger(pz)) throw new Error('挂机点方块 X、Z 必须是整数。');
     const minX=px-160,minZ=pz-160,n=WIDTH*WIDTH;
