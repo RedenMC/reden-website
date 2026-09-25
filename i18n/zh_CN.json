@@ -87,6 +87,11 @@
     "ok": "好"
   },
   "en": "English",
+  "slime_farm_tool": {
+    "title": "史莱姆农场投影生成器",
+    "description": "按种子搜索史莱姆区块，预览并下载农场投影；也可搜索区块群和结构。工具在浏览器本地运行，界面为简体中文。",
+    "open": "打开工具"
+  },
   "litematica_generator": {
     "by": {
       "author": "作者",
