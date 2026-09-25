@@ -391,24 +391,16 @@ const itemDisplayCols = computed(() => {
         <sidebar-ad style="position: sticky; top: 80px; right: 10px" />
       </div>
       <v-container>
-        <v-alert class="mb-4" color="green" variant="tonal">
-          <div class="d-flex flex-wrap align-center justify-space-between ga-3">
-            <div>
-              <strong>{{ t('slime_farm_tool.title') }}</strong>
-              <div class="text-body-2">{{ t('slime_farm_tool.description') }}</div>
-            </div>
-            <v-btn
-              href="/slime-farm-generator.html"
-              target="_blank"
-              rel="noopener"
-              color="green"
-              variant="flat"
-            >
-              {{ t('slime_farm_tool.open') }}
-            </v-btn>
-          </div>
-        </v-alert>
         <div class="d-flex flex-wrap flex-row mb-4" style="gap: 16px">
+          <v-btn
+            href="/slime-farm-generator.html"
+            target="_blank"
+            rel="noopener"
+            color="green"
+            variant="outlined"
+          >
+            {{ t('slime_farm_tool.title') }}
+          </v-btn>
           <v-btn
             v-if="locale === 'zh_cn'"
             :to="localePath('/litematica/earning')"
