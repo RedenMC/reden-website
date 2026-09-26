@@ -24,14 +24,13 @@ const x = ref('100'),
   dataVersion = ref('4556');
 const accepted = ref(false),
   busy = ref(false),
-  materialsOpen = ref(false);
+  openPanels = ref(['allocation']);
 const startupError = ref(''),
   actionError = ref(''),
   success = ref('');
 const engine = shallowRef<typeof import('~/utils/pearl-cannon/core.mjs')>();
 const template = shallowRef<CannonTemplate>();
 const assetBase = useRuntimeConfig().app.baseURL.replace(/\/$/, '');
-const source = `${assetBase}/generators/pearl-cannon-v9.2.html`;
 const mascotImage = `${assetBase}/generators/pearl-cannon-yueyue.png`;
 const mascotButton = ref<HTMLButtonElement | null>(null);
 const greeting = ref('');
@@ -219,13 +218,31 @@ function original() {
     save(template.value.originalBytes, 'pearl-cannon-original.litematic');
 }
 function openMaterials() {
-  materialsOpen.value = true;
+  if (!openPanels.value.includes('materials'))
+    openPanels.value = [...openPanels.value, 'materials'];
   nextTick(() =>
     document
       .getElementById('pearl-materials')
       ?.scrollIntoView({ block: 'nearest' }),
   );
 }
+const metrics = computed(() => [
+  {
+    label: `X ${copy.value.payload}`,
+    value: Math.abs(plan.value?.counts.x ?? 0),
+    detail: `${plan.value?.predicted.textX ?? '0.0'} ${copy.value.unit} · ${copy.value.errorDelta} ${formatError(plan.value?.error.x)}`,
+  },
+  {
+    label: `Z ${copy.value.payload}`,
+    value: Math.abs(plan.value?.counts.z ?? 0),
+    detail: `${plan.value?.predicted.textZ ?? '0.0'} ${copy.value.unit} · ${copy.value.errorDelta} ${formatError(plan.value?.error.z)}`,
+  },
+  {
+    label: copy.value.total,
+    value: plan.value?.counts.structureTotal ?? 0,
+    detail: `${copy.value.boost} ${plan.value?.counts.propulsion ?? 0} · ${copy.value.boostExcluded}`,
+  },
+]);
 const presets = [
   ['100', '422'],
   ['-100', '422'],
@@ -239,19 +256,17 @@ function preset(values: string[]) {
 }
 </script>
 <template>
-  <section class="pearl-tool" data-testid="pearl-native-form">
-    <header class="brand">
-      <div class="brandleft">
-        <div class="logo" aria-hidden="true">TNT</div>
-        <h2>{{ copy.toolTitle }}</h2>
-      </div>
-      <div class="badges">
-        <span class="badge live">{{ copy.offline }}</span
-        ><span class="badge">v9.2 · Java</span>
+  <section data-testid="pearl-native-form">
+    <div class="d-flex align-center justify-space-between ga-4 mb-4">
+      <div>
+        <h2 class="text-h5 mb-1">{{ copy.toolTitle }}</h2>
+        <p class="text-body-2 text-medium-emphasis mb-0">{{ copy.intro }}</p>
+        <p class="text-caption text-medium-emphasis mb-0">
+          {{ copy.offline }} · {{ copy.axisLimit }} 13,504 {{ copy.unit }}
+        </p>
       </div>
       <div class="yueyue">
         <span
-          id="yueyueGreeting"
           class="yueyue-greeting"
           :class="{ 'is-visible': greetingVisible }"
           role="status"
@@ -269,271 +284,196 @@ function preset(values: string[]) {
           <img
             :src="mascotImage"
             alt="长粉发、红眼、金色弦月发饰的 Q 版月月"
-            width="112"
-            height="120"
+            width="104"
+            height="112"
             draggable="false"
           />
         </button>
       </div>
-    </header>
-
-    <div class="heading">
-      <div>
-        <h3>{{ copy.hero }}</h3>
-        <p>{{ copy.intro }}</p>
-      </div>
-      <div class="limit">
-        {{ copy.axisLimit }}<strong>13,504 {{ copy.unit }}</strong>
-      </div>
     </div>
 
-    <div class="main">
-      <aside class="card" :aria-label="copy.target">
-        <div class="card-head">
-          <h3>{{ copy.target }}</h3>
-          <button
-            class="small-button"
-            type="button"
-            :disabled="busy"
-            @click="preset([z, x])"
-          >
-            {{ copy.swap }}
-          </button>
-        </div>
-        <div class="card-body">
-          <div class="field-grid">
-            <div class="field">
-              <label for="pearl-x">{{ copy.x }}</label>
-              <div class="input-wrap">
-                <input
+    <v-row>
+      <v-col cols="12" md="5" lg="4">
+        <v-card border>
+          <v-card-title class="d-flex align-center justify-space-between">
+            {{ copy.target }}
+            <v-btn
+              size="small"
+              variant="text"
+              :disabled="busy"
+              @click="preset([z, x])"
+              >{{ copy.swap }}</v-btn
+            >
+          </v-card-title>
+          <v-card-text>
+            <v-row dense>
+              <v-col cols="12" sm="6"
+                ><v-text-field
                   id="pearl-x"
                   v-model="x"
-                  type="text"
+                  :label="copy.x"
+                  :hint="copy.xHint"
+                  persistent-hint
                   inputmode="decimal"
                   autocomplete="off"
-                  spellcheck="false"
                   maxlength="80"
                   :disabled="busy"
-                  :aria-label="copy.x"
-                  aria-describedby="pearl-x-help"
                   @keydown.enter.stop.prevent="download"
-                /><span class="unit">{{ copy.unit }}</span>
-              </div>
-              <span id="pearl-x-help" class="help">{{ copy.xHint }}</span>
-            </div>
-            <div class="field">
-              <label for="pearl-z">{{ copy.z }}</label>
-              <div class="input-wrap">
-                <input
+              /></v-col>
+              <v-col cols="12" sm="6"
+                ><v-text-field
                   id="pearl-z"
                   v-model="z"
-                  type="text"
+                  :label="copy.z"
+                  :hint="copy.zHint"
+                  persistent-hint
                   inputmode="decimal"
                   autocomplete="off"
-                  spellcheck="false"
                   maxlength="80"
                   :disabled="busy"
-                  :aria-label="copy.z"
-                  aria-describedby="pearl-z-help"
                   @keydown.enter.stop.prevent="download"
-                /><span class="unit">{{ copy.unit }}</span>
-              </div>
-              <span id="pearl-z-help" class="help">{{ copy.zHint }}</span>
+              /></v-col>
+            </v-row>
+            <div class="d-flex flex-wrap ga-2 my-3" :aria-label="copy.presets">
+              <v-chip
+                v-for="values in presets"
+                :key="values.join(',')"
+                size="small"
+                :disabled="busy"
+                @click="preset(values)"
+                >{{ values.join(' / ') }}</v-chip
+              >
             </div>
-          </div>
-          <div class="presets" :aria-label="copy.presets">
-            <button
-              v-for="values in presets"
-              :key="values.join(',')"
-              class="chip"
-              type="button"
-              :disabled="busy"
-              @click="preset(values)"
+            <p v-if="!template && !startupError" role="status">
+              {{ copy.loading }}
+            </p>
+            <p v-if="startupError" role="alert" class="text-error">
+              {{ startupError }}
+              <v-btn size="small" variant="text" @click="load">{{
+                copy.retry
+              }}</v-btn>
+            </p>
+            <p
+              v-if="generated.error || actionError"
+              role="alert"
+              class="text-error"
             >
-              {{ values.join(' / ') }}
-            </button>
-          </div>
-          <div v-if="!template && !startupError" class="notice" role="status">
-            {{ copy.loading }}
-          </div>
-          <div v-if="startupError" class="error" role="alert">
-            {{ startupError }}
-            <button type="button" @click="load">{{ copy.retry }}</button>
-          </div>
-          <div v-if="generated.error || actionError" class="error" role="alert">
-            {{ actionError || generated.error }}
-          </div>
-          <div v-if="plan?.knownRuntimeIssue" class="error" role="alert">
-            {{
-              locale === 'zh_cn' ? plan.knownRuntimeIssue.message : copy.damage
-            }}
-          </div>
-          <div v-if="plan?.farArraySupport" class="notice" role="status">
-            {{ copy.farSupportWarning }}
-          </div>
-          <label v-if="plan?.needsExperimentalConsent" class="consent">
-            <input
+              {{ actionError || generated.error }}
+            </p>
+            <p v-if="plan?.knownRuntimeIssue" role="alert" class="text-error">
+              {{
+                locale === 'zh_cn'
+                  ? plan.knownRuntimeIssue.message
+                  : copy.damage
+              }}
+            </p>
+            <p v-if="plan?.farArraySupport" role="status" class="text-warning">
+              {{ copy.farSupportWarning }}
+            </p>
+            <v-checkbox
+              v-if="plan?.needsExperimentalConsent"
               v-model="accepted"
               data-testid="pearl-consent"
-              type="checkbox"
+              :label="
+                plan.knownRuntimeIssue ? copy.damageConsent : copy.consent
+              "
               :disabled="busy"
+              hide-details
+              class="mb-3"
             />
-            <span>{{
-              plan.knownRuntimeIssue ? copy.damageConsent : copy.consent
-            }}</span>
-          </label>
-          <button
-            class="primary"
-            data-testid="pearl-download"
-            type="button"
-            :disabled="!canExport"
-            @click="download"
-          >
-            {{ busy ? copy.exporting : copy.downloadNow }}
-          </button>
-          <div class="secondary-row">
-            <button
-              class="secondary"
-              type="button"
-              :disabled="!result"
-              @click="exportReport"
+            <v-btn
+              color="primary"
+              block
+              data-testid="pearl-download"
+              :disabled="!canExport"
+              :loading="busy"
+              @click="download"
+              >{{ copy.downloadNow }}</v-btn
             >
-              {{ copy.report }}
-            </button>
-            <button
-              class="secondary"
-              type="button"
-              :disabled="!result"
-              @click="openMaterials"
-            >
-              {{ copy.materials }}
-            </button>
-          </div>
-          <div v-if="success" class="download-status" role="status">
-            {{ success }}
-          </div>
-          <details class="parameter-notes">
-            <summary>{{ copy.savingNotes }}</summary>
-            <p>{{ copy.limits }}</p>
-            <p>{{ copy.roundingNotes }}</p>
-          </details>
-          <details class="parameter-notes">
-            <summary>{{ copy.orientationNotes }}</summary>
-            <p>{{ copy.correction }}</p>
-          </details>
-          <p class="fine-print">{{ copy.caution }}</p>
-        </div>
-      </aside>
+            <div class="d-flex flex-wrap ga-2 mt-3">
+              <v-btn
+                variant="outlined"
+                size="small"
+                :disabled="!result"
+                @click="exportReport"
+                >{{ copy.report }}</v-btn
+              >
+              <v-btn
+                variant="outlined"
+                size="small"
+                :disabled="!result"
+                @click="openMaterials"
+                >{{ copy.materials }}</v-btn
+              >
+            </div>
+            <p v-if="success" role="status" class="mt-3 mb-0">{{ success }}</p>
+            <p class="text-caption text-medium-emphasis mt-4 mb-0">
+              {{ copy.caution }}
+            </p>
+          </v-card-text>
+        </v-card>
+      </v-col>
 
-      <div class="rightcol">
-        <div class="metrics-bar" data-testid="pearl-summary" aria-live="polite">
-          <div class="metric">
-            <span class="metric-label">X {{ copy.payload }}</span
-            ><strong>{{ plan ? Math.abs(plan.counts.x) : 0 }}</strong
-            ><span>{{ plan?.predicted.textX ?? '0.0' }} {{ copy.unit }}</span
-            ><small
-              >{{ copy.errorDelta }} {{ formatError(plan?.error.x) }}
-              {{ copy.unit }}</small
-            >
-          </div>
-          <div class="metric">
-            <span class="metric-label">Z {{ copy.payload }}</span
-            ><strong>{{ plan ? Math.abs(plan.counts.z) : 0 }}</strong
-            ><span>{{ plan?.predicted.textZ ?? '0.0' }} {{ copy.unit }}</span
-            ><small
-              >{{ copy.errorDelta }} {{ formatError(plan?.error.z) }}
-              {{ copy.unit }}</small
-            >
-          </div>
-          <div class="metric">
-            <span class="metric-label">{{ copy.total }}</span
-            ><strong>{{ plan?.counts.structureTotal ?? 0 }}</strong
-            ><span>{{ copy.boost }} {{ plan?.counts.propulsion ?? 0 }}</span
-            ><small>{{ copy.boostExcluded }}</small>
-          </div>
-        </div>
-        <section class="card preview-card">
-          <div class="card-head">
-            <h3>{{ copy.preview }}</h3>
-            <span class="status">{{
-              result ? copy.previewReady : copy.loading
-            }}</span>
-          </div>
+      <v-col cols="12" md="7" lg="8">
+        <v-row dense data-testid="pearl-summary" aria-live="polite">
+          <v-col v-for="metric in metrics" :key="metric.label" cols="12" sm="4">
+            <v-sheet border rounded class="pa-3 h-100">
+              <div class="text-caption text-medium-emphasis">
+                {{ metric.label }}
+              </div>
+              <div class="text-h6">{{ metric.value }}</div>
+              <div class="text-caption">{{ metric.detail }}</div>
+            </v-sheet>
+          </v-col>
+        </v-row>
+        <v-card border class="mt-3">
+          <v-card-title>{{ copy.preview }}</v-card-title>
           <PearlCannonPreview v-if="result" :result="result" />
-          <div v-else class="preview-empty">
-            {{ generated.error || startupError || copy.previewEmpty }}
-          </div>
-          <div v-if="plan" class="checks">
-            <div>
-              <strong>{{ plan.structure.bounds.size.join(' × ') }}</strong
-              ><span>{{ copy.bounds }}</span>
-            </div>
-            <div>
-              <strong>{{ plan.structure.nonAir }} {{ copy.block }}</strong
-              ><span>{{ copy.correction }}</span>
-            </div>
-            <div>
-              <strong>{{ removed }} {{ copy.block }}</strong
-              ><span>{{ copy.removed }}</span>
-            </div>
-            <div>
-              <strong>{{ orientation }}</strong
-              ><span>{{ copy.orientation }}</span>
-            </div>
-          </div>
-        </section>
-      </div>
-    </div>
-
-    <details class="card wide" open>
-      <summary>
-        {{ copy.allocation
-        }}<span class="toggle-label"
-          ><span class="when-closed">{{ copy.expand }}</span
-          ><span class="when-open">{{ copy.collapse }}</span></span
-        >
-      </summary>
-      <div class="card-body scroll">
-        <table>
-          <thead>
-            <tr>
-              <th>{{ copy.wing }}</th>
-              <th>{{ copy.payload }}</th>
-              <th>{{ copy.rows }}</th>
-              <th>{{ copy.glass }}</th>
-              <th>{{ copy.boost }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="row in allocation" :key="row.label">
-              <td>{{ row.label }}</td>
-              <td>{{ row.count }}</td>
-              <td>{{ row.rows }}</td>
-              <td>{{ row.glass }}</td>
-              <td>{{ row.boost }}</td>
-            </tr>
-          </tbody>
-        </table>
-        <p class="detail-note">{{ copy.allocationNotes }}</p>
-      </div>
-    </details>
-
-    <div class="two-detail">
-      <details
-        id="pearl-materials"
-        class="card wide"
-        :open="materialsOpen"
-        @toggle="materialsOpen = ($event.target as HTMLDetailsElement).open"
-      >
-        <summary>
-          {{ copy.materials
-          }}<span class="toggle-label"
-            ><span class="when-closed">{{ copy.expand }}</span
-            ><span class="when-open">{{ copy.collapse }}</span></span
+          <v-card-text v-else>{{
+            generated.error || startupError || copy.previewEmpty
+          }}</v-card-text>
+          <v-card-subtitle v-if="plan" class="text-wrap pb-3"
+            >{{ plan.structure.bounds.size.join(' × ') }} ·
+            {{ plan.structure.nonAir }} {{ copy.block }} · {{ removed }}
+            {{ copy.removed }} · {{ orientation }}</v-card-subtitle
           >
-        </summary>
-        <div class="card-body material-table">
-          <table>
+        </v-card>
+      </v-col>
+    </v-row>
+
+    <v-expansion-panels v-model="openPanels" multiple class="mt-4">
+      <v-expansion-panel value="allocation" :title="copy.allocation">
+        <v-expansion-panel-text>
+          <v-table density="compact">
+            <thead>
+              <tr>
+                <th>{{ copy.wing }}</th>
+                <th>{{ copy.payload }}</th>
+                <th>{{ copy.rows }}</th>
+                <th>{{ copy.glass }}</th>
+                <th>{{ copy.boost }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="row in allocation" :key="row.label">
+                <td>{{ row.label }}</td>
+                <td>{{ row.count }}</td>
+                <td>{{ row.rows }}</td>
+                <td>{{ row.glass }}</td>
+                <td>{{ row.boost }}</td>
+              </tr>
+            </tbody>
+          </v-table>
+          <p class="text-caption mb-0">{{ copy.allocationNotes }}</p>
+        </v-expansion-panel-text>
+      </v-expansion-panel>
+      <v-expansion-panel
+        id="pearl-materials"
+        value="materials"
+        :title="copy.materials"
+      >
+        <v-expansion-panel-text>
+          <v-table density="compact">
             <thead>
               <tr>
                 <th>{{ copy.block }}</th>
@@ -548,603 +488,81 @@ function preset(values: string[]) {
                 <td>{{ id }}</td>
               </tr>
             </tbody>
-          </table>
-          <button
-            class="secondary"
-            type="button"
+          </v-table>
+          <v-btn
+            class="mt-3"
+            variant="outlined"
+            size="small"
             :disabled="!result"
             @click="exportCSV"
+            >{{ copy.csv }}</v-btn
           >
-            {{ copy.csv }}
-          </button>
-        </div>
-      </details>
-      <details class="card wide" data-testid="pearl-advanced">
-        <summary>
-          {{ copy.advanced
-          }}<span class="toggle-label"
-            ><span class="when-closed">{{ copy.expand }}</span
-            ><span class="when-open">{{ copy.collapse }}</span></span
-          >
-        </summary>
-        <div class="card-body">
-          <p v-if="template" class="muted">
+        </v-expansion-panel-text>
+      </v-expansion-panel>
+      <v-expansion-panel
+        value="advanced"
+        data-testid="pearl-advanced"
+        :title="copy.advanced"
+      >
+        <v-expansion-panel-text>
+          <p v-if="template" class="text-body-2">
             {{ copy.templateLoaded }} {{ template.author }} · DataVersion
             {{ template.sourceDataVersion }}
           </p>
-          <label class="version-label" for="pearl-version">{{
-            copy.version
-          }}</label>
-          <input
+          <v-text-field
             id="pearl-version"
             v-model="dataVersion"
             data-testid="pearl-version"
-            type="text"
+            :label="copy.version"
+            :hint="copy.versionHint"
+            persistent-hint
             inputmode="numeric"
+            :error-messages="versionValid ? [] : [copy.versionError]"
             :disabled="busy"
           />
-          <p class="muted">{{ copy.versionHint }}</p>
-          <p v-if="!versionValid" class="error" role="alert">
-            {{ copy.versionError }}
-          </p>
-          <div class="source-actions">
-            <button
-              class="small-button"
-              type="button"
+          <div class="d-flex flex-wrap ga-2 mt-3">
+            <v-btn
+              variant="outlined"
+              size="small"
               :disabled="!template"
               @click="original"
+              >{{ copy.original }}</v-btn
             >
-              {{ copy.original }}</button
-            ><a :href="source" target="_blank" rel="noopener noreferrer">{{
-              copy.standalone
-            }}</a>
           </div>
-        </div>
-      </details>
-    </div>
+          <p class="text-body-2 mt-4">
+            {{ copy.limits }} {{ copy.roundingNotes }}
+          </p>
+          <p class="text-body-2 mb-0">{{ copy.correction }}</p>
+        </v-expansion-panel-text>
+      </v-expansion-panel>
+    </v-expansion-panels>
   </section>
 </template>
 <style scoped>
-.pearl-tool {
-  --bg: #f1f3ee;
-  --panel: #fff;
-  --panel2: #e9eee6;
-  --line: #d5dcd2;
-  --text: #26352b;
-  --muted: #5f6d62;
-  --green: #32623c;
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Microsoft YaHei UI', 'Microsoft YaHei', 'Segoe UI', sans-serif;
-  font-size: 14px;
-  line-height: 1.6;
-  padding: 0 28px 32px;
-  border-radius: 6px;
-}
-.pearl-tool * {
-  box-sizing: border-box;
-}
-.pearl-tool button,
-.pearl-tool input {
-  font: inherit;
-}
-.pearl-tool button {
-  cursor: pointer;
-  border: 1px solid #b7c3b2;
-  background: #fff;
-  color: var(--text);
-  border-radius: 4px;
-  padding: 8px 12px;
-  font-weight: 600;
-  transition:
-    background-color 0.15s,
-    border-color 0.15s;
-}
-.pearl-tool button:hover:not(:disabled) {
-  background: #edf3e8;
-  border-color: #8ea487;
-}
-.pearl-tool button:disabled {
-  cursor: not-allowed;
-  opacity: 0.46;
-}
-.pearl-tool :focus-visible {
-  outline: 2px solid #43824d;
-  outline-offset: 3px;
-}
-.pearl-tool a {
-  color: var(--green);
-  text-underline-offset: 3px;
-}
-.pearl-tool ::selection {
-  background: #cce2bc;
-  color: #223629;
-}
-.brand {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  min-height: 64px;
-  border-bottom: 1px solid var(--line);
-}
-.brandleft {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-width: 0;
-}
-.brand h2 {
-  font-size: 19px;
-  font-weight: 700;
-  margin: 0;
-  letter-spacing: 0.02em;
-}
-.logo {
-  display: grid;
-  place-items: center;
-  width: 34px;
-  height: 34px;
-  flex: none;
-  background: #396540;
-  color: #edf5eb;
-  border-radius: 3px;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-}
-.badges {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-}
-.badge {
-  color: var(--muted);
-  font-size: 12px;
-  white-space: nowrap;
-}
-.badge.live {
-  color: var(--green);
-}
-.heading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  margin: 0 0 16px;
-  padding: 23px 0 0;
-}
-.heading h3 {
-  margin: 0 0 4px;
-  font-size: 23px;
-  font-weight: 650;
-  line-height: 1.4;
-}
-.heading p {
-  margin: 0;
-  color: var(--muted);
-  font-size: 13px;
-  max-width: 76ch;
-}
-.limit {
-  color: var(--muted);
-  white-space: nowrap;
-  font-size: 13px;
-  font-variant-numeric: tabular-nums;
-}
-.limit strong {
-  color: var(--green);
-  font-size: 18px;
-  margin-left: 6px;
-}
-.main {
-  display: grid;
-  grid-template-columns: 344px minmax(0, 1fr);
-  gap: 22px;
-  align-items: start;
-}
-.main > *,
-.rightcol {
-  min-width: 0;
-}
-.card {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  overflow: hidden;
-}
-.card-head {
-  padding: 12px 18px;
-  border-bottom: 1px solid var(--line);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-.card-head h3 {
-  margin: 0;
-  font-size: 15px;
-  font-weight: 650;
-}
-.card-body {
-  padding: 16px 18px;
-}
-.field-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-}
-.field {
-  min-width: 0;
-}
-.field label,
-.version-label {
-  display: block;
-  font-weight: 600;
-  margin-bottom: 6px;
-  font-size: 13px;
-}
-.input-wrap {
-  position: relative;
-}
-.pearl-tool input[type='text'] {
-  width: 100%;
-  padding: 9px 29px 9px 10px;
-  background: #fff;
-  color: var(--text);
-  border: 1px solid #b5c0b2;
-  border-radius: 4px;
-  min-height: 40px;
-  min-width: 0;
-  caret-color: var(--green);
-}
-.input-wrap input {
-  font-size: 20px !important;
-  font-variant-numeric: tabular-nums;
-  line-height: 1.4;
-}
-.pearl-tool input:hover {
-  border-color: #7d937b;
-}
-.pearl-tool input:focus {
-  border-color: var(--green);
-}
-.unit {
-  position: absolute;
-  right: 10px;
-  top: 12px;
-  color: var(--muted);
-  font-size: 12px;
-  pointer-events: none;
-}
-.help {
-  display: block;
-  color: var(--muted);
-  font-size: 11px;
-  line-height: 1.7;
-  margin-top: 6px;
-}
-.small-button {
-  font-size: 12px !important;
-  padding: 5px 8px !important;
-  white-space: nowrap;
-}
-.presets {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-  margin: 16px 0;
-}
-.chip {
-  font-size: 11px !important;
-  padding: 5px 7px !important;
-  font-weight: 400 !important;
-  background: #f6f8f2 !important;
-  line-height: 1.5;
-}
-.primary {
-  background: var(--green) !important;
-  border-color: var(--green) !important;
-  color: #fff !important;
-  width: 100%;
-  min-height: 46px;
-  font-size: 14px !important;
-  line-height: 1.5;
-}
-.primary:hover:not(:disabled) {
-  background: #244e2d !important;
-  border-color: #244e2d !important;
-}
-.secondary-row {
-  display: flex;
-  gap: 8px;
-  margin-top: 9px;
-  flex-wrap: wrap;
-}
-.secondary {
-  flex: 1;
-  font-size: 12px !important;
-  min-height: 40px;
-  padding: 7px 8px !important;
-}
-.download-status {
-  font-size: 12px;
-  color: var(--green);
-  line-height: 1.65;
-  min-height: 22px;
-  margin-top: 8px;
-  overflow-wrap: anywhere;
-}
-.notice,
-.error,
-.consent {
-  font-size: 12px;
-  line-height: 1.75;
-  padding: 11px 12px;
-  border-radius: 4px;
-  margin: 12px 0;
-}
-.notice {
-  background: #f1f4ed;
-  color: #4d6051;
-  border: 1px solid #d7e0d0;
-}
-.error {
-  background: #fff0eb;
-  color: #9a302d;
-  border: 1px solid #e1b7af;
-  overflow-wrap: anywhere;
-}
-.consent {
-  display: flex;
-  gap: 8px;
-  align-items: flex-start;
-  background: #faf4e5;
-  color: #79531a;
-  border: 1px solid #e5d6af;
-  cursor: pointer;
-}
-.consent input {
-  flex: none;
-  margin: 5px 0 0;
-  accent-color: var(--green);
-}
-.fine-print {
-  font-size: 12px;
-  line-height: 1.75;
-  color: var(--muted);
-  margin: 8px 0 0;
-}
-.parameter-notes {
-  margin-top: 12px;
-  border-top: 1px solid var(--line);
-  padding-top: 7px;
-}
-.parameter-notes summary {
-  font-size: 12px;
-  color: #435d46;
-  cursor: pointer;
-  font-weight: 600;
-  padding: 5px 0;
-}
-.parameter-notes p {
-  margin: 8px 0;
-  color: var(--muted);
-  font-size: 12px;
-}
-.metrics-bar {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  margin: 0 0 12px;
-  background: #e5ecdf;
-  border: 1px solid #ccd8c4;
-  border-radius: 5px;
-}
-.metric {
-  min-width: 0;
-  padding: 12px 18px;
-  border-right: 1px solid #ccd8c4;
-  display: flex;
-  flex-direction: column;
-}
-.metric:last-child {
-  border-right: 0;
-}
-.metric-label {
-  font-size: 12px;
-  color: #56674f;
-}
-.metric strong {
-  font-size: 28px;
-  line-height: 1.25;
-  font-weight: 650;
-  color: #294f31;
-  font-variant-numeric: tabular-nums;
-  margin-top: 5px;
-  overflow-wrap: anywhere;
-}
-.metric span:not(.metric-label) {
-  font-size: 15px;
-  font-weight: 600;
-  color: #294f31;
-  font-variant-numeric: tabular-nums;
-}
-.metric small {
-  font-size: 11px;
-  color: #56674f;
-}
-.status {
-  font-size: 11px;
-  color: var(--green);
-  line-height: 1.6;
-}
-.preview-empty {
-  height: 470px;
-  display: grid;
-  place-items: center;
-  background: #17251f;
-  color: #b2c7b7;
-  font-size: 14px;
-  text-align: center;
-  padding: 20px;
-}
-.checks {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  padding: 12px 18px;
-  border-top: 1px solid var(--line);
-  font-size: 12px;
-  color: var(--muted);
-}
-.checks strong {
-  display: block;
-  color: #3e5543;
-  font-size: 15px;
-  font-weight: 600;
-  margin-bottom: 3px;
-  font-variant-numeric: tabular-nums;
-}
-.checks span {
-  display: block;
-  line-height: 1.7;
-}
-.wide {
-  margin-top: 18px;
-}
-.wide summary {
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 600;
-  list-style: none;
-  padding: 14px 18px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 8px;
-  color: #435d46;
-}
-.wide summary::-webkit-details-marker {
-  display: none;
-}
-.toggle-label {
-  font-size: 11px;
-  font-weight: 400;
-  color: var(--muted);
-  flex: none;
-}
-.wide summary .when-open,
-.wide[open] summary .when-closed {
-  display: none;
-}
-.wide[open] summary .when-open {
-  display: inline;
-}
-.wide summary:hover {
-  background: #f6f8f2;
-}
-.wide .card-body {
-  padding: 0 18px 16px;
-}
-.scroll {
-  overflow-x: auto;
-}
-.scroll table {
-  min-width: 620px;
-}
-.pearl-tool table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 12px;
-  text-align: left;
-}
-.pearl-tool th,
-.pearl-tool td {
-  padding: 9px 10px;
-  border-bottom: 1px solid var(--line);
-  vertical-align: top;
-}
-.pearl-tool th {
-  color: #435c47;
-  background: #eef3e9;
-  font-weight: 600;
-}
-.pearl-tool td {
-  color: var(--text);
-  font-variant-numeric: tabular-nums;
-}
-.detail-note,
-.muted {
-  font-size: 12px;
-  line-height: 1.8;
-  color: var(--muted);
-  padding-top: 12px;
-  overflow-wrap: anywhere;
-}
-.two-detail {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 18px;
-}
-.material-table {
-  max-height: 360px;
-  overflow: auto;
-}
-.material-table th {
-  position: sticky;
-  top: 0;
-}
-.material-table td:last-child {
-  overflow-wrap: anywhere;
-  max-width: 230px;
-}
-.material-table .secondary {
-  margin-top: 14px;
-}
-.source-actions {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  flex-wrap: wrap;
-  margin-top: 14px;
-  font-size: 12px;
-}
-/* Original v9.2 Yueyue styling is scoped to this tool. */
-.brand .badges {
-  margin-left: auto;
-}
 .yueyue {
   position: relative;
   flex: 0 0 104px;
-  align-self: flex-end;
-  padding-top: 8px;
 }
 #yueyueButton {
   display: block;
   width: 104px;
   height: 112px;
-  padding: 0;
   border: 0;
   background: transparent;
-  border-radius: 12px;
+  padding: 0;
+  cursor: pointer;
   touch-action: manipulation;
   transform-origin: 50% 95%;
 }
-#yueyueButton:hover {
-  background: transparent;
-}
 #yueyueButton img {
-  display: block;
   width: 100%;
   height: 100%;
   object-fit: contain;
-  user-select: none;
   pointer-events: none;
+  user-select: none;
 }
 .yueyue-greeting {
   position: absolute;
-  z-index: 2;
   right: 90px;
   top: 22px;
   white-space: nowrap;
@@ -1180,125 +598,6 @@ function preset(values: string[]) {
   }
   85% {
     transform: translateY(0) scale(1.02, 0.98);
-  }
-}
-@media (max-width: 1150px) {
-  .pearl-tool {
-    padding: 0 18px 28px;
-  }
-  .main {
-    grid-template-columns: 320px minmax(0, 1fr);
-    gap: 16px;
-  }
-  .metric {
-    padding: 12px;
-  }
-  .metric strong {
-    font-size: 26px;
-  }
-  .limit strong {
-    font-size: 16px;
-  }
-}
-@media (max-width: 800px) {
-  .pearl-tool {
-    padding: 0 12px 22px;
-  }
-  .brand {
-    min-height: 65px;
-    gap: 8px;
-  }
-  .brandleft {
-    gap: 8px;
-  }
-  .brand h2 {
-    font-size: 15px;
-    text-wrap: balance;
-  }
-  .brand .badges {
-    display: none;
-  }
-  .logo {
-    width: 28px;
-    height: 28px;
-    font-size: 9px;
-  }
-  .heading {
-    display: block;
-    padding-top: 16px;
-  }
-  .heading h3 {
-    font-size: 20px;
-  }
-  .heading p {
-    font-size: 12px;
-  }
-  .limit {
-    display: block;
-    margin-top: 7px;
-  }
-  .main {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-  .card-body {
-    padding: 15px;
-  }
-  .card-head {
-    padding: 13px 15px;
-  }
-  .metric {
-    padding: 10px;
-  }
-  .metric-label {
-    font-size: 11px;
-  }
-  .metric strong {
-    font-size: 24px;
-  }
-  .metric span:not(.metric-label) {
-    font-size: 13px;
-  }
-  .metric small {
-    font-size: 10px;
-  }
-  .preview-empty {
-    height: 370px;
-  }
-  .two-detail {
-    grid-template-columns: 1fr;
-    gap: 0;
-  }
-  .checks {
-    gap: 12px;
-    padding: 12px 15px;
-    font-size: 11px;
-  }
-  .yueyue {
-    flex-basis: 70px;
-    padding-top: 6px;
-  }
-  #yueyueButton {
-    width: 70px;
-    height: 76px;
-  }
-  .yueyue-greeting {
-    right: 62px;
-    top: 12px;
-  }
-}
-@media (max-width: 400px) {
-  .metric {
-    padding: 10px 8px;
-  }
-  .metric strong {
-    font-size: 22px;
-  }
-  .metric span:not(.metric-label) {
-    font-size: 12px;
-  }
-  .checks strong {
-    font-size: 13px;
   }
 }
 @media (prefers-reduced-motion: reduce) {

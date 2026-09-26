@@ -75,7 +75,6 @@ const en = {
   mirror: 'Z mirror',
   correction:
     'The lower pearl correction keeps its original orientation. Do not rotate the whole exported schematic.',
-  standalone: 'Open the retained standalone tool',
   allZero:
     'Both axes round to zero TNT. Enter at least 21.1 blocks on one axis.',
 };
@@ -149,7 +148,6 @@ const zh_cn: typeof en = {
   orientation: '上部转向',
   mirror: 'Z镜像',
   correction: '下部珍珠矫正保持原朝向，导出后不要旋转整台机器。',
-  standalone: '打开保留的独立版工具',
   allZero: '两轴都取整为0个TNT，至少一个方向需要输入21.1格。',
 };
 const zh_tw: typeof en = {
@@ -222,7 +220,6 @@ const zh_tw: typeof en = {
   orientation: '上部轉向',
   mirror: 'Z鏡像',
   correction: '下部珍珠矯正保持原朝向，匯出後不要旋轉整台機器。',
-  standalone: '開啟保留的獨立版工具',
   allZero: '兩軸都取整為0個TNT，至少一個方向需要輸入21.1格。',
 };
 export const pearlMessages: Record<string, typeof en> = { en, zh_cn, zh_tw };

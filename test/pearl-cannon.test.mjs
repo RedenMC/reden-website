@@ -2,28 +2,9 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
-// Exercise the exact code shipped in the standalone browser tool.
-const html = await readFile(
-  new URL('../public/generators/pearl-cannon-v9.2.html', import.meta.url),
-  'utf8',
-);
-const script = html.match(/<script type="module">([\s\S]*?)<\/script>/)?.[1];
-assert.ok(script, 'Standalone tool must contain its module');
-const marker = '// Standalone browser UI.';
-assert.equal(
-  script.split(marker).length,
-  2,
-  'Core/UI boundary must be unambiguous',
-);
-const core = script.slice(0, script.indexOf(marker));
-const c = await import(
-  `data:text/javascript;base64,${Buffer.from(core).toString('base64')}`
-);
-const encoded = core.match(/const TEMPLATE_BASE64='([^']+)'/)?.[1];
-assert.ok(encoded);
-const template = await c.loadTemplate(
-  new Uint8Array(Buffer.from(encoded, 'base64')),
-);
+// The Vue page and tests consume the same complete v9.2 engine.
+const c = await import('../utils/pearl-cannon/core.mjs');
+const template = await c.loadBundledTemplate();
 
 const samples = [
   ['0', 0],

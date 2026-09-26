@@ -76,31 +76,32 @@ function letter(block: CannonBlock) {
 }
 </script>
 <template>
-  <div class="pearl-preview">
-    <div class="view-controls">
-      <label for="pearl-layer">{{ copy.layer }}</label>
-      <select id="pearl-layer" v-model.number="layer" :aria-label="copy.layer">
-        <option v-for="item in layers" :key="item.value" :value="item.value">
-          {{ item.title }}
-        </option>
-      </select>
-      <label class="fit-label"
-        ><input v-model="fit" type="checkbox" />{{ copy.fit }}</label
+  <div>
+    <v-card-text class="d-flex align-center flex-wrap ga-3">
+      <v-select
+        id="pearl-layer"
+        v-model="layer"
+        :items="layers"
+        :label="copy.layer"
+        density="compact"
+        hide-details
+        style="max-width: 150px"
+      />
+      <v-switch
+        v-model="fit"
+        :label="copy.fit"
+        density="compact"
+        hide-details
+      />
+      <span class="text-caption"
+        >B {{ copy.boost }} · T {{ copy.payload }} · G {{ copy.glass }}</span
       >
-      <div class="legend">
-        <span><b class="t-legend">B</b>{{ copy.boost }}</span
-        ><span><b class="t-legend">T</b>{{ copy.payload }}</span
-        ><span><b class="g-legend">G</b>{{ copy.glass }}</span>
-      </div>
-      <span class="direction"
-        >{{ copy.orientation }}
-        <strong
-          >{{ result.plan.degrees }}°{{
-            result.plan.mirrorZ ? ' + ' + copy.mirror : ''
-          }}</strong
-        ></span
+      <span class="text-caption"
+        >{{ copy.orientation }} {{ result.plan.degrees }}°{{
+          result.plan.mirrorZ ? ' + ' + copy.mirror : ''
+        }}</span
       >
-    </div>
+    </v-card-text>
     <svg
       :viewBox="viewBox"
       role="img"
@@ -161,134 +162,32 @@ function letter(block: CannonBlock) {
         </text>
       </g>
     </svg>
-    <div class="hover" role="status">
-      {{
-        hovered
-          ? `(${hovered.p.join(', ')}) ${blockName(hovered.state.Name, locale)} ${Object.entries(
-              hovered.state.Properties ?? {},
-            )
-              .map(([key, value]) => `${key}=${value}`)
-              .join(' ')}`
-          : copy.hoverHelp
-      }}
-    </div>
-    <div class="caption">
-      Y = {{ layer }} · {{ selected.length }} {{ copy.block }} ·
-      {{ copy.correction }}
-    </div>
+    <v-card-text class="text-caption">
+      <div role="status">
+        {{
+          hovered
+            ? `(${hovered.p.join(', ')}) ${blockName(hovered.state.Name, locale)} ${Object.entries(
+                hovered.state.Properties ?? {},
+              )
+                .map(([key, value]) => `${key}=${value}`)
+                .join(' ')}`
+            : copy.hoverHelp
+        }}
+      </div>
+      <div>
+        Y = {{ layer }} · {{ selected.length }} {{ copy.block }} ·
+        {{ copy.correction }}
+      </div>
+    </v-card-text>
   </div>
 </template>
 <style scoped>
 .pearl-layer {
   display: block;
   width: 100%;
-  height: 470px;
+  height: min(45vw, 470px);
+  min-height: 300px;
   background: #17251f;
   touch-action: manipulation;
-}
-.view-controls {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  padding: 8px 16px;
-  border-bottom: 1px solid #d5dcd2;
-  color: #5f6d62;
-  font-size: 12px;
-}
-.view-controls select {
-  width: auto;
-  max-width: 100%;
-  padding: 6px 9px;
-  font-size: 12px;
-  min-height: 34px;
-  flex: 0 1 auto;
-  background: #fff;
-  color: #26352b;
-  border: 1px solid #b5c0b2;
-  border-radius: 4px;
-}
-.fit-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  white-space: nowrap;
-}
-.fit-label input {
-  accent-color: #32623c;
-}
-.legend {
-  display: flex;
-  gap: 8px 14px;
-  align-items: center;
-  flex-wrap: wrap;
-  margin-left: auto;
-  font-size: 11px;
-}
-.legend span {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  white-space: nowrap;
-}
-.legend b {
-  display: inline-grid;
-  place-items: center;
-  width: 15px;
-  height: 15px;
-  font-size: 9px;
-}
-.t-legend {
-  background: #b64054;
-  color: #fff;
-}
-.g-legend {
-  background: #eaf4fb;
-  border: 1px solid #8297ad;
-  color: #455769;
-}
-.direction {
-  white-space: nowrap;
-}
-.direction strong {
-  color: #435c47;
-}
-.hover {
-  padding: 10px 16px;
-  font-size: 11px;
-  color: #5f6d62;
-  border-top: 1px solid #d5dcd2;
-  min-height: 38px;
-  overflow-wrap: anywhere;
-}
-.caption {
-  padding: 0 16px 12px;
-  color: #5f6d62;
-  font-size: 11px;
-  line-height: 1.6;
-}
-@media (max-width: 1150px) {
-  .pearl-layer {
-    height: 450px;
-  }
-  .legend {
-    margin-left: 0;
-  }
-}
-@media (max-width: 800px) {
-  .view-controls {
-    padding: 9px 12px;
-    gap: 8px;
-  }
-  .view-controls select {
-    flex: 1;
-    max-width: 220px;
-  }
-  .legend {
-    flex-basis: 100%;
-  }
-  .pearl-layer {
-    height: 370px;
-  }
 }
 </style>
