@@ -1,4 +1,24 @@
 const en = {
+  toolTitle: 'Pearl cannon displacement generator',
+  offline: 'Runs locally · no displacement upload',
+  hero: 'Enter two distances to generate a pearl cannon schematic.',
+  axisLimit: 'Nominal limit per axis',
+  target: 'Target displacement',
+  exporting: 'Writing schematic…',
+  downloadNow: 'Generate and save .litematic',
+  savingNotes: 'TNT rounding and material savings',
+  roundingNotes:
+    'Halfway values round away from zero. Surplus TNT is replaced with glass from the end opposite the coral fan.',
+  orientationNotes: 'Orientation and operation',
+  boostExcluded:
+    'The first-row propulsion TNT does not count toward displacement.',
+  previewReady: 'Schematic ready',
+  previewEmpty: 'Enter a valid displacement to preview blocks.',
+  hoverHelp: 'Point to or tap a block to see its coordinates and state.',
+  bounds: 'Non-air bounding dimensions, X × Y × Z',
+  allocationNotes:
+    'Each active array has 10 additional propulsion TNT. Empty payload rows are removed while shared transport and necessary wiring remain.',
+  templateLoaded: 'Original template author:',
   x: 'X displacement',
   z: 'Z displacement',
   unit: 'blocks',
@@ -55,6 +75,25 @@ const en = {
     'Both axes round to zero TNT. Enter at least 21.1 blocks on one axis.',
 };
 const zh_cn: typeof en = {
+  toolTitle: '珍珠炮位移生成器',
+  offline: '离线运行 · 位移不上传',
+  hero: '输入两个数，万格珍珠炮直接出图。',
+  axisLimit: '单轴标称上限',
+  target: '目标位移',
+  exporting: '正在写入投影…',
+  downloadNow: '生成并保存 .litematic',
+  savingNotes: '省料与取整说明',
+  roundingNotes:
+    '正负数对称取整；恰好一半时向远离零的方向取整。多余 TNT 从远离珊瑚扇的一端换成玻璃。',
+  orientationNotes: '转向与运行说明',
+  boostExcluded: '首排推进 TNT 不计入射程。',
+  previewReady: '投影已生成',
+  previewEmpty: '有效输入后显示方块层预览。',
+  hoverHelp: '移动鼠标或点按方块，可查看坐标、朝向和状态。',
+  bounds: '非空气方块外包尺寸，X × Y × Z',
+  allocationNotes:
+    '每个启用阵列另有 10 个推进 TNT，不计入射程。大射程全玻璃空排省去，共用传动及必要接线保留。',
+  templateLoaded: '原始样机作者：',
   x: 'X方向位移',
   z: 'Z方向位移',
   unit: '格',
@@ -104,6 +143,25 @@ const zh_cn: typeof en = {
   allZero: '两轴都取整为0个TNT，至少一个方向需要输入21.1格。',
 };
 const zh_tw: typeof en = {
+  toolTitle: '珍珠炮位移生成器',
+  offline: '離線執行 · 位移不上傳',
+  hero: '輸入兩個數，直接生成萬格珍珠炮投影。',
+  axisLimit: '單軸標稱上限',
+  target: '目標位移',
+  exporting: '正在寫入投影…',
+  downloadNow: '生成並儲存 .litematic',
+  savingNotes: '省料與取整說明',
+  roundingNotes:
+    '正負數對稱取整；恰好一半時向遠離零的方向取整。多餘 TNT 從遠離珊瑚扇的一端換成玻璃。',
+  orientationNotes: '轉向與運作說明',
+  boostExcluded: '首排推進 TNT 不計入射程。',
+  previewReady: '投影已生成',
+  previewEmpty: '有效輸入後顯示方塊層預覽。',
+  hoverHelp: '移動滑鼠或點按方塊，可查看座標、朝向與狀態。',
+  bounds: '非空氣方塊外包尺寸，X × Y × Z',
+  allocationNotes:
+    '每個啟用陣列另有 10 個推進 TNT，不計入射程。大射程全玻璃空排省去，共用傳動及必要接線保留。',
+  templateLoaded: '原始樣機作者：',
   x: 'X方向位移',
   z: 'Z方向位移',
   unit: '格',

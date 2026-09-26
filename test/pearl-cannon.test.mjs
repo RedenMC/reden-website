@@ -4,7 +4,7 @@ import test from 'node:test';
 
 // Exercise the exact code shipped in the standalone browser tool.
 const html = await readFile(
-  new URL('../public/generators/pearl-cannon-v9.html', import.meta.url),
+  new URL('../public/generators/pearl-cannon-v9.2.html', import.meta.url),
   'utf8',
 );
 const script = html.match(/<script type="module">([\s\S]*?)<\/script>/)?.[1];

@@ -496,6 +496,54 @@ function unpackRegion(name,r) {
 
 }
 
+// FAR_PLATFORM_SUPPORT_PATCH_V1
+// Only the two FAR, SECOND-array TNT launch supports in the canonical template.
+// Apply before pruning/rotation/reflection so inactive arrays stay omitted.
+// The source bytes and the small template are deliberately left untouched.
+function replaceFarArraySupports(large) {
+  const supports = [[60, 38, 6], [12, 38, 52]];
+  for (const p of supports) {
+    const b = large.blocks.get(key(p));
+    demand(b?.state.Name === NS + 'ender_chest',
+      `远端第二组承托模板不匹配：${key(p)}，停止生成，避免误替换。`);
+    b.state = {Name: NS + 'enchanting_table'};
+    // Do not attach an ender-chest block entity to an enchanting table.
+    // Minecraft creates the default enchanting-table block entity on placement.
+    delete b.tile;
+  }
+}
+
+function applyFarArraySupportNotes(p) {
+  if (!p.largeArrays) return;
+  p.generatorVersion = '0.9.1-far-platform-support';
+  p.farArraySupport = {
+    material: NS + 'enchanting_table',
+    canonicalPositions: [
+      ...(p.banks.east.tnt > 160 ? [[60, 38, 6]] : []),
+      ...(p.banks.south.tnt > 160 ? [[12, 38, 52]] : []),
+    ],
+    nearSupportsUnchanged: true,
+    lowerCorrectionUnchanged: true,
+    allConfigurationsTested: false,
+  };
+  // Historic v8/v9 design results describe the old support height. Do not
+  // silently carry their game-test label onto the changed large-array design.
+  p.verification = {...p.verification, gameTested: false,
+    designRuntimeTested: false,
+    runtimeScope: 'Far second-array supports changed to enchanting tables. '
+      + 'Prior ender-chest design tests are historical. '
+      + 'Static generation regression is separate from runtime and landing validation.'};
+  const warning = '远端第二组 TNT 承托平台已改用附魔台；近端及底部矫正不变。尚未完成所有数量和方向组合的实机验收，请先在测试世界试射。';
+  if (!p.warnings.includes(warning)) p.warnings.push(warning);
+  if (p.knownRuntimeIssue?.code === 'legacy-301-negative1-blast') {
+    const old = p.knownRuntimeIssue.message;
+    const note = '此 301 / -1 射程 TNT 配置在旧末影箱版本中发生过炸膛。当前已替换远端承托平台，尚未完成该配置的新版复测，只适合隔离测试。';
+    p.knownRuntimeIssue = {...p.knownRuntimeIssue, message: note};
+    p.warnings = p.warnings.map(w => w === old ? note : w);
+  }
+}
+// END_FAR_PLATFORM_SUPPORT_PATCH_V1
+
 export async function loadTemplate(bytes) {
 
   const {root}=decodeNBT(await inflate(bytes));
@@ -541,6 +589,7 @@ export async function loadTemplate(bytes) {
   const [largeName,[,largeNBT]]=Object.entries(value(largeDoc.root,'Regions'))[0];
 
   const large=unpackRegion(largeName,largeNBT);
+  replaceFarArraySupports(large);
 
   return {root,regions,base,east,south,large,originalBytes:bytes,
 
@@ -1224,7 +1273,7 @@ export async function exportLitematic(result,options={}) {
 
 export function suggestedFilename(plan) {
 
-  return `pearl_X${plan.predicted.textX}_Z${plan.predicted.textZ}_TNT${Math.abs(plan.counts.x)}-${Math.abs(plan.counts.z)}_BOOST${plan.counts.propulsion}_v9-zero-axis${plan.mirrorZ?'_MIRROR-Z':plan.quarterTurns>=2?'_LEGACY-SIGNAL-BYPASS':''}.litematic`;
+  return `pearl_X${plan.predicted.textX}_Z${plan.predicted.textZ}_TNT${Math.abs(plan.counts.x)}-${Math.abs(plan.counts.z)}_BOOST${plan.counts.propulsion}_${plan.farArraySupport?'v9.1-far-support':'v9-zero-axis'}${plan.mirrorZ?'_MIRROR-Z':plan.quarterTurns>=2?'_LEGACY-SIGNAL-BYPASS':''}.litematic`;
 
 }
 
@@ -1500,7 +1549,7 @@ export function makePlan(dx,dz,options={}) {
 
   p.verification={...p.verification,gameTested:false,designRuntimeTested:p.pivot.x===13.5&&p.pivot.z===5.5&&options.negativeZMode!=='legacy-bypass',runtimeVersion:'1.21.10',runtimeScope:'large-array threshold edition: see bundled TEST_REPORT.md for exact native test coverage; no landing-distance calibration'};
 
-  p.warnings=[VALIDATION.distance,'大射程结构省去全玻璃射程排；共用传动和推进首排保留。'];applyV8RuntimeNotes(p,options);applyV9RuntimeNotes(p,options);return p;
+  p.warnings=[VALIDATION.distance,'大射程结构省去全玻璃射程排；共用传动和推进首排保留。'];applyV8RuntimeNotes(p,options);applyV9RuntimeNotes(p,options);applyFarArraySupportNotes(p);return p;
 
 }
 
@@ -1629,6 +1678,7 @@ export function buildCannon(template,dx,dz,options={}) {
   result.plan.zeroAxisRemoval=plan.zeroAxisRemoval;
   applyV8RuntimeNotes(result.plan,options);
   applyV9RuntimeNotes(result.plan,options);
+  applyFarArraySupportNotes(result.plan);
   const tnt=[...result.blocks.values()].filter(b=>b.state.Name===TNT);
 
   demand(tnt.length===plan.counts.structureTotal,'Final virtual TNT count mismatch.');
@@ -1687,7 +1737,7 @@ function applyV9RuntimeNotes(p,options) {
 }
 
 
-// Public entry point for the native page; v9 generation code above is unchanged.
+// Public entry point for the native page; v9.2 generation code above is unchanged.
 export function loadBundledTemplate() {
   return loadTemplate(Uint8Array.from(atob(TEMPLATE_BASE64), c => c.charCodeAt(0)));
 }

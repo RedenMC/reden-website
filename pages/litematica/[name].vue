@@ -454,7 +454,11 @@ watch(tabs, (newTabs) => {
 
     <div class="ma-4">
       <v-row v-if="selected">
-        <v-col cols="12" md="8" style="height: min-content">
+        <v-col
+          cols="12"
+          :md="machineId === '91tvzzp1' ? 12 : 8"
+          style="height: min-content"
+        >
           <!-- 预览 -->
           <h1 class="text-h5 text-sm-h4 font-weight-bold">
             {{ selected.name }}
@@ -555,7 +559,7 @@ watch(tabs, (newTabs) => {
             </div>
           </div>
         </v-col>
-        <v-col cols="12" md="4">
+        <v-col cols="12" :md="machineId === '91tvzzp1' ? 12 : 4">
           <!-- 摘要 -->
           <div>
             <!-- 摘要头部 -->
