@@ -32,6 +32,14 @@ export interface CannonPlan {
   omittedAxes: string[];
   needsExperimentalConsent: boolean;
   knownRuntimeIssue?: { code: string; message: string } | null;
+  farArraySupport?: {
+    material: string;
+    canonicalPositions: Point[];
+    nearSupportsUnchanged: boolean;
+    lowerCorrectionUnchanged: boolean;
+    allConfigurationsTested: boolean;
+  };
+  warnings: string[];
   zeroAxisRemoval?: Removal;
   emptyRowRemoval?: Removal;
   banks: Record<

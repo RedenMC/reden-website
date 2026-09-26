@@ -19,6 +19,11 @@ const en = {
   allocationNotes:
     'Each active array has 10 additional propulsion TNT. Empty payload rows are removed while shared transport and necessary wiring remain.',
   templateLoaded: 'Original template author:',
+  errorDelta: 'Difference:',
+  expand: 'Expand',
+  collapse: 'Collapse',
+  farSupportWarning:
+    'Far second-array TNT supports use enchanting tables. The near supports and lower correction are unchanged. This layout has not completed game testing for every direction and count.',
   x: 'X displacement',
   z: 'Z displacement',
   unit: 'blocks',
@@ -94,6 +99,11 @@ const zh_cn: typeof en = {
   allocationNotes:
     '每个启用阵列另有 10 个推进 TNT，不计入射程。大射程全玻璃空排省去，共用传动及必要接线保留。',
   templateLoaded: '原始样机作者：',
+  errorDelta: '与输入相差',
+  expand: '展开',
+  collapse: '收起',
+  farSupportWarning:
+    '远端第二组 TNT 承托平台已改用附魔台；近端平台和底部珍珠矫正不变。尚未完成所有方向与数量组合的实机验收，请先在测试世界试射。',
   x: 'X方向位移',
   z: 'Z方向位移',
   unit: '格',
@@ -162,6 +172,11 @@ const zh_tw: typeof en = {
   allocationNotes:
     '每個啟用陣列另有 10 個推進 TNT，不計入射程。大射程全玻璃空排省去，共用傳動及必要接線保留。',
   templateLoaded: '原始樣機作者：',
+  errorDelta: '與輸入相差',
+  expand: '展開',
+  collapse: '收起',
+  farSupportWarning:
+    '遠端第二組 TNT 承托平台已改用附魔台；近端平台與底部珍珠矯正不變。尚未完成所有方向與數量組合的實機驗收，請先在測試世界試射。',
   x: 'X方向位移',
   z: 'Z方向位移',
   unit: '格',

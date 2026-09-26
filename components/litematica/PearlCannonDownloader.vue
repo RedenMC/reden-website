@@ -17,7 +17,7 @@ import { pearlMessages } from '~/utils/pearl-cannon/messages';
 import { blockName } from '~/utils/pearl-cannon/block-names';
 import PearlCannonPreview from './PearlCannonPreview.vue';
 const emits = defineEmits<{ (e: 'download'): void }>();
-const { t, locale } = useI18n();
+const { locale } = useI18n();
 const copy = computed(() => pearlMessages[locale.value] ?? pearlMessages.en);
 const x = ref('100'),
   z = ref('422'),
@@ -111,7 +111,7 @@ const orientation = computed(
 );
 const formatError = (value: number | undefined) =>
   new Intl.NumberFormat('zh-CN', { maximumFractionDigits: 6 }).format(
-    Object.is(value, -0) ? 0 : (value ?? 0),
+    Object.is(value, -0) ? 0 : value ?? 0,
   );
 const allocation = computed(() => {
   const p = plan.value;
@@ -364,7 +364,12 @@ function preset(values: string[]) {
             {{ actionError || generated.error }}
           </div>
           <div v-if="plan?.knownRuntimeIssue" class="error" role="alert">
-            {{ copy.damage }}
+            {{
+              locale === 'zh_cn' ? plan.knownRuntimeIssue.message : copy.damage
+            }}
+          </div>
+          <div v-if="plan?.farArraySupport" class="notice" role="status">
+            {{ copy.farSupportWarning }}
           </div>
           <label v-if="plan?.needsExperimentalConsent" class="consent">
             <input
@@ -426,13 +431,19 @@ function preset(values: string[]) {
             <span class="metric-label">X {{ copy.payload }}</span
             ><strong>{{ plan ? Math.abs(plan.counts.x) : 0 }}</strong
             ><span>{{ plan?.predicted.textX ?? '0.0' }} {{ copy.unit }}</span
-            ><small>{{ formatError(plan?.error.x) }} {{ copy.unit }}</small>
+            ><small
+              >{{ copy.errorDelta }} {{ formatError(plan?.error.x) }}
+              {{ copy.unit }}</small
+            >
           </div>
           <div class="metric">
             <span class="metric-label">Z {{ copy.payload }}</span
             ><strong>{{ plan ? Math.abs(plan.counts.z) : 0 }}</strong
             ><span>{{ plan?.predicted.textZ ?? '0.0' }} {{ copy.unit }}</span
-            ><small>{{ formatError(plan?.error.z) }} {{ copy.unit }}</small>
+            ><small
+              >{{ copy.errorDelta }} {{ formatError(plan?.error.z) }}
+              {{ copy.unit }}</small
+            >
           </div>
           <div class="metric">
             <span class="metric-label">{{ copy.total }}</span
@@ -441,7 +452,6 @@ function preset(values: string[]) {
             ><small>{{ copy.boostExcluded }}</small>
           </div>
         </div>
-        <p class="metrics-note">{{ copy.boostExcluded }}</p>
         <section class="card preview-card">
           <div class="card-head">
             <h3>{{ copy.preview }}</h3>
@@ -462,13 +472,27 @@ function preset(values: string[]) {
               <strong>{{ plan.structure.nonAir }} {{ copy.block }}</strong
               ><span>{{ copy.correction }}</span>
             </div>
+            <div>
+              <strong>{{ removed }} {{ copy.block }}</strong
+              ><span>{{ copy.removed }}</span>
+            </div>
+            <div>
+              <strong>{{ orientation }}</strong
+              ><span>{{ copy.orientation }}</span>
+            </div>
           </div>
         </section>
       </div>
     </div>
 
     <details class="card wide" open>
-      <summary>{{ copy.allocation }}</summary>
+      <summary>
+        {{ copy.allocation
+        }}<span class="toggle-label"
+          ><span class="when-closed">{{ copy.expand }}</span
+          ><span class="when-open">{{ copy.collapse }}</span></span
+        >
+      </summary>
       <div class="card-body scroll">
         <table>
           <thead>
@@ -501,7 +525,13 @@ function preset(values: string[]) {
         :open="materialsOpen"
         @toggle="materialsOpen = ($event.target as HTMLDetailsElement).open"
       >
-        <summary>{{ copy.materials }}</summary>
+        <summary>
+          {{ copy.materials
+          }}<span class="toggle-label"
+            ><span class="when-closed">{{ copy.expand }}</span
+            ><span class="when-open">{{ copy.collapse }}</span></span
+          >
+        </summary>
         <div class="card-body material-table">
           <table>
             <thead>
@@ -530,7 +560,13 @@ function preset(values: string[]) {
         </div>
       </details>
       <details class="card wide" data-testid="pearl-advanced">
-        <summary>{{ copy.advanced }}</summary>
+        <summary>
+          {{ copy.advanced
+          }}<span class="toggle-label"
+            ><span class="when-closed">{{ copy.expand }}</span
+            ><span class="when-open">{{ copy.collapse }}</span></span
+          >
+        </summary>
         <div class="card-body">
           <p v-if="template" class="muted">
             {{ copy.templateLoaded }} {{ template.author }} · DataVersion
@@ -938,12 +974,6 @@ function preset(values: string[]) {
   font-size: 11px;
   color: #56674f;
 }
-.metrics-note {
-  font-size: 12px;
-  line-height: 1.7;
-  color: var(--muted);
-  margin: 0 0 14px;
-}
 .status {
   font-size: 11px;
   color: var(--green);
@@ -998,15 +1028,18 @@ function preset(values: string[]) {
 .wide summary::-webkit-details-marker {
   display: none;
 }
-.wide summary::after {
-  content: '展开';
+.toggle-label {
   font-size: 11px;
   font-weight: 400;
   color: var(--muted);
   flex: none;
 }
-.wide[open] summary::after {
-  content: '收起';
+.wide summary .when-open,
+.wide[open] summary .when-closed {
+  display: none;
+}
+.wide[open] summary .when-open {
+  display: inline;
 }
 .wide summary:hover {
   background: #f6f8f2;

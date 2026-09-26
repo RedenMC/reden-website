@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 // Read-only block-layer preview for Minecraft schematic data.
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import type { CannonBlock, CannonResult } from '~/utils/pearl-cannon/core.mjs';
 import { pearlMessages } from '~/utils/pearl-cannon/messages';
@@ -11,6 +11,12 @@ const copy = computed(() => pearlMessages[locale.value] ?? pearlMessages.en);
 const layer = ref(92),
   fit = ref(true);
 const hovered = ref<CannonBlock | null>(null);
+watch([layer, () => props.result], () => {
+  hovered.value = null;
+});
+function clearMouseHover(event: PointerEvent) {
+  if (event.pointerType === 'mouse') hovered.value = null;
+}
 const layers = [92, 93, 97, 38, 35, 31, 5].map((value) => ({
   title: `Y = ${value}`,
   value,
@@ -101,7 +107,7 @@ function letter(block: CannonBlock) {
       :aria-label="copy.preview"
       class="pearl-layer"
       preserveAspectRatio="xMidYMid meet"
-      @pointerleave="hovered = null"
+      @pointerleave="clearMouseHover"
     >
       <defs>
         <pattern
