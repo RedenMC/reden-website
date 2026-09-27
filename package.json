@@ -5,7 +5,7 @@
   "scripts": {
     "test:pearl-cannon": "node --test test/pearl-cannon.test.mjs test/pearl-cannon-native.test.mjs",
     "build": "nuxt build",
-    "build-unlimited": "node --max-old-space-size=4096 node_modules/nuxt/bin/nuxt.mjs build",
+    "build-unlimited": "node --max-old-space-size=6144 node_modules/nuxt/bin/nuxt.mjs build",
     "dev": "nuxt dev",
     "dev-prod-backend": "nuxt dev --prod-backend",
     "generate": "nuxt generate",
