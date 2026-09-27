@@ -160,23 +160,26 @@ test('native page has one displacement entry point with no embedded panel or nes
   const generic = await read(
     '../components/litematica/LitematicaGenDownloader.vue',
   );
-  const ui = await read('../components/litematica/PearlCannonDownloader.vue');
-  assert.ok(!page.includes('<PearlCannonGenerator'));
-  assert.ok(generic.includes("selected.key === '91tvzzp1'"));
-  assert.match(generic, /<v-form\s+v-else/);
+  const ui = await read('../components/litematica/PearlCannonGenerator.vue');
+  assert.ok(page.includes('<PearlCannonGenerator'));
+  assert.ok(page.includes("v-if=\"selected.type === 'LitematicaGen' && !isPearlCannon\""));
+  assert.ok(page.includes("v-if=\"!useAppStore().logined && !isPearlCannon\""));
+  assert.ok(!generic.includes('PearlCannonGenerator'));
+  assert.match(generic, /<v-form\s+ref="formRef"/);
   assert.ok(!ui.includes('<iframe'));
   assert.ok(!ui.includes('<v-form'));
   assert.ok(ui.includes('<v-row>') && ui.includes('<v-text-field'));
   assert.ok(ui.includes('pearl-x') && ui.includes('pearl-z'));
   assert.equal((ui.match(/id="pearl-x"/g) ?? []).length, 1);
   assert.equal((ui.match(/id="pearl-z"/g) ?? []).length, 1);
-  assert.ok(page.includes("machineId === '91tvzzp1' ? 12 : 4"));
+  assert.ok(page.includes("const isPearlCannon = machineId === '91tvzzp1'"));
+  assert.ok(page.includes('<v-col cols="12" md="4">'));
   assert.ok(
     generic.includes('SizeInput') && generic.includes('xSize=${xSize.value}'),
   );
 });
 test('native form retains warnings, all export actions, and exact-decimal string inputs', async () => {
-  const ui = await read('../components/litematica/PearlCannonDownloader.vue');
+  const ui = await read('../components/litematica/PearlCannonGenerator.vue');
   for (const action of [
     'exportLitematic',
     'exportReport',

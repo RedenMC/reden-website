@@ -26,10 +26,12 @@ import { toast } from 'vuetify-sonner';
 import RedenPostStatusChip from '~/components/litematica/RedenPostStatusChip.vue';
 import TransferOwnershipDialog from '~/components/litematica/TransferOwnershipDialog.vue';
 import CommentsSection from '~/components/litematica/CommentsSection.vue';
+import PearlCannonGenerator from '~/components/litematica/PearlCannonGenerator.vue';
 
 const route = useRoute();
 const router = useRouter();
 const machineId = route.params.name as string;
+const isPearlCannon = machineId === '91tvzzp1';
 const { t, locale } = useI18n();
 const localePath = useLocalePath();
 const appStore = useAppStore();
@@ -453,12 +455,13 @@ watch(tabs, (newTabs) => {
     </div>
 
     <div class="ma-4">
+      <PearlCannonGenerator
+        v-if="isPearlCannon && selected?.type === 'LitematicaGen'"
+        class="mb-4"
+        @download="refresh"
+      />
       <v-row v-if="selected">
-        <v-col
-          cols="12"
-          :md="machineId === '91tvzzp1' ? 12 : 8"
-          style="height: min-content"
-        >
+        <v-col cols="12" md="8" style="height: min-content">
           <!-- 预览 -->
           <h1 class="text-h5 text-sm-h4 font-weight-bold">
             {{ selected.name }}
@@ -559,7 +562,7 @@ watch(tabs, (newTabs) => {
             </div>
           </div>
         </v-col>
-        <v-col cols="12" :md="machineId === '91tvzzp1' ? 12 : 4">
+        <v-col cols="12" md="4">
           <!-- 摘要 -->
           <div>
             <!-- 摘要头部 -->
@@ -830,7 +833,7 @@ watch(tabs, (newTabs) => {
             </div>
             <!-- 下载内容 -->
             <LitematicaGenDownloader
-              v-if="selected.type === 'LitematicaGen'"
+              v-if="selected.type === 'LitematicaGen' && !isPearlCannon"
               :selected="selected"
               @download="refresh"
             />
@@ -846,13 +849,7 @@ watch(tabs, (newTabs) => {
                 ])
               }}
             </div>
-            <v-row
-              v-if="
-                !useAppStore().logined &&
-                !(machineId === '91tvzzp1' && selected.type === 'LitematicaGen')
-              "
-              class="text-sm-body-1"
-            >
+            <v-row v-if="!useAppStore().logined && !isPearlCannon" class="text-sm-body-1">
               <v-col>
                 <reden-router :to="localePath('/login')">
                   {{ t('litematica_generator.not_logged_in') }}

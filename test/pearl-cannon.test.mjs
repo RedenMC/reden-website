@@ -121,8 +121,9 @@ test('integration targets only the pearl cannon and preserves the legacy downloa
     ),
     'utf8',
   );
-  assert.ok(downloader.includes("selected.key === '91tvzzp1'"));
-  assert.ok(!page.includes('<PearlCannonGenerator'));
+  assert.ok(downloader.includes('SizeInput'));
+  assert.ok(page.includes('<PearlCannonGenerator'));
+  assert.ok(page.includes("selected.type === 'LitematicaGen' && !isPearlCannon"));
   assert.ok(page.includes('<LitematicaGenDownloader'));
   assert.ok(page.includes('<LitematicaShareDownloader'));
 });

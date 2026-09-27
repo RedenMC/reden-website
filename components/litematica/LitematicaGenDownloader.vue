@@ -3,7 +3,6 @@ import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import type { Machine } from '~/pages/litematica/index.vue';
 import SizeInput from '~/components/litematica/SizeInput.vue';
-import PearlCannonDownloader from '~/components/litematica/PearlCannonDownloader.vue';
 import type { VForm } from 'vuetify/components';
 import type { SubmitEventPromise } from 'vuetify';
 
@@ -79,11 +78,7 @@ defineExpose({ xSize, ySize, zSize, formRef });
 </script>
 
 <template>
-  <PearlCannonDownloader
-    v-if="selected.key === '91tvzzp1'"
-    @download="emits('download')"
-  />
-  <v-form v-else ref="formRef" @submit.prevent="submit">
+  <v-form ref="formRef" @submit.prevent="submit">
     <v-row>
       <v-col>
         <v-card
