@@ -96,7 +96,7 @@ const zh_cn: typeof en = {
   hoverHelp: '移动鼠标或点按方块，可查看坐标、朝向和状态。',
   bounds: '非空气方块外包尺寸，X × Y × Z',
   allocationNotes:
-    '每个启用阵列另有 10 个推进 TNT，不计入射程。大射程全玻璃空排省去，共用传动及必要接线保留。',
+    '每个启用阵列另有 10 个推进 TNT，不计入射程。全玻璃空排省去，共用传动及必要接线保留。',
   templateLoaded: '原始样机作者：',
   errorDelta: '与输入相差',
   expand: '展开',
@@ -168,7 +168,7 @@ const zh_tw: typeof en = {
   hoverHelp: '移動滑鼠或點按方塊，可查看座標、朝向與狀態。',
   bounds: '非空氣方塊外包尺寸，X × Y × Z',
   allocationNotes:
-    '每個啟用陣列另有 10 個推進 TNT，不計入射程。大射程全玻璃空排省去，共用傳動及必要接線保留。',
+    '每個啟用陣列另有 10 個推進 TNT，不計入射程。全玻璃空排省去，共用傳動及必要接線保留。',
   templateLoaded: '原始樣機作者：',
   errorDelta: '與輸入相差',
   expand: '展開',

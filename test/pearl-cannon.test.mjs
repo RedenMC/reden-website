@@ -42,6 +42,7 @@ test('every single-axis count omits the other bank and its propulsion row', () =
       assert.equal(r.plan.counts.propulsion, boost);
       assert.deepEqual(r.plan.omittedAxes, x === 0 ? ['x'] : ['z']);
       assert.ok(r.rows.every((row) => !r.plan.banks[row.wing].omitted));
+      assert.ok(r.rows.every((row) => row.role === 'propulsion' || row.kept > 0));
       for (const row of r.rows) {
         const positions = row.outputPositions ?? row.positions;
         const blocks = positions.map((p) => r.blocks.get(p.join(',')));
@@ -75,6 +76,52 @@ test('two arrays, glass trimming and original option overrides remain available'
       .emptyRowRemoval.removedBlocks,
     0,
   );
+});
+
+test('ordinary arrays omit only fully glass terminal row modules', () => {
+  for (const [x, z, expectedRows] of [
+    ['42.2', '0', 1],
+    ['422', '0', 1],
+    ['464.2', '0', 0],
+    ['886.2', '0', 1],
+    ['100', '422', 2],
+    ['-100', '422', 2],
+    ['100', '-422', 2],
+    ['-100', '-422', 2],
+    ['6752', '0', 0],
+    ['6773.1', '422', 2],
+  ]) {
+    const full = c.buildCannon(template, x, z, { removeEmptyRows: false });
+    const lean = c.buildCannon(template, x, z);
+    const removal = lean.plan.emptyRowRemoval;
+    assert.equal(removal.rows.length, expectedRows, `${x}/${z} removed rows`);
+    assert.equal(removal.removedBlocks, full.blocks.size - lean.blocks.size);
+    assert.equal(lean.materials['minecraft:tnt'], full.materials['minecraft:tnt']);
+    for (const row of removal.rows) {
+      assert.equal(row.kept, 0);
+      assert.equal(row.positions.length, 10);
+      if (!x.startsWith('-') && !z.startsWith('-'))
+        assert.ok(row.positions.every((p) => !lean.blocks.has(p.join(','))));
+      const active = lean.rows.filter(
+        (r) => r.role === 'pearl' && r.wing === row.wing &&
+          (r.arrayIndex ?? 1) === (row.arrayIndex ?? 1),
+      );
+      assert.ok(active.every((r) => r.row < row.row), `${x}/${z} terminal row`);
+    }
+    const removed = new Set([...full.blocks.keys()].filter((key) => !lean.blocks.has(key)));
+    assert.equal(removed.size, removal.removedBlocks);
+    if (!x.startsWith('-') && !z.startsWith('-'))
+      assert.deepEqual(removed, new Set(removal.rows.flatMap((row) => row.removedPositions.map((p) => p.join(',')))));
+    for (const [key, block] of full.blocks) {
+      const kept = lean.blocks.get(key);
+      if (removed.has(key)) assert.equal(kept, undefined, `${x}/${z} ${key}`);
+      else {
+        assert.ok(kept, `${x}/${z} retained ${key}`);
+        assert.equal(c.testing.stateKey(kept.state), c.testing.stateKey(block.state), `${x}/${z} ${key}`);
+        assert.deepEqual(kept.tile, block.tile, `${x}/${z} block entity ${key}`);
+      }
+    }
+  }
 });
 
 test('NBT export round-trips without changing blocks or TNT counts', async () => {
