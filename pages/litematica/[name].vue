@@ -452,6 +452,18 @@ watch(tabs, (newTabs) => {
           </v-dialog>
         </v-btn>
       </div>
+      <span
+        v-if="locale === 'zh_cn'"
+        class="qq-group-invite align-self-center text-body-2"
+      >
+        欢迎加入 Reden QQ 群，前沿生电尽在手中！
+        <a
+          href="https://qm.qq.com/q/Lkvc9Z39qS"
+          target="_blank"
+          rel="noopener noreferrer"
+          >申请加入</a
+        >
+      </span>
     </div>
 
     <div class="ma-4">
@@ -871,6 +883,17 @@ watch(tabs, (newTabs) => {
 </template>
 
 <style scoped>
+.qq-group-invite {
+  color: rgb(var(--v-theme-primary));
+  opacity: 0.8;
+}
+
+.qq-group-invite a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 p {
   font-size: 1em;
 }
