@@ -16,6 +16,7 @@ import type {
 import { pearlMessages } from '~/utils/pearl-cannon/messages';
 import { blockName } from '~/utils/pearl-cannon/block-names';
 import PearlCannonPreview from './PearlCannonPreview.vue';
+import QQGroupInvite from './QQGroupInvite.vue';
 const emits = defineEmits<{ (e: 'download'): void }>();
 const { locale } = useI18n();
 const copy = computed(() => pearlMessages[locale.value] ?? pearlMessages.en);
@@ -410,6 +411,9 @@ function preset(values: string[]) {
             <p class="text-caption text-medium-emphasis mt-4 mb-0">
               {{ copy.caution }}
             </p>
+            <div v-if="locale === 'zh_cn'" class="mt-2">
+              <QQGroupInvite />
+            </div>
           </v-card-text>
         </v-card>
       </v-col>
