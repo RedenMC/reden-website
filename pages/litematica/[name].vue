@@ -28,11 +28,13 @@ import TransferOwnershipDialog from '~/components/litematica/TransferOwnershipDi
 import CommentsSection from '~/components/litematica/CommentsSection.vue';
 import PearlCannonGenerator from '~/components/litematica/PearlCannonGenerator.vue';
 import QQGroupInvite from '~/components/litematica/QQGroupInvite.vue';
+import OscFireControl from '~/components/litematica/OscFireControl.vue';
 
 const route = useRoute();
 const router = useRouter();
 const machineId = route.params.name as string;
 const isPearlCannon = machineId === '91tvzzp1';
+const isOscFireControl = machineId === 'soc26';
 const { t, locale } = useI18n();
 const localePath = useLocalePath();
 const appStore = useAppStore();
@@ -462,6 +464,7 @@ watch(tabs, (newTabs) => {
         class="mb-4"
         @download="refresh"
       />
+      <OscFireControl v-if="isOscFireControl" class="mb-4" />
       <v-row v-if="selected">
         <v-col cols="12" md="8" style="height: min-content">
           <!-- 预览 -->
