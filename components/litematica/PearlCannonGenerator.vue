@@ -539,6 +539,13 @@ function preset(values: string[]) {
           <p class="text-body-2 mb-0">{{ copy.correction }}</p>
         </v-expansion-panel-text>
       </v-expansion-panel>
+      <v-expansion-panel value="updates" :title="`${copy.updateTitle} · 2026-10-02`">
+        <v-expansion-panel-text>
+          <p>{{ copy.updateSavings }}</p>
+          <p>{{ copy.updatePreserved }}</p>
+          <p class="mb-0">{{ copy.updateLimits }}</p>
+        </v-expansion-panel-text>
+      </v-expansion-panel>
     </v-expansion-panels>
   </section>
 </template>

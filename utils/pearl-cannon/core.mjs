@@ -1543,13 +1543,13 @@ export function makePlan(dx,dz,options={}) {
 
   p.error={x:p.predicted.x-x.number,z:p.predicted.z-z.number};p.zero=!nx&&!nz;
 
-  p.largeArrays=Math.abs(nx)>160||Math.abs(nz)>160;p.activeArrays=propulsion/10;p.removeEmptyRows=p.largeArrays&&options.removeEmptyRows!==false;
+  p.largeArrays=Math.abs(nx)>160||Math.abs(nz)>160;p.activeArrays=propulsion/10;p.removeEmptyRows=options.removeEmptyRows!==false;
 
   p.omittedAxes=p.omitZeroAxes?[...(!nx?['x']:[]),...(!nz?['z']:[])]:[];p.playerEntry=p.mirrorZ?[12.25,0,21.25]:[12.25,0,4.25];
 
   p.verification={...p.verification,gameTested:false,designRuntimeTested:p.pivot.x===13.5&&p.pivot.z===5.5&&options.negativeZMode!=='legacy-bypass',runtimeVersion:'1.21.10',runtimeScope:'large-array threshold edition: see bundled TEST_REPORT.md for exact native test coverage; no landing-distance calibration'};
 
-  p.warnings=[VALIDATION.distance,'大射程结构省去全玻璃射程排；共用传动和推进首排保留。'];applyV8RuntimeNotes(p,options);applyV9RuntimeNotes(p,options);applyFarArraySupportNotes(p);return p;
+  p.warnings=[VALIDATION.distance,'全玻璃射程排省去；共用传动和推进首排保留。'];applyV8RuntimeNotes(p,options);applyV9RuntimeNotes(p,options);applyFarArraySupportNotes(p);return p;
 
 }
 

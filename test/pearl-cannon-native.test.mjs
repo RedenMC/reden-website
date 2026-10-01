@@ -14,27 +14,27 @@ test('v9.2 Yueyue asset is the supplied PNG', async () => {
     'b73f2d265201f54460faa9b1da647ede85527e40b6b6625660d054bda06a7ff3',
   );
 });
-test('Vue generator keeps the exact v9.2 export bytes', async () => {
+test('updated generator exports deterministic litematic bytes', async () => {
   const golden = [
     [
       '100',
       '422',
-      'a004c7e420276303a698e2c861379a743a48911e79aaf8622f8e919a935db7b6',
+      '1c1ae374126000323bc31215e62bd194908b30dfd8fde695bb164a4e42f569b5',
     ],
     [
       '6773.1',
       '422',
-      '13a71b38fb9777fe59d721fa576ae641e6a0d69215203cfa17ba4f46df3dd490',
+      '4ac45de526a8355ec5ec010e4a4d382038a276495ee6ccd9625dfca2a18edd24',
     ],
     [
       '12702.2',
       '-42.2',
-      '1ed820f8515c542660cd19f0ab586ea38d8860a0b3ce7c6bb2826bc7fd1d7564',
+      '4f0bcb365f9006e051ec67076ce1743ec96c48e042b1164cb278196f8ee7e235',
     ],
     [
       '-13504',
       '-13504',
-      '6117b41ba3bfa6d86283ce7dbd9abde53f442317255d2d9ffbcb2fd9ea02a4da',
+      'd804de689296554a526b6cf84b3def7148fc98d15105ca9a21caed839166bc58',
     ],
   ];
   for (const [x, z, expected] of golden) {
