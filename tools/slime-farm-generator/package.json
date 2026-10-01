@@ -1,0 +1,7 @@
+{
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "test": "node test_core.js && node test_centers.js && node test_tshape.js && node test_local_compute.js && node test_flower_range.js"
+  }
+}

@@ -94,26 +94,29 @@ const SlimeStructures=(()=>{
     }
     return best;
   }
-  async function search(engine,seed,version,range,type,onProgress=()=>{}){
+  async function search(engine,seed,version,range,type,onProgress=()=>{},centerX=0,centerZ=0){
     const profile=VERSION_PROFILES[version];if(profile===undefined)throw new Error('该 Java 版本尚无对应的种子结构配置。');
     if(!Number.isInteger(range)||range<1||range>108000)throw new Error('搜索范围必须是 1～108000 的整数。');
+    if(![centerX,centerZ].every(Number.isInteger)||Math.max(Math.abs(centerX),Math.abs(centerZ))+range>29999000)throw new Error('搜索中心须为整数，搜索范围须在 ±29999000 内。');
     if(!['hut','monument'].includes(type))throw new Error('未知结构类型。');
     const bits=BigInt.asUintN(64,BigInt(seed)),low=Number(bits&0xffffffffn),high=Number((bits>>32n)&0xffffffffn);
     if(!engine._structure_init(profile,low,high))throw new Error('种子结构引擎初始化失败。');
-    const started=performance.now(),id=type==='hut'?3:8,margin=256,regionMin=Math.floor((-range-margin)/512)-1,regionMax=Math.floor((range+margin)/512)+1,boxes=[];
+    const started=performance.now(),id=type==='hut'?3:8,margin=256,regionMin=Math.floor((centerZ-range-margin)/512)-1,regionMax=Math.floor((centerZ+range+margin)/512)+1,xRegionMin=Math.floor((centerX-range-margin)/512)-1,xRegionMax=Math.floor((centerX+range+margin)/512)+1,boxes=[];
     for(let z=regionMin;z<=regionMax;z++){
-      const count=engine._structure_scan_row(id,z,regionMin,regionMax);
+      const count=engine._structure_scan_row(id,z,xRegionMin,xRegionMax);
       if(count<0)throw new Error('结构搜索范围超过引擎限制。');
       for(let i=0;i<count;i++){
         const b=Array.from({length:6},(_,j)=>engine._structure_result_at(i*6+j));
-        if(b[3]<-range-128||b[0]>range+128||b[5]<-range-128||b[2]>range+128)continue;
+        if(b[3]<centerX-range-128||b[0]>centerX+range+128||b[5]<centerZ-range-128||b[2]>centerZ+range+128)continue;
         boxes.push(b);
       }
       if((z-regionMin)%4===0)onProgress({progress:.65*(z-regionMin+1)/(regionMax-regionMin+1),message:`按种子核验结构：${z-regionMin+1} / ${regionMax-regionMin+1} 行`});
     }
-    return optimizeBoxes(boxes,seed,version,range,type,onProgress,started,'seed');
+    return optimizeBoxes(boxes,seed,version,range,type,onProgress,started,'seed',centerX,centerZ);
   }
-  function optimizeBoxes(boxes,seed,version,range,type,onProgress,started,source){
+  function optimizeBoxes(boxes,seed,version,range,type,onProgress,started,source,centerX,centerZ){
+    const shift=(b,dx,dz)=>b.map((v,i)=>v+(i===0||i===3?dx:i===2||i===5?dz:0));
+    boxes=boxes.map(b=>shift(b,-centerX,-centerZ));
     const groups=groupsOf(boxes);groups.sort((a,b)=>b.length-a.length||groupDistanceBound(a)-groupDistanceBound(b));
     const yMin=/^1\.(16|17)(\.|$)/.test(version)?0:-64,yMax=yMin===0?255:319;
     let best={count:0,x:0,y:0,z:0,distance2:Infinity};
@@ -127,17 +130,18 @@ const SlimeStructures=(()=>{
     const selected=best.count?boxes.filter(b=>{
       const f=feasibleIntervals(b,best.y,best.z,range);return f.some(([a,c])=>best.x>=a&&best.x<=c);
     }):[];
-    return {type,seed:String(seed),version,range,found:best.count>0,count:best.count,
-      x:best.x,y:best.y,z:best.z,distanceToOrigin:best.count?Math.sqrt(best.distance2):null,
-      structures:selected,structureCount:boxes.length,groups:groups.length,
+    return {type,seed:String(seed),version,range,centerX,centerZ,found:best.count>0,count:best.count,
+      x:best.x+centerX,y:best.y,z:best.z+centerZ,distanceToCenter:best.count?Math.sqrt(best.distance2):null,distanceToOrigin:best.count?Math.hypot(best.x+centerX,best.y,best.z+centerZ):null,
+      structures:selected.map(b=>shift(b,centerX,centerZ)),structureCount:boxes.length,groups:groups.length,
       geometryExact:true,source,elapsedMs:performance.now()-started};
   }
-  function searchSaved(savedBoxes,seed,version,range,type,onProgress=()=>{}){
+  function searchSaved(savedBoxes,seed,version,range,type,onProgress=()=>{},centerX=0,centerZ=0){
     if(!Number.isInteger(range)||range<1||range>108000)throw new Error('搜索范围必须是 1～108000 的整数。');
+    if(![centerX,centerZ].every(Number.isInteger)||Math.max(Math.abs(centerX),Math.abs(centerZ))+range>29999000)throw new Error('搜索中心须为整数，搜索范围须在 ±29999000 内。');
     if(!['hut','monument'].includes(type))throw new Error('未知结构类型。');
     const boxes=savedBoxes.filter(b=>Array.isArray(b)&&b.length===6&&b.every(Number.isInteger)&&b[0]<=b[3]&&b[1]<=b[4]&&b[2]<=b[5]&&
-      b[3]>=-range-128&&b[0]<=range+128&&b[5]>=-range-128&&b[2]<=range+128);
-    return optimizeBoxes(boxes,seed,version,range,type,onProgress,performance.now(),'save');
+      b[3]>=centerX-range-128&&b[0]<=centerX+range+128&&b[5]>=centerZ-range-128&&b[2]<=centerZ+range+128);
+    return optimizeBoxes(boxes,seed,version,range,type,onProgress,performance.now(),'save',centerX,centerZ);
   }
   return {VERSION_PROFILES,feasibleIntervals,groupsOf,bestAtGroup,search,searchSaved};
 })();

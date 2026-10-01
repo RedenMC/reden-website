@@ -1,7 +1,7 @@
-/* 生电刷怪场专用投影生成器 — 独立计算内核，无外部依赖。 */
+/* 生电农场专用投影生成器 — 独立计算内核，无外部依赖。 */
 'use strict';
 const SlimeFarm = (() => {
-  const APP_VERSION = '1.12.3';
+  const APP_VERSION = '1.16.0';
   const INNER = 24, OUTER = 128, GLASS = 160, WIDTH = 321;
   const MASK48 = (1n << 48n) - 1n, MULT = 0x5deece66dn;
   const SALT = 987234911n, LONG_MIN = -(1n << 63n), LONG_MAX = (1n << 63n)-1n;
@@ -123,34 +123,118 @@ const SlimeFarm = (() => {
     kernelCache={weights,upper,lower,size,area:points.length,points};
     return kernelCache;
   }
-  function makeGrid(seed,minChunk,maxChunk,onProgress=()=>{}) {
-    const n=maxChunk-minChunk+1, grid=new Uint8Array(n*n), b=BigInt(seed);
+  let preparedGrid=null;
+  function withGrid(grid,fn){preparedGrid=grid;try{return fn();}finally{preparedGrid=null;}}
+  function makeGrid(seed,minChunk,maxChunk,onProgress=()=>{},minChunkZ=minChunk,maxChunkZ=maxChunk) {
+    if(preparedGrid){
+      const g=preparedGrid;
+      if(g.seed!==String(seed)||g.minChunk!==minChunk||g.maxChunk!==maxChunk||g.minChunkZ!==minChunkZ||g.maxChunkZ!==maxChunkZ||!(g.grid instanceof Uint8Array)||g.n!==maxChunk-minChunk+1||g.h!==maxChunkZ-minChunkZ+1||g.grid.length!==g.n*g.h)throw new Error('本机加速网格与搜索参数不一致。');
+      preparedGrid=null;return g;
+    }
+    const n=maxChunk-minChunk+1,h=maxChunkZ-minChunkZ+1, grid=new Uint8Array(n*h), b=BigInt(seed);
     // Cache the coordinate-dependent 32/64 bit arithmetic for every row/column.
     const xs=[],zs=[];
     for(let i=0;i<n;i++) {
       const c=minChunk+i;
       xs.push(BigInt(Math.imul(Math.imul(c,c),4987142))+BigInt(Math.imul(c,5947611)));
+    }
+    for(let i=0;i<h;i++){const c=minChunkZ+i;
       zs.push(BigInt(Math.imul(c,c))*4392871n+BigInt(Math.imul(c,389711)));
     }
-    for(let z=0;z<n;z++) {
+    for(let z=0;z<h;z++) {
       for(let x=0;x<n;x++) {
         let s=(b+xs[x]+zs[z])^SALT^MULT, bits,val;
         s &= MASK48;
         do {s=(s*MULT+11n)&MASK48;bits=Number(s>>17n);val=bits%10;} while(bits-val+9>2147483647);
         grid[z*n+x]=val===0?1:0;
       }
-      if((z&31)===0) onProgress({phase:'grid',progress:0.05+0.25*z/n,message:`计算史莱姆区块：${z+1} / ${n} 行`});
+      if((z&31)===0) onProgress({phase:'grid',progress:0.05+0.25*z/h,message:`计算史莱姆区块：${z+1} / ${h} 行`});
     }
-    return {grid,minChunk,maxChunk,n};
+    return {grid,minChunk,maxChunk,minChunkZ,maxChunkZ,n,h};
   }
-  // Search chunk-aligned shapes inside the block-coordinate square [-range,range].
+  // Consumes the binary grid. Every T lies in one connected component. For each
+  // solid bar, expanding it to its maximal horizontal run cannot reduce a T.
+  // A histogram of outward runs then gives the largest adjoining stem; transpose
+  // the component to cover the other two orientations. Both arms must be nonempty.
+  function findTShape(grid,width,height,onProgress=()=>{}){
+    if(grid.length!==width*height)throw new Error('区块网格尺寸无效。');
+    let best=null;
+    function examine(cells,w,h,offsetX,offsetZ,transpose){
+      const up=new Uint32Array(cells.length),down=new Uint32Array(cells.length),stack=new Int32Array(w);
+      for(let i=0;i<cells.length;i++)if(cells[i])up[i]=1+(i>=w?up[i-w]:0);
+      for(let i=cells.length-1;i>=0;i--)if(cells[i])down[i]=1+(i+w<cells.length?down[i+w]:0);
+      const rect=(x1,z1,x2,z2)=>transpose?{minX:offsetX+z1,maxX:offsetX+z2,minZ:offsetZ+x1,maxZ:offsetZ+x2}:{minX:offsetX+x1,maxX:offsetX+x2,minZ:offsetZ+z1,maxZ:offsetZ+z2};
+      for(let top=0;top<h;top++){
+        const valid=new Uint8Array(w).fill(1);
+        for(let bottom=top;bottom<h;bottom++){
+          for(let x=0;x<w;x++)valid[x]&=cells[bottom*w+x];
+          let hasBar=false;
+          for(let left=0;left<w;){
+            if(!valid[left]){left++;continue;}
+            let end=left+1;while(end<w&&valid[end])end++;
+            const right=end-1;
+            if(right-left>=2){
+              hasBar=true;
+              const barArea=(right-left+1)*(bottom-top+1);
+              for(const direction of [-1,1]){
+                const row=direction<0?top-1:bottom+1;
+                if(row<0||row>=h)continue;
+                const runs=direction<0?up:down,offset=row*w;let size=0;
+                for(let x=left+1;x<=right;x++){
+                  const current=x===right?0:runs[offset+x];
+                  while(size&&runs[offset+stack[size-1]]>current){
+                    const depth=runs[offset+stack[--size]],x1=size?stack[size-1]+1:left+1,x2=x-1;
+                    const count=barArea+depth*(x2-x1+1),z1=direction<0?top-depth:bottom+1,z2=direction<0?top-1:bottom+depth;
+                    if(best&&count<best.count)continue;
+                    const bounds=rect(left,Math.min(top,z1),right,Math.max(bottom,z2));
+                    if(!best||count>best.count||bounds.minZ<best.minZ||bounds.minZ===best.minZ&&bounds.minX<best.minX)
+                      best={count,...bounds,rectangles:[rect(left,top,right,bottom),rect(x1,z1,x2,z2)]};
+                  }
+                  stack[size++]=x;
+                }
+              }
+            }
+            left=end;
+          }
+          if(!hasBar)break;
+        }
+      }
+    }
+    for(let z=0;z<height;z++){
+      for(let x=0;x<width;x++){
+        const start=z*width+x;if(grid[start]!==1)continue;
+        const queue=[start];grid[start]=2;let minX=x,maxX=x,minZ=z,maxZ=z;
+        for(let head=0;head<queue.length;head++){
+          const i=queue[head],cx=i%width,cz=Math.floor(i/width);
+          minX=Math.min(minX,cx);maxX=Math.max(maxX,cx);minZ=Math.min(minZ,cz);maxZ=Math.max(maxZ,cz);
+          if(cx>0&&grid[i-1]===1){grid[i-1]=2;queue.push(i-1);}
+          if(cx+1<width&&grid[i+1]===1){grid[i+1]=2;queue.push(i+1);}
+          if(cz>0&&grid[i-width]===1){grid[i-width]=2;queue.push(i-width);}
+          if(cz+1<height&&grid[i+width]===1){grid[i+width]=2;queue.push(i+width);}
+        }
+        if(queue.length<4||best&&queue.length<best.count)continue;
+        const w=maxX-minX+1,h=maxZ-minZ+1,cells=new Uint8Array(w*h),transposed=new Uint8Array(w*h);
+        for(const i of queue){const cx=i%width-minX,cz=Math.floor(i/width)-minZ;cells[cz*w+cx]=1;transposed[cx*h+cz]=1;}
+        examine(cells,w,h,minX,minZ,false);examine(transposed,h,w,minX,minZ,true);
+      }
+      if((z&127)===0)onProgress({phase:'shape',progress:.3+.7*z/height,message:`检查格调形（T形）：${z+1} / ${height} 行`});
+    }
+    return best;
+  }
+  function searchBounds(range,centerX=0,centerZ=0){
+    if(![centerX,centerZ].every(Number.isInteger))throw new Error('搜索中心 X、Z 必须是整数。');
+    const minX=centerX-range,maxX=centerX+range,minZ=centerZ-range,maxZ=centerZ+range;
+    if(Math.min(minX,minZ)<-29999000||Math.max(maxX,maxZ)>29999000)throw new Error('搜索范围须在 ±29999000 内，为农场和刷怪范围预留边界空间。');
+    return {minX,maxX,minZ,maxZ,cmin:Math.floor(minX/16),cmax:Math.floor(maxX/16),zmin:Math.floor(minZ/16),zmax:Math.floor(maxZ/16)};
+  }
+  // Search chunk-aligned shapes inside the block square around centerX/centerZ.
   // A chunk is included when its block area intersects that square.
-  function searchChunkCluster(seed,range,target='slime',shape='square',onProgress=()=>{},biomeData=null){
+  function searchChunkCluster(seed,range,target='slime',shape='square',onProgress=()=>{},biomeData=null,centerX=0,centerZ=0){
     if(!Number.isInteger(range)||range<1||range>108000)throw new Error('搜索范围必须是 1～108000 的整数。');
     if(!['slime','nonSlime'].includes(target))throw new Error('未知区块种类。');
-    if(!['square','rectangle','unrestricted'].includes(shape)||target==='nonSlime'&&shape==='unrestricted')throw new Error('此区块种类不支持所选形状。');
-    const started=performance.now(),minChunk=Math.floor(-range/16),maxChunk=Math.floor(range/16);
-    const {grid,n}=makeGrid(seed,minChunk,maxChunk,onProgress),wanted=target==='slime'?1:0;
+    if(!['square','rectangle','unrestricted','tShape'].includes(shape)||target==='nonSlime'&&['unrestricted','tShape'].includes(shape))throw new Error('此区块种类不支持所选形状。');
+    const started=performance.now(),{cmin:minChunk,cmax:maxChunk,zmin:minChunkZ,zmax:maxChunkZ}=searchBounds(range,centerX,centerZ);
+    const {grid,n,h}=makeGrid(seed,minChunk,maxChunk,onProgress,minChunkZ,maxChunkZ),wanted=target==='slime'?1:0;
     let biome=null;
     if(target==='nonSlime'){
       const codes={desert:1,snowy:2,other:3},required=codes[biomeData?.category];
@@ -158,8 +242,8 @@ const SlimeFarm = (() => {
       let nonSlime=0,known=0,matched=0;
       for(const v of grid)if(v===0)nonSlime++;
       for(const [key,cells] of biomeData.chunks){
-        const [cx,cz]=key.split(',').map(Number),x=cx-minChunk,z=cz-minChunk;
-        if(x<0||z<0||x>=n||z>=n||cells?.length!==16)continue;
+        const [cx,cz]=key.split(',').map(Number),x=cx-minChunk,z=cz-minChunkZ;
+        if(x<0||z<0||x>=n||z>=h||cells?.length!==16)continue;
         const i=z*n+x;if(grid[i]!==0)continue;
         let complete=true,match=true;
         for(const code of cells){if(code===0)complete=false;if(code!==required)match=false;}
@@ -173,7 +257,7 @@ const SlimeFarm = (() => {
     const better=(count,x1,z1,x2,z2)=>count>best.count||count===best.count&&(z1<best.minZ||z1===best.minZ&&x1<best.minX);
     if(shape==='square'){
       let previous=new Uint16Array(n+1),current=new Uint16Array(n+1);
-      for(let z=0;z<n;z++){
+      for(let z=0;z<h;z++){
         const row=z*n;
         for(let x=0;x<n;x++)if(grid[row+x]===wanted){
           const side=1+Math.min(previous[x],previous[x+1],current[x]);current[x+1]=side;
@@ -181,11 +265,11 @@ const SlimeFarm = (() => {
           if(better(count,x1,z1,x,z))best={count,minX:x1,maxX:x,minZ:z1,maxZ:z};
         }else current[x+1]=0;
         [previous,current]=[current,previous];
-        if((z&127)===0)onProgress({phase:'shape',progress:.3+.7*z/n,message:`检查正方形：${z+1} / ${n} 行`});
+        if((z&127)===0)onProgress({phase:'shape',progress:.3+.7*z/h,message:`检查正方形：${z+1} / ${h} 行`});
       }
     }else if(shape==='rectangle'){
       const heights=new Uint16Array(n),stack=new Int32Array(n+1);
-      for(let z=0;z<n;z++){
+      for(let z=0;z<h;z++){
         const row=z*n;
         for(let x=0;x<n;x++)heights[x]=grid[row+x]===wanted?heights[x]+1:0;
         let size=0;
@@ -197,10 +281,13 @@ const SlimeFarm = (() => {
           }
           stack[size++]=x;
         }
-        if((z&127)===0)onProgress({phase:'shape',progress:.3+.7*z/n,message:`检查矩形：${z+1} / ${n} 行`});
+        if((z&127)===0)onProgress({phase:'shape',progress:.3+.7*z/h,message:`检查矩形：${z+1} / ${h} 行`});
       }
+    }else if(shape==='tShape'){
+      const found=findTShape(grid,n,h,onProgress);
+      if(found){best=found;bestCells=[];for(const r of found.rectangles)for(let z=r.minZ;z<=r.maxZ;z++)for(let x=r.minX;x<=r.maxX;x++)bestCells.push(z*n+x);}
     }else{
-      for(let z=0;z<n;z++){
+      for(let z=0;z<h;z++){
         for(let x=0;x<n;x++){
           const start=z*n+x;if(grid[start]!==wanted)continue;
           const queue=[start];grid[start]=2;
@@ -211,27 +298,28 @@ const SlimeFarm = (() => {
             if(cx>0&&grid[i-1]===wanted){grid[i-1]=2;queue.push(i-1);}
             if(cx+1<n&&grid[i+1]===wanted){grid[i+1]=2;queue.push(i+1);}
             if(cz>0&&grid[i-n]===wanted){grid[i-n]=2;queue.push(i-n);}
-            if(cz+1<n&&grid[i+n]===wanted){grid[i+n]=2;queue.push(i+n);}
+            if(cz+1<h&&grid[i+n]===wanted){grid[i+n]=2;queue.push(i+n);}
           }
           if(better(queue.length,minX,minZ,maxX,maxZ)){
             best={count:queue.length,minX,maxX,minZ,maxZ};bestCells=queue.slice();
           }
         }
-        if((z&127)===0)onProgress({phase:'shape',progress:.3+.7*z/n,message:`检查连通区域：${z+1} / ${n} 行`});
+        if((z&127)===0)onProgress({phase:'shape',progress:.3+.7*z/h,message:`检查连通区域：${z+1} / ${h} 行`});
       }
     }
-    if(!best.count)return {seed:String(seed),range,target,shape,gridChunks:n*n,found:false,biome,elapsedMs:performance.now()-started};
-    const coordinates=bestCells?.map(i=>[minChunk+i%n,minChunk+Math.floor(i/n)]).sort((a,b)=>a[1]-b[1]||a[0]-b[0])??null;
-    const chunks={minX:minChunk+best.minX,maxX:minChunk+best.maxX,minZ:minChunk+best.minZ,maxZ:minChunk+best.maxZ};
-    return {seed:String(seed),range,target,shape,gridChunks:n*n,found:true,count:best.count,width:best.maxX-best.minX+1,height:best.maxZ-best.minZ+1,chunks,blocks:{minX:chunks.minX*16,maxX:chunks.maxX*16+15,minZ:chunks.minZ*16,maxZ:chunks.maxZ*16+15},coordinates,biome,elapsedMs:performance.now()-started};
+    if(!best.count)return {seed:String(seed),range,centerX,centerZ,target,shape,gridChunks:n*h,found:false,biome,elapsedMs:performance.now()-started};
+    const coordinates=bestCells?.map(i=>[minChunk+i%n,minChunkZ+Math.floor(i/n)]).sort((a,b)=>a[1]-b[1]||a[0]-b[0])??null;
+    const chunks={minX:minChunk+best.minX,maxX:minChunk+best.maxX,minZ:minChunkZ+best.minZ,maxZ:minChunkZ+best.maxZ};
+    const rectangles=best.rectangles?.map(r=>({minX:minChunk+r.minX,maxX:minChunk+r.maxX,minZ:minChunkZ+r.minZ,maxZ:minChunkZ+r.maxZ}))??null;
+    return {seed:String(seed),range,centerX,centerZ,target,shape,gridChunks:n*h,found:true,count:best.count,width:best.maxX-best.minX+1,height:best.maxZ-best.minZ+1,chunks,blocks:{minX:chunks.minX*16,maxX:chunks.maxX*16+15,minZ:chunks.minZ*16,maxZ:chunks.maxZ*16+15},coordinates,rectangles,biome,elapsedMs:performance.now()-started};
   }
-  function search(seed,range,onProgress=()=>{},biomeData=null,spawnY=1) {
+  function search(seed,range,onProgress=()=>{},biomeData=null,spawnY=1,centerX=0,centerZ=0) {
     if(!Number.isInteger(range)||range<1||range>108000) throw new Error('搜索范围必须是 1～108000 的整数（默认 4000）。');
     const t0=performance.now();
     onProgress({phase:'kernel',progress:0.01,message:'建立逐格圆环权重与严格上界…'});
-    const k=kernels(), cmin=Math.floor(-range/16), cmax=Math.floor(range/16), cn=cmax-cmin+1;
-    const g=makeGrid(seed,cmin-10,cmax+10,onProgress);
-    const n=cn*cn;
+    const k=kernels(),{minX,maxX,minZ,maxZ,cmin,cmax,zmin,zmax}=searchBounds(range,centerX,centerZ),cn=cmax-cmin+1,zn=zmax-zmin+1;
+    const g=makeGrid(seed,cmin-10,cmax+10,onProgress,zmin-10,zmax+10);
+    const n=cn*zn;
     const offsets=[], values=[];
     for(let i=0;i<289;i++) if(k.upper[i]) {offsets.push((Math.floor(i/17)-8)*g.n+(i%17-8));values.push(k.upper[i]);}
     const activeBiome=biomeData?.chunks instanceof Map&&biomeData.y===spawnY?biomeData:null;
@@ -242,7 +330,7 @@ const SlimeFarm = (() => {
       let excluded=0,unknown=0,known=0;
       for(const [dx,dz] of k.points){
         const wx=x+dx,wz=z+dz,cx=Math.floor(wx/16),cz=Math.floor(wz/16);
-        if(!g.grid[(cz-g.minChunk)*g.n+cx-g.minChunk])continue;
+        if(!g.grid[(cz-g.minChunkZ)*g.n+cx-g.minChunk])continue;
         if(boxes.some(b=>wx>=b[0]&&wx<=b[3]&&wz>=b[2]&&wz<=b[5])){excluded++;continue;}
         const cells=activeBiome.chunks.get(cx+','+cz);
         if(!cells){unknown++;continue;}
@@ -261,8 +349,8 @@ const SlimeFarm = (() => {
     function centerScore(tx,tz){
       const base=(tz+10)*g.n+tx+10,relevant=[];
       for(let j=0;j<289;j++)if(g.grid[base+(Math.floor(j/17)-8)*g.n+j%17-8])relevant.push(j);
-      const px=(cmin+tx)*16,pz=(cmin+tz)*16;
-      const x=Math.max(-range,Math.min(range,px+8)),z=Math.max(-range,Math.min(range,pz+8));
+      const px=(cmin+tx)*16,pz=(zmin+tz)*16;
+      const x=Math.max(minX,Math.min(maxX,px+8)),z=Math.max(minZ,Math.min(maxZ,pz+8));
       const start=((z-pz)*16+x-px)*289;let score=0;
       for(const j of relevant)score+=k.weights[start+j];
       return score-(nearExcluded(x,z)?assess(x,z):0);
@@ -270,17 +358,17 @@ const SlimeFarm = (() => {
     // A deterministic sample supplies only a pruning threshold; every possible winner
     // is still checked below with admissible upper bounds.
     let threshold=0;
-    for(let iz=0;iz<Math.min(64,cn);iz++)for(let ix=0;ix<Math.min(64,cn);ix++){
+    for(let iz=0;iz<Math.min(64,zn);iz++)for(let ix=0;ix<Math.min(64,cn);ix++){
       const tx=Math.floor((cn-1)*ix/Math.max(1,Math.min(64,cn)-1));
-      const tz=Math.floor((cn-1)*iz/Math.max(1,Math.min(64,cn)-1));
+      const tz=Math.floor((zn-1)*iz/Math.max(1,Math.min(64,zn)-1));
       threshold=Math.max(threshold,centerScore(tx,tz));
     }
     let best=threshold-1,bx=0,bz=0,bestDistance=Infinity,ties=0,refined=0,evaluated=0;
     const columns=new Uint16Array(g.n);
     for(let row=2;row<=18;row++)for(let x=0;x<g.n;x++)columns[x]+=g.grid[row*g.n+x];
-    for(let band=0;band<cn;band+=16){
+    for(let band=0;band<zn;band+=16){
       const candidates=[];
-      for(let tz=band;tz<Math.min(cn,band+16);tz++){
+      for(let tz=band;tz<Math.min(zn,band+16);tz++){
         if(tz>0){const leaving=(tz+1)*g.n,entering=(tz+18)*g.n;for(let x=0;x<g.n;x++)columns[x]+=g.grid[entering+x]-g.grid[leaving+x];}
         let slimeCount=0;for(let x=2;x<=18;x++)slimeCount+=columns[x];
         for(let tx=0;tx<cn;tx++){
@@ -296,45 +384,45 @@ const SlimeFarm = (() => {
         if(bound<best)break;
         const base=(tz+10)*g.n+tx+10,relevant=[];
         for(let j=0;j<289;j++)if(g.grid[base+(Math.floor(j/17)-8)*g.n+j%17-8])relevant.push(j);
-        const originX=(cmin+tx)*16,originZ=(cmin+tz)*16;
+        const originX=(cmin+tx)*16,originZ=(zmin+tz)*16;
         for(let pz=0;pz<16;pz++){
-          const z=originZ+pz;if(z < -range||z>range)continue;
+          const z=originZ+pz;if(z < minZ||z>maxZ)continue;
           for(let px=0;px<16;px++){
-            const x=originX+px;if(x < -range||x>range)continue;
+            const x=originX+px;if(x < minX||x>maxX)continue;
             const start=(pz*16+px)*289;let score=0;
             for(const j of relevant)score+=k.weights[start+j];
             evaluated++;
             if(score<best)continue;
             if(nearExcluded(x,z))score-=assess(x,z);
-            const dist=(x+0.5)**2+(z+0.5)**2;
+            const dist=(x+0.5-centerX)**2+(z+0.5-centerZ)**2;
             if(score>best){best=score;bx=x;bz=z;bestDistance=dist;ties=1;}
             else if(score===best){ties++;if(dist<bestDistance||(dist===bestDistance&&(x<bx||(x===bx&&z<bz)))){bx=x;bz=z;bestDistance=dist;}}
           }
         }
         refined++;
       }
-      onProgress({phase:'bound',progress:0.30+0.68*Math.min(cn,band+16)/cn,message:`校验区块行 ${Math.min(cn,band+16)} / ${cn}；当前面积 ${best.toLocaleString()} 格`,best,x:bx,z:bz,refined});
+      onProgress({phase:'bound',progress:0.30+0.68*Math.min(zn,band+16)/zn,message:`校验区块行 ${Math.min(zn,band+16)} / ${zn}；当前面积 ${best.toLocaleString()} 格`,best,x:bx,z:bz,refined});
     }
     const biome=assess(bx,bz,true);
     const elapsedMs=performance.now()-t0;
     onProgress({phase:'complete',progress:1,message:'完成：所选范围内的全部挂机方块中心已精确求优。'});
-    return {seed:String(seed),range,x:bx,z:bz,score:best,ties,exact:true,refined,evaluated,
+    return {seed:String(seed),range,centerX,centerZ,x:bx,z:bz,score:best,ties,exact:true,refined,evaluated,
       totalCenters:(2*range+1)**2,totalTiles:n,remainingUpper:0,elapsedMs,kernelArea:k.area,
       biome:{used:!!activeBiome,excludedAtBest:biome.excluded,unknownAtBest:biome.unknown,knownAtBest:biome.known,importedChunks:activeBiome?.read??0},
-      grid:g.grid,gridMin:g.minChunk,gridMax:g.maxChunk,gridN:g.n};
+      grid:g.grid,gridMin:g.minChunk,gridMax:g.maxChunk,gridN:g.n,gridMinZ:g.minChunkZ,gridMaxZ:g.maxChunkZ,gridH:g.h};
   }
-  function searchLeastSlime(seed,range,onProgress=()=>{},biomeData=null){
+  function searchLeastSlime(seed,range,onProgress=()=>{},biomeData=null,centerX=0,centerZ=0){
     if(!Number.isInteger(range)||range<1||range>108000)throw new Error('搜索范围必须是 1～108000 的整数。');
-    const started=performance.now(),k=kernels(),cmin=Math.floor(-range/16),cmax=Math.floor(range/16),cn=cmax-cmin+1;
-    const g=makeGrid(seed,cmin-10,cmax+10,onProgress),grid=g.grid,n=g.n;
+    const started=performance.now(),k=kernels(),{minX,maxX,minZ,maxZ,cmin,cmax,zmin,zmax}=searchBounds(range,centerX,centerZ),cn=cmax-cmin+1,zn=zmax-zmin+1;
+    const g=makeGrid(seed,cmin-10,cmax+10,onProgress,zmin-10,zmax+10),grid=g.grid,n=g.n;
     const codes={desert:1,snowy:2,other:3},required=codes[biomeData?.category];
     if(!required||!(biomeData.chunks instanceof Map))throw new Error('刷怪范围内搜索需要先导入计划刷怪高度的主世界存档群系。');
     const invalid=new Uint8Array(grid.length);invalid.fill(1);
     for(let i=0;i<grid.length;i++)if(grid[i])invalid[i]=0;
     for(const [key,cells] of biomeData.chunks){
       if(cells?.length!==16||!cells.every(v=>v===required))continue;
-      const [cx,cz]=key.split(',').map(Number),ix=cx-g.minChunk,iz=cz-g.minChunk;
-      if(ix>=0&&ix<n&&iz>=0&&iz<n)invalid[iz*n+ix]=0;
+      const [cx,cz]=key.split(',').map(Number),ix=cx-g.minChunk,iz=cz-g.minChunkZ;
+      if(ix>=0&&ix<n&&iz>=0&&iz<g.h)invalid[iz*n+ix]=0;
     }
     // Four disjoint rectangles of chunks always lie entirely in the annulus,
     // for every possible block-centre offset within a candidate chunk.
@@ -346,27 +434,27 @@ const SlimeFarm = (() => {
     for(let j=0;j<289;j++)if(k.lower[j])lowerOffsets.push([Math.floor(j/17)-8,j%17-8,j,k.lower[j]]);
     let best=Infinity,bx=0,bz=0,bestDistance=Infinity,ties=0,refined=0,evaluated=0;
     function scoreAt(x,z){
-      const cx=Math.floor(x/16),cz=Math.floor(z/16),base=(cz-g.minChunk)*n+cx-g.minChunk;
+      const cx=Math.floor(x/16),cz=Math.floor(z/16),base=(cz-g.minChunkZ)*n+cx-g.minChunk;
       const start=((z-cz*16)*16+x-cx*16)*289;let score=0;
       for(let j=0;j<289;j++)if(grid[base+(Math.floor(j/17)-8)*n+j%17-8])score+=k.weights[start+j];
       return score;
     }
     function eligible(x,z){
-      const cx=Math.floor(x/16),cz=Math.floor(z/16),base=(cz-g.minChunk)*n+cx-g.minChunk;
+      const cx=Math.floor(x/16),cz=Math.floor(z/16),base=(cz-g.minChunkZ)*n+cx-g.minChunk;
       for(const [x1,x2,z1,z2] of rects)for(let dz=z1;dz<=z2;dz++)for(let dx=x1;dx<=x2;dx++)if(invalid[base+dz*n+dx])return false;
       for(const [dx,dz] of k.points){
         const wx=x+dx,wz=z+dz,cx=Math.floor(wx/16),cz=Math.floor(wz/16);
-        const i=(cz-g.minChunk)*n+cx-g.minChunk;
+        const i=(cz-g.minChunkZ)*n+cx-g.minChunk;
         if(grid[i])continue;
         const cells=biomeData.chunks.get(cx+','+cz);
         if(!cells||cells[((wz&15)>>2)*4+((wx&15)>>2)]!==required)return false;
       }
       return true;
     }
-    const sampleN=Math.min(64,cn);
-    for(let iz=0;iz<sampleN;iz++)for(let ix=0;ix<sampleN;ix++){
-      const tx=Math.floor((cn-1)*ix/Math.max(1,sampleN-1)),tz=Math.floor((cn-1)*iz/Math.max(1,sampleN-1));
-      const x=Math.max(-range,Math.min(range,(cmin+tx)*16+8)),z=Math.max(-range,Math.min(range,(cmin+tz)*16+8));
+    const sampleN=Math.min(64,cn),sampleZ=Math.min(64,zn);
+    for(let iz=0;iz<sampleZ;iz++)for(let ix=0;ix<sampleN;ix++){
+      const tx=Math.floor((cn-1)*ix/Math.max(1,sampleN-1)),tz=Math.floor((zn-1)*iz/Math.max(1,sampleZ-1));
+      const x=Math.max(minX,Math.min(maxX,(cmin+tx)*16+8)),z=Math.max(minZ,Math.min(maxZ,(zmin+tz)*16+8));
       if(eligible(x,z)){const score=scoreAt(x,z);if(score<best){best=score;bx=x;bz=z;}}
     }
     const cols=rects.map(()=>new Uint16Array(n));
@@ -375,7 +463,7 @@ const SlimeFarm = (() => {
       const [, ,z1,z2]=rects[r];
       for(let dz=z1;dz<=z2;dz++)for(let x=0;x<n;x++){cols[r][x]+=grid[(10+dz)*n+x];badCols[r][x]+=invalid[(10+dz)*n+x];}
     }
-    for(let tz=0;tz<cn;tz++){
+    for(let tz=0;tz<zn;tz++){
       if(tz)for(let r=0;r<rects.length;r++){
         const [, ,z1,z2]=rects[r],leaving=(tz-1+10+z1)*n,entering=(tz+10+z2)*n,column=cols[r];
         for(let x=0;x<n;x++){column[x]+=grid[entering+x]-grid[leaving+x];badCols[r][x]+=invalid[entering+x]-invalid[leaving+x];}
@@ -396,26 +484,26 @@ const SlimeFarm = (() => {
         if(lower>best)continue;
         const relevant=[];
         for(let j=0;j<289;j++)if(grid[base+(Math.floor(j/17)-8)*n+j%17-8])relevant.push(j);
-        const originX=(cmin+tx)*16,originZ=(cmin+tz)*16;
+        const originX=(cmin+tx)*16,originZ=(zmin+tz)*16;
         for(let pz=0;pz<16;pz++){
-          const z=originZ+pz;if(z < -range||z>range)continue;
+          const z=originZ+pz;if(z < minZ||z>maxZ)continue;
           for(let px=0;px<16;px++){
-            const x=originX+px;if(x < -range||x>range)continue;
+            const x=originX+px;if(x < minX||x>maxX)continue;
             const start=(pz*16+px)*289;let score=0;
             for(const j of relevant){score+=k.weights[start+j];if(score>best)break;}
             evaluated++;if(score>best||!eligible(x,z))continue;
-            const dist=(x+0.5)**2+(z+0.5)**2;
+            const dist=(x+0.5-centerX)**2+(z+0.5-centerZ)**2;
             if(score<best){best=score;bx=x;bz=z;bestDistance=dist;ties=1;}
             else{ties++;if(dist<bestDistance||(dist===bestDistance&&(x<bx||(x===bx&&z<bz)))){bx=x;bz=z;bestDistance=dist;}}
           }
         }
         refined++;
       }
-      if((tz&31)===0)onProgress({phase:'minimum',progress:.3+.7*tz/cn,message:`检查挂机点所在区块行 ${tz+1} / ${cn}；当前最少 ${best} 格`});
+      if((tz&31)===0)onProgress({phase:'minimum',progress:.3+.7*tz/zn,message:`检查挂机点所在区块行 ${tz+1} / ${zn}；当前最少 ${best} 格`});
     }
-    if(!ties)return {seed:String(seed),range,found:false,kernelArea:k.area,exact:true,refined,evaluated,totalCenters:(2*range+1)**2,totalTiles:cn*cn,elapsedMs:performance.now()-started};
+    if(!ties)return {seed:String(seed),range,centerX,centerZ,found:false,kernelArea:k.area,exact:true,refined,evaluated,totalCenters:(2*range+1)**2,totalTiles:cn*zn,elapsedMs:performance.now()-started};
     onProgress({phase:'complete',progress:1,message:'完成：已用严格下界校验所有挂机方块。'});
-    return {seed:String(seed),range,found:true,x:bx,z:bz,slimeArea:best,kernelArea:k.area,ties,exact:true,refined,evaluated,totalCenters:(2*range+1)**2,totalTiles:cn*cn,elapsedMs:performance.now()-started};
+    return {seed:String(seed),range,centerX,centerZ,found:true,x:bx,z:bz,slimeArea:best,kernelArea:k.area,ties,exact:true,refined,evaluated,totalCenters:(2*range+1)**2,totalTiles:cn*zn,elapsedMs:performance.now()-started};
   }
   function layout(seed,px,pz,type='checker',biomeData=null,spawnY=1,topWalk=false) {
     if(!['checker','stripe','uncut','theory'].includes(type)) throw new Error('未知投影类型');
@@ -661,7 +749,7 @@ const SlimeFarm = (() => {
       n.i('Version',5);n.i('MinecraftDataVersion',dataVersion(version));
       n.compound('Metadata',()=>{
         n.s('Name',`大史莱姆农场_${{checker:'棋盘门',stripe:'长条门',uncut:'不切门',theory:'理论最高效率试用'}[layout.type]}_X${layout.px}_Z${layout.pz}`);
-        n.s('Author','生电刷怪场专用投影生成器');
+        n.s('Author','生电农场专用投影生成器');
         n.s('Description',`目标 Java ${version};类型=${layout.type};顶部游走=${layout.topWalk===null?'不适用':layout.topWalk?'是':'否'};Y${baseY}填充=minecraft:${fillMaterial};顶层=minecraft:${roofMaterial};连通区方向按相邻史莱姆区块选择 X/Z;DataVersion=${dataVersion(version)};种子=${layout.seed};投影原点=${layout.minX},${baseY},${layout.minZ};P水平=${layout.px+0.5},${layout.pz+0.5};地板Y=${baseY};门块Y=${baseY+1};24<水平欧氏距离<=128;单层几何面积。`);
         n.l('TimeCreated',time);n.l('TimeModified',time);n.i('TotalBlocks',totalBlocks);n.i('TotalVolume',all.length);n.i('RegionCount',1);n.vec('EnclosingSize',WIDTH,layout.layers.length,WIDTH);
       });
@@ -695,8 +783,8 @@ const SlimeFarm = (() => {
     const roof=l.type==='uncut'?material(roofMaterial,version):null;
     if(roof)roofState(roofMaterial,version);
     if(roof&&!l.topWalk&&roof.group!=='下半砖')throw new Error('不需要顶部游走时，顶框上方只能使用下半砖。');
-    return {program:'生电刷怪场专用投影生成器',appVersion:APP_VERSION,targetJavaVersion:version,
-      search:{seed:l.seed,range:result.range??null,scope:'挂机方块坐标 X/Z∈[-R,R]，完整圆允许伸出搜索方框',
+    return {program:'生电农场专用投影生成器',appVersion:APP_VERSION,targetJavaVersion:version,
+      search:{seed:l.seed,range:result.range??null,centerX:result.centerX??0,centerZ:result.centerZ??0,scope:'挂机方块坐标分别位于搜索中心 X/Z±R，完整圆允许伸出搜索方框',
         optimum:complete?(result.biome?.used?'在搜索范围内按存档已知禁刷群系求最大；缺失群系暂按可刷计':'在搜索范围内按史莱姆区块几何面积求最大；未校验禁刷群系'):'手动选点，未声明最优',
         totalCenters:result.totalCenters??null,evaluated:result.evaluated??null,refinedTiles:result.refined??null,
         tiedMaximumCenters:result.ties??null,elapsedMs:result.elapsedMs??null},
@@ -717,7 +805,7 @@ const SlimeFarm = (() => {
       litematic:{formatVersion:5,minecraftDataVersion:dataVersion(version),note:'数据版本来自目标 Java 正式版服务端 version.json。'},
       limitations:['最大值指单层候选面积，不等于每小时产量。','存档未覆盖的群系暂按可刷计；需完整覆盖才能确认实际世界的最大值。',l.type==='theory'?'理论版尚未可靠量化小型史莱姆的滞留时间和 70 怪物上限的影响；条件试算不等于实际产量，也不证明全局最高效率。':'未过滤地形、世界出生点、其他玩家、怪物上限和模拟距离。','P 为挂机方块水平中心；按需求忽略玩家与刷怪脚部的微小高差。',l.type==='uncut'?'不切门版提供目标门框与门块布局，不提供施工设备或地狱侧处理系统。':'切门版提供成品门块布局，不提供切门设备或地狱侧处理系统。',...(l.type==='theory'?[`理论版采用棋盘门布局，并在必要的边缘格补门；每个可刷怪地板格周围 3×3 范围内至少有一个门块，中、大型史莱姆自然生成时即可碰到门。`,'每小时粘液球条件试算假设门块稳定存在、史莱姆成功传送且地狱侧全部收集；未经过切门存活或游戏内产量验收。']:[]),...(l.type==='uncut'&&roofMaterial==='air'?['不切门版顶层填充选择空气会留下可刷怪的黑曜石表面；满足刷怪条件时，黑曜石上面会刷怪，需另行防刷怪。']:[]),'没有宣称已在每个游戏版本里实机测试。']};
   }
-  return {APP_VERSION,INNER,OUTER,GLASS,WIDTH,MATERIALS,DATA_VERSIONS,material,materialState,roofState,biomeBlock,netherPortalRange,parseSeed,isSlime,inAnnulus,portalAt,orientChunks,kernels,makeGrid,searchChunkCluster,searchLeastSlime,search,layout,schematic,gzip,gzipStored,report,packIndices};
+  return {APP_VERSION,INNER,OUTER,GLASS,WIDTH,MATERIALS,DATA_VERSIONS,material,materialState,roofState,biomeBlock,netherPortalRange,parseSeed,isSlime,inAnnulus,portalAt,orientChunks,kernels,makeGrid,withGrid,searchBounds,findTShape,searchChunkCluster,searchLeastSlime,search,layout,schematic,gzip,gzipStored,report,packIndices};
 })();
 if(typeof module!=='undefined'&&module.exports)module.exports=SlimeFarm;
 if(typeof self!=='undefined')self.SlimeFarm=SlimeFarm;
