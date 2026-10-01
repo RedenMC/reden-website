@@ -4,6 +4,10 @@ The `91tvzzp1` page has one native generator with X and Z displacement inputs (X
 
 ## Implementation
 
+### Update report — 2026-10-02
+
+The native tool now shows a localized update report in its existing Vuetify expansion panels. Ordinary-range arrays also omit a row when all ten payload TNT slots become glass, together with its dedicated parts. Rows containing payload TNT, shared transport, necessary wiring and active-array propulsion TNT remain. This report describes the existing empty-row fix; it does not change generation behavior or claim additional in-game acceptance testing.
+
 The v9.2 tool now lives in `components/litematica/PearlCannonGenerator.vue` and shares one JavaScript generation core. This replaces the former iframe inside the existing standalone component; the old standalone v9.2 HTML was removed. The historic `pearl-cannon-v9.html` remains accessible. The native UI uses the supplied transparent Yueyue PNG, verified as SHA256 `b73f2d265201f54460faa9b1da647ede85527e40b6b6625660d054bda06a7ff3`. Its click animation and greeting reset after 1600 ms; repeated clicks restart the timer. No new production dependencies or backend endpoints are introduced.
 
 The page leaves its information and sidebar layout unchanged and skips the traditional size-based downloader for this machine. `LitematicaGenDownloader.vue` remains the original shared component for other machines. The pearl tool uses the site's Vuetify cards, fields, buttons, tables, and responsive grid, with no pearl-specific theme. Yueyue stays in the header's normal document flow. Seven preview layers, presets, X/Z swap, material CSV, parameter export, original-template download, and DataVersion remain available. Local downloads do not increment the existing backend's download counter.

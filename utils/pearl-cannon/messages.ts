@@ -1,4 +1,8 @@
 const en = {
+  updateTitle: 'Update report',
+  updateSavings: 'Material savings now also apply to ordinary-range arrays: when all 10 payload TNT in a row become glass, that empty glass row and its dedicated parts are omitted. Rows with remaining payload TNT are retained.',
+  updatePreserved: 'Shared transport, necessary wiring and the 10 propulsion TNT in each active array are retained. The 42.2 blocks/TNT conversion, capacity boundaries and negative-Z mirror rules remain unchanged.',
+  updateLimits: 'This is a material optimization with no new in-game acceptance testing. Existing explosion, early pearl collision and uncalibrated landing warnings still apply.',
   toolTitle: 'Pearl cannon displacement generator',
   offline: 'Runs locally · no displacement upload',
   hero: 'Enter two distances to generate a pearl cannon schematic.',
@@ -79,6 +83,10 @@ const en = {
     'Both axes round to zero TNT. Enter at least 21.1 blocks on one axis.',
 };
 const zh_cn: typeof en = {
+  updateTitle: '更新报告',
+  updateSavings: '省料规则已扩展到普通射程阵列：当某排 10 个射程 TNT 全部替换为玻璃时，省去该全玻璃空排及对应专用部件；仍有有效 TNT 的排保留。',
+  updatePreserved: '保留共用传动、必要接线，以及每个实际阵列的 10 个推进 TNT。42.2 格/TNT 的换算、容量边界和负 Z 镜像保持原规则。',
+  updateLimits: '本次为材料优化，未新增游戏内验收；既有炸膛、底部提前碰撞及落点未校准说明仍适用。',
   toolTitle: '珍珠炮位移生成器',
   offline: '离线运行 · 位移不上传',
   hero: '输入两个数，万格珍珠炮直接出图。',
@@ -151,6 +159,10 @@ const zh_cn: typeof en = {
   allZero: '两轴都取整为0个TNT，至少一个方向需要输入21.1格。',
 };
 const zh_tw: typeof en = {
+  updateTitle: '更新報告',
+  updateSavings: '省料規則已擴展到普通射程陣列：當某排 10 個射程 TNT 全部替換為玻璃時，省去該全玻璃空排及對應專用部件；仍有有效 TNT 的排保留。',
+  updatePreserved: '保留共用傳動、必要接線，以及每個實際陣列的 10 個推進 TNT。42.2 格/TNT 的換算、容量邊界和負 Z 鏡像保持原規則。',
+  updateLimits: '本次為材料最佳化，未新增遊戲內驗收；既有炸膛、底部提前碰撞及落點未校準說明仍適用。',
   toolTitle: '珍珠炮位移生成器',
   offline: '離線執行 · 位移不上傳',
   hero: '輸入兩個數，直接生成萬格珍珠炮投影。',
