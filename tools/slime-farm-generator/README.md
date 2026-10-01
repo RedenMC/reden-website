@@ -16,6 +16,8 @@ The page supports Java slime chunk search, four portal layouts and `.litematic` 
 
 ## Browser hardware (v1.16.0)
 
+The page includes a visible v1.16.0 update report dated 2026-10-02 covering local CPU/GPU processing, configurable search centers, T shapes and version-aware flower searches. It credits the code references with: 感谢sunnyslopes、minelogy、li_zi_o_o的代码参考！让我们的搜索更快
+
 All searching, saved-world reading and exports run on the user's device. This update adds optional WebGPU slime-grid generation inside the existing Web Workers. No compute server, API endpoint, telemetry, external script or CUDA binary is added. JavaScript CPU search remains available. HTTPS (or localhost for development), browser WebGPU support and an available adapter are required for GPU mode.
 
 The selector offers automatic, CPU and GPU modes. Automatic attempts GPU for grids of at least 4,194,304 chunks; smaller grids use CPU to avoid GPU initialization overhead. Failure in automatic mode discards the GPU grid and recomputes it on CPU. Forced GPU mode reports failure. Terminating the worker cancels either path. Completed status reports the backend actually used. The scoring/shape algorithms are unchanged and still run on CPU; structures and flowers use the embedded WASM/JavaScript CPU engine.
