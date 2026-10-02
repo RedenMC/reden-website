@@ -13,7 +13,14 @@ async function main(){
   const clean=r=>{const {elapsedMs,execution,...rest}=r;return rest;};assert.deepEqual(clean(cpu),clean(auto));
   await assert.rejects(run('SlimeLocalCompute.run(kind,{...params,compute:"gpu"})'),/WebGPU/);
  }
- await assert.rejects(run('SlimeLocalCompute.run("farm",{seed:"0",range:108001})'),/范围/);
+ assert.equal(run('SlimeFarm.MAX_SEARCH_RANGE'),216000);
+ // Check the larger boundary without allocating a maximum-size grid.
+ const savedWithGrid=run('SlimeFarm.withGrid');
+ run('SlimeFarm.withGrid=()=>{throw new Error("accepted range before allocation")}');
+ for(const kind of ['farm','cluster'])await assert.rejects(run(`SlimeLocalCompute.run("${kind}",{seed:"0",range:216000,compute:"cpu"})`),/accepted range/);
+ context.savedWithGrid=savedWithGrid;run('SlimeFarm.withGrid=savedWithGrid');
+ for(const code of ['SlimeFarm.search("0",216001)','SlimeFarm.searchChunkCluster("0",216001)','SlimeFarm.searchLeastSlime("0",216001)'])assert.throws(()=>run(code),/范围/);
+ await assert.rejects(run('SlimeLocalCompute.run("farm",{seed:"0",range:SlimeFarm.MAX_SEARCH_RANGE+1})'),/范围/);
  await assert.rejects(run('SlimeLocalCompute.run("farm",{seed:"0",range:10,centerX:29999000})'),/范围/);
  assert.throws(()=>run('SlimeFarm.withGrid({seed:"0"},()=>SlimeFarm.makeGrid("1",0,1))'),/不一致/);
  assert.equal(run('SlimeFarm.makeGrid("1",0,1).grid.length'),4);

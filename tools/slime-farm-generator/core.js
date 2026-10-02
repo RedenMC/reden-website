@@ -2,6 +2,7 @@
 'use strict';
 const SlimeFarm = (() => {
   const APP_VERSION = '1.16.0';
+  const MAX_SEARCH_RANGE = 216000;
   const INNER = 24, OUTER = 128, GLASS = 160, WIDTH = 321;
   const MASK48 = (1n << 48n) - 1n, MULT = 0x5deece66dn;
   const SALT = 987234911n, LONG_MIN = -(1n << 63n), LONG_MAX = (1n << 63n)-1n;
@@ -230,7 +231,7 @@ const SlimeFarm = (() => {
   // Search chunk-aligned shapes inside the block square around centerX/centerZ.
   // A chunk is included when its block area intersects that square.
   function searchChunkCluster(seed,range,target='slime',shape='square',onProgress=()=>{},biomeData=null,centerX=0,centerZ=0){
-    if(!Number.isInteger(range)||range<1||range>108000)throw new Error('搜索范围必须是 1～108000 的整数。');
+    if(!Number.isInteger(range)||range<1||range>MAX_SEARCH_RANGE)throw new Error('搜索范围必须是 1～216000 的整数。');
     if(!['slime','nonSlime'].includes(target))throw new Error('未知区块种类。');
     if(!['square','rectangle','unrestricted','tShape'].includes(shape)||target==='nonSlime'&&['unrestricted','tShape'].includes(shape))throw new Error('此区块种类不支持所选形状。');
     const started=performance.now(),{cmin:minChunk,cmax:maxChunk,zmin:minChunkZ,zmax:maxChunkZ}=searchBounds(range,centerX,centerZ);
@@ -314,7 +315,7 @@ const SlimeFarm = (() => {
     return {seed:String(seed),range,centerX,centerZ,target,shape,gridChunks:n*h,found:true,count:best.count,width:best.maxX-best.minX+1,height:best.maxZ-best.minZ+1,chunks,blocks:{minX:chunks.minX*16,maxX:chunks.maxX*16+15,minZ:chunks.minZ*16,maxZ:chunks.maxZ*16+15},coordinates,rectangles,biome,elapsedMs:performance.now()-started};
   }
   function search(seed,range,onProgress=()=>{},biomeData=null,spawnY=1,centerX=0,centerZ=0) {
-    if(!Number.isInteger(range)||range<1||range>108000) throw new Error('搜索范围必须是 1～108000 的整数（默认 4000）。');
+    if(!Number.isInteger(range)||range<1||range>MAX_SEARCH_RANGE) throw new Error('搜索范围必须是 1～216000 的整数（默认 4000）。');
     const t0=performance.now();
     onProgress({phase:'kernel',progress:0.01,message:'建立逐格圆环权重与严格上界…'});
     const k=kernels(),{minX,maxX,minZ,maxZ,cmin,cmax,zmin,zmax}=searchBounds(range,centerX,centerZ),cn=cmax-cmin+1,zn=zmax-zmin+1;
@@ -412,7 +413,7 @@ const SlimeFarm = (() => {
       grid:g.grid,gridMin:g.minChunk,gridMax:g.maxChunk,gridN:g.n,gridMinZ:g.minChunkZ,gridMaxZ:g.maxChunkZ,gridH:g.h};
   }
   function searchLeastSlime(seed,range,onProgress=()=>{},biomeData=null,centerX=0,centerZ=0){
-    if(!Number.isInteger(range)||range<1||range>108000)throw new Error('搜索范围必须是 1～108000 的整数。');
+    if(!Number.isInteger(range)||range<1||range>MAX_SEARCH_RANGE)throw new Error('搜索范围必须是 1～216000 的整数。');
     const started=performance.now(),k=kernels(),{minX,maxX,minZ,maxZ,cmin,cmax,zmin,zmax}=searchBounds(range,centerX,centerZ),cn=cmax-cmin+1,zn=zmax-zmin+1;
     const g=makeGrid(seed,cmin-10,cmax+10,onProgress,zmin-10,zmax+10),grid=g.grid,n=g.n;
     const codes={desert:1,snowy:2,other:3},required=codes[biomeData?.category];
@@ -805,7 +806,7 @@ const SlimeFarm = (() => {
       litematic:{formatVersion:5,minecraftDataVersion:dataVersion(version),note:'数据版本来自目标 Java 正式版服务端 version.json。'},
       limitations:['最大值指单层候选面积，不等于每小时产量。','存档未覆盖的群系暂按可刷计；需完整覆盖才能确认实际世界的最大值。',l.type==='theory'?'理论版尚未可靠量化小型史莱姆的滞留时间和 70 怪物上限的影响；条件试算不等于实际产量，也不证明全局最高效率。':'未过滤地形、世界出生点、其他玩家、怪物上限和模拟距离。','P 为挂机方块水平中心；按需求忽略玩家与刷怪脚部的微小高差。',l.type==='uncut'?'不切门版提供目标门框与门块布局，不提供施工设备或地狱侧处理系统。':'切门版提供成品门块布局，不提供切门设备或地狱侧处理系统。',...(l.type==='theory'?[`理论版采用棋盘门布局，并在必要的边缘格补门；每个可刷怪地板格周围 3×3 范围内至少有一个门块，中、大型史莱姆自然生成时即可碰到门。`,'每小时粘液球条件试算假设门块稳定存在、史莱姆成功传送且地狱侧全部收集；未经过切门存活或游戏内产量验收。']:[]),...(l.type==='uncut'&&roofMaterial==='air'?['不切门版顶层填充选择空气会留下可刷怪的黑曜石表面；满足刷怪条件时，黑曜石上面会刷怪，需另行防刷怪。']:[]),'没有宣称已在每个游戏版本里实机测试。']};
   }
-  return {APP_VERSION,INNER,OUTER,GLASS,WIDTH,MATERIALS,DATA_VERSIONS,material,materialState,roofState,biomeBlock,netherPortalRange,parseSeed,isSlime,inAnnulus,portalAt,orientChunks,kernels,makeGrid,withGrid,searchBounds,findTShape,searchChunkCluster,searchLeastSlime,search,layout,schematic,gzip,gzipStored,report,packIndices};
+  return {APP_VERSION,MAX_SEARCH_RANGE,INNER,OUTER,GLASS,WIDTH,MATERIALS,DATA_VERSIONS,material,materialState,roofState,biomeBlock,netherPortalRange,parseSeed,isSlime,inAnnulus,portalAt,orientChunks,kernels,makeGrid,withGrid,searchBounds,findTShape,searchChunkCluster,searchLeastSlime,search,layout,schematic,gzip,gzipStored,report,packIndices};
 })();
 if(typeof module!=='undefined'&&module.exports)module.exports=SlimeFarm;
 if(typeof self!=='undefined')self.SlimeFarm=SlimeFarm;

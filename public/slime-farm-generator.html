@@ -54,7 +54,7 @@ body:not(.has-result) .rightcol>.stats,body:not(.has-result) .result-details{dis
 <div class="field"><label class="title" for="version">Java 版版本</label><select id="version" aria-describedby="versionHelp"></select><span class="help" id="versionHelp">Java 原版史莱姆区块算法；不适用于基岩版或更改区块算法的服务器。</span></div>
 <div class="field"><label class="title" for="seed">世界种子</label><input id="seed" type="text" placeholder="粘贴 /seed 的完整数字" autocomplete="off" spellcheck="false"><span class="help" id="seedHint">支持完整 64 位种子，负数不会丢失精度。</span></div>
 <div class="row2"><div class="field"><label class="title" for="centerX">搜索中心 X</label><input id="centerX" type="number" min="-29999000" max="29999000" step="1" value="0"></div><div class="field"><label class="title" for="centerZ">搜索中心 Z</label><input id="centerZ" type="number" min="-29999000" max="29999000" step="1" value="0"></div></div>
-<div class="row2"><div class="field"><label class="title" for="range">搜索范围 ±</label><input id="range" type="number" min="1" max="108000" step="1" value="4000"><span class="help">从搜索中心出发，X、Z 各向正负延伸；大范围搜索需要更久。</span></div><div class="field"><label class="title" for="baseY" data-y-label>Y1 地板高度</label><input id="baseY" type="number" min="-64" max="38" step="1" value="-64"><span class="help" id="heightHint">Y-63 门块和堆肥桶</span></div></div>
+<div class="row2"><div class="field"><label class="title" for="range">搜索范围 ±</label><input id="range" type="number" min="1" max="216000" step="1" value="4000"><span class="help">从搜索中心出发，X、Z 各向正负延伸；上限 ±216000 格；上限处仅主网格约 696 MiB，另需搜索、预览等内存；范围翻倍，面积约变四倍。</span></div><div class="field"><label class="title" for="baseY" data-y-label>Y1 地板高度</label><input id="baseY" type="number" min="-64" max="38" step="1" value="-64"><span class="help" id="heightHint">Y-63 门块和堆肥桶</span></div></div>
 <div class="field"><label class="title">世界存档群系</label><button type="button" id="importZone">导入存档文件</button><input id="worldFiles" class="hidden" type="file" accept=".mca,.dat" multiple><span class="help">点击可多选主世界 region 文件夹里的 r.x.z.mca 和存档根目录的 level.dat；也可把世界或 region 文件夹拖到按钮上。只导入 level.dat 可核对种子和版本，但没有群系；只导入 .mca 可读取已保存区块的群系和记录的古城范围。文件只在本机读取，不会上传。</span><span class="help">当前程序用种子计算史莱姆区块，但尚未接入逐版本的种子群系和古城生成算法。未导入 .mca 时，面积只按史莱姆区块计算；导入后，未保存或未选中的区块仍暂按可刷计，并显示未覆盖格数。</span><div id="importVersionHelp"><p><strong>1.16～1.18.2：</strong>若有对应版本的世界生成配置，可从种子推算群系，辅助判断下雪风险；不是每个补丁版本都有独立配置。本程序目前不做这项种子推算，世界升降级后也不能把种子推算结果当作旧区块的实际群系。</p><p><strong>1.19～1.21.4：</strong>其中有配置可推算深暗之域群系和古城候选位置；古城候选中心不等于完整结构范围，不能据此精确扣除每一格刷怪面积。本程序导入存档后读取实际保存的群系和古城结构整体包围盒，仍不是逐方块的古城结构图。</p><p><strong>1.21.5～1.21.11、26.1～26.3：</strong>核对的 Cubiomes 主项目版本表未列出这些版本的配置，不能直接套用旧版结果。26.3 新增“斑驳森林”群系，正说明旧版群系配置可能遗漏新内容；本程序同样不声称能仅凭种子重建这些版本的群系。</p></div><span class="help">若存档经过升降级、魔改区块等原因，实际群系可能与种子推算不同，请导入存档。存档只能反映已保存的区块；降雪是否落在施工方块上，还需结合露天情况和天气现场核对。</span><div class="help" id="biomeStatus">尚未导入；仅按史莱姆区块几何面积搜索，未校验实际群系和古城。</div></div>
 <div class="field"><label class="title">投影类型</label>
 <label class="typechoice"><input type="radio" name="farmType" value="checker" checked><strong>棋盘门版</strong><em>已实现</em></label>
@@ -96,7 +96,7 @@ body:not(.has-result) .rightcol>.stats,body:not(.has-result) .result-details{dis
 <div class="field"><label class="title" for="clusterVersion">Java 版版本</label><select id="clusterVersion"></select><span class="help">所列 Java 版本使用相同的传统史莱姆区块公式；此页面不按地形过滤。无史莱姆区块页面会按导入存档的群系筛选。</span></div>
 <div class="field"><label class="title" for="clusterSeed">世界种子</label><input id="clusterSeed" type="text" placeholder="粘贴 /seed 的完整数字" autocomplete="off" spellcheck="false"><span class="help" id="clusterSeedHint">支持完整 64 位数字或文字种子。</span></div>
 <div class="row2"><div class="field"><label class="title" for="clusterCenterX">搜索中心 X</label><input id="clusterCenterX" type="number" min="-29999000" max="29999000" step="1" value="0"></div><div class="field"><label class="title" for="clusterCenterZ">搜索中心 Z</label><input id="clusterCenterZ" type="number" min="-29999000" max="29999000" step="1" value="0"></div></div>
-<div class="field"><label class="title" for="clusterRange">搜索范围 ±</label><input id="clusterRange" type="number" min="1" max="108000" step="1" value="4000"><span class="help">正方形、矩形、无限制：搜索与方块 X/Z ∈ [中心−R,中心+R] 相交的区块，边界区块整块参与；刷怪范围内：逐个检查该范围的挂机方块中心。</span></div>
+<div class="field"><label class="title" for="clusterRange">搜索范围 ±</label><input id="clusterRange" type="number" min="1" max="216000" step="1" value="4000"><span class="help">正方形、矩形、无限制：搜索与方块 X/Z ∈ [中心−R,中心+R] 相交的区块，边界区块整块参与；刷怪范围内：逐个检查该范围的挂机方块中心。上限 ±216000 格，仅主网格约 696 MiB，另需搜索内存；内存较小的设备请减小范围。</span></div>
 <div class="field"><label class="title">形状</label><div class="shapechoices"><label><input type="radio" name="clusterShape" value="square" checked> 正方形</label><label><input type="radio" name="clusterShape" value="rectangle"> 矩形</label><label id="tShapeChoice"><input type="radio" name="clusterShape" value="tShape"> 格调形（T形）</label><label id="unrestrictedChoice"><input type="radio" name="clusterShape" value="unrestricted"> 无限制</label><label id="spawnRangeChoice" class="hidden"><input type="radio" name="clusterShape" value="spawnRange"> 刷怪范围内</label></div><span class="help" id="clusterShapeHelp">格调形是两个矩形相接的 T 形，自动比较四个朝向；横臂两侧都须伸出，竖干可偏心。选中形状内部必须全部是史莱姆区块。</span></div>
 <div id="clusterBiomeFields"><div id="nonSlimeBiomeOptions" class="hidden"><div class="notebox">史莱姆区块会略微降低其他怪效率，所以这最适合用来找做刷怪塔！仅当史莱姆能够在附近生成并占用刷怪上限时才会产生这种影响。</div><div class="field" style="margin-top:17px"><label class="title" for="clusterBiome">目标群系</label><select id="clusterBiome"><option value="desert">沙漠</option><option value="snowy">雪原</option><option value="other" selected>其它</option></select><span class="help">沙漠群系普通僵尸刷出比例会降低，别的怪相对比例可能提高；雪原则是普通骷髅比例降低。原版同时加入尸壳、流浪者；它们的自然生成还要求露天，实际收益取决于塔的结构。</span></div></div><div class="field"><label class="title" for="clusterBiomeY">计划刷怪层脚部 Y</label><input id="clusterBiomeY" type="number" min="-64" max="319" step="1" value="64"><span class="help">存档群系按这个高度读取；改动高度后需要重新导入。目标“雪原”只指 snowy_plains，冰刺之地等归入“其它”；降雪提醒则覆盖已读取到的各种可降雪群系。</span></div><div class="field"><label class="title">世界存档群系</label><button type="button" id="clusterImportZone" class="btn wide">导入存档文件</button><input id="clusterWorldFiles" class="hidden" type="file" accept=".mca,.dat" multiple><span class="help">选择主世界 region 文件夹中的 r.x.z.mca，可同时选 level.dat 核对种子；也可拖入世界或 region 文件夹。连史莱姆块搜索可只用种子，导入存档后增加古城、降雪提醒。无史莱姆块的群系筛选必须导入存档：正方形和矩形要求每个目标区块的 16 个群系采样都匹配；“刷怪范围内”要求圆环中每个非史莱姆方块的群系采样都匹配。未保存区域不猜测群系；范围未覆盖完整时提醒也可能不完整。若存档经过升降级或改动区块，实际可能与种子有出入。</span><div class="help" id="clusterBiomeStatus">尚未导入主世界存档群系。</div></div></div>
 <button class="btn primary wide" id="clusterSearchBtn">开始寻找</button><button class="btn danger wide hidden" id="clusterStopBtn" style="margin-top:8px">停止搜索</button><div class="progress"><div class="progressbar" id="clusterProgressBar"></div></div><div class="status" id="clusterStatus">尚未搜索。</div><div class="notebox error hidden" id="clusterError"></div>
@@ -130,7 +130,7 @@ body:not(.has-result) .rightcol>.stats,body:not(.has-result) .result-details{dis
 </div></aside><div class="clusterresult"><div class="clusterstats"><div class="stat"><div class="label">区域面积（平方格）</div><div class="value accent" id="flowerArea">—</div><div class="sub" id="flowerDistance">中心距搜索中心 — 格</div></div><div class="stat"><div class="label">X × Z 尺寸</div><div class="value small" id="flowerSize">—</div><div class="sub" id="flowerHeight">最佳高度 Y —</div></div><div class="stat"><div class="label">覆盖花种</div><div class="value" id="flowerCount">—</div><div class="sub" id="flowerCountSub">种</div></div></div>
 <section class="card"><div class="cardhead"><h3>最佳区域</h3></div><div class="cardbody"><div class="coord" id="flowerCoords">搜索后显示 X / Z 边界及最佳 Y。</div><div class="help" id="flowerProof">所有花种须在同一 Y 层，且矩形不超过设置的最大 X/Z 尺寸。优先选择区域中心水平距离原点最近的位置，同距离取更小面积。</div><details id="flowerListDetails" class="hidden"><summary>查看各花种示例坐标</summary><div class="chunklist" id="flowerList"></div></details><div class="notebox warn">种子结果是可刷花的候选方块。实际施工还要检查地形、草方块及上方空间；花种会在草地施骨粉后按目标位置群系生成。当前不生成刷花机投影。</div></div></section></div></div>
 </section>
-<details class="card" open><summary>更新报告 · v1.16.0 · 2026-10-02</summary><div class="cardbody"><ul><li>搜索、存档读取和投影导出均在使用者本机运行，无需上传种子或存档。</li><li>大范围史莱姆区块计算支持 WebGPU 加速；自动模式在不支持或失败时使用 CPU，小范围直接使用 CPU。形状与评分仍按原规则计算。</li><li>各工具支持设置搜索原点；连史莱姆区块新增格调形（T 形）。</li><li>花种搜索按版本提供目标选项，支持 Y 范围和区域尺寸限制；暂不生成刷花机投影，等待模板接入。</li></ul><p>感谢sunnyslopes、minelogy、li_zi_o_o的代码参考！让我们的搜索更快</p></div></details>
+<details class="card" open><summary>更新报告 · v1.16.0 · 2026-10-02</summary><div class="cardbody"><ul><li>史莱姆相关搜索上限提高到 ±216000 格，范围输入旁注明内存占用。</li><li>搜索、存档读取和投影导出均在使用者本机运行，无需上传种子或存档。</li><li>大范围史莱姆区块计算支持 WebGPU 加速；自动模式在不支持或失败时使用 CPU，小范围直接使用 CPU。形状与评分仍按原规则计算。</li><li>各工具支持设置搜索原点；连史莱姆区块新增格调形（T 形）。</li><li>花种搜索按版本提供目标选项，支持 Y 范围和区域尺寸限制；暂不生成刷花机投影，等待模板接入。</li></ul><p>感谢sunnyslopes、minelogy、li_zi_o_o的代码参考！让我们的搜索更快</p></div></details>
 <aside class="feedback-callout" aria-labelledby="feedbackTitle"><h2 id="feedbackTitle">反馈与建议</h2><p>反馈 BUG 或修改建议，可在 UP 主对应视频的评论区留言。有更多需求，也可私聊 UP 主。</p></aside>
 <footer>生电农场专用投影生成器 v1.16.0 · 所有计算在本机浏览器执行 · 没有遥测、外部脚本或在线依赖</footer>
 </div><div id="toast" class="hidden" role="status"></div>
@@ -139,6 +139,7 @@ body:not(.has-result) .rightcol>.stats,body:not(.has-result) .result-details{dis
 'use strict';
 const SlimeFarm = (() => {
   const APP_VERSION = '1.16.0';
+  const MAX_SEARCH_RANGE = 216000;
   const INNER = 24, OUTER = 128, GLASS = 160, WIDTH = 321;
   const MASK48 = (1n << 48n) - 1n, MULT = 0x5deece66dn;
   const SALT = 987234911n, LONG_MIN = -(1n << 63n), LONG_MAX = (1n << 63n)-1n;
@@ -367,7 +368,7 @@ const SlimeFarm = (() => {
   // Search chunk-aligned shapes inside the block square around centerX/centerZ.
   // A chunk is included when its block area intersects that square.
   function searchChunkCluster(seed,range,target='slime',shape='square',onProgress=()=>{},biomeData=null,centerX=0,centerZ=0){
-    if(!Number.isInteger(range)||range<1||range>108000)throw new Error('搜索范围必须是 1～108000 的整数。');
+    if(!Number.isInteger(range)||range<1||range>MAX_SEARCH_RANGE)throw new Error('搜索范围必须是 1～216000 的整数。');
     if(!['slime','nonSlime'].includes(target))throw new Error('未知区块种类。');
     if(!['square','rectangle','unrestricted','tShape'].includes(shape)||target==='nonSlime'&&['unrestricted','tShape'].includes(shape))throw new Error('此区块种类不支持所选形状。');
     const started=performance.now(),{cmin:minChunk,cmax:maxChunk,zmin:minChunkZ,zmax:maxChunkZ}=searchBounds(range,centerX,centerZ);
@@ -451,7 +452,7 @@ const SlimeFarm = (() => {
     return {seed:String(seed),range,centerX,centerZ,target,shape,gridChunks:n*h,found:true,count:best.count,width:best.maxX-best.minX+1,height:best.maxZ-best.minZ+1,chunks,blocks:{minX:chunks.minX*16,maxX:chunks.maxX*16+15,minZ:chunks.minZ*16,maxZ:chunks.maxZ*16+15},coordinates,rectangles,biome,elapsedMs:performance.now()-started};
   }
   function search(seed,range,onProgress=()=>{},biomeData=null,spawnY=1,centerX=0,centerZ=0) {
-    if(!Number.isInteger(range)||range<1||range>108000) throw new Error('搜索范围必须是 1～108000 的整数（默认 4000）。');
+    if(!Number.isInteger(range)||range<1||range>MAX_SEARCH_RANGE) throw new Error('搜索范围必须是 1～216000 的整数（默认 4000）。');
     const t0=performance.now();
     onProgress({phase:'kernel',progress:0.01,message:'建立逐格圆环权重与严格上界…'});
     const k=kernels(),{minX,maxX,minZ,maxZ,cmin,cmax,zmin,zmax}=searchBounds(range,centerX,centerZ),cn=cmax-cmin+1,zn=zmax-zmin+1;
@@ -549,7 +550,7 @@ const SlimeFarm = (() => {
       grid:g.grid,gridMin:g.minChunk,gridMax:g.maxChunk,gridN:g.n,gridMinZ:g.minChunkZ,gridMaxZ:g.maxChunkZ,gridH:g.h};
   }
   function searchLeastSlime(seed,range,onProgress=()=>{},biomeData=null,centerX=0,centerZ=0){
-    if(!Number.isInteger(range)||range<1||range>108000)throw new Error('搜索范围必须是 1～108000 的整数。');
+    if(!Number.isInteger(range)||range<1||range>MAX_SEARCH_RANGE)throw new Error('搜索范围必须是 1～216000 的整数。');
     const started=performance.now(),k=kernels(),{minX,maxX,minZ,maxZ,cmin,cmax,zmin,zmax}=searchBounds(range,centerX,centerZ),cn=cmax-cmin+1,zn=zmax-zmin+1;
     const g=makeGrid(seed,cmin-10,cmax+10,onProgress,zmin-10,zmax+10),grid=g.grid,n=g.n;
     const codes={desert:1,snowy:2,other:3},required=codes[biomeData?.category];
@@ -942,7 +943,7 @@ const SlimeFarm = (() => {
       litematic:{formatVersion:5,minecraftDataVersion:dataVersion(version),note:'数据版本来自目标 Java 正式版服务端 version.json。'},
       limitations:['最大值指单层候选面积，不等于每小时产量。','存档未覆盖的群系暂按可刷计；需完整覆盖才能确认实际世界的最大值。',l.type==='theory'?'理论版尚未可靠量化小型史莱姆的滞留时间和 70 怪物上限的影响；条件试算不等于实际产量，也不证明全局最高效率。':'未过滤地形、世界出生点、其他玩家、怪物上限和模拟距离。','P 为挂机方块水平中心；按需求忽略玩家与刷怪脚部的微小高差。',l.type==='uncut'?'不切门版提供目标门框与门块布局，不提供施工设备或地狱侧处理系统。':'切门版提供成品门块布局，不提供切门设备或地狱侧处理系统。',...(l.type==='theory'?[`理论版采用棋盘门布局，并在必要的边缘格补门；每个可刷怪地板格周围 3×3 范围内至少有一个门块，中、大型史莱姆自然生成时即可碰到门。`,'每小时粘液球条件试算假设门块稳定存在、史莱姆成功传送且地狱侧全部收集；未经过切门存活或游戏内产量验收。']:[]),...(l.type==='uncut'&&roofMaterial==='air'?['不切门版顶层填充选择空气会留下可刷怪的黑曜石表面；满足刷怪条件时，黑曜石上面会刷怪，需另行防刷怪。']:[]),'没有宣称已在每个游戏版本里实机测试。']};
   }
-  return {APP_VERSION,INNER,OUTER,GLASS,WIDTH,MATERIALS,DATA_VERSIONS,material,materialState,roofState,biomeBlock,netherPortalRange,parseSeed,isSlime,inAnnulus,portalAt,orientChunks,kernels,makeGrid,withGrid,searchBounds,findTShape,searchChunkCluster,searchLeastSlime,search,layout,schematic,gzip,gzipStored,report,packIndices};
+  return {APP_VERSION,MAX_SEARCH_RANGE,INNER,OUTER,GLASS,WIDTH,MATERIALS,DATA_VERSIONS,material,materialState,roofState,biomeBlock,netherPortalRange,parseSeed,isSlime,inAnnulus,portalAt,orientChunks,kernels,makeGrid,withGrid,searchBounds,findTShape,searchChunkCluster,searchLeastSlime,search,layout,schematic,gzip,gzipStored,report,packIndices};
 })();
 if(typeof module!=='undefined'&&module.exports)module.exports=SlimeFarm;
 if(typeof self!=='undefined')self.SlimeFarm=SlimeFarm;
@@ -1046,7 +1047,7 @@ fn grid(@builtin(global_invocation_id) id:vec3<u32>,@builtin(local_invocation_in
   async function run(kind,data,onProgress=()=>{}) {
     const {seed,range,centerX=0,centerZ=0,compute='auto'}=data;
     if(!['auto','cpu','gpu'].includes(compute))throw new Error('未知本机计算方式。');
-    if(!Number.isInteger(range)||range<1||range>108000)throw new Error('搜索范围必须是 1～108000 的整数。');
+    if(!Number.isInteger(range)||range<1||range>SlimeFarm.MAX_SEARCH_RANGE)throw new Error('搜索范围必须是 1～216000 的整数。');
     const bounds=SlimeFarm.searchBounds(range,centerX,centerZ),halo=kind==='farm'||data.shape==='spawnRange'?10:0;
     for(const k of ['cmin','zmin'])bounds[k]-=halo;
     for(const k of ['cmax','zmax'])bounds[k]+=halo;
@@ -1611,7 +1612,7 @@ function searchCenter(prefix,range){
  if(Math.max(Math.abs(centerX),Math.abs(centerZ))+range>29999000)throw new Error('搜索范围须在 ±29999000 内，为农场和刷怪范围预留边界空间。');
  return {centerX,centerZ};
 }
-function config(){const parsed=SlimeFarm.parseSeed($('seed').value);if(saveInfo?.seed&&parsed.seed!==saveInfo.seed)throw new Error(`输入种子 ${parsed.seed} 与导入存档的种子 ${saveInfo.seed} 不一致。请检查是否选错世界。`);$('seedHint').textContent=parsed.text?`文字种子按 Java hashCode 转为：${parsed.seed}`:`实际使用种子：${parsed.seed}`;const h=heightConfig();const range=Number($('range').value);if(!Number.isInteger(range)||range<1||range>108000)throw new Error('搜索范围必须是 1～108000 的整数。');return {...h,...parsed,range,...searchCenter('',range)};}
+function config(){const parsed=SlimeFarm.parseSeed($('seed').value);if(saveInfo?.seed&&parsed.seed!==saveInfo.seed)throw new Error(`输入种子 ${parsed.seed} 与导入存档的种子 ${saveInfo.seed} 不一致。请检查是否选错世界。`);$('seedHint').textContent=parsed.text?`文字种子按 Java hashCode 转为：${parsed.seed}`:`实际使用种子：${parsed.seed}`;const h=heightConfig();const range=Number($('range').value);if(!Number.isInteger(range)||range<1||range>SlimeFarm.MAX_SEARCH_RANGE)throw new Error('搜索范围必须是 1～216000 的整数。');return {...h,...parsed,range,...searchCenter('',range)};}
 function activeBiomes(){return worldBiomes?.y===Number($('baseY').value)+1?worldBiomes:null;}
 async function importWorldData(items){
   clearError();const entries=[...items].map(v=>v.file?v:{file:v,path:v.webkitRelativePath||v.name});
@@ -1789,7 +1790,7 @@ function startCluster(){
  stopCluster();clearClusterResult();$('clusterError').classList.add('hidden');let seed,range,center,biomes=null;
  try{
    seed=SlimeFarm.parseSeed($('clusterSeed').value);range=Number($('clusterRange').value);center=searchCenter('cluster',range);
-   if(!Number.isInteger(range)||range<1||range>108000)throw new Error('搜索范围必须是 1～108000 的整数。');
+   if(!Number.isInteger(range)||range<1||range>SlimeFarm.MAX_SEARCH_RANGE)throw new Error('搜索范围必须是 1～216000 的整数。');
    if(clusterBiomes&&clusterSaveInfo?.seed&&clusterSaveInfo.seed!==seed.seed)throw new Error(`输入种子 ${seed.seed} 与存档种子 ${clusterSaveInfo.seed} 不一致。`);
    if(clusterMode()==='nonSlime'){
      const y=Number($('clusterBiomeY').value);

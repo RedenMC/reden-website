@@ -16,6 +16,8 @@ The page supports Java slime chunk search, four portal layouts and `.litematic` 
 
 ## Browser hardware (v1.16.0)
 
+Slime-related farm and chunk searches accept a radius of up to 216,000 blocks (default 4,000). Structure search remains capped at 108,000 and flower search at 10,800. The maximum slime grid including the annulus halo is about 696 MiB before temporary search, result and preview memory; GPU mode still reconstructs this CPU grid. Doubling the radius quadruples the area. Boundary tests validate acceptance without allocating the maximum grid. A separate Node CPU rectangle search at radius 216,000 with seed 0 processed 729,054,001 chunks in 50,957 ms with about 746 MiB process RSS on the test machine (best rectangle: 9 chunks). This is not a maximum-range browser or GPU benchmark.
+
 The page includes a visible v1.16.0 update report dated 2026-10-02 covering local CPU/GPU processing, configurable search centers, T shapes and version-aware flower searches. It credits the code references with: 感谢sunnyslopes、minelogy、li_zi_o_o的代码参考！让我们的搜索更快
 
 All searching, saved-world reading and exports run on the user's device. This update adds optional WebGPU slime-grid generation inside the existing Web Workers. No compute server, API endpoint, telemetry, external script or CUDA binary is added. JavaScript CPU search remains available. HTTPS (or localhost for development), browser WebGPU support and an available adapter are required for GPU mode.

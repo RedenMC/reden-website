@@ -92,7 +92,7 @@ fn grid(@builtin(global_invocation_id) id:vec3<u32>,@builtin(local_invocation_in
   async function run(kind,data,onProgress=()=>{}) {
     const {seed,range,centerX=0,centerZ=0,compute='auto'}=data;
     if(!['auto','cpu','gpu'].includes(compute))throw new Error('未知本机计算方式。');
-    if(!Number.isInteger(range)||range<1||range>108000)throw new Error('搜索范围必须是 1～108000 的整数。');
+    if(!Number.isInteger(range)||range<1||range>SlimeFarm.MAX_SEARCH_RANGE)throw new Error('搜索范围必须是 1～216000 的整数。');
     const bounds=SlimeFarm.searchBounds(range,centerX,centerZ),halo=kind==='farm'||data.shape==='spawnRange'?10:0;
     for(const k of ['cmin','zmin'])bounds[k]-=halo;
     for(const k of ['cmax','zmax'])bounds[k]+=halo;
