@@ -1,0 +1,32 @@
+<!doctype html><meta charset="utf-8"><title>本机计算回归检查</title>
+<button id="run">运行真实 WebGPU 对照</button><pre id="status">等待运行</pre>
+<script src="core.js"></script><script src="browser_compute.js"></script>
+<script>
+document.querySelector('#run').onclick=async()=>{
+ const status=document.querySelector('#status');status.textContent='运行中';
+ const rows=[],equal=(a,b)=>{if(a.length!==b.length||a.some((v,i)=>v!==b[i]))throw Error('网格不一致');};
+ try{
+  const cases=[['0',-19,1,33,1],['-1',-1200,513,-17,517],['-9223372036854775808',-2510,1030,1921,1031],['9223372036854775807',1874000,513,-1874500,517],['114514',-2050,4097,9000,4097]];
+  // Force the rare Java nextInt(10) rejection path at chunk 0,0.
+  const mod=1n<<48n,m=0x5deece66dn;let inv=1n;for(let i=0;i<48;i++)inv=inv*(2n-m*inv)&(mod-1n);
+  for(let bits=2147483640n;bits<=2147483647n;bits++){
+   const state=((bits<<17n)-11n)*inv&(mod-1n);
+   cases.push([String(state^987234911n^m),0,1,0,1]);
+  }
+  for(const [seed,x,n,z,h] of cases){
+   const before=performance.now(),cpu=SlimeFarm.makeGrid(seed,x,x+n-1,()=>{},z,z+h-1),cpuMs=performance.now()-before;
+   const start=performance.now(),gpu=await SlimeLocalCompute.grid(seed,{cmin:x,cmax:x+n-1,zmin:z,zmax:z+h-1});
+   equal(cpu.grid,gpu.grid);rows.push({seed,cells:n*h,cpuMs,gpuMs:performance.now()-start,result:'PASS'});status.textContent=JSON.stringify(rows,null,2);
+  }
+  for(const [kind,shape,target] of [['farm',null,null],['cluster','square','slime'],['cluster','rectangle','slime'],['cluster','tShape','slime'],['cluster','unrestricted','slime'],['cluster','square','nonSlime'],['cluster','rectangle','nonSlime'],['cluster','spawnRange','nonSlime']]){
+   const chunks=new Map();for(let z=-20;z<=20;z++)for(let x=-20;x<=20;x++)chunks.set(x+','+z,new Uint8Array(16).fill(3));
+   const params={seed:'0',range:128,centerX:-19,centerZ:37,target,shape,biomes:target==='nonSlime'?{chunks,y:64,category:'other'}:null};
+   const cpu=await SlimeLocalCompute.run(kind,{...params,compute:'cpu'}),gpu=await SlimeLocalCompute.run(kind,{...params,compute:'gpu'});
+   const clean=r=>{const {elapsedMs,execution,grid,...rest}=r;return rest;};
+   if(JSON.stringify(clean(cpu))!==JSON.stringify(clean(gpu)))throw Error('完整搜索不一致 '+kind+' '+shape);
+   if(cpu.grid)equal(cpu.grid,gpu.grid);rows.push({kind,shape,result:'FULL SEARCH PASS'});
+  }
+  status.textContent='PASS\n'+JSON.stringify(rows,null,2);
+ }catch(e){status.textContent='FAIL '+e.message+'\n'+JSON.stringify(rows,null,2);}
+};
+</script>

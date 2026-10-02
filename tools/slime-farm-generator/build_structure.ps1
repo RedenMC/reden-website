@@ -23,6 +23,6 @@ $sources = @(
 & (Join-Path $EmsdkRoot 'upstream/emscripten/emcc.exe') @sources -O3 -fwrapv `
     -s SINGLE_FILE=1 -s MODULARIZE=1 -s EXPORT_NAME=createStructureEngine `
     -s ENVIRONMENT=worker,node -s FILESYSTEM=0 -s ALLOW_MEMORY_GROWTH=1 `
-    '-sEXPORTED_FUNCTIONS=["_structure_profile","_structure_init","_structure_scan_row","_structure_result_at"]' `
+    '-sEXPORTED_FUNCTIONS=["_structure_profile","_structure_init","_structure_scan_row","_structure_result_at","_flower_scan_row","_flower_result_word","_flower_noise_at","_flower_biome_at","_flower_prepare","_flower_prepared_mask","_flower_prepared_layer","_flower_layer_word"]' `
     -o (Join-Path $here 'structure_engine.js')
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

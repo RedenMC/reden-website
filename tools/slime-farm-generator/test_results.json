@@ -1,0 +1,19 @@
+{
+  "gpuTests": "PASS\n[\n  {\n    \"seed\": \"0\",\n    \"cells\": 1,\n    \"cpuMs\": 0,\n    \"gpuMs\": 329.2000000476837,\n    \"result\": \"PASS\"\n  },\n  {\n    \"seed\": \"-1\",\n    \"cells\": 265221,\n    \"cpuMs\": 21.700000047683716,\n    \"gpuMs\": 47,\n    \"result\": \"PASS\"\n  },\n  {\n    \"seed\": \"-9223372036854775808\",\n    \"cells\": 1061930,\n    \"cpuMs\": 77.29999995231628,\n    \"gpuMs\": 69,\n    \"result\": \"PASS\"\n  },\n  {\n    \"seed\": \"9223372036854775807\",\n    \"cells\": 265221,\n    \"cpuMs\": 18.199999928474426,\n    \"gpuMs\": 47.60000002384186,\n    \"result\": \"PASS\"\n  },\n  {\n    \"seed\": \"114514\",\n    \"cells\": 16785409,\n    \"cpuMs\": 1047.2999999523163,\n    \"gpuMs\": 235.30000007152557,\n    \"result\": \"PASS\"\n  },\n  {\n    \"seed\": \"181072394636955\",\n    \"cells\": 1,\n    \"cpuMs\": 0,\n    \"gpuMs\": 36.10000002384186,\n    \"result\": \"PASS\"\n  },\n  {\n    \"seed\": \"101451874750107\",\n    \"cells\": 1,\n    \"cpuMs\": 0,\n    \"gpuMs\": 39.89999997615814,\n    \"result\": \"PASS\"\n  },\n  {\n    \"seed\": \"21795914567323\",\n    \"cells\": 1,\n    \"cpuMs\": 0,\n    \"gpuMs\": 40.10000002384186,\n    \"result\": \"PASS\"\n  },\n  {\n    \"seed\": \"223650361953947\",\n    \"cells\": 1,\n    \"cpuMs\": 0,\n    \"gpuMs\": 42.10000002384186,\n    \"result\": \"PASS\"\n  },\n  {\n    \"seed\": \"144064329207451\",\n    \"cells\": 1,\n    \"cpuMs\": 0.10000002384185791,\n    \"gpuMs\": 39.09999990463257,\n    \"result\": \"PASS\"\n  },\n  {\n    \"seed\": \"64443800931995\",\n    \"cells\": 1,\n    \"cpuMs\": 0,\n    \"gpuMs\": 37.5,\n    \"result\": \"PASS\"\n  },\n  {\n    \"seed\": \"266262815362715\",\n    \"cells\": 1,\n    \"cpuMs\": 0,\n    \"gpuMs\": 37.700000047683716,\n    \"result\": \"PASS\"\n  },\n  {\n    \"seed\": \"186642153918107\",\n    \"cells\": 1,\n    \"cpuMs\": 0,\n    \"gpuMs\": 35.799999952316284,\n    \"result\": \"PASS\"\n  },\n  {\n    \"kind\": \"farm\",\n    \"shape\": null,\n    \"result\": \"FULL SEARCH PASS\"\n  },\n  {\n    \"kind\": \"cluster\",\n    \"shape\": \"square\",\n    \"result\": \"FULL SEARCH PASS\"\n  },\n  {\n    \"kind\": \"cluster\",\n    \"shape\": \"rectangle\",\n    \"result\": \"FULL SEARCH PASS\"\n  },\n  {\n    \"kind\": \"cluster\",\n    \"shape\": \"tShape\",\n    \"result\": \"FULL SEARCH PASS\"\n  },\n  {\n    \"kind\": \"cluster\",\n    \"shape\": \"unrestricted\",\n    \"result\": \"FULL SEARCH PASS\"\n  },\n  {\n    \"kind\": \"cluster\",\n    \"shape\": \"square\",\n    \"result\": \"FULL SEARCH PASS\"\n  },\n  {\n    \"kind\": \"cluster\",\n    \"shape\": \"rectangle\",\n    \"result\": \"FULL SEARCH PASS\"\n  },\n  {\n    \"kind\": \"cluster\",\n    \"shape\": \"spawnRange\",\n    \"result\": \"FULL SEARCH PASS\"\n  }\n]",
+  "farmStatus": [
+    "",
+    "搜索完成（本机 GPU）：64,016,001 个候选中心，已知群系口径面积 10,075 格。",
+    "材料更改会立即更新预览与导出。"
+  ],
+  "coordinates": "-1528 / 3943",
+  "area": "10,075",
+  "checks": {
+    "stop": "PASS immediate stop, controls restored",
+    "download": "PASS actual browser litematic NBT equals CPU reference except timestamps",
+    "wasmRebuild": "PASS byte identical",
+    "nodeRegression": "PASS",
+    "productionBuild": "PASS NODE_OPTIONS=--max-old-space-size=8192 npm run build, SSR retained; no backend fixture",
+    "firstBuild": "OOM without the CI heap setting",
+    "htmlSha256": "04664b009ab7fb35d29d0fd38e6e32f2b8035772a1d220192ef4f41474a469dd"
+  }
+}

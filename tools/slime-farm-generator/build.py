@@ -23,12 +23,14 @@ def main():
     for marker, source in [
         ('/*__STRUCTURE_ENGINE__*/', 'structure_engine.js'),
         ('/*__STRUCTURES__*/', 'structures.js'),
+        ('/*__FLOWERS__*/', 'flowers.js'),
+        ('/*__BROWSER_COMPUTE__*/', 'browser_compute.js'),
     ]:
         if html.count(marker) != 1:
             raise RuntimeError(f'The UI template must contain exactly one {marker} marker.')
         html = html.replace(marker, (root / source).read_text(encoding='utf-8'))
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(html, encoding='utf-8')
+    args.output.write_text(html, encoding='utf-8', newline='\n')
     print(f'Created {args.output} ({args.output.stat().st_size:,} bytes)')
 
 if __name__ == '__main__':

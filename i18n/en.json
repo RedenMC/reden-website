@@ -88,7 +88,7 @@
   },
   "en": "English",
   "slime_farm_tool": {
-    "title": "Slime farm schematic generator",
+    "title": "Redstone farm schematic generator",
     "description": "Search slime chunks by seed, preview and download farm schematics, or find chunk clusters and structures. Runs locally in your browser; the tool interface is in Simplified Chinese.",
     "open": "Open tool"
   },
