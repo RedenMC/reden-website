@@ -1,6 +1,6 @@
 'use strict';
 const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
-const context=vm.createContext({console,performance,Uint8Array,Uint16Array,Uint32Array,BigInt,Map,Set});
+const context=vm.createContext({console,performance,Uint8Array,Uint16Array,Uint32Array,Int32Array,BigInt,Map,Set,setTimeout});
 for(const file of ['core.js','browser_compute.js'])vm.runInContext(fs.readFileSync(__dirname+'/'+file,'utf8'),context);
 async function main(){
  const run=(code)=>vm.runInContext(code,context);

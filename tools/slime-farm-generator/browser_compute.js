@@ -41,7 +41,7 @@ fn grid(@builtin(global_invocation_id) id:vec3<u32>,@builtin(local_invocation_in
 }`;
   const mask=(1n<<48n)-1n;
   const pair=(array,i,value)=>{value&=mask;array[i*2]=Number(value&0xffffffffn);array[i*2+1]=Number(value>>32n);};
-  async function grid(seed,bounds,onProgress=()=>{},gpu=globalThis.navigator?.gpu) {
+  async function grid(seed,bounds,onProgress=()=>{},gpu=globalThis.navigator?.gpu,consume=null) {
     if(!gpu)throw new Error('浏览器未提供 WebGPU；请使用本机 CPU 或支持 WebGPU 的安全页面。');
     const adapter=await gpu.requestAdapter();
     if(!adapter)throw new Error('没有可用的本机 WebGPU 设备。');
@@ -49,8 +49,10 @@ fn grid(@builtin(global_invocation_id) id:vec3<u32>,@builtin(local_invocation_in
     let lost=null;device.lost.then(info=>{lost=info.message||'GPU 设备已断开';});
     try {
       const {cmin,cmax,zmin,zmax}=bounds,n=cmax-cmin+1,h=zmax-zmin+1;
-      if(![n,h].every(v=>Number.isInteger(v)&&v>0)||n*h>200000000)throw new Error('区块网格尺寸超出支持范围。');
-      const batchRows=Math.max(1,Math.min(128,Math.floor(device.limits.maxStorageBufferBindingSize/(n*4))));
+      if(![n,h].every(v=>Number.isInteger(v)&&v>0)||!consume&&n*h>200000000)throw new Error('区块网格尺寸超出支持范围。');
+      if(n*8>device.limits.maxStorageBufferBindingSize)throw new Error('GPU 不支持该搜索行宽。');
+      const batchRows=Math.max(1,Math.min(128,Math.floor(1048576/n),Math.floor(device.limits.maxComputeWorkgroupsPerDimension*256/n)));
+      if(n*batchRows>device.limits.maxComputeWorkgroupsPerDimension*256)throw new Error('GPU 单行计算超出设备限制。');
       const batchCells=n*batchRows,maxBytes=Math.ceil(batchCells/32)*4;
       const make=(size,usage)=>{const b=device.createBuffer({size,usage});buffers.push(b);return b;};
       const xbuf=make(n*8,GPUBufferUsage.STORAGE|GPUBufferUsage.COPY_DST);
@@ -66,7 +68,7 @@ fn grid(@builtin(global_invocation_id) id:vec3<u32>,@builtin(local_invocation_in
       const pipeline=await device.createComputePipelineAsync({layout:'auto',compute:{module,entryPoint:'grid'}});
       const validation=await device.popErrorScope();if(validation)throw new Error(validation.message);
       const bind=device.createBindGroup({layout:pipeline.getBindGroupLayout(0),entries:[xbuf,zbuf,out,params].map((buffer,binding)=>({binding,resource:{buffer}}))});
-      const xs=new Uint32Array(n*2),zs=new Uint32Array(batchRows*2),result=new Uint8Array(n*h),b=BigInt(seed);
+      const xs=new Uint32Array(n*2),zs=new Uint32Array(batchRows*2),result=new Uint8Array(consume?batchCells:n*h),b=BigInt(seed);
       for(let x=0;x<n;x++){const c=cmin+x;pair(xs,x,b+BigInt(Math.imul(Math.imul(c,c),4987142))+BigInt(Math.imul(c,5947611)));}
       device.queue.writeBuffer(xbuf,0,xs);
       for(let row=0;row<h;row+=batchRows){
@@ -80,18 +82,43 @@ fn grid(@builtin(global_invocation_id) id:vec3<u32>,@builtin(local_invocation_in
         encoder.copyBufferToBuffer(out,0,read,0,bytes);device.queue.submit([encoder.finish()]);
         await read.mapAsync(GPUMapMode.READ,0,bytes);
         try{const words=new Uint32Array(read.getMappedRange(0,bytes));
-          for(let i=0;i<cells;i++)result[row*n+i]=(words[i>>>5]>>>(i&31))&1;
+          for(let i=0;i<cells;i++)result[(consume?0:row*n)+i]=(words[i>>>5]>>>(i&31))&1;
         }finally{read.unmap();}
         const error=await device.popErrorScope();if(error)throw new Error(error.message);
-        onProgress({phase:'grid',progress:0.05+0.25*(row+rows)/h,message:`本机 GPU 计算史莱姆区块：${row+rows} / ${h} 行`});
+        if(consume)consume({grid:result.subarray(0,cells),minChunk:cmin,maxChunk:cmax,minChunkZ:zmin+row,maxChunkZ:zmin+row+rows-1,n,h:rows});
+        onProgress({phase:'grid',progress:consume?(row+rows)/h:0.05+0.25*(row+rows)/h,message:`本机 GPU ${consume?'逐行搜索':'计算史莱姆区块'}：${row+rows} / ${h} 行`});
       }
       if(lost)throw new Error(lost);
-      return {seed:String(seed),grid:result,minChunk:cmin,maxChunk:cmax,minChunkZ:zmin,maxChunkZ:zmax,n,h};
+      return consume?null:{seed:String(seed),grid:result,minChunk:cmin,maxChunk:cmax,minChunkZ:zmin,maxChunkZ:zmax,n,h};
     } finally {for(const b of buffers)b.destroy();device.destroy();}
+  }
+  async function stream(data,onProgress){
+    const {seed,range,centerX=0,centerZ=0,target,shape,biomes,compute='auto'}=data;
+    let scan=SlimeFarm.chunkRowScan(seed,range,target,shape,biomes,centerX,centerZ),backend='cpu',reason='',peakGridCells=0;
+    const accept=g=>{peakGridCells=Math.max(peakGridCells,g.grid.length);scan.consume(g);};
+    if(compute==='gpu'||compute==='auto'&&scan.n*scan.h>=4194304){
+      try{await grid(seed,scan.bounds,onProgress,globalThis.navigator?.gpu,accept);backend='gpu';}
+      catch(error){
+        if(compute==='gpu')throw error;
+        reason=error.message;scan=SlimeFarm.chunkRowScan(seed,range,target,shape,biomes,centerX,centerZ);
+        onProgress({phase:'grid',progress:0,message:'本机 GPU 不可用，从首行重新以本机 CPU 搜索…'});
+      }
+    }
+    if(backend==='cpu'){
+      const rows=Math.max(1,Math.min(128,Math.floor(1048576/scan.n))),b=scan.bounds;
+      for(let row=0;row<scan.h;row+=rows){
+        const count=Math.min(rows,scan.h-row);
+        accept(SlimeFarm.makeGrid(seed,b.cmin,b.cmax,()=>{},b.zmin+row,b.zmin+row+count-1));
+        onProgress({phase:'shape',progress:(row+count)/scan.h,message:`本机 CPU 逐行搜索：${row+count} / ${scan.h} 行`});
+        await new Promise(resolve=>setTimeout(resolve,0));
+      }
+    }
+    const result=scan.finish();result.execution={backend,fallbackReason:reason,strategy:'row-stream',peakGridCells,stateBytes:scan.stateBytes};return result;
   }
   async function run(kind,data,onProgress=()=>{}) {
     const {seed,range,centerX=0,centerZ=0,compute='auto'}=data;
     if(!['auto','cpu','gpu'].includes(compute))throw new Error('未知本机计算方式。');
+    if(kind==='cluster'&&['square','rectangle'].includes(data.shape))return stream(data,onProgress);
     if(!Number.isInteger(range)||range<1||range>SlimeFarm.MAX_SEARCH_RANGE)throw new Error('搜索范围必须是 1～216000 的整数。');
     const bounds=SlimeFarm.searchBounds(range,centerX,centerZ),halo=kind==='farm'||data.shape==='spawnRange'?10:0;
     for(const k of ['cmin','zmin'])bounds[k]-=halo;

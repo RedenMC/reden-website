@@ -96,7 +96,7 @@ body:not(.has-result) .rightcol>.stats,body:not(.has-result) .result-details{dis
 <div class="field"><label class="title" for="clusterVersion">Java 版版本</label><select id="clusterVersion"></select><span class="help">所列 Java 版本使用相同的传统史莱姆区块公式；此页面不按地形过滤。无史莱姆区块页面会按导入存档的群系筛选。</span></div>
 <div class="field"><label class="title" for="clusterSeed">世界种子</label><input id="clusterSeed" type="text" placeholder="粘贴 /seed 的完整数字" autocomplete="off" spellcheck="false"><span class="help" id="clusterSeedHint">支持完整 64 位数字或文字种子。</span></div>
 <div class="row2"><div class="field"><label class="title" for="clusterCenterX">搜索中心 X</label><input id="clusterCenterX" type="number" min="-29999000" max="29999000" step="1" value="0"></div><div class="field"><label class="title" for="clusterCenterZ">搜索中心 Z</label><input id="clusterCenterZ" type="number" min="-29999000" max="29999000" step="1" value="0"></div></div>
-<div class="field"><label class="title" for="clusterRange">搜索范围 ±</label><input id="clusterRange" type="number" min="1" max="216000" step="1" value="4000"><span class="help">正方形、矩形、无限制：搜索与方块 X/Z ∈ [中心−R,中心+R] 相交的区块，边界区块整块参与；刷怪范围内：逐个检查该范围的挂机方块中心。上限 ±216000 格，仅主网格约 696 MiB，另需搜索内存；内存较小的设备请减小范围。</span></div>
+<div class="field"><label class="title" for="clusterRange">搜索范围 ±</label><input id="clusterRange" type="number" min="1" max="29999000" step="1" value="4000"><span class="help">正方形、矩形、无限制：搜索与方块 X/Z ∈ [中心−R,中心+R] 相交的区块，边界区块整块参与；刷怪范围内：逐个检查该范围的挂机方块中心。正方形、矩形按批次逐行扫描，可搜至世界边境（搜索边界须在 ±29999000 内）；不保存全范围网格，仍需逐个计算全部区块。T 形、无限制和刷怪范围内仍限 ±216000 格。</span></div>
 <div class="field"><label class="title">形状</label><div class="shapechoices"><label><input type="radio" name="clusterShape" value="square" checked> 正方形</label><label><input type="radio" name="clusterShape" value="rectangle"> 矩形</label><label id="tShapeChoice"><input type="radio" name="clusterShape" value="tShape"> 格调形（T形）</label><label id="unrestrictedChoice"><input type="radio" name="clusterShape" value="unrestricted"> 无限制</label><label id="spawnRangeChoice" class="hidden"><input type="radio" name="clusterShape" value="spawnRange"> 刷怪范围内</label></div><span class="help" id="clusterShapeHelp">格调形是两个矩形相接的 T 形，自动比较四个朝向；横臂两侧都须伸出，竖干可偏心。选中形状内部必须全部是史莱姆区块。</span></div>
 <div id="clusterBiomeFields"><div id="nonSlimeBiomeOptions" class="hidden"><div class="notebox">史莱姆区块会略微降低其他怪效率，所以这最适合用来找做刷怪塔！仅当史莱姆能够在附近生成并占用刷怪上限时才会产生这种影响。</div><div class="field" style="margin-top:17px"><label class="title" for="clusterBiome">目标群系</label><select id="clusterBiome"><option value="desert">沙漠</option><option value="snowy">雪原</option><option value="other" selected>其它</option></select><span class="help">沙漠群系普通僵尸刷出比例会降低，别的怪相对比例可能提高；雪原则是普通骷髅比例降低。原版同时加入尸壳、流浪者；它们的自然生成还要求露天，实际收益取决于塔的结构。</span></div></div><div class="field"><label class="title" for="clusterBiomeY">计划刷怪层脚部 Y</label><input id="clusterBiomeY" type="number" min="-64" max="319" step="1" value="64"><span class="help">存档群系按这个高度读取；改动高度后需要重新导入。目标“雪原”只指 snowy_plains，冰刺之地等归入“其它”；降雪提醒则覆盖已读取到的各种可降雪群系。</span></div><div class="field"><label class="title">世界存档群系</label><button type="button" id="clusterImportZone" class="btn wide">导入存档文件</button><input id="clusterWorldFiles" class="hidden" type="file" accept=".mca,.dat" multiple><span class="help">选择主世界 region 文件夹中的 r.x.z.mca，可同时选 level.dat 核对种子；也可拖入世界或 region 文件夹。连史莱姆块搜索可只用种子，导入存档后增加古城、降雪提醒。无史莱姆块的群系筛选必须导入存档：正方形和矩形要求每个目标区块的 16 个群系采样都匹配；“刷怪范围内”要求圆环中每个非史莱姆方块的群系采样都匹配。未保存区域不猜测群系；范围未覆盖完整时提醒也可能不完整。若存档经过升降级或改动区块，实际可能与种子有出入。</span><div class="help" id="clusterBiomeStatus">尚未导入主世界存档群系。</div></div></div>
 <button class="btn primary wide" id="clusterSearchBtn">开始寻找</button><button class="btn danger wide hidden" id="clusterStopBtn" style="margin-top:8px">停止搜索</button><div class="progress"><div class="progressbar" id="clusterProgressBar"></div></div><div class="status" id="clusterStatus">尚未搜索。</div><div class="notebox error hidden" id="clusterError"></div>
@@ -130,7 +130,7 @@ body:not(.has-result) .rightcol>.stats,body:not(.has-result) .result-details{dis
 </div></aside><div class="clusterresult"><div class="clusterstats"><div class="stat"><div class="label">区域面积（平方格）</div><div class="value accent" id="flowerArea">—</div><div class="sub" id="flowerDistance">中心距搜索中心 — 格</div></div><div class="stat"><div class="label">X × Z 尺寸</div><div class="value small" id="flowerSize">—</div><div class="sub" id="flowerHeight">最佳高度 Y —</div></div><div class="stat"><div class="label">覆盖花种</div><div class="value" id="flowerCount">—</div><div class="sub" id="flowerCountSub">种</div></div></div>
 <section class="card"><div class="cardhead"><h3>最佳区域</h3></div><div class="cardbody"><div class="coord" id="flowerCoords">搜索后显示 X / Z 边界及最佳 Y。</div><div class="help" id="flowerProof">所有花种须在同一 Y 层，且矩形不超过设置的最大 X/Z 尺寸。优先选择区域中心水平距离原点最近的位置，同距离取更小面积。</div><details id="flowerListDetails" class="hidden"><summary>查看各花种示例坐标</summary><div class="chunklist" id="flowerList"></div></details><div class="notebox warn">种子结果是可刷花的候选方块。实际施工还要检查地形、草方块及上方空间；花种会在草地施骨粉后按目标位置群系生成。当前不生成刷花机投影。</div></div></section></div></div>
 </section>
-<details class="card" open><summary>更新报告 · v1.16.0 · 2026-10-02</summary><div class="cardbody"><ul><li>史莱姆相关搜索上限提高到 ±216000 格，范围输入旁注明内存占用。</li><li>搜索、存档读取和投影导出均在使用者本机运行，无需上传种子或存档。</li><li>大范围史莱姆区块计算支持 WebGPU 加速；自动模式在不支持或失败时使用 CPU，小范围直接使用 CPU。形状与评分仍按原规则计算。</li><li>各工具支持设置搜索原点；连史莱姆区块新增格调形（T 形）。</li><li>花种搜索按版本提供目标选项，支持 Y 范围和区域尺寸限制；暂不生成刷花机投影，等待模板接入。</li></ul><p>感谢sunnyslopes、minelogy、li_zi_o_o的代码参考！让我们的搜索更快</p></div></details>
+<details class="card" open><summary>更新报告 · v1.16.0 · 2026-10-02</summary><div class="cardbody"><ul><li>正方形和矩形支持分批逐行扫描至世界边境，不保存全范围网格；其他史莱姆搜索仍限 ±216000 格。</li><li>搜索、存档读取和投影导出均在使用者本机运行，无需上传种子或存档。</li><li>大范围史莱姆区块计算支持 WebGPU 加速；自动模式在不支持或失败时使用 CPU，小范围直接使用 CPU。形状与评分仍按原规则计算。</li><li>各工具支持设置搜索原点；连史莱姆区块新增格调形（T 形）。</li><li>花种搜索按版本提供目标选项，支持 Y 范围和区域尺寸限制；暂不生成刷花机投影，等待模板接入。</li></ul><p>感谢sunnyslopes、minelogy、li_zi_o_o的代码参考！让我们的搜索更快</p></div></details>
 <aside class="feedback-callout" aria-labelledby="feedbackTitle"><h2 id="feedbackTitle">反馈与建议</h2><p>反馈 BUG 或修改建议，可在 UP 主对应视频的评论区留言。有更多需求，也可私聊 UP 主。</p></aside>
 <footer>生电农场专用投影生成器 v1.16.0 · 所有计算在本机浏览器执行 · 没有遥测、外部脚本或在线依赖</footer>
 </div><div id="toast" class="hidden" role="status"></div>
@@ -140,6 +140,7 @@ body:not(.has-result) .rightcol>.stats,body:not(.has-result) .result-details{dis
 const SlimeFarm = (() => {
   const APP_VERSION = '1.16.0';
   const MAX_SEARCH_RANGE = 216000;
+  const MAX_STREAM_RANGE = 29999000;
   const INNER = 24, OUTER = 128, GLASS = 160, WIDTH = 321;
   const MASK48 = (1n << 48n) - 1n, MULT = 0x5deece66dn;
   const SALT = 987234911n, LONG_MIN = -(1n << 63n), LONG_MAX = (1n << 63n)-1n;
@@ -364,6 +365,58 @@ const SlimeFarm = (() => {
     const minX=centerX-range,maxX=centerX+range,minZ=centerZ-range,maxZ=centerZ+range;
     if(Math.min(minX,minZ)<-29999000||Math.max(maxX,maxZ)>29999000)throw new Error('搜索范围须在 ±29999000 内，为农场和刷怪范围预留边界空间。');
     return {minX,maxX,minZ,maxZ,cmin:Math.floor(minX/16),cmax:Math.floor(maxX/16),zmin:Math.floor(minZ/16),zmax:Math.floor(maxZ/16)};
+  }
+  // Only row state survives each batch; coordinates and tie order match the grid search.
+  function chunkRowScan(seed,range,target,shape,biomeData=null,centerX=0,centerZ=0){
+    if(!Number.isInteger(range)||range<1||range>MAX_STREAM_RANGE)throw new Error('逐行搜索范围必须是 1～29999000 的整数。');
+    if(!['square','rectangle'].includes(shape)||!['slime','nonSlime'].includes(target))throw new Error('逐行搜索仅支持正方形和矩形。');
+    const started=performance.now(),bounds=searchBounds(range,centerX,centerZ),n=bounds.cmax-bounds.cmin+1,h=bounds.zmax-bounds.zmin+1;
+    const wanted=target==='slime'?1:0,required={desert:1,snowy:2,other:3}[biomeData?.category];
+    if(target==='nonSlime'&&(!required||!(biomeData?.chunks instanceof Map)||!Number.isInteger(biomeData.y)))throw new Error('无史莱姆区块群系搜索需要先导入计划刷怪高度的主世界存档群系。');
+    let row=0,best={count:0,minX:0,maxX:0,minZ:0,maxZ:0},previous=new Uint32Array(n+1);
+    let current=shape==='square'?new Uint32Array(n+1):null;
+    const stack=shape==='rectangle'?new Int32Array(n+1):null;
+    const biome=target==='nonSlime'?{category:biomeData.category,y:biomeData.y,nonSlime:0,known:0,matched:0,unknown:0,complete:false,importedChunks:biomeData.read??biomeData.chunks.size}:null;
+    const better=(count,x1,z1,x2,z2)=>{if(count>best.count||count===best.count&&(z1<best.minZ||z1===best.minZ&&x1<best.minX))best={count,minX:x1,maxX:x2,minZ:z1,maxZ:z2};};
+    function consume(g){
+      if(g.minChunk!==bounds.cmin||g.maxChunk!==bounds.cmax||g.minChunkZ!==bounds.zmin+row||g.n!==n||g.h<1||row+g.h>h||!(g.grid instanceof Uint8Array)||g.grid.length!==n*g.h)throw new Error('逐行批次顺序或尺寸不一致。');
+      for(let z=0;z<g.h;z++,row++){
+        for(let x=0;x<n;x++){
+          let valid=g.grid[z*n+x]===wanted;
+          if(biome&&valid){
+            biome.nonSlime++;
+            const cells=biomeData.chunks.get((bounds.cmin+x)+','+(bounds.zmin+row));
+            const known=cells?.length===16&&cells.every(v=>v!==0),match=known&&cells.every(v=>v===required);
+            if(known)biome.known++;if(match)biome.matched++;valid=!!match;
+          }
+          if(shape==='square'){
+            const side=valid?1+Math.min(previous[x],previous[x+1],current[x]):0;
+            current[x+1]=side;if(side)better(side*side,x-side+1,row-side+1,x,row);
+          }else previous[x]=valid?previous[x]+1:0;
+        }
+        if(shape==='square')[previous,current]=[current,previous];
+        else{
+          let size=0;
+          for(let x=0;x<=n;x++){
+            const height=x===n?0:previous[x];
+            while(size&&previous[stack[size-1]]>height){
+              const last=stack[--size],height=previous[last],x1=size?stack[size-1]+1:0;
+              better(height*(x-x1),x1,row-height+1,x-1,row);
+            }
+            stack[size++]=x;
+          }
+        }
+      }
+    }
+    function finish(){
+      if(row!==h)throw new Error('逐行搜索尚未完成，不能输出完整范围的结果。');
+      if(biome){biome.unknown=biome.nonSlime-biome.known;biome.complete=biome.unknown===0;}
+      const result={seed:String(seed),range,centerX,centerZ,target,shape,gridChunks:n*h,found:!!best.count,biome,elapsedMs:performance.now()-started};
+      if(!best.count)return result;
+      const chunks={minX:bounds.cmin+best.minX,maxX:bounds.cmin+best.maxX,minZ:bounds.zmin+best.minZ,maxZ:bounds.zmin+best.maxZ};
+      return {...result,count:best.count,width:best.maxX-best.minX+1,height:best.maxZ-best.minZ+1,chunks,blocks:{minX:chunks.minX*16,maxX:chunks.maxX*16+15,minZ:chunks.minZ*16,maxZ:chunks.maxZ*16+15},coordinates:null,rectangles:null};
+    }
+    return {bounds,n,h,consume,finish,stateBytes:previous.byteLength+(current?.byteLength||0)+(stack?.byteLength||0)};
   }
   // Search chunk-aligned shapes inside the block square around centerX/centerZ.
   // A chunk is included when its block area intersects that square.
@@ -943,7 +996,7 @@ const SlimeFarm = (() => {
       litematic:{formatVersion:5,minecraftDataVersion:dataVersion(version),note:'数据版本来自目标 Java 正式版服务端 version.json。'},
       limitations:['最大值指单层候选面积，不等于每小时产量。','存档未覆盖的群系暂按可刷计；需完整覆盖才能确认实际世界的最大值。',l.type==='theory'?'理论版尚未可靠量化小型史莱姆的滞留时间和 70 怪物上限的影响；条件试算不等于实际产量，也不证明全局最高效率。':'未过滤地形、世界出生点、其他玩家、怪物上限和模拟距离。','P 为挂机方块水平中心；按需求忽略玩家与刷怪脚部的微小高差。',l.type==='uncut'?'不切门版提供目标门框与门块布局，不提供施工设备或地狱侧处理系统。':'切门版提供成品门块布局，不提供切门设备或地狱侧处理系统。',...(l.type==='theory'?[`理论版采用棋盘门布局，并在必要的边缘格补门；每个可刷怪地板格周围 3×3 范围内至少有一个门块，中、大型史莱姆自然生成时即可碰到门。`,'每小时粘液球条件试算假设门块稳定存在、史莱姆成功传送且地狱侧全部收集；未经过切门存活或游戏内产量验收。']:[]),...(l.type==='uncut'&&roofMaterial==='air'?['不切门版顶层填充选择空气会留下可刷怪的黑曜石表面；满足刷怪条件时，黑曜石上面会刷怪，需另行防刷怪。']:[]),'没有宣称已在每个游戏版本里实机测试。']};
   }
-  return {APP_VERSION,MAX_SEARCH_RANGE,INNER,OUTER,GLASS,WIDTH,MATERIALS,DATA_VERSIONS,material,materialState,roofState,biomeBlock,netherPortalRange,parseSeed,isSlime,inAnnulus,portalAt,orientChunks,kernels,makeGrid,withGrid,searchBounds,findTShape,searchChunkCluster,searchLeastSlime,search,layout,schematic,gzip,gzipStored,report,packIndices};
+  return {APP_VERSION,MAX_SEARCH_RANGE,MAX_STREAM_RANGE,chunkRowScan,INNER,OUTER,GLASS,WIDTH,MATERIALS,DATA_VERSIONS,material,materialState,roofState,biomeBlock,netherPortalRange,parseSeed,isSlime,inAnnulus,portalAt,orientChunks,kernels,makeGrid,withGrid,searchBounds,findTShape,searchChunkCluster,searchLeastSlime,search,layout,schematic,gzip,gzipStored,report,packIndices};
 })();
 if(typeof module!=='undefined'&&module.exports)module.exports=SlimeFarm;
 if(typeof self!=='undefined')self.SlimeFarm=SlimeFarm;
@@ -996,7 +1049,7 @@ fn grid(@builtin(global_invocation_id) id:vec3<u32>,@builtin(local_invocation_in
 }`;
   const mask=(1n<<48n)-1n;
   const pair=(array,i,value)=>{value&=mask;array[i*2]=Number(value&0xffffffffn);array[i*2+1]=Number(value>>32n);};
-  async function grid(seed,bounds,onProgress=()=>{},gpu=globalThis.navigator?.gpu) {
+  async function grid(seed,bounds,onProgress=()=>{},gpu=globalThis.navigator?.gpu,consume=null) {
     if(!gpu)throw new Error('浏览器未提供 WebGPU；请使用本机 CPU 或支持 WebGPU 的安全页面。');
     const adapter=await gpu.requestAdapter();
     if(!adapter)throw new Error('没有可用的本机 WebGPU 设备。');
@@ -1004,8 +1057,10 @@ fn grid(@builtin(global_invocation_id) id:vec3<u32>,@builtin(local_invocation_in
     let lost=null;device.lost.then(info=>{lost=info.message||'GPU 设备已断开';});
     try {
       const {cmin,cmax,zmin,zmax}=bounds,n=cmax-cmin+1,h=zmax-zmin+1;
-      if(![n,h].every(v=>Number.isInteger(v)&&v>0)||n*h>200000000)throw new Error('区块网格尺寸超出支持范围。');
-      const batchRows=Math.max(1,Math.min(128,Math.floor(device.limits.maxStorageBufferBindingSize/(n*4))));
+      if(![n,h].every(v=>Number.isInteger(v)&&v>0)||!consume&&n*h>200000000)throw new Error('区块网格尺寸超出支持范围。');
+      if(n*8>device.limits.maxStorageBufferBindingSize)throw new Error('GPU 不支持该搜索行宽。');
+      const batchRows=Math.max(1,Math.min(128,Math.floor(1048576/n),Math.floor(device.limits.maxComputeWorkgroupsPerDimension*256/n)));
+      if(n*batchRows>device.limits.maxComputeWorkgroupsPerDimension*256)throw new Error('GPU 单行计算超出设备限制。');
       const batchCells=n*batchRows,maxBytes=Math.ceil(batchCells/32)*4;
       const make=(size,usage)=>{const b=device.createBuffer({size,usage});buffers.push(b);return b;};
       const xbuf=make(n*8,GPUBufferUsage.STORAGE|GPUBufferUsage.COPY_DST);
@@ -1021,7 +1076,7 @@ fn grid(@builtin(global_invocation_id) id:vec3<u32>,@builtin(local_invocation_in
       const pipeline=await device.createComputePipelineAsync({layout:'auto',compute:{module,entryPoint:'grid'}});
       const validation=await device.popErrorScope();if(validation)throw new Error(validation.message);
       const bind=device.createBindGroup({layout:pipeline.getBindGroupLayout(0),entries:[xbuf,zbuf,out,params].map((buffer,binding)=>({binding,resource:{buffer}}))});
-      const xs=new Uint32Array(n*2),zs=new Uint32Array(batchRows*2),result=new Uint8Array(n*h),b=BigInt(seed);
+      const xs=new Uint32Array(n*2),zs=new Uint32Array(batchRows*2),result=new Uint8Array(consume?batchCells:n*h),b=BigInt(seed);
       for(let x=0;x<n;x++){const c=cmin+x;pair(xs,x,b+BigInt(Math.imul(Math.imul(c,c),4987142))+BigInt(Math.imul(c,5947611)));}
       device.queue.writeBuffer(xbuf,0,xs);
       for(let row=0;row<h;row+=batchRows){
@@ -1035,18 +1090,43 @@ fn grid(@builtin(global_invocation_id) id:vec3<u32>,@builtin(local_invocation_in
         encoder.copyBufferToBuffer(out,0,read,0,bytes);device.queue.submit([encoder.finish()]);
         await read.mapAsync(GPUMapMode.READ,0,bytes);
         try{const words=new Uint32Array(read.getMappedRange(0,bytes));
-          for(let i=0;i<cells;i++)result[row*n+i]=(words[i>>>5]>>>(i&31))&1;
+          for(let i=0;i<cells;i++)result[(consume?0:row*n)+i]=(words[i>>>5]>>>(i&31))&1;
         }finally{read.unmap();}
         const error=await device.popErrorScope();if(error)throw new Error(error.message);
-        onProgress({phase:'grid',progress:0.05+0.25*(row+rows)/h,message:`本机 GPU 计算史莱姆区块：${row+rows} / ${h} 行`});
+        if(consume)consume({grid:result.subarray(0,cells),minChunk:cmin,maxChunk:cmax,minChunkZ:zmin+row,maxChunkZ:zmin+row+rows-1,n,h:rows});
+        onProgress({phase:'grid',progress:consume?(row+rows)/h:0.05+0.25*(row+rows)/h,message:`本机 GPU ${consume?'逐行搜索':'计算史莱姆区块'}：${row+rows} / ${h} 行`});
       }
       if(lost)throw new Error(lost);
-      return {seed:String(seed),grid:result,minChunk:cmin,maxChunk:cmax,minChunkZ:zmin,maxChunkZ:zmax,n,h};
+      return consume?null:{seed:String(seed),grid:result,minChunk:cmin,maxChunk:cmax,minChunkZ:zmin,maxChunkZ:zmax,n,h};
     } finally {for(const b of buffers)b.destroy();device.destroy();}
+  }
+  async function stream(data,onProgress){
+    const {seed,range,centerX=0,centerZ=0,target,shape,biomes,compute='auto'}=data;
+    let scan=SlimeFarm.chunkRowScan(seed,range,target,shape,biomes,centerX,centerZ),backend='cpu',reason='',peakGridCells=0;
+    const accept=g=>{peakGridCells=Math.max(peakGridCells,g.grid.length);scan.consume(g);};
+    if(compute==='gpu'||compute==='auto'&&scan.n*scan.h>=4194304){
+      try{await grid(seed,scan.bounds,onProgress,globalThis.navigator?.gpu,accept);backend='gpu';}
+      catch(error){
+        if(compute==='gpu')throw error;
+        reason=error.message;scan=SlimeFarm.chunkRowScan(seed,range,target,shape,biomes,centerX,centerZ);
+        onProgress({phase:'grid',progress:0,message:'本机 GPU 不可用，从首行重新以本机 CPU 搜索…'});
+      }
+    }
+    if(backend==='cpu'){
+      const rows=Math.max(1,Math.min(128,Math.floor(1048576/scan.n))),b=scan.bounds;
+      for(let row=0;row<scan.h;row+=rows){
+        const count=Math.min(rows,scan.h-row);
+        accept(SlimeFarm.makeGrid(seed,b.cmin,b.cmax,()=>{},b.zmin+row,b.zmin+row+count-1));
+        onProgress({phase:'shape',progress:(row+count)/scan.h,message:`本机 CPU 逐行搜索：${row+count} / ${scan.h} 行`});
+        await new Promise(resolve=>setTimeout(resolve,0));
+      }
+    }
+    const result=scan.finish();result.execution={backend,fallbackReason:reason,strategy:'row-stream',peakGridCells,stateBytes:scan.stateBytes};return result;
   }
   async function run(kind,data,onProgress=()=>{}) {
     const {seed,range,centerX=0,centerZ=0,compute='auto'}=data;
     if(!['auto','cpu','gpu'].includes(compute))throw new Error('未知本机计算方式。');
+    if(kind==='cluster'&&['square','rectangle'].includes(data.shape))return stream(data,onProgress);
     if(!Number.isInteger(range)||range<1||range>SlimeFarm.MAX_SEARCH_RANGE)throw new Error('搜索范围必须是 1～216000 的整数。');
     const bounds=SlimeFarm.searchBounds(range,centerX,centerZ),halo=kind==='farm'||data.shape==='spawnRange'?10:0;
     for(const k of ['cmin','zmin'])bounds[k]-=halo;
@@ -1751,9 +1831,10 @@ async function importClusterWorldData(items){
 }
 function clusterMode(){return $('toolMode').value;}
 function clusterShape(){return document.querySelector('[name=clusterShape]:checked').value;}
+function clusterRangeLimit(){return ['square','rectangle'].includes(clusterShape())?SlimeFarm.MAX_STREAM_RANGE:SlimeFarm.MAX_SEARCH_RANGE;}
 function clusterBusy(value){$('localCompute').disabled=value;for(const id of ['clusterVersion','clusterSeed','clusterRange','clusterCenterX','clusterCenterZ','clusterSearchBtn','clusterBiome','clusterBiomeY','clusterImportZone','clusterWorldFiles'])$(id).disabled=value;document.querySelectorAll('[name=clusterShape]').forEach(v=>v.disabled=value);$('clusterStopBtn').classList.toggle('hidden',!value);}
 function stopCluster(){if(clusterWorker){clusterWorker.terminate();clusterWorker=null;}clusterBusy(false);}
-function clearClusterResult(){clusterResult=null;for(const id of ['clusterCount','clusterSize','clusterTotal','clusterChunkCoords','clusterBlockCoords'])$(id).textContent='—';$('clusterCountLabel').textContent=clusterShape()==='spawnRange'?'最少史莱姆面积':'最多连续区块';$('clusterSizeLabel').textContent=clusterShape()==='spawnRange'?'非史莱姆面积':'形状尺寸（区块）';$('clusterTotalLabel').textContent=clusterShape()==='spawnRange'?'搜索挂机点总数':'搜索区块总数';$('clusterCountSub').textContent='—';$('clusterSizeSub').textContent='—';$('clusterTotalSub').textContent='—';$('clusterProof').textContent='搜索完成后显示区块区域；此功能不生成投影。';$('clusterSpawnResult').classList.add('hidden');$('clusterGeometry').classList.remove('hidden');$('clusterRisk').textContent='未导入存档，无法判断古城与降雪风险。';$('clusterListDetails').classList.add('hidden');$('clusterList').replaceChildren();const c=$('clusterCanvas'),ctx=c.getContext('2d');ctx.clearRect(0,0,c.width,c.height);}
+function clearClusterResult(){$('clusterRange').max=clusterRangeLimit();clusterResult=null;for(const id of ['clusterCount','clusterSize','clusterTotal','clusterChunkCoords','clusterBlockCoords'])$(id).textContent='—';$('clusterCountLabel').textContent=clusterShape()==='spawnRange'?'最少史莱姆面积':'最多连续区块';$('clusterSizeLabel').textContent=clusterShape()==='spawnRange'?'非史莱姆面积':'形状尺寸（区块）';$('clusterTotalLabel').textContent=clusterShape()==='spawnRange'?'搜索挂机点总数':'搜索区块总数';$('clusterCountSub').textContent='—';$('clusterSizeSub').textContent='—';$('clusterTotalSub').textContent='—';$('clusterProof').textContent='搜索完成后显示区块区域；此功能不生成投影。';$('clusterSpawnResult').classList.add('hidden');$('clusterGeometry').classList.remove('hidden');$('clusterRisk').textContent='未导入存档，无法判断古城与降雪风险。';$('clusterListDetails').classList.add('hidden');$('clusterList').replaceChildren();const c=$('clusterCanvas'),ctx=c.getContext('2d');ctx.clearRect(0,0,c.width,c.height);}
 function showClusterRisks(r){
  if(!clusterBiomes){$('clusterRisk').textContent='未导入存档，无法判断古城与降雪风险。';return;}
  const chosen=new Set();
@@ -1783,6 +1864,7 @@ function showCluster(r){
  $('clusterCount').textContent=fmt(r.count);$('clusterCountSub').textContent=r.target==='slime'?'史莱姆区块':`${{desert:'沙漠',snowy:'雪原',other:'其它'}[r.biome.category]}非史莱姆区块`;
  $('clusterSize').textContent=`${fmt(r.width)} × ${fmt(r.height)}`;$('clusterSizeSub').textContent=r.shape==='tShape'?'T形外接框；仅高亮区块计数':r.shape==='unrestricted'?'外接框；内部可有空洞':'形状内部全部符合目标';$('clusterChunkCoords').textContent=`X ${r.chunks.minX} ～ ${r.chunks.maxX}　Z ${r.chunks.minZ} ～ ${r.chunks.maxZ}`;$('clusterBlockCoords').textContent=`X ${r.blocks.minX} ～ ${r.blocks.maxX}　Z ${r.blocks.minZ} ～ ${r.blocks.maxZ}`;
  $('clusterProof').textContent=`Java ${$('clusterVersion').value}；搜索中心 X ${r.centerX} / Z ${r.centerZ}；已计算 ${fmt(r.gridChunks)} 个区块。${coverage}结果为${r.biome?.complete||!r.biome?'整个搜索范围':'已导入群系范围'}中所选形状的最大区块数。相同数量时按最北、再最西的位置确定唯一展示结果。用时 ${(r.elapsedMs/1000).toFixed(1)} 秒。此功能不生成投影。`;
+ if(r.execution?.strategy==='row-stream')$('clusterProof').textContent+=' 按批次逐行扫描，未保存全范围区块网格。';
  if(r.rectangles)$('clusterProof').textContent+=' 已比较 T 形四个朝向。两个相接矩形的区块坐标：'+r.rectangles.map((b,i)=>`矩形${i+1} X ${b.minX}～${b.maxX}、Z ${b.minZ}～${b.maxZ}`).join('；')+'。';
  drawCluster(r);$('clusterListDetails').classList.toggle('hidden',!r.coordinates);$('clusterList').textContent=r.coordinates?r.coordinates.map(([x,z])=>`(${x}, ${z})`).join('　'):'';showClusterRisks(r);
 }
@@ -1790,7 +1872,7 @@ function startCluster(){
  stopCluster();clearClusterResult();$('clusterError').classList.add('hidden');let seed,range,center,biomes=null;
  try{
    seed=SlimeFarm.parseSeed($('clusterSeed').value);range=Number($('clusterRange').value);center=searchCenter('cluster',range);
-   if(!Number.isInteger(range)||range<1||range>SlimeFarm.MAX_SEARCH_RANGE)throw new Error('搜索范围必须是 1～216000 的整数。');
+   if(!Number.isInteger(range)||range<1||range>clusterRangeLimit())throw new Error(`此形状搜索范围必须是 1～${clusterRangeLimit()} 的整数。`);
    if(clusterBiomes&&clusterSaveInfo?.seed&&clusterSaveInfo.seed!==seed.seed)throw new Error(`输入种子 ${seed.seed} 与存档种子 ${clusterSaveInfo.seed} 不一致。`);
    if(clusterMode()==='nonSlime'){
      const y=Number($('clusterBiomeY').value);
